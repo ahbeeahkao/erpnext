@@ -42,3 +42,20 @@ def execute(filters=None):
 		},
 		{"fieldname": "doctype", "label": _("Type"), "width": 200, "fieldtype": "Link", "options": "DocType"},
 	], data
+<<<<<<< HEAD
+=======
+
+
+def get_parent_filters(doctype):
+	if doctype == "Product Bundle Item":
+		parent = frappe.qb.DocType("Product Bundle")
+		condition = get_allowed_masters_condition(parent.new_item_code, "Item")
+	else:
+		parent = frappe.qb.DocType("BOM")
+		condition = get_allowed_companies_condition(parent.company, "BOM")
+
+	allowed_parents = frappe.qb.from_(parent).select(parent.name).where(parent.docstatus == 1)
+	if condition:
+		allowed_parents = allowed_parents.where(condition)
+	return [frappe.qb.DocType(doctype).parent.isin(allowed_parents)]
+>>>>>>> 5f0ae05 (fix(stock): exclude unsubmitted documents from BOM search)
