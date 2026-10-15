@@ -71,7 +71,7 @@ def get_data(
 	item_code=None, warehouse=None, item_group=None, start=0, sort_by="actual_qty", sort_order="desc"
 ):
 	"""Return data to render the item dashboard"""
-	if not frappe.has_permission("Bin", "read"):
+	if not frappe.has_permission("Bin", "read") or not frappe.has_permission("Warehouse", "read"):
 		return []
 
 	if sort_by not in QTY_FIELDS or sort_order not in ("asc", "desc"):
@@ -81,7 +81,7 @@ def get_data(
 	if item_code:
 		filters.append(["item_code", "=", item_code])
 	if warehouse:
-		filters.append(["warehouse", "=", warehouse])
+		filters.append(["warehouse", "descendants of (inclusive)", warehouse])
 	if item_group:
 		lft, rgt = frappe.db.get_value("Item Group", item_group, ["lft", "rgt"])
 		items = frappe.db.sql_list(
@@ -93,6 +93,7 @@ def get_data(
 			(lft, rgt),
 		)
 		filters.append(["item_code", "in", items])
+<<<<<<< HEAD
 	try:
 		# check if user has any restrictions based on user permissions on warehouse
 		if DatabaseQuery("Warehouse", user=frappe.session.user).build_match_conditions():
@@ -100,8 +101,14 @@ def get_data(
 	except frappe.PermissionError:
 		# user does not have access on warehouse
 		return []
+=======
+>>>>>>> 17c4afc (fix(stock): respect stock summary permissions and warehouse groups)
 
-	items = frappe.db.get_all(
+	# Warehouse-only User Permissions do not apply to the Bin query.
+	if build_match_conditions("Warehouse", user=frappe.session.user):
+		filters.append(["warehouse", "in", frappe.get_list("Warehouse", pluck="name", limit_page_length=0)])
+
+	items = frappe.get_list(
 		"Bin",
 		fields=[
 			"item_code",
@@ -120,8 +127,8 @@ def get_data(
 		limit_page_length=21,
 	)
 
-	item_code_list = [item_code] if item_code else [i.item_code for i in items]
-	warehouse_list = [warehouse] if warehouse else [i.warehouse for i in items]
+	item_code_list = list({i.item_code for i in items})
+	warehouse_list = list({i.warehouse for i in items})
 
 	sre_reserved_stock_details = get_reserved_stock_details(item_code_list, warehouse_list)
 	precision = cint(frappe.db.get_single_value("System Settings", "float_precision"))
