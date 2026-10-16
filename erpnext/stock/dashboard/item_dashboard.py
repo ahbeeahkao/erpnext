@@ -104,7 +104,6 @@ def get_data(
 =======
 >>>>>>> 17c4afc (fix(stock): respect stock summary permissions and warehouse groups)
 
-	# Warehouse-only User Permissions do not apply to the Bin query.
 	if build_match_conditions("Warehouse", user=frappe.session.user):
 		filters.append(["warehouse", "in", frappe.get_list("Warehouse", pluck="name", limit_page_length=0)])
 
