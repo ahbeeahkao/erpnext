@@ -59,7 +59,7 @@ def submit_now(sales_invoice: str) -> dict:
 	doc = _get_invoice(sales_invoice, permission="write")
 
 	try:
-		result = submit_invoice(doc.name, force=True)
+		result = submit_invoice(doc.name)
 	except InvoiceValidationError as error:
 		frappe.throw(
 			_("This invoice cannot be e-Invoiced yet:")

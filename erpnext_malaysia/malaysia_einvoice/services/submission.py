@@ -107,7 +107,7 @@ def build_payload(name: str) -> tuple[InvoiceData, bytes, list[str]]:
 # --------------------------------------------------------------------------- submission
 
 
-def submit_invoice(name: str, force: bool = False) -> dict:
+def submit_invoice(name: str) -> dict:
 	"""Submit one Sales Invoice to MyInvois and record the outcome.
 
 	Safe to call from a background job or from the desk; returns a summary dict rather than
@@ -124,8 +124,10 @@ def submit_invoice(name: str, force: bool = False) -> dict:
 	data, payload, warnings = build_payload(name)
 	digest = document_hash(payload)
 
+	# Idempotency is absolute: a document LHDN has already accepted with this hash is never
+	# sent again, whoever asks and however often the queue retries.
 	existing = _accepted_log(name, digest)
-	if existing and not force:
+	if existing:
 		return {
 			"status": existing.status,
 			"log": existing.name,
@@ -290,7 +292,6 @@ def _handle_failure(log, error: MyInvoisError, settings) -> dict:
 			timeout=600,
 			enqueue_after_commit=True,
 			name=log.sales_invoice,
-			force=True,
 		)
 		return {
 			"status": "Retry",
@@ -442,7 +443,6 @@ def retry_pending() -> dict:
 			queue="long",
 			timeout=600,
 			name=row.sales_invoice,
-			force=True,
 		)
 	return {"queued": len(logs)}
 
