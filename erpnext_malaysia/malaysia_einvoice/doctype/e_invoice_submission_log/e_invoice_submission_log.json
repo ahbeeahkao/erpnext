@@ -1,0 +1,224 @@
+{
+ "actions": [],
+ "autoname": "EISL-.#####",
+ "creation": "2026-10-30 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sales_invoice",
+  "company",
+  "customer",
+  "status",
+  "column_break_main",
+  "invoice_type",
+  "code_number",
+  "attempts",
+  "document_section",
+  "submission_uid",
+  "uuid",
+  "long_id",
+  "column_break_document",
+  "document_hash",
+  "submitted_on",
+  "last_checked_on",
+  "payload_section",
+  "warnings",
+  "cancellation_reason",
+  "request",
+  "response",
+  "error"
+ ],
+ "fields": [
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "default": "Queued",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Queued\nSubmitting\nSubmitted\nValid\nInvalid\nCancelled\nRejected\nRetry\nError\nSkipped",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "01 Invoice, 02 Credit Note, 03 Debit Note, 04 Refund Note.",
+   "fieldname": "invoice_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "e-Invoice Type",
+   "options": "\n01\n02\n03\n04",
+   "read_only": 1
+  },
+  {
+   "fieldname": "code_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Document Number",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "attempts",
+   "fieldtype": "Int",
+   "label": "Attempts",
+   "read_only": 1
+  },
+  {
+   "fieldname": "document_section",
+   "fieldtype": "Section Break",
+   "label": "MyInvois Document"
+  },
+  {
+   "fieldname": "submission_uid",
+   "fieldtype": "Data",
+   "label": "Submission UID",
+   "read_only": 1
+  },
+  {
+   "description": "The UUID LHDN assigns once the document is accepted for processing.",
+   "fieldname": "uuid",
+   "fieldtype": "Data",
+   "label": "Document UUID",
+   "read_only": 1
+  },
+  {
+   "description": "Long ID used to build the public validation link / QR code.",
+   "fieldname": "long_id",
+   "fieldtype": "Data",
+   "label": "Long ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_document",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "SHA-256 (hex) of the exact document bytes submitted — the idempotency key.",
+   "fieldname": "document_hash",
+   "fieldtype": "Data",
+   "label": "Document Hash",
+   "read_only": 1
+  },
+  {
+   "fieldname": "submitted_on",
+   "fieldtype": "Datetime",
+   "label": "Submitted On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_checked_on",
+   "fieldtype": "Datetime",
+   "label": "Last Status Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payload_section",
+   "fieldtype": "Section Break",
+   "label": "Payload & Result",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "warnings",
+   "fieldtype": "Small Text",
+   "label": "Warnings",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancellation_reason",
+   "fieldtype": "Small Text",
+   "label": "Cancellation Reason",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request",
+   "fieldtype": "Code",
+   "label": "Submitted Document (UBL JSON)",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "response",
+   "fieldtype": "Code",
+   "label": "MyInvois Response",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error",
+   "fieldtype": "Long Text",
+   "label": "Error",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-30 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Malaysia E-Invoice",
+ "name": "E Invoice Submission Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "code_number",
+ "track_changes": 1
+}

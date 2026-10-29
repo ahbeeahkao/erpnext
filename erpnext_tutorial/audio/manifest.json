@@ -1,0 +1,77 @@
+{
+	"course": "Mastering ERPNext",
+	"voice": "voice-00",
+	"note": "Chapter narration generated from course/*.json narration text. Transcripts are identical to the narration field.",
+	"chapters": {
+		"ch01": {
+			"file": "ch01.mp3",
+			"voice": "voice-00",
+			"chars": 1356,
+			"bytes": 742313,
+			"text": "Welcome to the course. Chapter one is about how ERPNext thinks, because most mistakes with it come from a wrong mental model. ERPNext runs on the Frappe framework, and everything you see is metadata stored in the database. A DocType is a table definition; a document is one row in it. When you submit a document it stops being editable and posts to ledgers, and there are three. The General Ledger holds accounting entries and feeds the profit and loss and balance sheet. The Stock Ledger holds quantity and valuation movements. The Payment Ledger holds what is still owed on each invoice, which is what receivables ageing actually reads. A mistake in one ledger is invisible in the other two, which is why reconciliation is a monthly habit. Set up in this order: company, chart of accounts, cost centres, masters, taxes and pricing, then people and permissions, because each step depends on the one before. For Malaysian sites, tax is SST, not the repealed GST, and older tax templates may still carry GST rows. Learn to navigate like an operator: search instead of menu trees, save filtered list views for your team, and treat cancel and amend as the only safe correction after submission. In the lab you will post a journal entry, cancel it, and watch four rows appear in the general ledger. If that surprises you, good. That is the audit trail working."
+		},
+		"ch02": {
+			"file": "ch02.mp3",
+			"voice": "voice-00",
+			"chars": 1309,
+			"bytes": 775123,
+			"text": "Chapter two is about masters, the four decisions that are cheap before go-live and expensive afterwards. First, items. An item is a costing decision wearing a product name: the item type decides whether stock is tracked, and the valuation method decides how value moves. Choose FIFO or moving average once, in the pilot, and write down why. Units of measure come first, because if conversions are wrong the stock report still looks plausible while valuation drifts. Second, parties. A customer is the default value factory for every future sales document: control account, currency, price list, payment terms. For Malaysia capture TIN and business registration number, and keep one complete primary address, because LHDN validates both. Third, pricing. Rates resolve in layers: price list, then item prices filtered by customer and unit, then pricing rules. When a rate looks wrong, walk the layers instead of editing the line. Fourth, tax. Use On Net Total rows for SST, one row per tax account, and if your prices already include tax, mark the row included in print rate, otherwise the customer pays it twice. Dimensions are the quiet fifth decision: if anyone will ever ask profit by branch, create the accounting dimension before the first transaction. Import in dependency order and test on a copy first."
+		},
+		"ch03": {
+			"file": "ch03.mp3",
+			"voice": "voice-00",
+			"chars": 1343,
+			"bytes": 708249,
+			"text": "Chapter three follows the money out of the building. Five documents, two events. A quotation writes nothing. A sales order is a commitment and normally writes nothing, though it can reserve stock. The delivery note moves stock. The sales invoice creates revenue, receivables and tax. The payment entry brings cash in and allocates it. Keep those two events separate and every reconciliation question gets easier. On the order, fill delivery date and warehouse per line, because those fields drive picking, planning and reports. Use per-billed and per-delivered percentages for staged work instead of splitting the order. On the delivery note, pick batches and serials properly instead of typing them into a description. If stock goes negative you have a missing or late receipt, so fix the receipt date rather than the report. Invoice from the delivery note to keep quantities matching, and remember that submitting the invoice also triggers e-invoicing in Malaysia. Returns must be created as a return against the original invoice, never as a negative-priced new invoice, because the payment ledger links them and LHDN requires the credit note to reference the original UUID. Finally, cash: a payment that is not allocated is not a settled invoice. Use get outstanding invoices, run payment reconciliation weekly, and receivables stay boring."
+		},
+		"ch04": {
+			"file": "ch04.mp3",
+			"voice": "voice-00",
+			"chars": 1384,
+			"bytes": 729983,
+			"text": "Chapter four is the mirror image of selling, with one extra document, because suppliers deliver before you approve anything. The chain runs material request, request for quotation, supplier quotation, purchase order, purchase receipt, purchase invoice and payment. Only the receipt moves stock. Only the invoice creates the payable. Two shortcuts are legitimate: order directly when the supplier is nominated, and invoice a service with no receipt at all. Fine, but keep them visibly different from the standard flow. Start buying at the material request, because that is where demand and approval belong. Put real dates, terms and tax templates on the order, and use per-received and per-billed percentages for instalments. The receipt is where inventory value is born: the rate you receive at becomes the stock valuation, so a wrong rate poisons every margin report until it is fixed. Record rejections on the receipt line rather than receiving and transferring out. Bill against the receipt so three-way matching can protect you. Watch the stock received but not billed account; if it grows, you have unbilled liabilities hiding in the balance sheet. For imports, book at customs value and use a landed cost voucher. Returns go against the original receipt or invoice, never as adjustments. Note that foreign suppliers need self-billed e-invoices, which this course does not cover."
+		},
+		"ch05": {
+			"file": "ch05.mp3",
+			"voice": "voice-00",
+			"chars": 1380,
+			"bytes": 766764,
+			"text": "Chapter five is stock accuracy, and it starts with one row. Every receipt, issue, transfer and count writes a stock ledger entry with quantity, valuation rate, value and a running balance. Everything else is a consequence. If someone says stock is wrong, ask which row is wrong. Valuation method is a policy decision. FIFO consumes the oldest layers, so cost of goods sold follows historical purchase prices. Moving average re-blends on every receipt, which smooths margins. Both are fine; inconsistency is not, and changing later requires a repost that rewrites history, so decide in the pilot. Use transfers for movement between warehouses, never a receipt plus an issue, because that invents trading activity. Opening stock is a receipt flagged as opening. When counts disagree, post a stock reconciliation with the counted quantity and send the difference to an adjustment account. Never edit old receipts to hide a variance, and keep adjustment and write-off accounts separate, otherwise shrinkage disappears into cost of goods sold and nobody investigates. For traceability, enable batches and serials at receipt time, because a batch scanned late breaks the chain; practise one mock recall. Finally, check the stock and account value difference report before any correction. If it is not zero, look for a wrong receipt rate, a missing landed cost, or a repost still queued."
+		},
+		"ch06": {
+			"file": "ch06.mp3",
+			"voice": "voice-00",
+			"chars": 1432,
+			"bytes": 795603,
+			"text": "Chapter six is accounting, and the theme is evidence. Start with the chart of accounts and with restraint. Group accounts hold no postings. Account type drives behaviour: bank accounts reconcile, receivables attach to customers, accumulated depreciation is a contra asset. The classic mistake is encoding dimensions in account names, which multiplies rows and destroys comparability; use cost centres or an accounting dimension instead. Then the six journal patterns: accruals with a reversal date, prepayments amortised monthly, depreciation against accumulated depreciation, bad debt write-offs that keep the party and reference, mirrored intercompany entries, and one payroll journal per run. Journals are the language of period accounting, not a workaround for missing documents, so name them consistently. For cash, the discipline is allocation: a payment not allocated to an invoice is not a settled invoice. Put bank charges on the payment as deductions, and never reconcile a bank line against a journal with no party, because it balances the account and destroys the trail. The close is a sequence with owners and dates: cut off transactions, post accruals and depreciation, reconcile bank, receivables and payables, then review the statements. Freeze the past with a period closing voucher and restrict back-dating to one named person. For Malaysia, reconcile submitted e-invoices to the sales ledger before filing SST-02."
+		},
+		"ch07": {
+			"file": "ch07.mp3",
+			"voice": "voice-00",
+			"chars": 1449,
+			"bytes": 785154,
+			"text": "Chapter seven is manufacturing, which in ERPNext is assembly with accounting attached. Three documents and one idea. The bill of materials is the recipe: components, quantities, operations, scrap and cost. The work order is the batch: how many, by when, from which warehouse. The job card is the labour record. Then a stock entry of type manufacture is the physical event that consumes components and produces finished goods. Put scrap in the BOM even when it feels unflattering. Without it, every work order comes up short and the shop floor quietly issues extra material with no document, which destroys the variance report. Version your BOMs instead of editing recipes production already used, so history points at the recipe that was followed. Plan from confirmed orders through a production plan, and check capacity before promising dates. When executing, transfer materials before consuming, receive finished goods in partial entries as reality requires, and record rejected units rather than receiving and adjusting later. Receiving production before consuming components is the classic error: it leaves component stock negative and understates cost of production. Cost per finished unit is components consumed, plus operations, plus additional costs, divided by accepted quantity; when it looks wrong, check those four inputs in that order. Reconcile subcontractor warehouses monthly, and read work in progress before every inventory review."
+		},
+		"ch08": {
+			"file": "ch08.mp3",
+			"voice": "voice-00",
+			"chars": 1348,
+			"bytes": 715355,
+			"text": "Chapter eight covers the modules that stop being optional once a company passes twenty people. Projects are a cost collector with a Gantt chart attached. Every hour, purchase and expense that references the project joins the same profitability view, which means the project field must be mandatory on timesheets and expenses; an hour that does not name its project is invisible forever. Decide the billing model at creation, time and materials or fixed price, because it changes what you record and how you invoice. Assets exist so you never rebuild depreciation in a spreadsheet: capitalise through a purchase invoice flagged as a fixed asset, let the category drive the schedule, and treat movement, disposal and repair as separate documents. Reconcile the register to the fixed-asset accounts quarterly. For quality, choose two or three parameters that predict customer complaints and make them hard gates at receipt and at the job card; a system that measures everything and blocks nothing is documentation, not control. For CRM, one opportunity behind every quotation plus a weekly stage update keeps the pipeline useful. Support data is the cheapest product feedback you own: repeated serial failures are a supplier or manufacturing problem, not a service problem. The value of these modules is in the joins, so show the report, not the form."
+		},
+		"ch09": {
+			"file": "ch09.mp3",
+			"voice": "voice-00",
+			"chars": 1449,
+			"bytes": 808142,
+			"text": "Chapter nine is about changing the system without forking it. Start with configuration, because most requirements are a checkbox away. Custom fields live in the database and survive upgrades, unlike editing DocType JSON in the repository. Property setters override a default or an option, and list view settings decide what people see first, which is the cheapest usability win you will find. For approvals, design around one decision that carries real risk: discount, credit, write-off, or a purchase above a threshold. A workflow that adds clicks without a decision gets routed around within a month, and broad mandatory approvals train people to click approve without reading. Automation should remove decisions rather than add noise: one digest per role beats forty notifications nobody reads. Print formats are what customers judge you by, so test them with long item names and tax rows, and add the SST registration number and LHDN validation link once you are e-invoicing. Permissions have four layers: roles at DocType level, permission levels for fields, user permissions for rows like company or warehouse, and role profiles for onboarding. Always test as a real non-admin user, because System Manager hides every mistake. Then choose deliberately between configuration, client script, server script and a custom app; if it touches money, stock or statutory reporting, it belongs in a versioned app with tests. Keep it fast and debuggable."
+		},
+		"ch10": {
+			"file": "ch10.mp3",
+			"voice": "voice-00",
+			"chars": 1448,
+			"bytes": 777631,
+			"text": "Chapter ten takes the course live. Make the gate organisational rather than technical: masters reviewed by the people who use them, UAT signed off on the ten transactions that matter, opening balances tying to the audited trial balance, and a named super-user in every department. If nobody can name that person, the department is not ready. Agree in writing what triggers a rollback and who can call it. Opening balances are a one-time chance to start clean. Load stock through stock documents so valuation enters the ledger. Load receivables and payables as opening invoices, not journals, so ageing, allocation and dunning work. Put everything else in an opening journal against opening balance equity, and reconcile before the first real transaction. Write the cut-over as a timed runbook with a verification step after each block, and rehearse it on staging twice. Afterwards: test a restore quarterly, keep a staging site, pin versions, and review custom apps after every upgrade. Harden security with two-factor authentication, least privilege and a leavers checklist. Then the Malaysian specifics: separate SST liability accounts, a monthly reconciliation, and the e-invoice app tested end to end in sandbox, including a cancellation with a reason, before your first real invoice. Agree two policies on day one: who may cancel an e-invoice, and what happens when a buyer rejects one. Mastery is predicting what a change does to the ledgers."
+		}
+	}
+}

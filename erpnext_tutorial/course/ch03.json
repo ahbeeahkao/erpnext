@@ -1,0 +1,226 @@
+{
+	"id": "ch03",
+	"number": 3,
+	"title": "Selling: Order to Cash",
+	"subtitle": "From quotation to banked money, with the stock and accounting events in between",
+	"level": "Core",
+	"minutes": 50,
+	"outcomes": [
+		"Run a quotation-to-payment cycle including partial delivery and returns",
+		"Explain which document moves stock and which one creates revenue",
+		"Configure credit limits, reservations and advance payments",
+		"Read the selling reports that actually predict cash"
+	],
+	"slides": [
+		{
+			"kicker": "Orientation",
+			"title": "Five documents, two events",
+			"bullets": [
+				"Quotation → Sales Order → Delivery Note → Sales Invoice → Payment Entry is the full chain",
+				"Only the Delivery Note moves stock; only the Sales Invoice creates revenue and receivables",
+				"Each step is optional after the Sales Order: service businesses often skip the Delivery Note",
+				"Every document keeps links to its parents, so the chain is traceable in both directions"
+			],
+			"notes": "Teach the two events before the five documents. New users conflate selling with shipping with invoicing, then wonder why revenue appears before the goods leave. Once you know that the Delivery Note writes the stock ledger and the Sales Invoice writes the general and payment ledgers, every 'why is this number wrong' question becomes a question about which document was missed.",
+			"table": {
+				"headers": ["Document", "Business meaning", "Writes to"],
+				"rows": [
+					["Quotation", "An offer, no commitment", "Nothing"],
+					["Sales Order", "A commitment to supply", "Nothing (optional stock reservation)"],
+					["Delivery Note", "Goods left the warehouse", "Stock ledger"],
+					["Sales Invoice", "Revenue and receivable", "General + Payment ledger"],
+					["Payment Entry", "Cash received and allocated", "General + Payment ledger"]
+				]
+			}
+		},
+		{
+			"kicker": "Sales Order",
+			"title": "The order is where you prevent the fire",
+			"bullets": [
+				"Set delivery date and warehouse per line; ERPNext uses them to plan and to reserve stock",
+				"Per-billed and per-delivered percentages let one order bill in stages without splitting the order",
+				"'Reserve Stock' on the order (or Stock Settings globally) holds inventory for this customer",
+				"Credit limit and 'Check Credit Limit' on the Customer stop the order before it becomes a bad debt"
+			],
+			"notes": "Most operational disputes are decided at the order: which warehouse, which date, how much may be invoiced now. Fill those fields rather than writing them in the remarks. If you enable stock reservation, remember it consumes availability — a warehouse can look empty while stock sits reserved for orders that will never ship.",
+			"callout": {
+				"tone": "tip",
+				"title": "Two fields that prevent 80% of arguments",
+				"text": "Delivery Date and Warehouse. Both are on the line, both print on the picking list, both feed the reports."
+			}
+		},
+		{
+			"kicker": "Delivery Note",
+			"title": "The stock event, with batch and serial discipline",
+			"bullets": [
+				"Create from the Sales Order so quantities and rates are inherited; never retype a line that exists",
+				"Partial delivery leaves the order open; the balance shows as 'per delivered' less than 100%",
+				"Batch and serial numbers are selected here — use the 'Tracking' fields, not free text in the description",
+				"The 'Update Stock' checkbox exists for service and non-stock flows; leaving it on for a service item is harmless, turning it off for a stock item is not"
+			],
+			"notes": "The Delivery Note is also your proof of dispatch: print it, get it signed, keep it. In Malaysia it is the document customs and auditors ask for when they question when goods moved. If you deliver without an order, create the Delivery Note directly but still fill the warehouse and customer address.",
+			"callout": {
+				"tone": "warn",
+				"title": "Negative stock is a symptom",
+				"text": "If the Delivery Note submits with negative stock, a receipt is missing or late. Fix the receipt date, not the report."
+			}
+		},
+		{
+			"kicker": "Sales Invoice",
+			"title": "The accounting event",
+			"bullets": [
+				"Invoice from the Delivery Note to keep quantity matching perfect; invoice from the order only for services or milestone billing",
+				"The invoice posts: debit receivable, credit income, credit tax liability, and cost of goods sold if 'Update Stock' is used",
+				"Advance payments are recorded as payments against the order, then allocated when the invoice is created",
+				"Once submitted, corrections go through cancel → amend (or a credit note), never an edit"
+			],
+			"notes": "Invoicing before delivery is legal but creates a mismatch between revenue and stock. If the business needs it, decide the policy explicitly and reconcile monthly. For Malaysia, the Sales Invoice submit is also the moment e-Invoicing fires: our app queues the LHDN submission after commit and tracks its validation.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "e-Invoice timing",
+				"text": "LHDN expects the e-Invoice when the invoice is issued. Submitting days later is permitted within the grace window but flagged; submit on the day."
+			}
+		},
+		{
+			"kicker": "Returns",
+			"title": "Credit notes without breaking the quarter",
+			"bullets": [
+				"Create the return with 'Is Return' and 'Return Against' the original invoice — never as a new negative-priced invoice",
+				"Restocking is a choice per line: return to stock, or write off to an expense if the goods are damaged",
+				"The credit note links to the original in the Payment Ledger, so AR ageing nets correctly",
+				"At LHDN, a credit note is a separate e-Invoice (type 02) that must reference the original document's UUID"
+			],
+			"notes": "Returns are where ledgers silently diverge: stock comes back but the invoice is not credited, or vice versa. Insist on return-against-original so the payment ledger can link the two, and reconcile returns monthly against the stock ledger. If the original invoice was e-Invoiced, the credit note must carry its UUID or LHDN rejects it.",
+			"paths": [
+				"Selling > Sales Invoice > Is Return",
+				"Stock > Stock Entry (Material Transfer for damaged goods)"
+			]
+		},
+		{
+			"kicker": "Cash",
+			"title": "Payment Entry: allocation is the whole game",
+			"bullets": [
+				"Payment Entry against an invoice settles it; against the party only, it becomes an unallocated advance",
+				"Payment Terms generate the schedule that ageing reports use — Net 30 with a 2% 10-day discount needs two rows",
+				"'Deductions' handle bank charges and withholding in one entry instead of two",
+				"Unallocated amounts appear in 'Payment Reconciliation' and in the party's advance balance — allocate them or they age forever"
+			],
+			"notes": "A payment that is not allocated is not a settled invoice, no matter what the bank statement says. Teach the team to use 'Get Outstanding Invoices' inside Payment Entry, and to run Payment Reconciliation weekly. This one habit is the difference between a clean AR ledger and a quarter-end archaeology project.",
+			"table": {
+				"headers": ["Scenario", "Do", "Avoid"],
+				"rows": [
+					[
+						"Customer pays two invoices at once",
+						"One Payment Entry, allocate both references",
+						"Two entries with the same bank transaction"
+					],
+					[
+						"Customer overpays",
+						"Allocate invoices, leave the balance as advance",
+						"Adjusting the invoice rate"
+					],
+					[
+						"Bank fee deducted",
+						"Add a deduction row to the payment",
+						"A separate journal entry with no reference"
+					],
+					[
+						"Payment received before invoice",
+						"Advance Payment Entry, allocate on invoicing",
+						"Booking income on the payment date"
+					]
+				]
+			}
+		},
+		{
+			"kicker": "Controls",
+			"title": "Controls that scale past the founder",
+			"bullets": [
+				"Credit limit on Customer + 'Check Credit Limit' in Selling Settings blocks over-limit orders",
+				"Roles: a Sales User may create orders, only a Sales Manager may amend an invoiced document",
+				"Document statuses are computed, not typed: To Deliver and Bill, Completed, Overdue — trust them, do not override",
+				"Enable 'Allow User to Close Sales Order' only if operations can be trusted to close honestly"
+			],
+			"notes": "Controls fail politely when nobody owns them. Write down who may amend an invoice, who may override a credit hold, and how a discount above the pricing rule gets approved. ERPNext enforces what you configure, so configure the exceptions as workflow steps rather than trusting memory.",
+			"callout": {
+				"tone": "warn",
+				"title": "Amending an invoiced order",
+				"text": "The order stays open after invoicing. Closing it without delivering leaves 'per delivered' at 0% and inventory unaccounted for."
+			}
+		},
+		{
+			"kicker": "Reports",
+			"title": "The four selling reports worth a weekly habit",
+			"bullets": [
+				"Sales Order Analysis — what is committed, by delivery date, by item and by salesperson",
+				"Accounts Receivable summary and ageing — what is owed, bucketed by age, with the party's currency",
+				"Gross Profit — margin by invoice; run it by item group to find the products that only look profitable",
+				"Item-wise Sales Register and Sales Analytics — volume trends against price changes"
+			],
+			"notes": "Dashboards are decoration unless someone acts on them. Pick four reports, name an owner and a cadence, and put them on the wall. If a report is wrong, fix the underlying documents rather than exporting to Excel — every workaround teaches the team that ERPNext cannot be trusted, and that belief is harder to fix than any query.",
+			"paths": ["Selling > Reports", "Accounts > Accounts Receivable", "Selling > Sales Order Analysis"]
+		}
+	],
+	"lab": {
+		"title": "Ship a partial order, invoice it, collect and credit",
+		"minutes": 45,
+		"steps": [
+			"Create a Quotation for two lines (one stock item, one service) and convert it to a Sales Order with a delivery date",
+			"Set the stock item's delivery to 4 of 10 units: submit a Delivery Note for 4 and confirm the order shows per-delivered 40%",
+			"Invoice the delivered quantity only; note the cost of goods sold entry in the General Ledger",
+			"Record a Payment Entry for the invoice using 'Get Outstanding Invoices' and confirm the invoice shows Paid",
+			"Create a Sales Invoice with 'Is Return', 'Return Against' the original, returning 1 unit; choose 'return to stock'",
+			"Run Accounts Receivable ageing and confirm the return reduced the customer's balance",
+			"If the e-Invoice app is installed: open the original invoice and press 'e-Invoice Status' to see the submitted UUID, then preview the credit note document and check the BillingReference"
+		],
+		"done": "Order shows 40% delivered and 100% billed on the delivered quantity; AR nets to the returned value; the credit note references the original e-Invoice UUID."
+	},
+	"quiz": [
+		{
+			"question": "Which document creates revenue in the general ledger?",
+			"options": ["Sales Order", "Delivery Note", "Sales Invoice", "Quotation"],
+			"answer": 2,
+			"why": "The Sales Invoice posts income, receivable and tax. The Delivery Note only moves stock, even though it feels like the sale."
+		},
+		{
+			"question": "A customer paid RM5,000 against two invoices of RM2,000 and RM3,000. What must you do beyond recording the payment?",
+			"options": [
+				"Nothing, the balance clears itself",
+				"Allocate the payment against both invoice references",
+				"Create two separate payment entries",
+				"Amend the invoices to zero"
+			],
+			"answer": 1,
+			"why": "The Payment Ledger settles per invoice. Without allocation the invoices stay open and age, while the party shows an advance."
+		},
+		{
+			"question": "What is the correct way to reverse an invoiced sale of damaged goods that came back?",
+			"options": [
+				"Delete the invoice",
+				"Create a return invoice against the original, choosing whether to restock",
+				"Create a new invoice with negative rates",
+				"Post a journal entry with no reference"
+			],
+			"answer": 1,
+			"why": "Return against original links the documents in the Payment Ledger, keeps the audit trail and (in Malaysia) allows the mandatory LHDN credit note reference."
+		},
+		{
+			"question": "Stock shows negative after a Delivery Note even though goods were received last week. What is the most likely cause?",
+			"options": [
+				"The valuation method is wrong",
+				"The Purchase Receipt is dated after the Delivery Note, or was never submitted",
+				"The item is a service item",
+				"The warehouse is a group warehouse"
+			],
+			"answer": 1,
+			"why": "Stock is dated. A back-dated delivery against a later receipt produces negative stock; fix the dates or submit the missing receipt."
+		},
+		{
+			"question": "For a Malaysian sale of services at 8% service tax, which tax template row type do you need?",
+			"options": ["Actual", "On Item Quantity", "On Net Total", "On Previous Row Total"],
+			"answer": 2,
+			"why": "Service tax is a percentage of the net line amounts, so On Net Total with the liability account is correct."
+		}
+	],
+	"narration": "Chapter three follows the money out of the building. Five documents, two events. A quotation writes nothing. A sales order is a commitment and normally writes nothing, though it can reserve stock. The delivery note moves stock. The sales invoice creates revenue, receivables and tax. The payment entry brings cash in and allocates it. Keep those two events separate and every reconciliation question gets easier. On the order, fill delivery date and warehouse per line, because those fields drive picking, planning and reports. Use per-billed and per-delivered percentages for staged work instead of splitting the order. On the delivery note, pick batches and serials properly instead of typing them into a description. If stock goes negative you have a missing or late receipt, so fix the receipt date rather than the report. Invoice from the delivery note to keep quantities matching, and remember that submitting the invoice also triggers e-invoicing in Malaysia. Returns must be created as a return against the original invoice, never as a negative-priced new invoice, because the payment ledger links them and LHDN requires the credit note to reference the original UUID. Finally, cash: a payment that is not allocated is not a settled invoice. Use get outstanding invoices, run payment reconciliation weekly, and receivables stay boring."
+}

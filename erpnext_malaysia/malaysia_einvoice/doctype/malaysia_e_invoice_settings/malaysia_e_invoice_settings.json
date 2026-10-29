@@ -1,0 +1,190 @@
+{
+ "creation": "2026-10-30 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "general_section",
+  "enabled",
+  "environment",
+  "auto_submit",
+  "cancel_on_sales_invoice_cancel",
+  "submit_inline",
+  "column_break_general",
+  "allow_general_public",
+  "credentials_section",
+  "client_id",
+  "on_behalf_of",
+  "client_secret",
+  "column_break_credentials",
+  "request_timeout",
+  "max_retries",
+  "defaults_section",
+  "default_classification_code",
+  "default_tax_type",
+  "taxes_section",
+  "tax_accounts"
+ ],
+ "fields": [
+  {
+   "fieldname": "general_section",
+   "fieldtype": "Section Break",
+   "label": "General"
+  },
+  {
+   "default": "0",
+   "description": "When disabled, no Sales Invoice is submitted and the hooks do nothing.",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enable Malaysia e-Invoicing"
+  },
+  {
+   "default": "Sandbox",
+   "description": "Sandbox talks to preprod-api.myinvois.hasil.gov.my, Production to api.myinvois.hasil.gov.my.",
+   "fieldname": "environment",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Environment",
+   "options": "Sandbox\nProduction",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "description": "Submit a Sales Invoice to MyInvois automatically when it is submitted.",
+   "fieldname": "auto_submit",
+   "fieldtype": "Check",
+   "label": "Submit Automatically on Sales Invoice Submit"
+  },
+  {
+   "default": "0",
+   "description": "Try to cancel the e-Invoice at MyInvois when the Sales Invoice is cancelled. LHDN only allows cancellation within 72 hours of validation.",
+   "fieldname": "cancel_on_sales_invoice_cancel",
+   "fieldtype": "Check",
+   "label": "Cancel e-Invoice when Sales Invoice is Cancelled"
+  },
+  {
+   "default": "0",
+   "description": "Queue on the short queue instead of long. Only useful for very low volume sites.",
+   "fieldname": "submit_inline",
+   "fieldtype": "Check",
+   "label": "Use Short Queue"
+  },
+  {
+   "fieldname": "column_break_general",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "description": "Allow invoices to be billed to LHDN's General Public buyer (EI00000000010) \u2014 required for B2C / consolidated e-Invoices.",
+   "fieldname": "allow_general_public",
+   "fieldtype": "Check",
+   "label": "Allow General Public Buyer"
+  },
+  {
+   "fieldname": "credentials_section",
+   "fieldtype": "Section Break",
+   "label": "MyInvois API Credentials"
+  },
+  {
+   "description": "Client ID created in the MyInvois portal (Taxpayer System > MyInvois System > Integration).",
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "label": "Client ID",
+   "mandatory_depends_on": "enabled"
+  },
+  {
+   "description": "Only for intermediary systems submitting on behalf of a taxpayer: that taxpayer's TIN.",
+   "fieldname": "on_behalf_of",
+   "fieldtype": "Data",
+   "label": "On Behalf Of (Intermediary TIN)"
+  },
+  {
+   "fieldname": "client_secret",
+   "fieldtype": "Password",
+   "label": "Client Secret",
+   "mandatory_depends_on": "enabled"
+  },
+  {
+   "fieldname": "column_break_credentials",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "30",
+   "description": "HTTP timeout in seconds for every MyInvois call.",
+   "fieldname": "request_timeout",
+   "fieldtype": "Int",
+   "label": "Request Timeout (seconds)"
+  },
+  {
+   "default": "3",
+   "description": "How many times a throttled (HTTP 429) or gateway-failing (HTTP 5xx) request is retried.",
+   "fieldname": "max_retries",
+   "fieldtype": "Int",
+   "label": "Max Retries"
+  },
+  {
+   "fieldname": "defaults_section",
+   "fieldtype": "Section Break",
+   "label": "Document Defaults"
+  },
+  {
+   "description": "Used when neither the item nor the invoice line carries an MSIC code.",
+   "fieldname": "default_classification_code",
+   "fieldtype": "Link",
+   "label": "Default Classification (MSIC) Code",
+   "options": "LHDN Classification Code"
+  },
+  {
+   "default": "06",
+   "description": "01 Sales Tax, 02 Service Tax, 03 Tourism Tax, 04 High-Value Goods Tax, 05 Sales Tax on LVG, 06 Not Applicable, E Tax Exemption.",
+   "fieldname": "default_tax_type",
+   "fieldtype": "Select",
+   "label": "Default Tax Type",
+   "options": "\n01\n02\n03\n04\n05\n06\nE"
+  },
+  {
+   "fieldname": "taxes_section",
+   "fieldtype": "Section Break",
+   "description": "Map each tax liability account used on Sales Invoices to a MyInvois tax type (and its rate) so mixed-rate invoices are reported correctly.",
+   "label": "Tax Account Mapping"
+  },
+  {
+   "fieldname": "tax_accounts",
+   "fieldtype": "Table",
+   "label": "Tax Accounts",
+   "options": "Malaysia Tax Account Mapping"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-30 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Malaysia E-Invoice",
+ "name": "Malaysia E-Invoice Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

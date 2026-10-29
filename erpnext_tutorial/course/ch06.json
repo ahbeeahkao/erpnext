@@ -1,0 +1,218 @@
+{
+	"id": "ch06",
+	"number": 6,
+	"title": "Accounting Mastery and the Close",
+	"subtitle": "Chart of accounts, journals, reconciliation and a month-end you can finish on day three",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Design a chart of accounts that reports without Excel",
+		"Post the six journal patterns every business needs",
+		"Reconcile bank, receivables and payables monthly",
+		"Close a period with evidence, not optimism"
+	],
+	"slides": [
+		{
+			"kicker": "Structure",
+			"title": "Chart of accounts: fewer accounts, more dimensions",
+			"bullets": [
+				"Group accounts hold no postings; only ledger accounts receive journal entries",
+				"Account type drives behaviour: Bank and Cash reconcile, Receivable/Payable attach to parties, Accumulated Depreciation behaves differently on the balance sheet",
+				"Root types (Asset, Liability, Equity, Income, Expense) are fixed by ERPNext and must not be re-purposed",
+				"Prefer one account plus an Accounting Dimension over fifty near-duplicate accounts"
+			],
+			"notes": "The most common chart of accounts mistake is encoding dimensions in account names: Travel – Sales – North, Travel – Service – South, and so on. That multiplies rows, breaks comparability and makes the P&L unreadable. Use cost centres, projects or a custom dimension instead, then let the report group by them. A good chart of accounts fits on one screen per root type.",
+			"callout": {
+				"tone": "tip",
+				"title": "The three-question test",
+				"text": "Will anyone report on it separately this year? Is a statutory filing keyed to it? Does a bank statement line need to match it? If all three are no, use a dimension."
+			}
+		},
+		{
+			"kicker": "Journals",
+			"title": "Six journal patterns that cover almost everything",
+			"bullets": [
+				"Accrual: expense now, invoice later — debit expense, credit accrued liabilities; reverse when the invoice arrives",
+				"Prepayment: debit prepaid asset, credit bank; amortise monthly to expense",
+				"Depreciation: debit depreciation expense, credit accumulated depreciation — never credit the asset",
+				"Write-off: debit bad debt expense, credit receivable with the party and reference intact",
+				"Intercompany: two mirrored entries through the intercompany journal, never one-sided",
+				"Payroll: one entry per pay run with salary expense, statutory payables and net pay to bank"
+			],
+			"notes": "Journals are not a workaround for missing documents; they are the language of period accounting. Keep a naming convention in the remark field — ACCRUAL-2026-03, PREPAY-INSURANCE-2026 — and reverse accruals with the reversal date set explicitly, so next month's close does not depend on memory. Every journal should be explainable in one sentence to an auditor.",
+			"paths": ["Accounts > Journal Entry > Reversal", "Accounts > Journal Entry > Inter Company"]
+		},
+		{
+			"kicker": "Receivables",
+			"title": "Payment terms, advances and post-dated cheques",
+			"bullets": [
+				"Payment Terms generate schedules; a 2/10 net 30 term needs two rows with credit days and discount percentage",
+				"Advances are payments without allocation — visible in Payment Reconciliation until consumed",
+				"Post-dated cheques are recorded as a payment with a post-dated reference date, or tracked in a dedicated register account",
+				"Payment Reconciliation is the tool that settles many invoices against many payments at once"
+			],
+			"notes": "Cash application is where finance teams lose weeks. Decide the policy for overpayments, short payments and bank charges once, then encode it: deductions on the payment entry, advances left unallocated and consumed later, write-offs only with approval. Run Payment Reconciliation weekly so the unallocated bucket never accumulates.",
+			"table": {
+				"headers": ["Event", "Document", "Ledger effect"],
+				"rows": [
+					["Customer pays an invoice", "Payment Entry allocated", "Bank +, receivable −"],
+					["Customer pays early", "Payment Entry + deduction row", "Bank +, discount expense +"],
+					[
+						"Customer underpays by bank fee",
+						"Payment Entry with deduction",
+						"Bank +, bank charges expense +"
+					],
+					["Customer overpays", "Payment Entry, unallocated balance", "Bank +, advance liability"]
+				]
+			}
+		},
+		{
+			"kicker": "Bank",
+			"title": "Bank reconciliation that closes in an hour",
+			"bullets": [
+				"Create the Bank doctype per account, then import Bank Transactions from statement CSV or connect the feed",
+				"Bank Transaction Rules auto-match common narrations against party, account and reference",
+				"Match each statement line to a Payment Entry, a journal or an invoice; matched lines leave the unreconciled pool",
+				"The Bank Reconciliation Tool shows the statement balance against the ledger balance and exposes anything unmatched"
+			],
+			"notes": "Reconciliation is a matching exercise, not a data-entry exercise. If you spend more than an hour a week per account, the problem is upstream: payments are not allocated to invoices, or bank charges are posted as journals with no reference. Fix the source and reconciliation becomes a review rather than an investigation.",
+			"callout": {
+				"tone": "warn",
+				"title": "Never match to a journal",
+				"text": "A journal entry with no party or reference reconciles the balance but destroys the audit trail. Match to the payment or create one."
+			}
+		},
+		{
+			"kicker": "Close",
+			"title": "The month-end sequence",
+			"bullets": [
+				"Cut off transactions: agree the last goods receipt, delivery and invoice date with operations",
+				"Post accruals, prepayment amortisation, depreciation and payroll for the period",
+				"Reconcile bank accounts, receivables and payables to their subledgers, then review the GR/IR and advance buckets",
+				"Run the trial balance, P&L and balance sheet; investigate every movement you cannot explain in one sentence"
+			],
+			"notes": "A close is a sequence with owners and evidence, not a heroic evening. Publish the calendar: day one cut-off, day two journals, day three reconciliation, day four review, day five sign-off. Each step produces a document or a report that someone signs. If a step keeps slipping, it is usually a missing automation, not a lazy person.",
+			"paths": ["Accounts > Tools > Period Closing Voucher", "Accounts > Accounting Period"]
+		},
+		{
+			"kicker": "Controls",
+			"title": "Freezing the past",
+			"bullets": [
+				"Accounting Period or Period Closing Voucher blocks postings into a closed period",
+				"Accounts Settings controls whether users may edit or cancel submitted accounting documents, and who may back-date",
+				"Restrict back-dated entries to a small group; a back-dated receipt silently reprices everything after it",
+				"Keep the audit trail: version history, submission and cancellation logs, and immutable logs for statutory documents"
+			],
+			"notes": "Closing a period is a promise that the numbers will not change. Enforce it technically, not socially. Set the period close inside the first week, restrict back-dating to the finance lead, and review the Activity Log monthly for cancelled invoices — a spike there is either a training gap or a control failure.",
+			"callout": {
+				"tone": "tip",
+				"title": "Who can back-date?",
+				"text": "One named person. Everyone else asks that person, and every request is logged in the document's remarks."
+			}
+		},
+		{
+			"kicker": "Reporting",
+			"title": "Reading the statements like an operator",
+			"bullets": [
+				"P&L: compare periods and dimensions, not just totals; a flat total hides two segments moving in opposite directions",
+				"Balance sheet: check inventory against the stock ledger, receivables against AR ageing, and bank against statements",
+				"Cash flow: the Cash Flow Mapper decides which accounts are operating, investing and financing — maintain it",
+				"Financial Report Builder assembles custom statements from row templates when the standard ones do not fit"
+			],
+			"notes": "Statements are a reconciliation surface, not a presentation. The balance sheet is only trustworthy if its inventory, receivables, payables and bank lines agree with the reports that own those numbers. Put that cross-check in the close checklist; it catches more errors than any variance analysis.",
+			"paths": [
+				"Accounts > Reports > Profit and Loss Statement",
+				"Accounts > Reports > Balance Sheet",
+				"Accounts > Tools > Cash Flow Mapper"
+			]
+		},
+		{
+			"kicker": "Malaysia",
+			"title": "SST filing and e-Invoice reconciliation",
+			"bullets": [
+				"SST-02 is filed from output tax less input tax; make sure your SST accounts are separate from other taxes",
+				"Reconcile submitted e-Invoices to the sales ledger for the period: total, count, and any cancelled or rejected documents",
+				"LHDN cancellations must be mirrored in ERPNext — a cancelled e-Invoice with a live sales invoice is the worst of both worlds",
+				"Keep the submission log export with the period's working papers; it holds the document hash and LHDN's response"
+			],
+			"notes": "The filing is arithmetic; the audit trail is the work. Malaysian auditors increasingly ask for the e-Invoice submission evidence alongside the ledger, so export the submission log monthly and file it with the close. If the numbers differ, the difference is almost always a credit note that was issued in ERPNext but never submitted, or the reverse.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "One number, two places",
+				"text": "Sales ledger total for the period must equal submitted e-Invoice totals plus any documents still in error state. Reconcile before filing, not after."
+			}
+		}
+	],
+	"lab": {
+		"title": "Close a month with evidence",
+		"minutes": 60,
+		"steps": [
+			"Import a bank statement CSV as Bank Transactions and create two matching rules for recurring narrations",
+			"Match every statement line to a payment, an invoice or a new payment entry; leave nothing unreconciled",
+			"Post an accrual journal for an unbilled utility, set a reversal date in the next period, and verify the reversal appears",
+			"Post depreciation for one asset category and confirm the accumulated depreciation account increased while the asset stayed put",
+			"Run Trial Balance, P&L by cost centre and Balance Sheet; tie inventory to the stock ledger and receivables to AR ageing",
+			"Create a Period Closing Voucher for the month and attempt to post a back-dated journal — observe the block",
+			"Export the e-Invoice submission log for the month and reconcile its total to the sales ledger"
+		],
+		"done": "You can hand someone the close pack — reconciliation evidence, journals with reversals, and three statements that agree with their subledgers — and they can follow it without asking you a question."
+	},
+	"quiz": [
+		{
+			"question": "Where does depreciation of an asset go?",
+			"options": [
+				"Credit the asset account directly",
+				"Debit depreciation expense, credit accumulated depreciation",
+				"Debit accumulated depreciation, credit bank",
+				"Credit retained earnings"
+			],
+			"answer": 1,
+			"why": "Accumulated depreciation is a contra-asset so the asset keeps its cost on the balance sheet while its carrying value falls."
+		},
+		{
+			"question": "A customer underpays by RM30 because of a bank charge. What is the cleanest treatment?",
+			"options": [
+				"Amend the invoice to RM30 less",
+				"Post the payment with a RM30 deduction to bank charges",
+				"Leave an unallocated balance",
+				"Write it off as bad debt"
+			],
+			"answer": 1,
+			"why": "Deductions settle the invoice fully and book the fee to its own account, keeping both the receivable and the expense correct."
+		},
+		{
+			"question": "What does a Period Closing Voucher do?",
+			"options": [
+				"Closes the fiscal year and resets balances",
+				"Blocks postings into the closed period",
+				"Transfers profit to retained earnings",
+				"Archives documents"
+			],
+			"answer": 1,
+			"why": "It prevents back-dated postings into a closed period; profit transfer happens through the year-end closing entry."
+		},
+		{
+			"question": "Which reconciliation should you run before trusting the balance sheet inventory line?",
+			"options": [
+				"Stock Ageing only",
+				"Inventory account balance against the stock ledger value",
+				"Gross profit by item",
+				"Bank reconciliation"
+			],
+			"answer": 1,
+			"why": "The balance sheet reads the GL; the stock ledger is the operational truth. Comparing them is the check that both received entries."
+		},
+		{
+			"question": "For a Malaysian period filing, what must be reconciled alongside the sales ledger?",
+			"options": [
+				"Only the bank statement",
+				"Submitted e-Invoice totals, including cancelled and rejected documents",
+				"Payroll register",
+				"Purchase orders"
+			],
+			"answer": 1,
+			"why": "The ledger and LHDN's accepted documents must agree; unreconciled credit notes are the usual cause of a difference."
+		}
+	],
+	"narration": "Chapter six is accounting, and the theme is evidence. Start with the chart of accounts and with restraint. Group accounts hold no postings. Account type drives behaviour: bank accounts reconcile, receivables attach to customers, accumulated depreciation is a contra asset. The classic mistake is encoding dimensions in account names, which multiplies rows and destroys comparability; use cost centres or an accounting dimension instead. Then the six journal patterns: accruals with a reversal date, prepayments amortised monthly, depreciation against accumulated depreciation, bad debt write-offs that keep the party and reference, mirrored intercompany entries, and one payroll journal per run. Journals are the language of period accounting, not a workaround for missing documents, so name them consistently. For cash, the discipline is allocation: a payment not allocated to an invoice is not a settled invoice. Put bank charges on the payment as deductions, and never reconcile a bank line against a journal with no party, because it balances the account and destroys the trail. The close is a sequence with owners and dates: cut off transactions, post accruals and depreciation, reconcile bank, receivables and payables, then review the statements. Freeze the past with a period closing voucher and restrict back-dating to one named person. For Malaysia, reconcile submitted e-invoices to the sales ledger before filing SST-02."
+}

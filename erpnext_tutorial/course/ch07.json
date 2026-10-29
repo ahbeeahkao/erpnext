@@ -1,0 +1,218 @@
+{
+	"id": "ch07",
+	"number": 7,
+	"title": "Manufacturing",
+	"subtitle": "Bills of materials, work orders and the cost that ends up in finished goods",
+	"level": "Advanced",
+	"minutes": 50,
+	"outcomes": [
+		"Build a BOM that reflects how the product is actually made",
+		"Run work orders with material transfer, job cards and partial production",
+		"Explain the cost of a finished unit, and prove it",
+		"Subcontract without losing control of components"
+	],
+	"slides": [
+		{
+			"kicker": "Model",
+			"title": "Three documents, one idea",
+			"bullets": [
+				"Bill of Materials: what a product is made of and the operations required, with costs and scrap",
+				"Work Order: a commitment to produce a quantity on a date, created manually or from a Sales Order or Production Plan",
+				"Job Card: the shop-floor work for one operation, recording time, operators and completion",
+				"A Stock Entry of type Manufacture consumes components and produces the finished good in one movement"
+			],
+			"notes": "Manufacturing in ERPNext is assembly with accounting attached. The BOM is the recipe, the work order is the batch, the job card is the labour record, and the manufacture stock entry is the physical event. If you remember that sequence, material, labour and cost questions answer themselves.",
+			"table": {
+				"headers": ["Document", "Answers", "Writes to"],
+				"rows": [
+					["Bill of Materials", "What and how much per unit", "Nothing"],
+					[
+						"Work Order",
+						"How many, by when, in which warehouse",
+						"Nothing until material is transferred"
+					],
+					["Job Card", "Who worked, for how long", "Time logs; cost via operation rate"],
+					["Stock Entry (Manufacture)", "Raw materials became finished goods", "Stock ledger + GL"]
+				]
+			}
+		},
+		{
+			"kicker": "BOM",
+			"title": "A BOM that survives the shop floor",
+			"bullets": [
+				"Components carry quantity, rate, source warehouse and a scrap percentage — scrap belongs in the BOM, not in a monthly adjustment",
+				"Operations add time and cost per unit; without them, labour never reaches finished goods valuation",
+				"'Include Item in Manufacturing' distinguishes purchased components from sub-assemblies you build yourself",
+				"BOM cost is a snapshot: recalculate it deliberately when rates move, and keep old BOMs for audit"
+			],
+			"notes": "A BOM that omits scrap produces a work order that always comes up short, which the floor then fixes by issuing extra material with no document. Put the scrap percentage in the BOM even if it feels unflattering; it is the only way the variance report means anything. For multi-level products, explode the BOM and check that every sub-assembly has its own current version.",
+			"callout": {
+				"tone": "tip",
+				"title": "Version the recipe",
+				"text": "New BOM version rather than editing a used one. Production history should point at the recipe that was actually used."
+			}
+		},
+		{
+			"kicker": "Planning",
+			"title": "From demand to a production plan",
+			"bullets": [
+				"Sales Orders with a delivery date create the demand signal; Production Plan groups them per item and date range",
+				"Production Plan combines open work orders and stock on hand to suggest what to make and what to buy",
+				"Capacity planning compares work order hours against workstation availability — sales promises without it are fiction",
+				"Material Requests from the plan give purchasing a date-driven shopping list rather than a monthly guess"
+			],
+			"notes": "ERPNext does not pretend to be an advanced APS engine, and that is fine for most small and mid-sized plants. A weekly plan built from confirmed orders, current stock and open work orders beats a monthly spreadsheet, because it updates when reality changes. Keep the horizon short and the review cadence fixed.",
+			"paths": [
+				"Manufacturing > Production Plan",
+				"Manufacturing > Reports > Production Planning Report"
+			]
+		},
+		{
+			"kicker": "Execution",
+			"title": "Running a work order without surprises",
+			"bullets": [
+				"Transfer materials before consumption; Manufacturing Settings can backflush components based on the BOM or on transferred material",
+				"Partial production is normal: finished goods can be received in several entries against one work order",
+				"Rejected finished goods stay out of stock; record them as scrap or rework rather than receiving and adjusting later",
+				"Close the work order deliberately: material left unissued is either over-ordered or wasted, and both deserve a look"
+			],
+			"notes": "Work order discipline is mostly about timing. Materials issued too early inflate work in progress; production received before materials are issued creates negative component stock. Set the rule that no finished goods are received before the material transfer for that quantity, and make the shop floor's life easy enough that they follow it.",
+			"callout": {
+				"tone": "warn",
+				"title": "Receiving without consuming",
+				"text": "Finished goods with no material issue understates cost of production and leaves components on the books. The stock ledger will show it."
+			}
+		},
+		{
+			"kicker": "Labour",
+			"title": "Job cards, time logs and capacity",
+			"bullets": [
+				"Job Cards capture operator time against an operation; time logs aggregate for payroll and cost analysis",
+				"Workstation and operation rates turn minutes into money; without rates, labour stays a period expense",
+				"Hourly rate × time logged feeds additional costs on the work order if you enable it",
+				"Discipline beats precision: a rough time log recorded daily is better than a perfect one reconstructed monthly"
+			],
+			"notes": "If the shop floor will not log time, do not build a sophisticated costing model on top of fiction — cost labour at standard and treat the variance as overhead. The decision is cultural as much as technical, and it is worth having explicitly rather than discovering it in a margin review six months later.",
+			"paths": ["Manufacturing > Job Card", "Manufacturing > Workstation", "Manufacturing > Operation"]
+		},
+		{
+			"kicker": "Costing",
+			"title": "Where the unit cost comes from",
+			"bullets": [
+				"Finished goods valuation = component value consumed + operation cost + additional costs, divided by accepted quantity",
+				"Component value uses the item's valuation method, so a wrong receipt price follows the product all the way to margin",
+				"Scrap and rejected quantity raise the cost of the good units — which is correct, and worth showing to production",
+				"Work in progress is the gap between materials issued and finished goods received; review it for work orders left open"
+			],
+			"notes": "Costing arguments end when you can walk the arithmetic: these components at these rates, this many minutes at this rate, this much extra, divided by this many good units. Build that walk-through once for a real product and keep it as a worked example. If the number does not match, you now know which of the four inputs to check.",
+			"table": {
+				"headers": ["Cost input", "Source", "Typical error"],
+				"rows": [
+					[
+						"Components",
+						"Stock ledger valuation at consumption",
+						"Wrong receipt rate or missing landed cost"
+					],
+					["Operations", "Operation time × workstation rate", "Rates never configured"],
+					[
+						"Additional costs",
+						"Landed cost or journal against the work order",
+						"Posted as period expense instead"
+					],
+					["Yield", "Accepted quantity vs produced", "Rejected units not recorded"]
+				]
+			}
+		},
+		{
+			"kicker": "Subcontracting",
+			"title": "Subcontracting without losing the components",
+			"bullets": [
+				"Mark the BOM as subcontracting, raise a Purchase Order for the service, and transfer components to the subcontractor warehouse",
+				"Receipt of the finished good consumes the transferred components — the subcontractor never owns them on your books",
+				"Value the service charge into the finished good via the purchase invoice or a landed cost on the receipt",
+				"Reconcile the subcontractor warehouse monthly: components sent minus consumed must equal stock held outside"
+			],
+			"notes": "The subcontractor warehouse is a real place with real risk. Treat it as an audit area: a monthly statement of components held, signed by the supplier, is the only thing that keeps the numbers honest. If you skip that, the first stocktake will produce a variance you cannot explain.",
+			"paths": ["Buying > Purchase Order > Is Subcontracted", "Manufacturing > BOM > Is Subcontracted"]
+		},
+		{
+			"kicker": "Reports",
+			"title": "Five manufacturing reports worth reading",
+			"bullets": [
+				"Work Order Summary — open, overdue and completed by item and date",
+				"Production Analytics — quantities produced against planned, by period",
+				"BOM Cost / Stock Balance — confirm the recipe cost matches today's component prices",
+				"Work In Progress — issued material not yet received as finished goods, by work order",
+				"Capacity / Workstation analysis — hours promised against hours available"
+			],
+			"notes": "Read the work-in-progress report before any inventory review; it is where forgotten work orders hide. Overdue work orders are a customer promise problem, not a manufacturing one, so share that report with sales. Production analytics only becomes useful once scrap and rejection are recorded, which is why chapter discipline matters.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Sales tax on manufactured goods",
+				"text": "Sales tax applies at the point of sale, not production. Keep manufacturing value movements out of SST accounts; tax belongs on the invoice."
+			}
+		}
+	],
+	"lab": {
+		"title": "Manufacture a product and prove its cost",
+		"minutes": 60,
+		"steps": [
+			"Create two component items and one finished item; add a BOM with 2 units of each component, 5% scrap and one operation of 30 minutes",
+			"Set a workstation hourly rate and confirm the BOM cost shows material plus operation cost",
+			"Create a Work Order for 10 units from a Sales Order; transfer the required materials to WIP",
+			"Create a Job Card for the operation, log 4 hours, and complete it",
+			"Receive 9 finished units (one rejected) against the work order; note the valuation rate and explain why it exceeds the BOM cost",
+			"Run Work In Progress and Work Order Summary; close the work order and confirm no material remains unissued",
+			"Compare the finished item's valuation to the BOM cost and write a one-line reconciliation of the difference"
+		],
+		"done": "You can state the cost of one good unit and account for every component, minute and rejected unit behind it."
+	},
+	"quiz": [
+		{
+			"question": "Which document consumes components and creates finished goods?",
+			"options": ["Bill of Materials", "Work Order", "Job Card", "Stock Entry of type Manufacture"],
+			"answer": 3,
+			"why": "The manufacture stock entry is the physical and accounting event; the work order only authorises it."
+		},
+		{
+			"question": "Why does a BOM need a scrap percentage?",
+			"options": [
+				"To inflate the sales price",
+				"So material planning and cost reflect real consumption rather than ideal consumption",
+				"To satisfy LHDN",
+				"To avoid negative stock"
+			],
+			"answer": 1,
+			"why": "Without scrap in the BOM, work orders are always short and the floor issues undocumented extra material."
+		},
+		{
+			"question": "Finished goods were received before any material transfer. What is the symptom?",
+			"options": [
+				"Higher finished goods value",
+				"Negative component stock and understated cost of production",
+				"No effect on reports",
+				"Automatic job card creation"
+			],
+			"answer": 1,
+			"why": "Receiving production without consuming components leaves components on the books and pushes stock negative."
+		},
+		{
+			"question": "In subcontracting, where do components sit while the supplier works on them?",
+			"options": [
+				"Written off to expense",
+				"Transferred to a subcontractor warehouse that you still own and reconcile",
+				"In the supplier's own ERP",
+				"Converted into a fixed asset"
+			],
+			"answer": 1,
+			"why": "Ownership does not transfer; the subcontractor warehouse is your stock location and needs a monthly reconciliation."
+		},
+		{
+			"question": "Which report localises forgotten work orders holding material?",
+			"options": ["Production Analytics", "Work In Progress", "BOM Cost", "Capacity planning"],
+			"answer": 1,
+			"why": "Work In Progress lists material issued but not yet received as finished goods, per work order."
+		}
+	],
+	"narration": "Chapter seven is manufacturing, which in ERPNext is assembly with accounting attached. Three documents and one idea. The bill of materials is the recipe: components, quantities, operations, scrap and cost. The work order is the batch: how many, by when, from which warehouse. The job card is the labour record. Then a stock entry of type manufacture is the physical event that consumes components and produces finished goods. Put scrap in the BOM even when it feels unflattering. Without it, every work order comes up short and the shop floor quietly issues extra material with no document, which destroys the variance report. Version your BOMs instead of editing recipes production already used, so history points at the recipe that was followed. Plan from confirmed orders through a production plan, and check capacity before promising dates. When executing, transfer materials before consuming, receive finished goods in partial entries as reality requires, and record rejected units rather than receiving and adjusting later. Receiving production before consuming components is the classic error: it leaves component stock negative and understates cost of production. Cost per finished unit is components consumed, plus operations, plus additional costs, divided by accepted quantity; when it looks wrong, check those four inputs in that order. Reconcile subcontractor warehouses monthly, and read work in progress before every inventory review."
+}

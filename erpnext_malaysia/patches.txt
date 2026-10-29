@@ -1,0 +1,3 @@
+# Add new patches at the end, under the heading they belong to.
+# This app ships with no data patches yet: install-time custom fields and the starter
+# classification codes are created by malaysia_einvoice.setup.install.after_install.
