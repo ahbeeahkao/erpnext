@@ -1,0 +1,44 @@
+{
+  "name": "ERPNext Inventory",
+  "short_name": "Inventory",
+  "description": "Scan, receive, issue, transfer and count stock in ERPNext. Works offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Scan item",
+      "short_name": "Scan",
+      "url": "./#/scan"
+    },
+    {
+      "name": "Pending sync",
+      "short_name": "Pending",
+      "url": "./#/queue"
+    }
+  ]
+}
