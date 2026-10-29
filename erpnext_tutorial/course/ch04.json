@@ -1,0 +1,213 @@
+{
+	"id": "ch04",
+	"number": 4,
+	"title": "Buying: Procure to Pay",
+	"subtitle": "Requisition to payment, with the three-way match that keeps payables honest",
+	"level": "Core",
+	"minutes": 45,
+	"outcomes": [
+		"Run a requisition-to-payment cycle with partial receipts",
+		"Decide when to skip documents without losing control",
+		"Reconcile what was received against what was billed",
+		"Handle purchase returns, debit notes and landed costs"
+	],
+	"slides": [
+		{
+			"kicker": "Orientation",
+			"title": "The chain, and the two shortcuts people take",
+			"bullets": [
+				"Material Request → Request for Quotation → Supplier Quotation → Purchase Order → Purchase Receipt → Purchase Invoice → Payment Entry",
+				"Shortcut one: PO straight from a Material Request, skipping the RFQ when you have a nominated supplier",
+				"Shortcut two: Purchase Invoice without a receipt for services and expenses, which is legitimate and must be visibly different",
+				"Only the Purchase Receipt moves stock; the Purchase Invoice creates the payable"
+			],
+			"notes": "Buying has one more document than selling because suppliers can deliver before you have a PO, and because price and quantity legitimately disagree. The purpose of the chain is not ceremony: it is to make it impossible to pay for something nobody ordered and nobody checked.",
+			"table": {
+				"headers": ["Document", "Meaning", "Writes to"],
+				"rows": [
+					["Material Request", "Internal demand", "Nothing"],
+					["RFQ / Supplier Quotation", "Price comparison", "Nothing"],
+					["Purchase Order", "Commitment to buy", "Nothing"],
+					["Purchase Receipt", "Goods arrived (or rejected)", "Stock ledger"],
+					["Purchase Invoice", "Supplier bill", "General + Payment ledger"],
+					[
+						"Landed Cost Voucher",
+						"Freight, duty, insurance into stock value",
+						"Stock ledger (valuation)"
+					]
+				]
+			}
+		},
+		{
+			"kicker": "Demand",
+			"title": "Material Requests: demand, not paperwork",
+			"bullets": [
+				"Types: Purchase, Material Transfer, Material Issue, Manufacture, Customer Provided — each routes work differently",
+				"Reorder level + auto-reorder create requests automatically when stock falls below the threshold",
+				"Production plans and work orders create Material Requests for components, so keep the two channels distinct",
+				"A request is a claim on a budget; approval belongs on the request, not on the PO"
+			],
+			"notes": "If purchasing starts at the PO, nobody knows why anything was bought. Starting at the request gives you the audit chain and, more usefully, a forecast of demand by date and warehouse. Keep approval on the request: approving a PO after the supplier has been chosen is theatre.",
+			"callout": {
+				"tone": "tip",
+				"title": "Auto reorder is a policy, not a switch",
+				"text": "Set reorder levels per warehouse and item, review them quarterly, and route requests to a buyer — otherwise the system orders the same item from three people."
+			}
+		},
+		{
+			"kicker": "Sourcing",
+			"title": "RFQs and quotations in practice",
+			"bullets": [
+				"One RFQ can go to many suppliers; Supplier Quotation records what each replied, with validity dates",
+				"'Compare Supplier Quotations' shows price, lead time and score side by side",
+				"Awarding a quotation creates the PO with the quoted rates and terms, so the comparison survives as evidence",
+				"For repeat items with a nominated supplier, skip the RFQ but keep the quotation on file if price is negotiated"
+			],
+			"notes": "RFQs are most valuable when two suppliers can actually win, and least valuable as a compliance ritual. Use them for new or contested spend, and use supplier quotations to lock a price for a period. The audit value is in the recorded rate and validity, not the ceremony.",
+			"paths": ["Buying > Request for Quotation", "Buying > Supplier Quotation > Compare"]
+		},
+		{
+			"kicker": "Purchase Order",
+			"title": "The order is a contract; make it enforceable",
+			"bullets": [
+				"Put the real delivery date, payment terms, currency and tax template on the order — they flow to receipt, invoice and ageing",
+				"'Per Received' and 'Per Billed' let long orders receive and bill in instalments without duplication",
+				"Amendment after submission is allowed until a receipt exists; afterwards create a new order for the delta",
+				"Supplier advance payments are recorded against the order and deducted on the invoice"
+			],
+			"notes": "Purchase orders are the single best control in procurement: a receipt without an order is an exception that should be rare and approved. Use the 'Against Purchase Order' requirement in Buying Settings if you want the system to enforce it, and keep the PO number on every delivery challan the supplier sends.",
+			"callout": {
+				"tone": "warn",
+				"title": "Receipts without orders",
+				"text": "Allowing them quietly defeats three-way matching. If a site allows it, review those receipts monthly — they are where duplicate payments hide."
+			}
+		},
+		{
+			"kicker": "Receipt",
+			"title": "Goods receipt: quantity, quality and valuation",
+			"bullets": [
+				"Receive against the PO line; the receipt sets the stock price, so a wrong rate here poisons valuation until it is corrected",
+				"Rejected quantity is recorded on the receipt line and never enters stock — do not receive then transfer out",
+				"Quality Inspection can be triggered per item; a failed inspection blocks the receipt or forces a rejection",
+				"Receipts without a submitted PO create stock with no commitment — useful for petty purchases, dangerous as habit"
+			],
+			"notes": "The receipt is where inventory value is born. If finance and warehouse disagree on what an item is worth, the difference usually started at a receipt with a wrong rate or a landed cost that was never applied. Review receipts with a rate that deviates from the PO by more than a tolerance you set.",
+			"paths": [
+				"Stock > Purchase Receipt",
+				"Quality > Quality Inspection",
+				"Stock > Stock Settings > Allow Purchase Receipt without Purchase Order"
+			]
+		},
+		{
+			"kicker": "Billing",
+			"title": "Purchase Invoice and the three-way match",
+			"bullets": [
+				"Invoice against the receipt, not the order, so quantities can never exceed what physically arrived",
+				"ERPNext compares ordered, received and billed quantities; a mismatch shows as a validation message before submission",
+				"Service and expense purchases go straight to a Purchase Invoice with an expense account and no stock movement",
+				"For imported goods, book the invoice at the customs value and apply a Landed Cost Voucher for freight, duty and insurance"
+			],
+			"notes": "Three-way matching is the strongest fraud control a mid-sized company has: order, receipt, invoice. When the invoice exceeds the received quantity, the correct fix is a debit note or a corrected receipt, not overriding the validation. Keep the GR/IR clearing account reconciled monthly — unreconciled receipts are unbilled liabilities waiting to surprise you.",
+			"callout": {
+				"tone": "tip",
+				"title": "The account to watch",
+				"text": "Stock Received But Not Billed. It should trend to zero for closed periods; a growing balance means receipts were never invoiced."
+			}
+		},
+		{
+			"kicker": "Exceptions",
+			"title": "Returns, debit notes and price corrections",
+			"bullets": [
+				"Return goods with a Purchase Receipt flagged 'Is Return' against the original receipt, so the stock ledger nets out",
+				"If the supplier already invoiced, add a Purchase Invoice flagged 'Is Return' referencing the original — that is your debit note",
+				"Price differences after invoicing are corrected with a debit note, not by editing the original",
+				"Cancel and amend only while nothing downstream depends on the document; otherwise reverse and replace"
+			],
+			"notes": "Returns are the test of whether a purchasing process is real. If your team creates a stock adjustment to make a return disappear, you have lost the supplier reconciliation and the audit trail in one move. Require return-against-reference for both receipts and invoices.",
+			"paths": ["Buying > Purchase Invoice > Is Return", "Stock > Purchase Receipt > Is Return"]
+		},
+		{
+			"kicker": "Reports",
+			"title": "What to review weekly",
+			"bullets": [
+				"Purchase Order Analysis — open commitments by supplier and expected date",
+				"Accounts Payable ageing — what is due, and to whom, in which currency",
+				"Item-wise Purchase Register and Purchase Analytics — price drift per item per supplier",
+				"Supplier scorecard and lead-time history if you negotiate on data rather than anecdotes"
+			],
+			"notes": "Payables ageing plus open commitments is the cash forecast a small business actually needs. Price drift by item catches the slow erosion of margin that no single invoice reveals. Run both before every supplier review; the conversation changes when you have three months of lead times on screen.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Imports and self-billed e-Invoices",
+				"text": "LHDN expects a self-billed e-Invoice when the supplier is foreign or a non-taxpayer. This repository's app covers sales-side e-Invoicing only — plan the purchase side separately."
+			}
+		}
+	],
+	"lab": {
+		"title": "Buy, receive in two shipments, bill, pay and return",
+		"minutes": 45,
+		"steps": [
+			"Create a Material Request for 20 units of a stock item; convert it to a Purchase Order with a supplier, terms and an SST purchase template",
+			"Receive 12 units against the PO and note the stock ledger row and the valuation rate used",
+			"Create the Purchase Invoice against the receipt for 12 units only; confirm the PO shows per-billed 60%",
+			"Add a Landed Cost Voucher of MYR 120 across the 12 units and verify the item's valuation rate increased",
+			"Pay the invoice with a Payment Entry and check the payable is settled in Accounts Payable ageing",
+			"Return 2 units with a Purchase Receipt flagged 'Is Return', then raise a debit note if the supplier had invoiced them",
+			"Open the General Ledger filtered to the stock received-but-not-billed account and explain its balance in one sentence"
+		],
+		"done": "Stock matches the net received quantity, valuation includes landed cost, payable is settled, and you can explain the GR/IR balance."
+	},
+	"quiz": [
+		{
+			"question": "Which document creates the payable to the supplier?",
+			"options": ["Purchase Order", "Purchase Receipt", "Purchase Invoice", "Material Request"],
+			"answer": 2,
+			"why": "The Purchase Invoice posts the payable, expense or stock adjustment and tax. The receipt only moves stock."
+		},
+		{
+			"question": "A supplier delivers 12 of 20 ordered units. What should you bill?",
+			"options": [
+				"All 20, as ordered",
+				"Only the 12 received, invoicing against the receipt",
+				"Nothing until all 20 arrive",
+				"The 12, but on a new PO"
+			],
+			"answer": 1,
+			"why": "Billing against the receipt keeps the three-way match intact and prevents paying for goods that have not arrived."
+		},
+		{
+			"question": "What does the Landed Cost Voucher actually change?",
+			"options": [
+				"The supplier's payable",
+				"The stock valuation of the received items",
+				"The purchase order rate",
+				"The tax template"
+			],
+			"answer": 1,
+			"why": "It distributes freight, duty and insurance into the valuation of the received items, and posts the offset to the expense or clearing account."
+		},
+		{
+			"question": "A growing 'Stock Received But Not Billed' balance means:",
+			"options": [
+				"Suppliers were overpaid",
+				"Receipts exist that were never invoiced",
+				"Stock is negative in some warehouse",
+				"The tax template is wrong"
+			],
+			"answer": 1,
+			"why": "The clearing account holds the value of goods received without a bill. Growth means unbilled liabilities and a mismatch between stock and payables."
+		},
+		{
+			"question": "Which exception is the strongest signal that purchasing controls are weak?",
+			"options": [
+				"RFQs sent to three suppliers",
+				"Frequent receipts without a purchase order",
+				"Purchase invoices linked to receipts",
+				"Suppliers with payment terms"
+			],
+			"answer": 1,
+			"why": "Receipts without orders bypass the commitment control and are where duplicate or unauthorised payments hide."
+		}
+	],
+	"narration": "Chapter four is the mirror image of selling, with one extra document, because suppliers deliver before you approve anything. The chain runs material request, request for quotation, supplier quotation, purchase order, purchase receipt, purchase invoice and payment. Only the receipt moves stock. Only the invoice creates the payable. Two shortcuts are legitimate: order directly when the supplier is nominated, and invoice a service with no receipt at all. Fine, but keep them visibly different from the standard flow. Start buying at the material request, because that is where demand and approval belong. Put real dates, terms and tax templates on the order, and use per-received and per-billed percentages for instalments. The receipt is where inventory value is born: the rate you receive at becomes the stock valuation, so a wrong rate poisons every margin report until it is fixed. Record rejections on the receipt line rather than receiving and transferring out. Bill against the receipt so three-way matching can protect you. Watch the stock received but not billed account; if it grows, you have unbilled liabilities hiding in the balance sheet. For imports, book at customs value and use a landed cost voucher. Returns go against the original receipt or invoice, never as adjustments. Note that foreign suppliers need self-billed e-invoices, which this course does not cover."
+}

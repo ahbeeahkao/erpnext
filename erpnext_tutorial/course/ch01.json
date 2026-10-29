@@ -1,0 +1,206 @@
+{
+	"id": "ch01",
+	"number": 1,
+	"title": "How ERPNext Thinks",
+	"subtitle": "DocTypes, document states and the three ledgers that run everything",
+	"level": "Foundation",
+	"minutes": 40,
+	"outcomes": [
+		"Explain what a DocType is and why ERPNext is metadata-driven",
+		"Walk a document through draft, submitted and cancelled without breaking the books",
+		"Name the three ledgers and which report reads each one",
+		"Set up a new company in the correct order"
+	],
+	"slides": [
+		{
+			"kicker": "Orientation",
+			"title": "ERPNext is a database you drive, not a form you fill",
+			"bullets": [
+				"Built on the Frappe framework: every screen, table and permission is metadata stored in the database",
+				"A DocType is a table definition plus its behaviour; a document is one row in that table",
+				"Almost every business action is a document that moves between states and writes to ledgers",
+				"Because it is metadata-driven, custom fields, workflows and print formats need no code deployment"
+			],
+			"notes": "Start by dismantling the 'app with screens' mental model. In ERPNext a DocType is defined as JSON in the database, and the UI is generated from it. That is why an accountant can add a field and a manager can add an approval step without a developer. Internalise this and the rest of the course becomes learning names for things you already understand.",
+			"callout": {
+				"tone": "tip",
+				"title": "The one question to ask",
+				"text": "Whenever you are unsure where something lives, ask: which document caused this, and which ledger did it write to?"
+			}
+		},
+		{
+			"kicker": "Orientation",
+			"title": "The document lifecycle",
+			"bullets": [
+				"Draft (docstatus 0) is editable and has no accounting effect whatsoever",
+				"Submitted (docstatus 1) is frozen: it posts stock and accounting entries and can only be cancelled",
+				"Cancelled (docstatus 2) reverses those entries with offsetting records — nothing is deleted",
+				"Amend creates a new linked document (amended_from) so the audit trail survives a correction"
+			],
+			"notes": "This is the single most important behaviour to teach users. Submitting is the commit. If a number is wrong after submit, cancel and amend rather than editing rows in the database. Every downstream report reads the submitted records, so an unauthorised edit does not just break one document, it silently desynchronises the books from reality.",
+			"table": {
+				"headers": ["State", "docstatus", "Editable", "Posts entries", "Typical fix"],
+				"rows": [
+					["Draft", "0", "Yes", "No", "Edit and submit"],
+					["Submitted", "1", "No (allow-on-submit fields excepted)", "Yes", "Cancel and amend"],
+					["Cancelled", "2", "No", "Reversal posted", "Amend from the cancelled doc"]
+				]
+			}
+		},
+		{
+			"kicker": "Anatomy",
+			"title": "Anatomy of a DocType",
+			"bullets": [
+				"Fields have a type (Data, Link, Currency, Select, Table) and a name; the Name is the field that identifies the row",
+				"Child tables store line items: they live in their own table and belong to one parent document",
+				"Links produce the pickers and enforce referential integrity across DocTypes",
+				"Naming series or autoname rules decide the document number you will quote for years"
+			],
+			"notes": "When you open a form like Sales Invoice, the header is the parent table and each item row is a row in Sales Invoice Item with a parent link. That is why filtering, permissions and naming behave consistently across the whole product. Naming matters commercially: invoice numbers are quoted to customers, filed with LHDN and audited, so decide the series before go-live, not after.",
+			"paths": ["Setup > DocType > (any DocType) > Fields", "DocType > Naming Series"]
+		},
+		{
+			"kicker": "The engine",
+			"title": "Three ledgers, three truths",
+			"bullets": [
+				"General Ledger: every accounting entry (GL Entry), the source of P&L, Balance Sheet and Trial Balance",
+				"Stock Ledger: every quantity and valuation movement (Stock Ledger Entry), the source of Stock Balance and Stock Ledger reports",
+				"Payment Ledger: what is still owed per invoice (Payment Ledger Entry) — AR/AP ageing and payment reconciliation read this, not GL",
+				"A mistake in one ledger is invisible in the other two, which is why reconciliation is a monthly habit"
+			],
+			"notes": "New users assume one 'balance' solves everything. It does not: stock quantity, inventory value and money owed are three separate ledgers written by the same documents. When a client says 'the stock report and the balance sheet disagree', the answer is always the same: find which ledger stopped receiving entries — usually a cancelled receipt, a back-dated entry or negative stock.",
+			"callout": {
+				"tone": "warn",
+				"title": "Cancelling a receipt",
+				"text": "Cancelling a Purchase Receipt after the invoice was booked leaves stock relieved but the payable intact. Reverse in the right order: invoice, then receipt."
+			}
+		},
+		{
+			"kicker": "Setup",
+			"title": "The only safe setup order",
+			"bullets": [
+				"Company (with country, currency, fiscal year) → Chart of Accounts → Accounts Settings → Cost Centers",
+				"Masters: Item Groups, Items, UOMs, Customers, Suppliers, Warehouses, Territories",
+				"Taxes and pricing: tax templates, item tax templates, price lists, pricing rules",
+				"People: roles, role profiles, users, then document-level permissions; finally opening balances and go-live"
+			],
+			"notes": "This order is not bureaucracy — each step depends on the previous one existing. A common failure is importing items before UOMs or item groups exist, which silently creates 'No UOM' rows that break later valuations. Follow the sequence in the Setup Checklist and your first month will be boring, which is exactly what you want.",
+			"paths": [
+				"Getting Started > Setup Checklist",
+				"Accounts > Chart of Accounts",
+				"Stock > Warehouse"
+			]
+		},
+		{
+			"kicker": "Navigation",
+			"title": "Driving the interface like an operator",
+			"bullets": [
+				"The awesome bar searches every DocType and every document by name; type two letters of a DocType and press Enter",
+				"Every list view supports filters, saved filters, column picking, bulk actions and export to Excel/CSV",
+				"Report Builder builds a saved report in a minute; Script Reports cover everything it cannot",
+				"Ctrl+S saves any form; the Help menu lists the shortcuts of your installed version"
+			],
+			"notes": "Operators lose more time to navigation than to data entry. Teach three habits: use the search bar instead of the menu tree, save a filtered list view per role, and keep the browser zoom at 100 percent so table columns stay readable. Frappe's shortcuts differ between versions, so point people at Help rather than memorising blog posts.",
+			"callout": {
+				"tone": "tip",
+				"title": "Saved filters are shared features",
+				"text": "A saved filter on Sales Invoice Order Book, named for a role ('Dispatch – today'), becomes a tool the whole team uses."
+			}
+		},
+		{
+			"kicker": "Malaysia",
+			"title": "What is different in a Malaysian site",
+			"bullets": [
+				"Tax is SST (sales tax 5%/10%, service tax 8% with reduced 6% categories), not the repealed 2015–2018 GST",
+				"Country tax templates shipped in older data still contain GST rows — build tax templates from RMCD rules, do not inherit templates blindly",
+				"e-Invoicing is mandatory by turnover phase; this course ships with an LHDN MyInvois app that submits Sales Invoices and tracks validation",
+				"Statutory payroll lives outside this repository (Frappe HR), so plan the payroll integration as a separate decision"
+			],
+			"notes": "Malaysian sites trip over legacy GST data and over the assumption that ERPNext ships a full localisation. It does not: no Malaysian chart of accounts template, no SST report, no e-Invoice. Treat the Malaysia chapter and the bundled apps as the localisation layer, and verify rates with RMCD before every renewal cycle.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Bundled with this course",
+				"text": "erpnext_malaysia (MyInvois e-Invoice) and mobile_inventory (offline stock PWA) are in this repository; chapter 10 configures both."
+			}
+		},
+		{
+			"kicker": "Practice",
+			"title": "Lab: stand up a company in twenty minutes",
+			"bullets": [
+				"Create a company with the country set to Malaysia, MYR as currency and a 1 January fiscal year",
+				"Open the Chart of Accounts and verify the structure: Assets, Liabilities, Equity, Income, Expenses, and that group accounts start with digits",
+				"Add one warehouse child (e.g. 'Main - PJ') and one cost center",
+				"Post a manual Journal Entry between two bank accounts, submit it, then cancel it and confirm the GL shows both entries"
+			],
+			"notes": "The journal entry test proves the ledger pipeline end to end before you trust it with customer data. If the cancelled entry does not appear in the General Ledger report, you are looking at the wrong company or a draft — check the company filter first, then docstatus.",
+			"paths": [
+				"Setup > Company",
+				"Accounts > Chart of Accounts",
+				"Accounts > Journal Entry",
+				"Accounts > General Ledger"
+			]
+		}
+	],
+	"lab": {
+		"title": "Bootstrap a company and prove the ledger works",
+		"minutes": 25,
+		"steps": [
+			"Create Company 'Arena Demo Sdn Bhd' with country Malaysia, currency MYR, 1 Jan – 31 Dec fiscal year",
+			"Open Chart of Accounts and screenshot the five root groups; note how many leaf accounts exist",
+			"Create a Warehouse 'Main - PJ' under the company and a Cost Center 'Operations - PJ'",
+			"Create a Journal Entry: debit 'Cash' MYR 1,000, credit 'Owner's Equity' MYR 1,000; submit",
+			"Run Accounts > General Ledger for the company and confirm two rows appear for the entry",
+			"Cancel the Journal Entry and re-run the report: four rows now, with the reversal dated today",
+			"Open the same document and use Amend; note the amended_from link in the Connections tab"
+		],
+		"done": "You can explain, without notes, where a submitted entry appears and why cancelling does not delete it."
+	},
+	"quiz": [
+		{
+			"question": "A colleague edits a submitted Sales Invoice row directly in the database. What breaks first?",
+			"options": [
+				"Nothing — submitted documents are just rows",
+				"The three ledgers stop agreeing with the document because the posted entries are untouched",
+				"The naming series resets",
+				"Nothing until the next backup"
+			],
+			"answer": 1,
+			"why": "Posted GL, stock and payment entries are separate records computed at submit time. Editing the source document desynchronises them silently."
+		},
+		{
+			"question": "Which ledger answers 'how much does this customer still owe us?'",
+			"options": ["General Ledger", "Stock Ledger", "Payment Ledger", "The Sales Invoice list"],
+			"answer": 2,
+			"why": "Payment Ledger Entries track per-invoice settlement; AR/AP ageing and payment reconciliation read them. GL tells you the account balance, not the invoice-level position."
+		},
+		{
+			"question": "What is the correct sequence when a Purchase Receipt was posted at the wrong quantity and the invoice is already booked?",
+			"options": [
+				"Cancel the receipt and re-post it",
+				"Cancel the invoice, then the receipt, then redo both",
+				"Create a stock reconciliation to fix the quantity",
+				"Edit the receipt's item table"
+			],
+			"answer": 1,
+			"why": "Reverse downstream first: the invoice references the receipt. Cancelling the receipt underneath a live invoice leaves a payable pointing at a cancelled stock movement."
+		},
+		{
+			"question": "Which setup step must exist before you can import items?",
+			"options": ["Price lists", "Item Groups and UOMs", "Pricing rules", "Bank accounts"],
+			"answer": 1,
+			"why": "Items link to item groups and units of measure. Importing before those exist creates malformed items that fail valuation later."
+		},
+		{
+			"question": "On a Malaysian site, which tax assumption should you verify before designing templates?",
+			"options": [
+				"That GST at 6% applies",
+				"That SST rates and categories match current RMCD guidance — shipped templates may still contain GST",
+				"That withholding tax covers SST",
+				"That tax is calculated on grand total"
+			],
+			"answer": 1,
+			"why": "GST was repealed in 2018; ERPNext's older country tax data still carries GST rows. Build SST templates from current RMCD rates."
+		}
+	],
+	"narration": "Welcome to the course. Chapter one is about how ERPNext thinks, because most mistakes with it come from a wrong mental model. ERPNext runs on the Frappe framework, and everything you see is metadata stored in the database. A DocType is a table definition; a document is one row in it. When you submit a document it stops being editable and posts to ledgers, and there are three. The General Ledger holds accounting entries and feeds the profit and loss and balance sheet. The Stock Ledger holds quantity and valuation movements. The Payment Ledger holds what is still owed on each invoice, which is what receivables ageing actually reads. A mistake in one ledger is invisible in the other two, which is why reconciliation is a monthly habit. Set up in this order: company, chart of accounts, cost centres, masters, taxes and pricing, then people and permissions, because each step depends on the one before. For Malaysian sites, tax is SST, not the repealed GST, and older tax templates may still carry GST rows. Learn to navigate like an operator: search instead of menu trees, save filtered list views for your team, and treat cancel and amend as the only safe correction after submission. In the lab you will post a journal entry, cancel it, and watch four rows appear in the general ledger. If that surprises you, good. That is the audit trail working."
+}

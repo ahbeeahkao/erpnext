@@ -1,0 +1,212 @@
+{
+	"id": "ch08",
+	"number": 8,
+	"title": "Projects, Assets, Quality and CRM",
+	"subtitle": "The modules that stop being optional once you pass twenty people",
+	"level": "Advanced",
+	"minutes": 45,
+	"outcomes": [
+		"Bill project work from timesheets without an Excel reconciliation",
+		"Run a fixed-asset register with depreciation and disposal",
+		"Put quality gates where they catch defects, not where they look good",
+		"Turn leads into quotations with a pipeline you can forecast"
+	],
+	"slides": [
+		{
+			"kicker": "Projects",
+			"title": "Projects are a cost collector with a Gantt chart",
+			"bullets": [
+				"Project groups tasks; every timesheet, purchase and expense that references it joins the same profitability view",
+				"Tasks carry dependencies, expected hours and actual time; the Gantt view is for coordination, not for planning theory",
+				"Project templates create the standard phases for repeatable delivery work",
+				"Project type controls billing: fixed price, time and materials, or non-billable internal work"
+			],
+			"notes": "Projects pay for themselves the first time someone asks whether a client is profitable. The prerequisite is discipline: every cost and every hour must reference the project. If a timesheet does not name the project, that hour is invisible forever. Make the project field mandatory on timesheets for billable teams.",
+			"paths": ["Projects > Project", "Projects > Task", "Projects > Project Template"]
+		},
+		{
+			"kicker": "Billing",
+			"title": "From timesheet to invoice",
+			"bullets": [
+				"Timesheets record hours per employee per activity; billing rates come from the activity's costing rate and the project or customer",
+				"Project billing lets you invoice billable hours from a Sales Invoice using 'Get items from timesheet'",
+				"Fixed-price projects bill against milestones instead, with the project as the revenue dimension",
+				"Project profitability compares billed value against labour, expenses and purchases booked to the project"
+			],
+			"notes": "The billing decision is a contract question: are you selling hours or outcomes? Time and materials needs rate discipline and weekly timesheet approval; fixed price needs milestone discipline and a hard review of scope creep. Set the project type honestly at creation, because retrofitting a billing model into an invoiced project is painful and always late.",
+			"callout": {
+				"tone": "tip",
+				"title": "Approve weekly",
+				"text": "Unapproved timesheets block billing. Weekly approval cadence turns a month-end scramble into a ten-minute review."
+			}
+		},
+		{
+			"kicker": "Assets",
+			"title": "A register, not a spreadsheet",
+			"bullets": [
+				"Asset Category defines depreciation method, useful life and the accounts used for depreciation and disposal",
+				"Purchase a fixed asset through a Purchase Invoice with 'Is Fixed Asset', or create the asset and capitalise it from a work order",
+				"Depreciation runs from the schedule automatically or via manual entries; the accumulated depreciation account grows while asset cost stays",
+				"Disposal, sale, movement between locations and repairs are separate documents — that is what makes the register auditable"
+			],
+			"notes": "The classic asset failure is a purchase invoice expensed because nobody flagged the item as a fixed asset. Then depreciation is computed in a spreadsheet and the balance sheet drifts. Put a review step on purchases of capital items, and reconcile the asset register to the fixed-asset cost accounts quarterly.",
+			"table": {
+				"headers": ["Event", "Document", "Effect"],
+				"rows": [
+					["Buy a machine", "Purchase Invoice (Is Fixed Asset)", "Asset created, payable recorded"],
+					[
+						"Monthly depreciation",
+						"Depreciation entry (scheduled)",
+						"Expense + accumulated depreciation"
+					],
+					["Move to another site", "Asset Movement", "Location updated, no P&L effect"],
+					["Sell or scrap", "Asset Disposal", "Gain or loss computed and posted"]
+				]
+			}
+		},
+		{
+			"kicker": "Quality",
+			"title": "Quality gates where they catch things",
+			"bullets": [
+				"Quality Inspection Template lists parameters with numeric or pass/fail goals per item",
+				"Trigger inspections on purchase receipt, delivery note or job card — the earliest point that can still stop the problem",
+				"Inspection results feed QC actions: accept, reject, rework or return to supplier",
+				"A quality system that measures everything and blocks nothing is documentation, not control"
+			],
+			"notes": "Choose two or three parameters that predict customer complaints and make them hard gates. More parameters mean more skipped fields. For Malaysian manufacturers supplying into regulated chains, the inspection record is also the evidence trail customers audit; keep the readings, not just the pass mark.",
+			"paths": [
+				"Quality > Quality Inspection Template",
+				"Quality > Quality Inspection",
+				"Stock > Item > Inspection Required Before Purchase"
+			]
+		},
+		{
+			"kicker": "CRM",
+			"title": "Leads, opportunities and an honest pipeline",
+			"bullets": [
+				"Lead captures an unqualified contact; Opportunity tracks a qualified deal with value, probability and expected closing date",
+				"Convert an opportunity to a Quotation to keep the attribution chain from first contact to revenue",
+				"Territory, campaign and source dimensions answer where the revenue came from",
+				"Pipeline reporting is only useful if stages and probabilities are enforced and reviewed weekly"
+			],
+			"notes": "Most small businesses already have a CRM: a salesperson's phone. ERPNext wins when the pipeline feeds quotations and orders, so the forecast matches the order book. Enforce two rules: every quotation has an opportunity, and every salesperson updates stage and date weekly. Without that, the CRM becomes a graveyard of stale records.",
+			"callout": {
+				"tone": "tip",
+				"title": "Forecast from the order book",
+				"text": "Compare expected opportunity value to submitted sales orders monthly. The gap is your pipeline realism score."
+			}
+		},
+		{
+			"kicker": "Support",
+			"title": "Issues, SLAs and warranty claims",
+			"bullets": [
+				"Issues record customer complaints with priority, status and resolution time; service level agreements set response targets",
+				"Escalation rules raise priority automatically when an SLA is about to breach",
+				"Warranty claims link the issue to the serial number and, when covered, to a free-of-charge delivery and repair",
+				"Track resolution time by technician and product — that is where service margin hides"
+			],
+			"notes": "Support data is the cheapest product feedback you will ever get. If the same serial number fails repeatedly, you have a manufacturing or supplier problem, not a service problem. Review the top five failure modes monthly and route them back to quality and purchasing.",
+			"paths": ["Support > Issue", "Support > Service Level Agreement", "Support > Warranty Claim"]
+		},
+		{
+			"kicker": "Cross-links",
+			"title": "The joins that make the modules worth having",
+			"bullets": [
+				"Project + timesheet + invoice = project profitability without a spreadsheet",
+				"Asset + purchase invoice + depreciation = a fixed-asset register that ties to the GL",
+				"Item + quality inspection + warranty claim = traceable failure history per product",
+				"Opportunity + quotation + sales order = revenue attribution from first touch to cash"
+			],
+			"notes": "Each module is modest alone; the value is in the joins. When someone asks why they should use projects or assets at all, show them the join, not the form. A single report that answers a question the business actually asks is a better argument than any feature list.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Capital allowances",
+				"text": "The asset register is also your capital allowance working paper. Keep acquisition dates, categories and disposal records clean."
+			}
+		},
+		{
+			"kicker": "Checklist",
+			"title": "Adoption rules that keep these modules alive",
+			"bullets": [
+				"Make the project field mandatory on timesheets and expenses for billable teams",
+				"Flag capital purchases at the item level so the asset register is not rebuilt at year end",
+				"Inspect at receipt for incoming goods and at job card for produced goods",
+				"Require an opportunity on every quotation and a weekly stage update"
+			],
+			"notes": "Every module in this chapter dies quietly when the mandatory field is optional. ERPNext can enforce most of these with property setters, mandatory flags or workflow conditions. Choose enforcement over exhortation; a field that blocks submission gets filled, a field that politely suggests does not.",
+			"paths": ["Customize Form > Make field mandatory", "Workflow > Transition conditions"]
+		}
+	],
+	"lab": {
+		"title": "Bill a project, register an asset, gate quality, win a deal",
+		"minutes": 50,
+		"steps": [
+			"Create a Project with three tasks and a fixed-price billing type; log two timesheets against it with billable hours",
+			"Raise a Sales Invoice from the project using timesheet billing and confirm the project profitability report shows labour cost against billed value",
+			"Create an Asset Category with straight-line depreciation over five years, then capitalise one purchase as a fixed asset",
+			"Run depreciation for one month and verify the accumulated depreciation account moved while the asset cost did not",
+			"Create a Quality Inspection Template for a purchased component and trigger it on a Purchase Receipt; record a failing reading and reject the receipt",
+			"Create a Lead, convert it to an Opportunity worth MYR 50,000 at 40% probability, then convert it to a Quotation",
+			"Review the pipeline report and reconcile the opportunity value against the quotation you just created"
+		],
+		"done": "Four joins work end to end: project to invoice, purchase to asset, inspection to rejection, and lead to quotation."
+	},
+	"quiz": [
+		{
+			"question": "What must be true for project profitability to be trustworthy?",
+			"options": [
+				"Every cost and hour references the project",
+				"All projects are fixed price",
+				"Timesheets are optional",
+				"Only invoices use the project field"
+			],
+			"answer": 0,
+			"why": "Unreferenced costs are invisible to the profit report, so the project field must be mandatory on time and expenses."
+		},
+		{
+			"question": "A machine bought last month was expensed. What is the consequence?",
+			"options": [
+				"Nothing until year end",
+				"Assets and equity are understated, expenses overstated, and depreciation is missing",
+				"Only the cash flow statement is wrong",
+				"Depreciation runs automatically anyway"
+			],
+			"answer": 1,
+			"why": "Capital expenditure was treated as a period expense, so the register and depreciation schedule will not match the GL."
+		},
+		{
+			"question": "Where is the most useful place to trigger a quality inspection?",
+			"options": [
+				"After the invoice is paid",
+				"At the earliest point where a defect can still be stopped — receipt for incoming, job card for produced",
+				"Only during the annual audit",
+				"On the sales quotation"
+			],
+			"answer": 1,
+			"why": "Inspections are controls; the value is preventing bad material from reaching the customer or the next production step."
+		},
+		{
+			"question": "Which practice keeps a CRM pipeline usable?",
+			"options": [
+				"Updating stages quarterly",
+				"An opportunity behind every quotation plus a weekly stage review",
+				"Storing leads only in email",
+				"Setting every probability to 100%"
+			],
+			"answer": 1,
+			"why": "Attribution only exists if quotations link to opportunities, and forecasts decay without a regular review cadence."
+		},
+		{
+			"question": "How should a project's billing model be decided?",
+			"options": [
+				"At the first invoice",
+				"At project creation, because it determines timesheet, milestone and revenue handling",
+				"By the customer's bank",
+				"After the project closes"
+			],
+			"answer": 1,
+			"why": "Fixed price versus time and materials changes what you record and how you invoice; retrofitting it mid-project is expensive."
+		}
+	],
+	"narration": "Chapter eight covers the modules that stop being optional once a company passes twenty people. Projects are a cost collector with a Gantt chart attached. Every hour, purchase and expense that references the project joins the same profitability view, which means the project field must be mandatory on timesheets and expenses; an hour that does not name its project is invisible forever. Decide the billing model at creation, time and materials or fixed price, because it changes what you record and how you invoice. Assets exist so you never rebuild depreciation in a spreadsheet: capitalise through a purchase invoice flagged as a fixed asset, let the category drive the schedule, and treat movement, disposal and repair as separate documents. Reconcile the register to the fixed-asset accounts quarterly. For quality, choose two or three parameters that predict customer complaints and make them hard gates at receipt and at the job card; a system that measures everything and blocks nothing is documentation, not control. For CRM, one opportunity behind every quotation plus a weekly stage update keeps the pipeline useful. Support data is the cheapest product feedback you own: repeated serial failures are a supplier or manufacturing problem, not a service problem. The value of these modules is in the joins, so show the report, not the form."
+}

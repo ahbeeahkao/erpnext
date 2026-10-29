@@ -1,0 +1,222 @@
+{
+	"id": "ch05",
+	"number": 5,
+	"title": "Stock Accuracy and Valuation",
+	"subtitle": "Why quantities and values drift apart, and how to make counting boring",
+	"level": "Core",
+	"minutes": 50,
+	"outcomes": [
+		"Read the Stock Ledger and explain any valuation you see",
+		"Choose and defend a valuation method",
+		"Run cycle counts with Stock Reconciliation instead of destructive edits",
+		"Trace batches and serials end to end"
+	],
+	"slides": [
+		{
+			"kicker": "Mechanics",
+			"title": "Every movement is one row",
+			"bullets": [
+				"Each receipt, issue, transfer and count writes a Stock Ledger Entry with quantity, rate, value and a running balance",
+				"Valuation rate is derived, not typed: it follows the method and the order of entries",
+				"Back-dating a movement recalculates later balances — that is 'reposting', and it is normal, not corruption",
+				"The Stock and Account Value Difference is the diagnostic: if it is not zero, stock and the ledger disagree"
+			],
+			"notes": "Show the Stock Ledger report live and read a row out loud: posting date, item, warehouse, quantity change, valuation rate, balance quantity, balance value. Everything else in inventory accounting is a consequence of that row. When someone claims stock is wrong, ask which row they think is wrong and why, and the conversation becomes specific within a minute.",
+			"callout": {
+				"tone": "tip",
+				"title": "The one report to trust",
+				"text": "Stock Ledger, filtered to one item and warehouse, sorted by date. If the ledger is right, the balances it produces are right."
+			}
+		},
+		{
+			"kicker": "Valuation",
+			"title": "FIFO or Moving Average — pick once",
+			"bullets": [
+				"FIFO consumes the oldest layers first: outbound valuation reflects historical purchase prices",
+				"Moving Average re-averages on every receipt: outbound valuation follows the blended cost",
+				"FIFO suits commodities and price-volatile goods; moving average suits stable, high-volume trading",
+				"Changing the method on live data requires a stock reposting and changes every historical margin — decide in the pilot"
+			],
+			"notes": "Both methods are legitimate; inconsistency is not. The choice affects gross margin, tax provisioning and how a purchasing win shows up in the P&L. Document the decision with a sentence of justification, because the first auditor question will be why. If you must change later, treat it as an accounting policy change with a repost, a disclosure and a lot of testing on a copy.",
+			"table": {
+				"headers": ["Situation", "Better fit", "Why"],
+				"rows": [
+					[
+						"Commodity with volatile purchase prices",
+						"FIFO",
+						"Outbound cost tracks actual layers bought"
+					],
+					[
+						"Fast-moving retail with many small receipts",
+						"Moving Average",
+						"Less layer bookkeeping, smoother margins"
+					],
+					[
+						"Manufactured goods with BOM",
+						"Moving Average",
+						"Component costs blend across production runs"
+					],
+					[
+						"Regulated inventory (pharma, food)",
+						"FIFO",
+						"Consistent with expiry-driven physical flow"
+					]
+				]
+			}
+		},
+		{
+			"kicker": "Moves",
+			"title": "Stock Entry types, and the ones that should be rare",
+			"bullets": [
+				"Material Receipt, Material Issue, Material Transfer (with or without transit), Manufacture, Repack",
+				"Use transfers for movement between warehouses, never a receipt plus an issue — that invents stock in and out",
+				"Opening stock is a Material Receipt flagged 'Opening Stock' so reports can separate it from trading",
+				"Material Issue is for consumption; an unexplained issue is usually a missing bill of materials or a write-off"
+			],
+			"notes": "Stock Entry is the escape hatch of inventory, and escape hatches attract mess. Set a rule: any stock entry that is not a transfer or an opening balance needs a reason in the remarks and a named approver. Then read the remarks column monthly; it is the cheapest audit you will ever run.",
+			"paths": ["Stock > Stock Entry", "Stock > Stock Entry Type"]
+		},
+		{
+			"kicker": "Counting",
+			"title": "Stock Reconciliation: how to be wrong safely",
+			"bullets": [
+				"Enter the counted quantity and the valuation rate; ERPNext posts the difference to the difference account",
+				"Count in cycles — a rolling subset weekly — rather than an annual shutdown that freezes operations",
+				"Reconcile per warehouse and per batch; one reconciliation per item avoids double-posting the same variance",
+				"Never fix a count by editing old receipts: the variance is a fact, and the ledger should show it"
+			],
+			"notes": "Counting is a control, not a correction. If the same item is always short, the count is telling you about theft, breakage or an unrecorded issue — investigate the cause before adjusting the number. Keep the reconciliation documents: they are the evidence that a variance was approved rather than discovered.",
+			"callout": {
+				"tone": "warn",
+				"title": "Expense vs stock adjustment",
+				"text": "Point the difference account at 'Stock Adjustment' for small variances and at an expense account for write-offs. Mixing them hides shrinkage inside cost of goods sold."
+			}
+		},
+		{
+			"kicker": "Traceability",
+			"title": "Batches, serials and expiry",
+			"bullets": [
+				"Enable batch or serial tracking on the item; batch numbers are needed for expiry reports and recalls",
+				"Serial numbers are individual units: one row per unit, with warranty and asset links if used",
+				"'Has Expiry Date' plus shelf life in days drives the Batch Expiry report and automatic batch selection",
+				"Traceability is only as good as discipline at receipt — a batch scanned late breaks the whole chain"
+			],
+			"notes": "Regulated industries do not get to skip this. In food, pharma and electronics, a recall costs more than the whole ERP project. Practise a mock recall once: pick a batch number and prove you can list every customer it reached. If that takes a day, fix the process now, when nobody is watching.",
+			"paths": [
+				"Stock > Batch",
+				"Stock > Serial No",
+				"Stock > Stock Settings > Enable Serial and Batch"
+			]
+		},
+		{
+			"kicker": "Costs",
+			"title": "Landed cost, reposting and the value difference",
+			"bullets": [
+				"Landed Cost Voucher distributes freight, duty and insurance across received items and posts the offset to a clearing or expense account",
+				"Repost Item Valuation recalculates historical entries after a back-dated movement or a corrected rate",
+				"Reposting is expensive on large histories: run it off-peak and check the progress log",
+				"If stock and accounting disagree, compare the Stock and Account Value Difference report before touching anything"
+			],
+			"notes": "Most 'the stock value is wrong' tickets resolve to one of three causes: a receipt at the wrong rate, a landed cost never applied, or a repost that is still queued. Diagnose in that order. Do not start editing entries; you will multiply the problem and lose the evidence.",
+			"callout": {
+				"tone": "tip",
+				"title": "Repost queue",
+				"text": "Repost Item Valuation runs in the background. A stuck queue silently freezes valuation corrections — check its status after every correction."
+			}
+		},
+		{
+			"kicker": "Structure",
+			"title": "Warehouses, transit and inter-company",
+			"bullets": [
+				"Model physical reality: one leaf warehouse per location where stock physically sits; group warehouses only for reporting",
+				"Transit warehouses hold goods between sites so in-transit value is visible instead of vanishing",
+				"Inter-company transfers need mirrored documents in both companies, or the group balance sheet will not eliminate",
+				"Warehouse-level permissions restrict who can see or move stock, and they apply to reports as well"
+			],
+			"notes": "Warehouse structure is the skeleton of every stock report. Two rules avoid most pain: a group warehouse never holds stock, and a transfer never changes company without a mirror document. If the group needs consolidation, build it from the company tree in ERPNext, not from spreadsheets.",
+			"paths": [
+				"Stock > Warehouse",
+				"Stock > Warehouse > Account",
+				"Accounts > Inter Company Journal Entry"
+			]
+		},
+		{
+			"kicker": "Operations",
+			"title": "Scanning, mobile counting and the human layer",
+			"bullets": [
+				"Barcodes remove the transcription errors that cause most stock variance; a scanner is cheaper than one recount",
+				"This repository's mobile inventory PWA scans codes and posts receipts, issues, transfers and counts offline, syncing when connectivity returns",
+				"Offline queues must be idempotent: the app stamps a marker in the document so a retry cannot double-post",
+				"Give the person counting a device and a basket, not a spreadsheet and hope"
+			],
+			"notes": "Warehouse software fails when it assumes connectivity. A phone that loses signal in a freezer should keep working and sync later; that is precisely what the bundled PWA was built for. Test any mobile flow by putting the device in flight mode halfway through and watching what happens to the queue.",
+			"paths": ["mobile_inventory/README.md (bundled app)", "Stock > Stock Reconciliation"]
+		}
+	],
+	"lab": {
+		"title": "Count a cycle, transfer through transit, trace a batch",
+		"minutes": 45,
+		"steps": [
+			"Create two leaf warehouses plus a transit warehouse; move 10 units between them with a Stock Entry using the transit warehouse and inspect the two ledger rows",
+			"Receive 50 units of a batch-tracked item with an expiry date, then issue 5 to a customer and note the batch on the delivery note",
+			"Run a Stock Reconciliation counting 47 units on hand; post the variance to a stock adjustment account and read the ledger row",
+			"Back-date a receipt by one week and run Repost Item Valuation; compare the valuation before and after",
+			"Open Stock and Account Value Difference for the company and confirm it is zero, then explain what a non-zero value would mean",
+			"Produce the Batch Expiry report and the Stock Ageing report; identify one item that is ageing faster than it sells"
+		],
+		"done": "The ledger tells a coherent story: transfer in transit, batch traceable to a customer, variance posted as a document, and no value difference."
+	},
+	"quiz": [
+		{
+			"question": "What does a Stock Ledger Entry store besides the quantity?",
+			"options": [
+				"Only the quantity",
+				"The valuation rate, value change and running balance",
+				"The customer name",
+				"The tax template"
+			],
+			"answer": 1,
+			"why": "Valuation rate, value and running balances are on the entry, which is why inventory value can be reconstructed from the ledger."
+		},
+		{
+			"question": "You must move 10 units from Warehouse A to B. Which is correct?",
+			"options": [
+				"A Material Issue from A and a Material Receipt to B",
+				"A single Material Transfer",
+				"A Stock Reconciliation in both warehouses",
+				"Editing the item's default warehouse"
+			],
+			"answer": 1,
+			"why": "A transfer keeps one movement with both sides linked. Issue plus receipt invents trading activity and breaks value continuity."
+		},
+		{
+			"question": "A physical count finds 47 units where the ledger says 50. What is the correct action?",
+			"options": [
+				"Edit the original receipt",
+				"Post a Stock Reconciliation for 47 with the variance to an adjustment account",
+				"Delete three units from the delivery note",
+				"Create a journal entry with no stock document"
+			],
+			"answer": 1,
+			"why": "The variance is a real event. Reconciliation records it with an approver and leaves the history intact."
+		},
+		{
+			"question": "Stock quantity looks right but the balance sheet inventory value does not. Which report do you open first?",
+			"options": ["Stock Ageing", "Stock and Account Value Difference", "Item Price", "Gross Profit"],
+			"answer": 1,
+			"why": "It compares the stock ledger's value to the GL inventory accounts and localises the discrepancy to items and warehouses."
+		},
+		{
+			"question": "Which practice most reliably prevents stock shrinkage from being hidden in cost of goods sold?",
+			"options": [
+				"Annual full count only",
+				"Separate adjustment and write-off accounts, reviewed monthly with reasons recorded",
+				"Allowing negative stock",
+				"Using one warehouse for everything"
+			],
+			"answer": 1,
+			"why": "Separate accounts make shrinkage visible and reviewable; a single difference account quietly folds it into margin."
+		}
+	],
+	"narration": "Chapter five is stock accuracy, and it starts with one row. Every receipt, issue, transfer and count writes a stock ledger entry with quantity, valuation rate, value and a running balance. Everything else is a consequence. If someone says stock is wrong, ask which row is wrong. Valuation method is a policy decision. FIFO consumes the oldest layers, so cost of goods sold follows historical purchase prices. Moving average re-blends on every receipt, which smooths margins. Both are fine; inconsistency is not, and changing later requires a repost that rewrites history, so decide in the pilot. Use transfers for movement between warehouses, never a receipt plus an issue, because that invents trading activity. Opening stock is a receipt flagged as opening. When counts disagree, post a stock reconciliation with the counted quantity and send the difference to an adjustment account. Never edit old receipts to hide a variance, and keep adjustment and write-off accounts separate, otherwise shrinkage disappears into cost of goods sold and nobody investigates. For traceability, enable batches and serials at receipt time, because a batch scanned late breaks the chain; practise one mock recall. Finally, check the stock and account value difference report before any correction. If it is not zero, look for a wrong receipt rate, a missing landed cost, or a repost still queued."
+}

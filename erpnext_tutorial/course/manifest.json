@@ -1,0 +1,18 @@
+{
+	"title": "Mastering ERPNext",
+	"subtitle": "Ten chapters from first login to a live Malaysian site",
+	"version": "1.0.0",
+	"audience": "ERPNext implementers, finance leads, operations managers and power users",
+	"chapters": [
+		{ "id": "ch01", "file": "ch01.json" },
+		{ "id": "ch02", "file": "ch02.json" },
+		{ "id": "ch03", "file": "ch03.json" },
+		{ "id": "ch04", "file": "ch04.json" },
+		{ "id": "ch05", "file": "ch05.json" },
+		{ "id": "ch06", "file": "ch06.json" },
+		{ "id": "ch07", "file": "ch07.json" },
+		{ "id": "ch08", "file": "ch08.json" },
+		{ "id": "ch09", "file": "ch09.json" },
+		{ "id": "ch10", "file": "ch10.json" }
+	]
+}

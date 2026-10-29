@@ -1,0 +1,212 @@
+{
+	"id": "ch09",
+	"number": 9,
+	"title": "Automation, Customisation and Control",
+	"subtitle": "Change the system without forking it — and keep it fast while you do",
+	"level": "Advanced",
+	"minutes": 50,
+	"outcomes": [
+		"Customise fields, forms and lists without writing code",
+		"Build approvals and notifications that people do not route around",
+		"Decide between configuration, scripts and a custom app",
+		"Keep a busy site fast and debuggable"
+	],
+	"slides": [
+		{
+			"kicker": "Configuration",
+			"title": "Most requirements are a checkbox away",
+			"bullets": [
+				"Customize Form adds fields, changes labels, reorders sections and toggles mandatory/in-read-only per DocType",
+				"Custom Fields are upgrade-safe: they live in the database and survive ERPNext updates, unlike edits to DocType JSON",
+				"Property setters override a DocType property (default, options, hidden) without touching the original",
+				"List View Settings and Form Settings decide what people see first — the cheapest usability win available"
+			],
+			"notes": "The first question for any request is whether configuration can do it. A custom field plus a property setter solves most of them in minutes and survives upgrades. Editing a DocType JSON in the app's own repository does not survive an update cleanly, and forking is a decision you cannot easily reverse.",
+			"paths": ["Customize Form", "Data > Custom Field", "Data > Property Setter"]
+		},
+		{
+			"kicker": "Structure",
+			"title": "Custom DocTypes and child tables",
+			"bullets": [
+				"Create a DocType for data ERPNext does not model: equipment registers, licences, inspection logs",
+				"Choose submittable only if the record has a lifecycle that must be frozen and reversed",
+				"Naming: field-based for codes that humans quote, series for documents that need gaps controlled",
+				"Add a child table when the rows belong to one parent and have no independent life"
+			],
+			"notes": "Custom DocTypes are cheap and therefore multiply. Keep a register of every custom DocType with an owner and a purpose; the ones nobody can explain after two years are the ones that break upgrades. Prefer linking to existing DocTypes over duplicating their fields, and never store a copy of a customer's address in a custom table.",
+			"paths": ["Data > DocType > New", "DocType > Naming Series"]
+		},
+		{
+			"kicker": "Approvals",
+			"title": "Workflows that survive a busy Monday",
+			"bullets": [
+				"Workflow defines states (Draft, Pending Approval, Approved, Rejected) and transitions with allowed roles",
+				"Conditions on transitions enforce rules: only approve a discount above 10% if the margin is above 25%",
+				"Self-approval can be blocked so a requester cannot approve their own document",
+				"A workflow that adds three clicks without a decision will be routed around within a month"
+			],
+			"notes": "Approvals are a design problem, not a feature. Model the decision that actually matters — discount, credit, write-off, purchase above a threshold — and put the approval exactly there. Sending every document through a workflow teaches people to click approve without reading, which is worse than no control at all.",
+			"callout": {
+				"tone": "tip",
+				"title": "One decision per workflow",
+				"text": "If you cannot state the decision in a sentence, the workflow is documenting bureaucracy rather than preventing risk."
+			}
+		},
+		{
+			"kicker": "Automation",
+			"title": "Notifications, assignments and recurring work",
+			"bullets": [
+				"Notification rules fire on document events with conditions, recipients by role or field, and optional attachments",
+				"Assignment Rules route new documents to the right queue automatically",
+				"Auto Repeat recreates invoices, journals and maintenance visits on a schedule",
+				"Digest emails summarise what is overdue instead of pinging people per document"
+			],
+			"notes": "Automation should remove a decision, not add noise. One digest email listing overdue deliveries beats forty notifications nobody reads. Start with a daily digest per role, then add event-driven alerts only for things that genuinely need same-hour action, and review the notification list quarterly — every legacy alert is a false alarm generator.",
+			"paths": ["Automation > Notification", "Automation > Assignment Rule", "Automation > Auto Repeat"]
+		},
+		{
+			"kicker": "Output",
+			"title": "Print formats, letterheads and the documents customers see",
+			"bullets": [
+				"Print Format Builder handles most layouts; Jinja HTML takes over when you need logic",
+				"Letterhead holds the logo, address and footer; keep versions for rebrands and statutory changes",
+				"Test every print format against a real document with long item names, multi-currency and a tax row",
+				"Malaysian invoices need the SST registration number and, once e-Invoiced, the LHDN validation link or QR code"
+			],
+			"notes": "Print formats are the part of the system customers judge you by, and they break quietly when a field is renamed. Keep them minimal, test with real data, and version them in a custom app if you maintain many. Adding the LHDN QR or validation link to the invoice print format is a small change that materially improves compliance perception.",
+			"paths": ["Printing > Print Format", "Printing > Letter Head"]
+		},
+		{
+			"kicker": "Security",
+			"title": "Permissions: four layers, in this order",
+			"bullets": [
+				"Roles grant DocType-level rights; permission levels (permlevel) protect individual fields",
+				"User Permissions restrict rows — by company, warehouse, territory or cost centre — and apply to reports too",
+				"Role Profiles bundle roles for common jobs so onboarding is one selection, not fifteen checkboxes",
+				"Owner-based rules and 'if owner' permissions decide whether people see their own records or everyone's"
+			],
+			"notes": "Design permissions from the job description down: what may this person read, write, submit and cancel? Then test with a real non-admin user, because admin sees everything and hides every mistake. Separation of duties matters most around payments, credit notes and cancellations; a single role that can do all three is a fraud risk in any size of company.",
+			"callout": {
+				"tone": "warn",
+				"title": "Always test as a user",
+				"text": "Create a test user per role and click through the daily path. Permission bugs are invisible to System Manager."
+			}
+		},
+		{
+			"kicker": "Code",
+			"title": "Configuration, script or app?",
+			"bullets": [
+				"Client Script and doctype_js handle form behaviour — hiding fields, adding buttons, live validation",
+				"Server Script adds server-side logic without deployment, but is harder to version and test",
+				"A custom app packages hooks, patches, fixtures and DocTypes with tests and a migration path",
+				"Rule of thumb: if it touches money, stock or statutory reporting, it belongs in a versioned app"
+			],
+			"notes": "Server scripts are genuinely useful for small automations and genuinely dangerous for critical logic, because they are invisible in git. The bundled erpnext_malaysia and mobile_inventory projects are examples of the other end: a full app with tests, fixtures and install hooks. Choose deliberately, and write down which category each customisation belongs to.",
+			"table": {
+				"headers": ["Need", "Use", "Why"],
+				"rows": [
+					["Hide a field for a role", "Property Setter / Customize Form", "No code, upgrade-safe"],
+					["Button that prints a summary", "Client Script", "UI-only, no deployment"],
+					[
+						"Recalculate a field on save",
+						"Server Script or app hook",
+						"Server-side, auditable if in git"
+					],
+					[
+						"Statutory submission logic",
+						"Custom app with tests",
+						"Needs review, versioning, patches"
+					]
+				]
+			}
+		},
+		{
+			"kicker": "Performance",
+			"title": "Fast, and debuggable when it is not",
+			"bullets": [
+				"Long reports and imports belong in background jobs; the long queue is not a dumping ground for everything",
+				"Scheduler logs and Error Logs are the first place to look when something 'stopped working'",
+				"Index search fields you filter on daily; unindexed filters turn list views into full table scans",
+				"Clear cache after configuration changes, and pin ERPNext/Frappe versions so an update is a decision, not an accident"
+			],
+			"notes": "Performance work starts with measurement: which report is slow, on how many rows, with which filters. A weekly five-minute health check — scheduler running, error log empty, disk and queue depth sane — prevents most incidents. Version pinning matters more than people expect, because an unattended upgrade is how features disappear on a Monday morning.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Immutable audit trails",
+				"text": "The e-Invoice submission log blocks deletion once LHDN has the document. Governance by design beats a policy nobody enforces."
+			}
+		}
+	],
+	"lab": {
+		"title": "Add a field, an approval, a notification and a restriction",
+		"minutes": 45,
+		"steps": [
+			"Add a custom field 'Delivery Instructions' to Sales Invoice via Customize Form; make it visible in the print format",
+			"Create a Workflow on Purchase Order with Draft → Pending Approval → Approved, allowing only a Purchase Manager to approve",
+			"Add a condition that blocks approval when the order total exceeds MYR 10,000 unless the approver has the Finance Manager role",
+			"Create a Notification that emails the warehouse role when a Sales Order is submitted with a delivery date within two days",
+			"Create a User Permission restricting one test user to a single warehouse; verify it also restricts the Stock Balance report",
+			"Open the Error Log and Scheduler Log on a demo site and identify what a healthy day looks like",
+			"Write a one-page register: which changes are configuration, which are scripts, which need an app"
+		],
+		"done": "A non-admin test user can follow the workflow, sees only their warehouse, and the notification fires once — not forty times."
+	},
+	"quiz": [
+		{
+			"question": "What is the safest way to add a field to Sales Invoice?",
+			"options": [
+				"Edit the DocType JSON in the app repository",
+				"Create a Custom Field (or use Customize Form)",
+				"Add it with a server script",
+				"Store it in the remarks field"
+			],
+			"answer": 1,
+			"why": "Custom fields live in the database and survive upgrades; editing DocType JSON is overwritten by the next update."
+		},
+		{
+			"question": "Which change belongs in a versioned custom app rather than a server script?",
+			"options": [
+				"Hiding a field for a role",
+				"Logic that submits statutory e-Invoices",
+				"Adding a print button",
+				"Changing a label"
+			],
+			"answer": 1,
+			"why": "Statutory logic needs review, tests and a migration path, all of which live in git — server scripts do not."
+		},
+		{
+			"question": "A user can see stock in every warehouse despite a User Permission. What is the likely cause?",
+			"options": [
+				"The permission is on the wrong Doctype",
+				"Roles with wider access, or cached permissions, are overriding it",
+				"Warehouses cannot be restricted",
+				"The report ignores permissions by design"
+			],
+			"answer": 1,
+			"why": "User Permissions intersect with role permissions, so a broader role or stale cache can make them look ignored. Re-test as a fresh user."
+		},
+		{
+			"question": "What is the best first step when a list view becomes slow?",
+			"options": [
+				"Add more servers",
+				"Check which filters are used and whether the filtered fields are indexed",
+				"Disable the list view",
+				"Delete old records"
+			],
+			"answer": 1,
+			"why": "Most slow lists are unindexed filters or overly broad searches; indexing the fields people filter on solves it cheaply."
+		},
+		{
+			"question": "Which approval design is most likely to be respected?",
+			"options": [
+				"Every document requires three approvals",
+				"One workflow around one decision that carries real risk",
+				"Approval optional for everyone",
+				"Approval by email only"
+			],
+			"answer": 1,
+			"why": "Approvals focused on a real decision are read and enforced; broad mandatory approvals train people to click without reading."
+		}
+	],
+	"narration": "Chapter nine is about changing the system without forking it. Start with configuration, because most requirements are a checkbox away. Custom fields live in the database and survive upgrades, unlike editing DocType JSON in the repository. Property setters override a default or an option, and list view settings decide what people see first, which is the cheapest usability win you will find. For approvals, design around one decision that carries real risk: discount, credit, write-off, or a purchase above a threshold. A workflow that adds clicks without a decision gets routed around within a month, and broad mandatory approvals train people to click approve without reading. Automation should remove decisions rather than add noise: one digest per role beats forty notifications nobody reads. Print formats are what customers judge you by, so test them with long item names and tax rows, and add the SST registration number and LHDN validation link once you are e-invoicing. Permissions have four layers: roles at DocType level, permission levels for fields, user permissions for rows like company or warehouse, and role profiles for onboarding. Always test as a real non-admin user, because System Manager hides every mistake. Then choose deliberately between configuration, client script, server script and a custom app; if it touches money, stock or statutory reporting, it belongs in a versioned app with tests. Keep it fast and debuggable."
+}

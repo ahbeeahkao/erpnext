@@ -1,0 +1,241 @@
+{
+	"id": "ch10",
+	"number": 10,
+	"title": "Going Live in Malaysia",
+	"subtitle": "Opening balances, cut-over, SST and MyInvois — plus a 90-day path to mastery",
+	"level": "Capstone",
+	"minutes": 60,
+	"outcomes": [
+		"Run a go-live with a rollback plan instead of hope",
+		"Load opening balances that tie to the audited numbers",
+		"Configure a Malaysian site end to end, including e-Invoicing",
+		"Operate, monitor and keep learning after the consultant leaves"
+	],
+	"slides": [
+		{
+			"kicker": "Readiness",
+			"title": "The go-live gate",
+			"bullets": [
+				"Masters complete: items, parties, prices, taxes, warehouses, cost centres — reviewed by the people who will use them",
+				"UAT signed off on the ten transactions that matter most, run by real users with real data volumes",
+				"Opening balances prepared in a spreadsheet that already ties to the audited trial balance",
+				"Training delivered per role, a named super-user per department, and a help channel that is not one exhausted consultant"
+			],
+			"notes": "A go-live fails for organisational reasons far more often than technical ones. The gate is not 'the software is ready'; it is 'the business can run on it on Monday'. If a department cannot name a super-user who has already completed their own transactions, that department is not ready, whatever the checklist says.",
+			"callout": {
+				"tone": "warn",
+				"title": "No rollback, no go-live",
+				"text": "Agree in writing what triggers a rollback and who may call it. Deciding that at 2am on Sunday is how projects die."
+			}
+		},
+		{
+			"kicker": "Balances",
+			"title": "Opening balances that survive an audit",
+			"bullets": [
+				"Stock: Stock Reconciliation or an opening Material Receipt per warehouse, valued at the agreed cost",
+				"Receivables and payables: opening Sales and Purchase Invoices, not journals, so ageing and reconciliation work",
+				"Bank and equity: an opening Journal Entry for everything else, balanced against an 'Opening Balance Equity' account",
+				"Reconcile the result to the audited trial balance before the first real transaction, and lock the numbers in a signed document"
+			],
+			"notes": "The temptation is to jam everything into one opening journal because it balances. Resist: invoices are what make dunning, ageing and payment reconciliation possible, and stock documents are what make valuation possible. The opening balance is a one-time chance to start clean, and the cost of doing it properly is a few days.",
+			"table": {
+				"headers": ["Balance", "Document", "Why not a journal"],
+				"rows": [
+					[
+						"Inventory",
+						"Stock Reconciliation / opening receipt",
+						"Valuation and quantities must enter the stock ledger"
+					],
+					[
+						"Receivables",
+						"Opening Sales Invoice per customer",
+						"Ageing, dunning and allocation need invoices"
+					],
+					[
+						"Payables",
+						"Opening Purchase Invoice per supplier",
+						"Three-way matching and payment runs"
+					],
+					["Bank / equity / accruals", "Opening Journal Entry", "No subledger involved"],
+					[
+						"Fixed assets",
+						"Asset records with opening depreciation",
+						"Register must agree to the GL"
+					]
+				]
+			}
+		},
+		{
+			"kicker": "Cut-over",
+			"title": "The weekend runbook",
+			"bullets": [
+				"Freeze: stop invoicing and stock movements in the old system at an agreed timestamp, and tell customers",
+				"Load in order: company and accounts → masters → opening stock → opening AR/AP → bank and equity journals",
+				"Verify: trial balance, stock balance, AR/AP ageing and a test invoice all match the agreed numbers",
+				"Switch, then hypercare: daily stand-up for two weeks, one queue for issues, one person deciding what is a bug"
+			],
+			"notes": "Write the runbook as a numbered list with timestamps, owners and a verification step after each block. Rehearse it on a staging copy, timed. The rehearsal is what turns a terrifying weekend into a checklist, and it usually reveals that the master data export is the long pole, not the software.",
+			"callout": {
+				"tone": "tip",
+				"title": "Run it twice",
+				"text": "A full dry run on staging, then delete the site and do it again. The second run is the one that goes smoothly in production."
+			}
+		},
+		{
+			"kicker": "Operations",
+			"title": "Backups, staging and upgrades",
+			"bullets": [
+				"Automated daily backups, checked weekly by restoring into a scratch site — an untested backup is a rumour",
+				"Keep a staging site with production-like data for testing upgrades, patches and customisations",
+				"Pin Frappe and ERPNext versions; upgrade on a schedule with a rollback plan and a changelog review",
+				"Test custom apps and print formats after every upgrade — that is where breakage hides"
+			],
+			"notes": "The restore drill is non-negotiable. Do it quarterly, on a machine someone else can reach, and time it. You are not testing whether backups exist; you are testing whether the business can be back in an hour. The same discipline applies to upgrades: patch notes, staging, verification, and a documented way back.",
+			"paths": [
+				"bench --site <site> backup --with-files",
+				"bench --site <site> restore <backup>",
+				"bench update --patch"
+			]
+		},
+		{
+			"kicker": "Security",
+			"title": "Hardening a site that holds the company's money",
+			"bullets": [
+				"Two-factor authentication for every user who can pay, cancel or approve; a separate integration user for APIs",
+				"Least privilege: no shared logins, no System Manager for daily work, role profiles reviewed quarterly",
+				"Protect secrets: API keys per integration, rotate on staff departure, keep client secrets in Password fields only",
+				"Restrict network exposure — VPN or IP allowlist for admin, HTTPS everywhere, and an audit of who can export data"
+			],
+			"notes": "Most ERPNext breaches are not clever: they are a shared admin password, an API key in a spreadsheet, or a former employee with a live login. Review the user list monthly, disable rather than delete, and treat data export rights as sensitive. Frappe gives you the tools; discipline is the rest.",
+			"callout": {
+				"tone": "warn",
+				"title": "Leavers checklist",
+				"text": "Disable the user, revoke API keys, rotate shared secrets, remove from role profiles. Put it in the HR offboarding form, not in someone's memory."
+			}
+		},
+		{
+			"kicker": "Malaysia",
+			"title": "Configuring the Malaysian site",
+			"bullets": [
+				"SST: sales and service tax templates with separate liability accounts, tax categories per supply type, and a monthly SST-02 reconciliation",
+				"e-Invoice: install erpnext_malaysia, set the MyInvois client credentials, company TIN/BRN/SST, customer TINs and MSIC codes, then test in Sandbox",
+				"Operate LHDN rules: submit on invoice day, 72-hour cancellation window with a reason, credit notes referencing the original UUID, TIN validation before billing a new customer",
+				"Stock on the floor: the mobile_inventory PWA posts receipts, issues, transfers and counts offline and syncs when the signal returns"
+			],
+			"notes": "This is the chapter where the course becomes local. Test the whole chain in the MyInvois sandbox before the first real invoice: TIN validation, submission, validation polling, and a cancellation. Then agree two written policies the day you go live — who may cancel an e-Invoice, and what happens when a buyer rejects one. Both will be needed within the first month.",
+			"paths": [
+				"Malaysia E-Invoice Settings",
+				"LHDN Classification Code",
+				"E Invoice Submission Log",
+				"mobile_inventory/README.md"
+			]
+		},
+		{
+			"kicker": "After go-live",
+			"title": "The weekly health check",
+			"bullets": [
+				"Scheduler running, Error Log reviewed, background queue drained, backups restored last week",
+				"Unallocated payments, unreconciled bank lines, negative stock and open work orders trending to zero",
+				"Pipeline of failed e-Invoice submissions empty, with every error either fixed or documented",
+				"One dashboard per role, reviewed in a standing fifteen-minute meeting"
+			],
+			"notes": "Systems do not fail suddenly; they decay. A fifteen-minute weekly review of five numbers prevents the quarterly crisis. Assign each number an owner and make the meeting about the exception, not the report. If a metric has been red for three weeks, either fix it or stop measuring it — a permanently red metric teaches people to ignore the dashboard.",
+			"paths": [
+				"Error Log",
+				"Scheduler Log",
+				"Background Jobs",
+				"Accounts > Payment Reconciliation",
+				"Stock > Stock Balance"
+			]
+		},
+		{
+			"kicker": "Mastery",
+			"title": "Your next ninety days",
+			"bullets": [
+				"Days 1–30: rebuild this course's labs on a throwaway site; break things deliberately and fix them",
+				"Days 31–60: own one real business process end to end — selling or buying — including its month-end reconciliation",
+				"Days 61–90: write something reusable: a print format, a report, an app, or a runbook your successor could follow",
+				"Read the source when documentation runs out: the DocType JSON and the controller tell the truth about behaviour"
+			],
+			"notes": "Mastery is not knowing every feature; it is predicting what a change will do to the ledgers. The fastest route is deliberate practice on a site you are allowed to destroy, followed by ownership of a process whose numbers you have to defend. After that, contributing — a patch, a report, a documented gotcha — is how the knowledge sticks.",
+			"callout": {
+				"tone": "tip",
+				"title": "The one habit that compounds",
+				"text": "Keep a running notes file of every surprise: what you expected, what happened, what the fix was. In a year it is worth more than any course."
+			}
+		}
+	],
+	"lab": {
+		"title": "Capstone: take a company live in a day",
+		"minutes": 120,
+		"steps": [
+			"Provision a fresh site; create the company, chart of accounts, cost centres and warehouses from a written plan",
+			"Import items, customers, suppliers, price lists and tax templates; prove them with two draft transactions",
+			"Load opening stock, three opening customer invoices, two supplier invoices and a bank journal that balances to a trial balance",
+			"Run the full sales cycle for one of those customers, including a partial delivery and a payment; run the full purchase cycle including a receipt and a payment",
+			"Manufacture one product from a BOM and reconcile its valuation to the components consumed",
+			"Configure Malaysia E-Invoice Settings in Sandbox, validate a TIN, submit one invoice, poll its status, then cancel it with a reason",
+			"Close the month: bank reconciliation, accrual journal with reversal, depreciation, period closing voucher, and export the submission log",
+			"Write a two-page handover: the runbook, the rollback triggers and the weekly health check, in your own words"
+		],
+		"done": "A stranger can read your handover, restart the site from backup, and run a compliant invoice without asking you anything."
+	},
+	"quiz": [
+		{
+			"question": "Why should opening receivables be invoices rather than a journal entry?",
+			"options": [
+				"Journals are not allowed after go-live",
+				"Ageing, allocation and dunning work per invoice; a journal leaves an unallocated lump sum",
+				"Invoices are faster to enter",
+				"It changes the tax calculation"
+			],
+			"answer": 1,
+			"why": "The Payment Ledger settles per invoice. A journal balances the account but produces nothing to allocate or chase."
+		},
+		{
+			"question": "What makes a backup trustworthy?",
+			"options": [
+				"It runs nightly",
+				"It has been restored into a working site within a measured time",
+				"It is stored off-site",
+				"It includes files"
+			],
+			"answer": 1,
+			"why": "Only a completed restore proves recoverability; everything else is an assumption about files you have not opened."
+		},
+		{
+			"question": "A buyer rejects an e-Invoice in MyInvois. What is the supplier's next step?",
+			"options": [
+				"Nothing, rejection is final",
+				"Cancel the document at LHDN within the allowed window and issue a corrected invoice",
+				"Edit the invoice in ERPNext",
+				"Create a stock adjustment"
+			],
+			"answer": 1,
+			"why": "A rejection request only asks for cancellation; the supplier must cancel and re-issue. Editing a submitted invoice is never the answer."
+		},
+		{
+			"question": "Which go-live signal matters most?",
+			"options": [
+				"Every feature configured",
+				"Real users completing their own transactions in UAT with a named super-user per department",
+				"Consultants on site for a week",
+				"A perfect chart of accounts"
+			],
+			"answer": 1,
+			"why": "Adoption is the risk. Completed transactions by real users, with local support, predict survival far better than configuration completeness."
+		},
+		{
+			"question": "What is the fastest route to ERPNext mastery?",
+			"options": [
+				"Memorising menu paths",
+				"Deliberate practice on a disposable site, then owning a process whose numbers you must defend",
+				"Reading release notes only",
+				"Customising everything before go-live"
+			],
+			"answer": 1,
+			"why": "You learn the system by predicting its effect on the ledgers and being corrected. Ownership of real numbers forces that feedback loop."
+		}
+	],
+	"narration": "Chapter ten takes the course live. Make the gate organisational rather than technical: masters reviewed by the people who use them, UAT signed off on the ten transactions that matter, opening balances tying to the audited trial balance, and a named super-user in every department. If nobody can name that person, the department is not ready. Agree in writing what triggers a rollback and who can call it. Opening balances are a one-time chance to start clean. Load stock through stock documents so valuation enters the ledger. Load receivables and payables as opening invoices, not journals, so ageing, allocation and dunning work. Put everything else in an opening journal against opening balance equity, and reconcile before the first real transaction. Write the cut-over as a timed runbook with a verification step after each block, and rehearse it on staging twice. Afterwards: test a restore quarterly, keep a staging site, pin versions, and review custom apps after every upgrade. Harden security with two-factor authentication, least privilege and a leavers checklist. Then the Malaysian specifics: separate SST liability accounts, a monthly reconciliation, and the e-invoice app tested end to end in sandbox, including a cancellation with a reason, before your first real invoice. Agree two policies on day one: who may cancel an e-invoice, and what happens when a buyer rejects one. Mastery is predicting what a change does to the ledgers."
+}

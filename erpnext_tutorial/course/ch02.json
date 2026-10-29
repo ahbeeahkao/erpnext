@@ -1,0 +1,216 @@
+{
+	"id": "ch02",
+	"number": 2,
+	"title": "Masters That Decide Everything",
+	"subtitle": "Items, parties, prices and taxes — the four decisions you cannot undo cheaply",
+	"level": "Foundation",
+	"minutes": 45,
+	"outcomes": [
+		"Model items with the right type, UOM and valuation method",
+		"Configure customers, suppliers and price lists that scale to thousands of rows",
+		"Build SST-correct tax templates and know which charge type to use",
+		"Import master data without creating decades of cleanup"
+	],
+	"slides": [
+		{
+			"kicker": "Items",
+			"title": "An item is a costing decision wearing a product's name",
+			"bullets": [
+				"Item Type is Stock, Non-Stock, Service or Product Bundle; only Stock items create stock ledger entries",
+				"Valuation Method per item: FIFO (default) or Moving Average — mixing methods in one warehouse is how valuations drift",
+				"Item variants (template + attributes) or separate items? Variants when stock must be tracked separately by attribute",
+				"Item Defaults per company hold the income, expense and stock accounts and the default warehouse"
+			],
+			"notes": "The expensive mistakes are structural: choosing Service for something you later stock, or creating one item per colour when variants would do. Both are fixable, neither is free once invoices and stock exist. Decide valuation method before the first receipt — changing it later requires reposting every ledger entry.",
+			"callout": {
+				"tone": "warn",
+				"title": "Valuation is not a display setting",
+				"text": "Switching FIFO to Moving Average on live data rewrites every historical valuation. Pick once, in the pilot, and document the choice."
+			}
+		},
+		{
+			"kicker": "Units",
+			"title": "Units of measure before anything else",
+			"bullets": [
+				"Every item has a stock UOM; selling and buying UOMs convert into it via UOM Conversion Factor rows",
+				"Set 'Must be Whole Number' for pieces, cartons and anything you cannot split",
+				"Conversion is multiplicative: 1 Box = 12 Nos means a factor of 12 on the Nos row",
+				"The UOM on a transaction drives quantity in the stock ledger but price per chosen UOM"
+			],
+			"notes": "If UOM conversion is wrong, stock is wrong in a way no report flags: quantities look plausible, valuation does not. Test one carton sold in Nos and one sold in Boxes, then check Stock Balance in stock UOM. Malaysian training grant and customs reporting both ask for quantities in specific UOMs, so keep the set small and consistent.",
+			"paths": ["Stock > UOM", "Stock > UOM Conversion Factor", "Item > Units of Measure"]
+		},
+		{
+			"kicker": "Parties",
+			"title": "Customers and suppliers are ledgers, not address books",
+			"bullets": [
+				"Each party carries a control account, default currency, price list and payment terms — those defaults decide every future transaction",
+				"Groups and territories drive reporting and default accounts; two levels of nesting is usually enough",
+				"Addresses and contacts are separate DocTypes linked by Dynamic Link — the primary address is what prints and what MyInvois reads",
+				"Malaysia TIN, business registration and SST numbers live in custom fields added by the e-Invoice app"
+			],
+			"notes": "A customer record is the default value factory for sales documents: change its price list and every new order changes with it. Keep an address hygiene rule — one primary billing address per party — because e-Invoicing rejects documents with incomplete buyer addresses and because humans read the printed address, not the database.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Two identity fields matter",
+				"text": "LHDN validates TIN plus registration number (BRN/NRIC). Capture both on the Customer, and make the address complete — line 1, city, postcode, state."
+			}
+		},
+		{
+			"kicker": "Pricing",
+			"title": "How ERPNext picks a rate",
+			"bullets": [
+				"Price List on the transaction, then Item Price rows filtered by price list, UOM, customer/supplier, batch and validity dates",
+				"Pricing Rules run after the price list and can set, discount, or add margin — by item, group, brand, customer, territory or quantity",
+				"Item Price 'buying rate' and 'selling rate' are separate rows; never share one price list across both directions",
+				"Selling Price List currency must match the order currency, or the rate is converted at the exchange rate of the day"
+			],
+			"notes": "Rate resolution is layered, and that layering is the feature: one standard price list, then pricing rules for segments, then negotiated item prices for named customers. When a salesperson reports a wrong rate, walk the layers in order rather than editing the line. Also lock down who may edit Pricing Rules — they silently override everything.",
+			"table": {
+				"headers": ["Layer", "Example", "Wins over"],
+				"rows": [
+					[
+						"Transaction rate typed by user",
+						"Sales Order line = 980",
+						"Everything (manual override)"
+					],
+					["Pricing Rule", "10% off Item Group 'Consumables'", "Item Price"],
+					["Item Price", "Customer 'Acme' MYR 950 / Nos", "Price List"],
+					["Price List", "Standard Selling MYR 1,000", "—"]
+				]
+			}
+		},
+		{
+			"kicker": "Taxes",
+			"title": "Tax templates: five charge types, one rule",
+			"bullets": [
+				"On Net Total is what SST needs: rate × net amount, one row per tax account",
+				"Actual takes a fixed amount; On Previous Row Amount/Total compound; On Item Quantity is per unit",
+				"Tax Category selects the template automatically on transactions (e.g. 'SST Sales – Service 8%')",
+				"Item Tax Template narrows exemption per item; 'included in print rate' means the price already contains the tax"
+			],
+			"notes": "Most Malaysian setups need two sales templates (sales tax, service tax) and two purchase templates, plus a zero-rated and an exempt template. The trap is inclusive pricing: if your price list is tax-inclusive, set 'included in print rate' so the ledger posts the right net and tax split. Otherwise the customer pays 8% twice.",
+			"table": {
+				"headers": ["Charge type", "Calculates on", "Use for"],
+				"rows": [
+					["On Net Total", "Sum of line net amounts", "SST, VAT, GST-style percentage taxes"],
+					["Actual", "Fixed amount", "Stamp duty, fixed fees, round-off"],
+					["On Previous Row Amount", "A previous row's tax amount", "Compounding levies"],
+					["On Previous Row Total", "A previous row's running total", "Second-stage taxes"],
+					["On Item Quantity", "Quantity × rate", "Excise per unit, deposits"]
+				]
+			}
+		},
+		{
+			"kicker": "Structure",
+			"title": "Warehouses, cost centres and dimensions",
+			"bullets": [
+				"Warehouse is a tree: group warehouses for reporting, leaf warehouses for stock; each leaf can own a stock account",
+				"Transit warehouses model goods in motion between sites; use them instead of 'adjustment' entries",
+				"Cost Center is mandatory on most expense lines; Project is the second common dimension",
+				"Accounting Dimensions add up to five more free dimensions (channel, branch, campaign) reported on every ledger row"
+			],
+			"notes": "Dimensions are cheap to add and expensive to backfill. If the business will ever ask 'profit by branch' or 'cost by channel', create the dimension before the first transaction, because reports cannot reconstruct what was never recorded. Keep the count small: three dimensions is plenty for most mid-sized companies.",
+			"callout": {
+				"tone": "tip",
+				"title": "Name for the report",
+				"text": "Warehouses and cost centres appear in every report. Name them so a column header is readable: 'Main - PJ', not 'WH01'."
+			}
+		},
+		{
+			"kicker": "Data",
+			"title": "Importing master data without regret",
+			"bullets": [
+				"Import in dependency order: UOMs → Item Groups → Items → Customers/Suppliers → Addresses → Price Lists → Item Prices",
+				"Use the Data Import tool's template export, keep one row per record, and never import an ID you did not create",
+				"Download the error report, fix the sheet, re-import only failed rows — the tool is idempotent per name",
+				"Test on a copy of the site; a wrong column in a 10,000-row import is a weekend, not an hour"
+			],
+			"notes": "The classic failure is importing items with a text 'UOM' column that does not exactly match an existing UOM. The import succeeds and creates items referencing nothing. Validate by opening five random imported records and running Stock Balance before declaring victory.",
+			"paths": ["Data > Import", "Data > Export"]
+		},
+		{
+			"kicker": "Checklist",
+			"title": "Master data review before go-live",
+			"bullets": [
+				"Every stock item has a stock UOM, an item group, a valuation method and per-company default accounts",
+				"Every customer and supplier has a control account, currency, payment terms and a primary address",
+				"Tax templates exist for every tax situation you actually invoice, and each has been tested on a draft invoice",
+				"Price lists are named by purpose and currency; only one is marked default per currency"
+			],
+			"notes": "Run this review as a checklist with sign-off from finance, not as a vibe. In practice the four items above catch ninety percent of go-live defects, and each is a five-minute SQL or report query rather than a project.",
+			"callout": {
+				"tone": "tip",
+				"title": "Prove it with a draft",
+				"text": "Create one draft Sales Invoice per tax situation. If the tax split and totals look right, your masters are ready."
+			}
+		}
+	],
+	"lab": {
+		"title": "Configure a product, a customer and an SST-correct price",
+		"minutes": 40,
+		"steps": [
+			"Create UOM 'Box' with a conversion factor of 12 against Nos; mark 'Must be Whole Number' on both",
+			"Create Item Group 'Consulting' and Item Group 'Hardware'; add one Service item and one Stock item under them",
+			"On the stock item set valuation method FIFO, stock UOM Nos, and per-company defaults for income, expense and stock accounts",
+			"Create Customer 'Acme Manufacturing' with MYR, payment terms Net 30, a primary billing address and a Malaysian TIN",
+			"Create Sales Tax Template 'SST Sales – Service 8%' with one On Net Total row at 8% against the service tax liability account",
+			"Create Price List 'Standard Selling MYR' with an Item Price for the service item; then add a Pricing Rule giving Acme 5% off",
+			"Draft a Sales Invoice for Acme with both items, apply the tax category and verify: discount applied, 8% only on the service line, totals reconcile"
+		],
+		"done": "The draft invoice shows the pricing-rule discount, tax on the correct line only, and a grand total you can reproduce on paper."
+	},
+	"quiz": [
+		{
+			"question": "You need to track the same shirt in five sizes with separate stock. What is the correct model?",
+			"options": [
+				"Five separate items",
+				"One item template with a size attribute (variants)",
+				"One item with a note",
+				"A product bundle per size"
+			],
+			"answer": 1,
+			"why": "Variants keep separate stock and valuation per attribute combination while sharing one template, pricing and description."
+		},
+		{
+			"question": "An SST template row uses charge type 'On Previous Row Total'. What have you built?",
+			"options": [
+				"A simple 8% sales tax",
+				"A compounding tax calculated on a previous row's running total",
+				"A fixed fee",
+				"A per-unit excise"
+			],
+			"answer": 1,
+			"why": "On Previous Row Total compounds; for ordinary SST you want On Net Total."
+		},
+		{
+			"question": "Prices in your price list already include 8% service tax. Which setting prevents double taxation?",
+			"options": [
+				"Tax Category",
+				"Included in Print Rate on the tax row",
+				"Pricing Rule with margin",
+				"Item Tax Template"
+			],
+			"answer": 1,
+			"why": "Marking the tax row 'included in print rate' tells ERPNext the rate already contains tax, so it back-computes net and tax instead of adding on top."
+		},
+		{
+			"question": "Which is evaluated last when ERPNext resolves a selling rate?",
+			"options": ["Item Price", "Price List", "Pricing Rule", "Customer default currency"],
+			"answer": 2,
+			"why": "Price list lookup first, then Item Price filtering, then Pricing Rules adjust — except a rate typed manually by the user, which always wins."
+		},
+		{
+			"question": "What is the safe order for a first master-data import?",
+			"options": [
+				"Items, then UOMs, then Item Groups",
+				"UOMs, then Item Groups, then Items, then parties, then prices",
+				"Prices, then Items, then UOMs",
+				"Any order — the importer resolves dependencies"
+			],
+			"answer": 1,
+			"why": "Each record links to the previous level. Importing items before UOMs or groups produces records pointing at nothing."
+		}
+	],
+	"narration": "Chapter two is about masters, the four decisions that are cheap before go-live and expensive afterwards. First, items. An item is a costing decision wearing a product name: the item type decides whether stock is tracked, and the valuation method decides how value moves. Choose FIFO or moving average once, in the pilot, and write down why. Units of measure come first, because if conversions are wrong the stock report still looks plausible while valuation drifts. Second, parties. A customer is the default value factory for every future sales document: control account, currency, price list, payment terms. For Malaysia capture TIN and business registration number, and keep one complete primary address, because LHDN validates both. Third, pricing. Rates resolve in layers: price list, then item prices filtered by customer and unit, then pricing rules. When a rate looks wrong, walk the layers instead of editing the line. Fourth, tax. Use On Net Total rows for SST, one row per tax account, and if your prices already include tax, mark the row included in print rate, otherwise the customer pays it twice. Dimensions are the quiet fifth decision: if anyone will ever ask profit by branch, create the accounting dimension before the first transaction. Import in dependency order and test on a copy first."
+}
