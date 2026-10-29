@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:code",
+ "creation": "2026-10-30 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "code",
+  "category",
+  "column_break_main",
+  "description",
+  "msic_section",
+  "msic_description"
+ ],
+ "fields": [
+  {
+   "description": "Five-digit MSIC 2008 code, e.g. 62010 for computer programming activities.",
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Code",
+   "reqd": 1,
+   "set_only_once": 1,
+   "unique": 1
+  },
+  {
+   "default": "Services",
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Category",
+   "options": "Goods\nServices"
+  },
+  {
+   "fieldname": "column_break_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "msic_section",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "description": "Free-text note shown to users picking this code (e.g. the full MSIC wording).",
+   "fieldname": "msic_description",
+   "fieldtype": "Small Text",
+   "label": "Full MSIC Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-30 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Malaysia E-Invoice",
+ "name": "LHDN Classification Code",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1
+  }
+ ],
+ "sort_field": "code",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "description",
+ "track_changes": 1
+}

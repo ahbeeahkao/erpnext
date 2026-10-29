@@ -1,0 +1,542 @@
+{
+ "Invoice": [
+  {
+   "_D": "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
+   "_A": "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2",
+   "_B": "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2",
+   "ID": [
+    {
+     "_": "INV-2026-0001"
+    }
+   ],
+   "IssueDate": [
+    {
+     "_": "2026-03-04"
+    }
+   ],
+   "IssueTime": [
+    {
+     "_": "02:30:00Z"
+    }
+   ],
+   "InvoiceTypeCode": [
+    {
+     "_": "01",
+     "listVersionID": "1.1"
+    }
+   ],
+   "DocumentCurrencyCode": [
+    {
+     "_": "MYR"
+    }
+   ],
+   "AccountingSupplierParty": [
+    {
+     "Party": [
+      {
+       "PartyIdentification": [
+        {
+         "ID": [
+          {
+           "_": "C2584563200",
+           "schemeID": "TIN"
+          }
+         ]
+        }
+       ],
+       "PartyName": [
+        {
+         "Name": [
+          {
+           "_": "Arena Technologies Sdn Bhd"
+          }
+         ]
+        }
+       ],
+       "PostalAddress": [
+        {
+         "CityName": [
+          {
+           "_": "Petaling Jaya"
+          }
+         ],
+         "PostalZone": [
+          {
+           "_": "47400"
+          }
+         ],
+         "CountrySubentityCode": [
+          {
+           "_": "10"
+          }
+         ],
+         "Country": [
+          {
+           "IdentificationCode": [
+            {
+             "_": "MYS"
+            }
+           ]
+          }
+         ],
+         "AddressLine": [
+          {
+           "Line": [
+            {
+             "_": "Level 12, Menara Arena"
+            }
+           ]
+          },
+          {
+           "Line": [
+            {
+             "_": "Jalan SS 21/1"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "PartyLegalEntity": [
+        {
+         "RegistrationName": [
+          {
+           "_": "Arena Technologies Sdn Bhd"
+          }
+         ],
+         "CompanyID": [
+          {
+           "_": "201901009876",
+           "schemeID": "BRN"
+          }
+         ]
+        }
+       ],
+       "PartyTaxScheme": [
+        {
+         "CompanyID": [
+          {
+           "_": "W10-1808-32000123"
+          }
+         ],
+         "TaxScheme": [
+          {
+           "ID": [
+            {
+             "_": "OTH"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "Contact": [
+        {
+         "Telephone": [
+          {
+           "_": "+603-1234 5678"
+          }
+         ],
+         "ElectronicMail": [
+          {
+           "_": "billing@arena.example"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "AccountingCustomerParty": [
+    {
+     "Party": [
+      {
+       "PartyIdentification": [
+        {
+         "ID": [
+          {
+           "_": "C2584563201",
+           "schemeID": "TIN"
+          }
+         ]
+        }
+       ],
+       "PartyName": [
+        {
+         "Name": [
+          {
+           "_": "Client Two Sdn Bhd"
+          }
+         ]
+        }
+       ],
+       "PostalAddress": [
+        {
+         "CityName": [
+          {
+           "_": "Kuala Lumpur"
+          }
+         ],
+         "PostalZone": [
+          {
+           "_": "50450"
+          }
+         ],
+         "CountrySubentityCode": [
+          {
+           "_": "14"
+          }
+         ],
+         "Country": [
+          {
+           "IdentificationCode": [
+            {
+             "_": "MYS"
+            }
+           ]
+          }
+         ],
+         "AddressLine": [
+          {
+           "Line": [
+            {
+             "_": "1 Jalan Ampang"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "PartyLegalEntity": [
+        {
+         "RegistrationName": [
+          {
+           "_": "Client Two Sdn Bhd"
+          }
+         ],
+         "CompanyID": [
+          {
+           "_": "202001009877",
+           "schemeID": "BRN"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "TaxTotal": [
+    {
+     "TaxAmount": [
+      {
+       "_": "170.00",
+       "currencyID": "MYR"
+      }
+     ],
+     "TaxSubtotal": [
+      {
+       "TaxableAmount": [
+        {
+         "_": "100.00",
+         "currencyID": "MYR"
+        }
+       ],
+       "TaxAmount": [
+        {
+         "_": "10.00",
+         "currencyID": "MYR"
+        }
+       ],
+       "Percent": [
+        {
+         "_": "10.00"
+        }
+       ],
+       "TaxCategory": [
+        {
+         "ID": [
+          {
+           "_": "01"
+          }
+         ],
+         "TaxScheme": [
+          {
+           "ID": [
+            {
+             "_": "OTH"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "TaxableAmount": [
+        {
+         "_": "2000.00",
+         "currencyID": "MYR"
+        }
+       ],
+       "TaxAmount": [
+        {
+         "_": "160.00",
+         "currencyID": "MYR"
+        }
+       ],
+       "Percent": [
+        {
+         "_": "8.00"
+        }
+       ],
+       "TaxCategory": [
+        {
+         "ID": [
+          {
+           "_": "02"
+          }
+         ],
+         "TaxScheme": [
+          {
+           "ID": [
+            {
+             "_": "OTH"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "LegalMonetaryTotal": [
+    {
+     "LineExtensionAmount": [
+      {
+       "_": "2100.00",
+       "currencyID": "MYR"
+      }
+     ],
+     "TaxExclusiveAmount": [
+      {
+       "_": "2100.00",
+       "currencyID": "MYR"
+      }
+     ],
+     "TaxInclusiveAmount": [
+      {
+       "_": "2270.00",
+       "currencyID": "MYR"
+      }
+     ],
+     "PayableAmount": [
+      {
+       "_": "2270.00",
+       "currencyID": "MYR"
+      }
+     ]
+    }
+   ],
+   "InvoiceLine": [
+    {
+     "ID": [
+      {
+       "_": "1"
+      }
+     ],
+     "InvoicedQuantity": [
+      {
+       "_": "2",
+       "unitCode": "C62"
+      }
+     ],
+     "LineExtensionAmount": [
+      {
+       "_": "2000.00",
+       "currencyID": "MYR"
+      }
+     ],
+     "TaxTotal": [
+      {
+       "TaxAmount": [
+        {
+         "_": "160.00",
+         "currencyID": "MYR"
+        }
+       ],
+       "TaxSubtotal": [
+        {
+         "TaxableAmount": [
+          {
+           "_": "2000.00",
+           "currencyID": "MYR"
+          }
+         ],
+         "TaxAmount": [
+          {
+           "_": "160.00",
+           "currencyID": "MYR"
+          }
+         ],
+         "Percent": [
+          {
+           "_": "8.00"
+          }
+         ],
+         "TaxCategory": [
+          {
+           "ID": [
+            {
+             "_": "02"
+            }
+           ],
+           "TaxScheme": [
+            {
+             "ID": [
+              {
+               "_": "OTH"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "Item": [
+      {
+       "CommodityClassification": [
+        {
+         "ItemClassificationCode": [
+          {
+           "_": "62010",
+           "listID": "CLASS"
+          }
+         ]
+        }
+       ],
+       "Description": [
+        {
+         "_": "Consulting services - March 2026"
+        }
+       ]
+      }
+     ],
+     "Price": [
+      {
+       "PriceAmount": [
+        {
+         "_": "1000.00",
+         "currencyID": "MYR"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "ID": [
+      {
+       "_": "2"
+      }
+     ],
+     "InvoicedQuantity": [
+      {
+       "_": "1",
+       "unitCode": "C62"
+      }
+     ],
+     "LineExtensionAmount": [
+      {
+       "_": "100.00",
+       "currencyID": "MYR"
+      }
+     ],
+     "TaxTotal": [
+      {
+       "TaxAmount": [
+        {
+         "_": "10.00",
+         "currencyID": "MYR"
+        }
+       ],
+       "TaxSubtotal": [
+        {
+         "TaxableAmount": [
+          {
+           "_": "100.00",
+           "currencyID": "MYR"
+          }
+         ],
+         "TaxAmount": [
+          {
+           "_": "10.00",
+           "currencyID": "MYR"
+          }
+         ],
+         "Percent": [
+          {
+           "_": "10.00"
+          }
+         ],
+         "TaxCategory": [
+          {
+           "ID": [
+            {
+             "_": "01"
+            }
+           ],
+           "TaxScheme": [
+            {
+             "ID": [
+              {
+               "_": "OTH"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "Item": [
+      {
+       "CommodityClassification": [
+        {
+         "ItemClassificationCode": [
+          {
+           "_": "58110",
+           "listID": "CLASS"
+          }
+         ]
+        }
+       ],
+       "Description": [
+        {
+         "_": "Printed manual"
+        }
+       ]
+      }
+     ],
+     "Price": [
+      {
+       "PriceAmount": [
+        {
+         "_": "100.00",
+         "currencyID": "MYR"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
