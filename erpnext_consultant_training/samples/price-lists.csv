@@ -1,0 +1,6 @@
+item_code,price_list,uom,rate,currency,valid_from
+SM-BL200,Retail - SM,Nos,240.00,MYR,2026-01-01
+SM-BL200,Dealer - SM,Nos,216.00,MYR,2026-01-01
+SM-KT100,Retail - SM,Nos,90.00,MYR,2026-01-01
+SM-KT100,Dealer - SM,Nos,81.00,MYR,2026-01-01
+SM-PKG-BOX,Retail - SM,Nos,3.00,MYR,2026-01-01

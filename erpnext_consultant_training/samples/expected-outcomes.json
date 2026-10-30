@@ -1,0 +1,119 @@
+{
+	"company": "Seri Murni Sdn Bhd",
+	"abbreviation": "SM",
+	"currency": "MYR",
+	"fiscal_year": "2026-01-01 to 2026-12-31",
+	"valuation_method": "FIFO",
+	"setup_checks": [
+		{
+			"id": "company.roots",
+			"label": "Account root groups",
+			"expected": "5",
+			"where": "Chart of Accounts"
+		},
+		{
+			"id": "company.suffix",
+			"label": "Account name suffix",
+			"expected": "- SM",
+			"where": "Any ledger account"
+		},
+		{
+			"id": "company.receivable",
+			"label": "Default receivable",
+			"expected": "Debtors - SM",
+			"where": "Company → Accounts"
+		},
+		{
+			"id": "company.cost_centres",
+			"label": "Cost centres",
+			"expected": "Main, Retail, Showroom, Assembly",
+			"where": "Cost Center list"
+		},
+		{
+			"id": "tax.sales",
+			"label": "Sales tax template",
+			"expected": "SST 10% - SM",
+			"where": "Item Tax Template"
+		},
+		{
+			"id": "tax.service",
+			"label": "Service tax template",
+			"expected": "Service Tax 8% - SM",
+			"where": "Item Tax Template"
+		},
+		{
+			"id": "uom.conversion",
+			"label": "1 Box equals",
+			"expected": "12 Nos",
+			"where": "UOM Conversion Factor"
+		},
+		{
+			"id": "stock.warehouses",
+			"label": "Warehouses",
+			"expected": "Main, Retail Counter, Assembly Floor, Returns Quarantine",
+			"where": "Warehouse list"
+		},
+		{
+			"id": "stock.negative",
+			"label": "Allow negative stock",
+			"expected": "off",
+			"where": "Stock Settings"
+		},
+		{
+			"id": "selling.credit_check",
+			"label": "Check credit limit",
+			"expected": "on",
+			"where": "Selling Settings"
+		}
+	],
+	"cycles": {
+		"sale": {
+			"documents": ["Quotation", "Sales Order", "Delivery Note", "Sales Invoice", "Payment Entry"],
+			"quantities": { "ordered": 5, "delivered": 5, "billed": 5 },
+			"amounts": { "net": "1200.00", "tax": "120.00", "total": "1320.00" },
+			"gl": {
+				"delivery": ["Dr Cost of Goods Sold 600.00", "Cr Stock 600.00"],
+				"invoice": ["Dr Debtors 1320.00", "Cr Sales 1200.00", "Cr SST Payable 120.00"],
+				"payment": ["Dr Bank 1320.00", "Cr Debtors 1320.00"]
+			},
+			"stock": { "before": 0, "after_delivery": -5, "valuation_rate": "120.00" },
+			"reports": { "gross_profit": "600.00", "receivable_after_payment": "0.00" }
+		},
+		"partial_delivery": {
+			"quantities": { "ordered": 5, "delivered": 2, "billed": 2 },
+			"amounts": { "net": "480.00", "tax": "48.00", "total": "528.00" },
+			"gl": { "delivery": ["Dr Cost of Goods Sold 240.00", "Cr Stock 240.00"] },
+			"order_percentages": { "delivered": "40", "billed": "40" }
+		},
+		"discount": {
+			"line_discount_percent": "10",
+			"amounts": { "net": "1080.00", "tax": "108.00", "total": "1188.00" },
+			"gross_profit": "480.00"
+		},
+		"return": {
+			"quantities": { "returned": 1 },
+			"amounts": { "net": "-240.00", "tax": "-24.00", "total": "-264.00" },
+			"gl": ["Dr Sales Return 240.00", "Dr SST Payable 24.00", "Cr Debtors 264.00"],
+			"stock": { "delta": 1, "warehouse": "Returns Quarantine" }
+		},
+		"credit_limit": {
+			"limit": "5000.00",
+			"attempted": "6000.00",
+			"result": "blocked at submit",
+			"override": "raise limit with documented approval"
+		},
+		"pricing_rule": {
+			"base_rate": "216.00",
+			"discount_percent": "5",
+			"minimum_quantity": 10,
+			"expected_rate": "205.20",
+			"expected_net_for_ten": "2052.00"
+		}
+	},
+	"cross_checks": {
+		"gross_profit_equals_net_minus_cost": true,
+		"tax_follows_taxable_value": true,
+		"stock_moves_only_on_delivery_and_return": true,
+		"payment_ledger_cleared_only_by_allocation": true
+	}
+}

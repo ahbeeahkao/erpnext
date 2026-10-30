@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>ERPNext Functional Consultant — setup and transaction walkthroughs</title>
+		<meta
+			name="description"
+			content="Functional consultant training for ERPNext: step-by-step setup, sample data entry and the exact result to expect after every transaction."
+		/>
+		<link rel="stylesheet" href="styles.css" />
+	</head>
+	<body>
+		<a class="skip-link" href="#slide">Skip to slide content</a>
+
+		<div class="app">
+			<aside class="sidebar" id="sidebar" aria-label="Course chapters">
+				<div class="brand">
+					<div class="brand-mark" aria-hidden="true">M</div>
+					<div class="brand-copy">
+						<p class="brand-title">ERPNext Consultant</p>
+						<p class="brand-sub" id="brand-sub">Loading the course…</p>
+					</div>
+				</div>
+
+				<div class="progress-block">
+					<div class="progress-labels">
+						<span>Course progress</span>
+						<span id="progress-text">0%</span>
+					</div>
+					<div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+				</div>
+
+				<nav class="chapter-list" id="chapter-list"></nav>
+
+				<div class="sidebar-foot">
+					<button class="ghost" id="btn-search" type="button">Search <kbd>/</kbd></button>
+					<button class="ghost" id="btn-help" type="button">Help <kbd>?</kbd></button>
+					<button class="ghost" id="btn-print" type="button">Print / PDF</button>
+				</div>
+			</aside>
+
+			<main class="main" id="main">
+				<header class="topbar">
+					<button class="icon-button" id="btn-menu" type="button" aria-label="Toggle chapter list">
+						☰
+					</button>
+					<p class="crumbs" id="crumbs">Loading…</p>
+					<div class="topbar-actions">
+						<button class="ghost" id="btn-grid" type="button">Grid <kbd>G</kbd></button>
+						<button class="ghost" id="btn-notes" type="button" aria-pressed="false">
+							Notes <kbd>P</kbd>
+						</button>
+					</div>
+				</header>
+
+				<section class="stage" id="stage">
+					<article class="slide" id="slide" aria-live="polite" tabindex="-1"></article>
+					<aside class="notes-panel" id="notes" hidden aria-label="Speaker notes"></aside>
+				</section>
+
+				<footer class="deckbar">
+					<div class="audio" id="audio-bar">
+						<button
+							class="round"
+							id="btn-audio"
+							type="button"
+							aria-label="Play chapter narration"
+						>
+							▶
+						</button>
+						<div class="audio-meta">
+							<span class="audio-title" id="audio-title">Narration</span>
+							<span class="audio-time" id="audio-time">--:--</span>
+						</div>
+						<input
+							class="audio-seek"
+							id="audio-seek"
+							type="range"
+							min="0"
+							max="100"
+							value="0"
+							step="0.1"
+							aria-label="Seek in narration"
+						/>
+						<button class="ghost" id="btn-transcript" type="button">Transcript</button>
+					</div>
+					<div class="nav-buttons">
+						<button class="ghost" id="btn-prev" type="button">← Prev</button>
+						<span class="counter" id="counter">1 / 1</span>
+						<button class="primary" id="btn-next" type="button">Next →</button>
+					</div>
+				</footer>
+			</main>
+		</div>
+
+		<dialog class="overlay" id="overlay">
+			<div class="overlay-head">
+				<h2 id="overlay-title">Search</h2>
+				<button class="icon-button" id="overlay-close" type="button" aria-label="Close">✕</button>
+			</div>
+			<div class="overlay-body" id="overlay-body"></div>
+		</dialog>
+
+		<div class="print-view" id="print-view" hidden></div>
+		<p class="toast" id="toast" role="status" hidden></p>
+
+		<audio id="narration" preload="metadata"></audio>
+
+		<script type="module" src="src/app.js"></script>
+	</body>
+</html>

@@ -1,0 +1,10 @@
+cycle,step,document,party,detail,expected_net,expected_tax,expected_total,expected_stock,expected_cogs,expected_status
+V2-L01,1,Quotation,Aeon Big Sdn Bhd,5 x SM-BL200 @ 240.00,1200.00,120.00,1320.00,unchanged,0.00,Open
+V2-L02,2,Sales Order,Aeon Big Sdn Bhd,5 x SM-BL200 @ 240.00,1200.00,120.00,1320.00,unchanged,0.00,To Deliver and Bill
+V2-L03,3,Delivery Note,Aeon Big Sdn Bhd,5 x SM-BL200 from Main Warehouse,0.00,0.00,0.00,-5 in Main,600.00,To Bill
+V2-L04,4,Sales Invoice,Aeon Big Sdn Bhd,5 x SM-BL200 billed from delivery,1200.00,120.00,1320.00,unchanged,0.00,Unpaid
+V2-L05,5,Payment Entry,Aeon Big Sdn Bhd,Receive 1320.00 into Bank - SM,0.00,0.00,1320.00,unchanged,0.00,Paid
+V2-L06,6,Sales Invoice,Aeon Big Sdn Bhd,Partial delivery of 2 units,480.00,48.00,528.00,-2 in Main,240.00,Unpaid
+V2-L07,7,Sales Invoice,Aeon Big Sdn Bhd,5 units with 10 percent line discount,1080.00,108.00,1188.00,unchanged,600.00,Unpaid
+V2-L08,8,Credit Note,Aeon Big Sdn Bhd,Return 1 unit to Returns Quarantine,-240.00,-24.00,-264.00,+1 in Returns,0.00,Submitted
+V2-L09,9,Sales Order,Aeon Big Sdn Bhd,6000.00 order against a 5000.00 limit,6000.00,600.00,6600.00,unchanged,0.00,Blocked at submit

@@ -1,0 +1,4 @@
+customer_name,customer_group,territory,default_price_list,default_currency,credit_limit,payment_terms_days,tax_id
+Aeon Big Sdn Bhd,Distributor,Malaysia,Retail - SM,MYR,5000.00,30,C2584563201
+Kedai Elektrik Jaya,Dealer,Malaysia,Dealer - SM,MYR,0.00,14,C2019456712
+Walk-in Retail,Retail,Malaysia,Retail - SM,MYR,0.00,0,None

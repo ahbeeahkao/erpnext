@@ -1,0 +1,429 @@
+{
+	"id": "ch03",
+	"number": 3,
+	"title": "Volume 0 · Standing Up the Company",
+	"subtitle": "Lessons 1–5: create the company, shape the chart of accounts, set defaults, cost centres and Malaysian SST",
+	"level": "Foundation",
+	"minutes": 75,
+	"outcomes": [
+		"Create a Malaysian company with the right currency, fiscal year and chart of accounts",
+		"Add and reclassify ledger accounts without breaking the report structure",
+		"Set the company defaults that silently drive every later document",
+		"Build a cost centre tree a client can actually report on",
+		"Configure SST sales and service tax so documents compute tax correctly"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Create the company",
+			"title": "Company, abbreviation, currency and fiscal year",
+			"bullets": [
+				"Everything in ERPNext hangs off the Company record, so this is the first screen a consultant opens",
+				"The abbreviation becomes the suffix on every account and warehouse, so choose two letters and keep them",
+				"Country selects the chart of accounts template; Malaysia brings the standard tree, not a tax setup",
+				"Currency is per company and effectively fixed once the first transaction exists",
+				"Financial year dates decide which period new documents post into by default"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Setup → Company → New",
+						"(open form)",
+						"Empty company form with General, Accounts, Defaults tabs"
+					],
+					["2", "Company Name", "Seri Murni Sdn Bhd", "Name copied into the form header"],
+					["3", "Abbreviation", "SM", "Two-letter suffix used by accounts and warehouses"],
+					[
+						"4",
+						"Country / Default Currency",
+						"Malaysia / MYR",
+						"Country set, currency set to Malaysian Ringgit"
+					],
+					[
+						"5",
+						"Financial Year",
+						"01-01-2026 to 31-12-2026",
+						"Fiscal year saved on the Accounts tab"
+					],
+					["6", "Chart of Accounts", "Standard", "Save creates five account root groups"],
+					[
+						"7",
+						"Click Save",
+						"(submit)",
+						"Company saved; tree of accounts created in the background"
+					]
+				]
+			},
+			"notes": "Say the abbreviation out loud before saving: every account becomes '… - SM' and changing it later means renaming dozens of records. Same for the fiscal year, because a wrong year quietly posts opening entries into the wrong period. If the client keeps a non-calendar year, enter it here rather than trying to fix dates document by document.",
+			"paths": ["Setup → Company → New"]
+		},
+		{
+			"kicker": "Lesson 1 · Expected outcome",
+			"title": "What a correctly created company looks like",
+			"bullets": [
+				"Five root groups appear: Application of Funds, Sources of Funds, Equity, Income and Expenses",
+				"Every ledger account ends with the suffix - SM, which proves the abbreviation was applied",
+				"A Debtors control account exists under Accounts Receivable and is linked as the default receivable",
+				"The company is selectable in Global Defaults, which means new documents will inherit it",
+				"Nothing here is tax-specific yet: no SST account and no tax template has been created"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Root groups", "5 groups", "Accounts → Chart of Accounts"],
+					["Account suffix", "… - SM", "Any ledger account row"],
+					["Receivable account", "Debtors - SM", "Company → Accounts tab"],
+					["Fiscal year", "01-01-2026 → 31-12-2026", "Company → Accounts tab"],
+					["Default company", "Seri Murni Sdn Bhd", "Setup → Global Defaults"]
+				]
+			},
+			"notes": "This is the verification habit the whole course teaches: after every configuration step, check a named value in a named place. If the suffix is missing, the company was created with a different abbreviation. If fewer than five roots exist, the chart template did not load and the company should be deleted and recreated before any transaction exists.",
+			"callout": {
+				"tone": "warn",
+				"title": "Do not fix accounts by deleting them",
+				"text": "If the tree is wrong, delete the company while it is empty. Once a voucher exists, accounts can only be disabled, and the tree carries the mistake forever."
+			}
+		},
+		{
+			"kicker": "Lesson 2 · Chart of accounts",
+			"title": "Add the three accounts your client will actually need",
+			"bullets": [
+				"Keep the template tree and add leaf accounts: renaming the standard tree breaks every report a consultant later runs",
+				"Add Petty Cash as a cash-type ledger so it appears in cash flow and can be reconciled",
+				"Add Freight Inward as an expense so landed cost and purchase charges have a home",
+				"Add SST Payable as an account of type Tax, which is what tax reports expect",
+				"Group accounts hold no postings; leaf accounts do, and getting this wrong produces silent zero-value reports"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Chart of Accounts → Add Account",
+						"Account Name: Petty Cash",
+						"New account under Assets → Current Assets"
+					],
+					["2", "Set Is Group", "No", "Account accepts journal entries"],
+					["3", "Add Account", "Freight Inward, under Expenses", "New expense ledger"],
+					["4", "Add Account", "SST Payable, under Current Liabilities", "Account type selectable"],
+					["5", "Set Account Type", "Tax", "Account flagged as a tax account"],
+					[
+						"6",
+						"Add Account",
+						"Service Tax Payable, type Tax",
+						"Second tax ledger for 8 % service tax"
+					],
+					["7", "Save each", "(no voucher)", "Tree shows all four with the - SM suffix"]
+				]
+			},
+			"notes": "Consultants are hired for judgement, not clicking. Explain why these four: petty cash because Malaysian SMEs keep a float, freight inward because imports and delivery charges must land somewhere other than a generic expense, and two tax accounts because sales tax and service tax are declared separately. A single 'Tax Payable' account forces the client to unpick it manually at filing time.",
+			"paths": ["Accounts → Chart of Accounts → Add Account"]
+		},
+		{
+			"kicker": "Lesson 2 · Expected outcome",
+			"title": "Verify the tree, not the form",
+			"bullets": [
+				"The tree shows Petty Cash under Current Assets and both tax accounts under Current Liabilities",
+				"Opening a leaf account shows no children; opening a group shows an Add Child button",
+				"Trying to post a Journal Entry to a group account is refused with a clear message",
+				"Freight Inward appears in the Profit and Loss report under Expenses, at zero",
+				"The two tax accounts appear in the tax account selector of a tax template"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Petty Cash parent", "Current Assets", "Chart of Accounts tree"],
+					["SST Payable type", "Tax", "Account form"],
+					["Group posting", "Blocked", "Try a Journal Entry"],
+					["P&L line", "Freight Inward, 0.00", "Accounts → Profit and Loss"],
+					["Tax selector", "Both tax accounts listed", "Sales Taxes and Charges Template"]
+				]
+			},
+			"notes": "The group-posting test is the one learners remember, because ERPNext refuses it explicitly. Run it once in front of the client so they understand why 'add a new account' is sometimes the wrong answer. Keep the account list short and meaningful; a 300-account chart is the most common sign of an implementation done without a designer.",
+			"callout": {
+				"tone": "tip",
+				"title": "Name for the report",
+				"text": "Account names are read by managers on the P&L, not by developers. Write 'Freight Inward', not 'Account 5200'."
+			}
+		},
+		{
+			"kicker": "Lesson 3 · Company defaults",
+			"title": "The defaults that every document silently inherits",
+			"bullets": [
+				"Round Off and Write Off accounts decide where rounding and bad-debt differences land",
+				"Default Cost Center pre-fills every line so no posting is ever unallocated",
+				"Global Defaults sets the company used when a user creates a document from the home screen",
+				"Defaults are cheap now and painful later: changing them creates an inconsistency between periods",
+				"Write the choices down in the configuration worksheet, because nobody remembers them at audit time"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Company → Accounts tab",
+						"Round Off Account: Round Off - SM",
+						"Field accepts the ledger"
+					],
+					[
+						"2",
+						"Company → Accounts tab",
+						"Write Off Account: Write Off - SM",
+						"Second default set"
+					],
+					[
+						"3",
+						"Company → Accounts tab",
+						"Default Cost Center: Main - SM",
+						"Cost centre pre-filled on new documents"
+					],
+					[
+						"4",
+						"Company → Defaults tab",
+						"Default Warehouse: Main Warehouse - SM",
+						"Used by stock documents"
+					],
+					[
+						"5",
+						"Setup → Global Defaults",
+						"Default Company: Seri Murni Sdn Bhd",
+						"Home screen uses this company"
+					],
+					["6", "Save both forms", "(no voucher)", "Values persist after a refresh"]
+				]
+			},
+			"notes": "These fields are where implementations quietly diverge: one site rounds to a salary-expense account, another to a suspense account, and the P&L becomes incomparable across years. Explain the intent of each default and let the client choose, then record the choice. If a client has no opinion, propose the conventional option and move on.",
+			"paths": ["Setup → Company → Accounts", "Setup → Global Defaults"]
+		},
+		{
+			"kicker": "Lesson 3 · Expected outcome",
+			"title": "Prove the defaults are wired",
+			"bullets": [
+				"A new Sales Invoice opens with the company already filled in",
+				"Each line shows the default cost centre without the user typing it",
+				"A journal entry can be posted with a 0.05 difference and lands in Round Off",
+				"Stock documents default to Main Warehouse, not to the retail counter",
+				"The configuration worksheet has six completed rows you can show the client"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["New invoice company", "Seri Murni Sdn Bhd", "Selling → Sales Invoice → New"],
+					["Line cost centre", "Main - SM", "Item table, Cost Center column"],
+					["Rounding account", "Round Off - SM", "Journal Entry with 0.05 difference"],
+					["Default warehouse", "Main Warehouse - SM", "Stock Entry → New"],
+					["Worksheet rows", "6", "Your configuration worksheet"]
+				]
+			},
+			"notes": "Use the rounding test deliberately: post a journal entry that is out by five sen and watch ERPNext route the difference. It teaches two things at once, that ERPNext enforces balance and that the round-off account is real, not decorative. Then delete the test voucher so the client's trial balance stays clean.",
+			"callout": {
+				"tone": "warn",
+				"title": "Delete your test vouchers",
+				"text": "Cancel and delete every test journal entry before handover. A stray RM 0.05 posting is the first thing an auditor asks about."
+			}
+		},
+		{
+			"kicker": "Lesson 4 · Cost centres",
+			"title": "A cost centre tree the client can report on",
+			"bullets": [
+				"Cost centres are a dimension on postings, so they never change the total, only the analysis",
+				"Build the tree around how the client makes decisions: outlet, channel or production line",
+				"Parent cost centres are groups; only leaves can receive postings",
+				"Every transaction line needs one, which is why the default is set at company level",
+				"Too many cost centres is worse than too few: nobody allocates 40 buckets correctly"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Accounts → Cost Center → New", "Retail - SM", "New child cost centre"],
+					["2", "Set Parent", "Main - SM", "Tree shows Retail under Main"],
+					[
+						"3",
+						"Add Cost Center",
+						"Assembly - SM, parent Main - SM",
+						"Third cost centre in the tree"
+					],
+					["4", "Add Cost Center", "Showroom - SM, parent Retail - SM", "Nested third level"],
+					["5", "Open Main - SM", "Is Group: Yes if it has children", "Group cannot be posted to"],
+					["6", "Save all", "(no voucher)", "Cost centre tree renders with indentation"]
+				]
+			},
+			"notes": "Ask one question before building: 'which number do you want split three ways on the P&L?' The answer defines the dimension. For a distributor with a showroom and an assembly bench, three cost centres are enough. If the client asks for profit by customer, that is a group-by in a report, not a cost centre, and mixing the two is a classic consultant error.",
+			"paths": ["Accounts → Cost Center → New"]
+		},
+		{
+			"kicker": "Lesson 4 · Expected outcome",
+			"title": "Dimension postings that add up to the total",
+			"bullets": [
+				"A journal entry posted to Showroom appears in the cost-centre column of the P&L",
+				"The sum of all cost-centre columns equals the company total for that account",
+				"Posting to the parent Main - SM is refused because it is a group",
+				"The Cost Center field on a new invoice line defaults to Main - SM",
+				"Cost Center-wise Profit and Loss shows four columns, three of them with zero balances"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Tree", "Main → Retail → Showroom, plus Assembly", "Cost Center list"],
+					["Group posting", "Refused", "Journal Entry to Main - SM"],
+					["Report columns", "4 cost centres", "Cost Center-wise Profit and Loss"],
+					["Dimension total", "Equals company total", "Same report, Total row"],
+					["Default on lines", "Main - SM", "Sales Invoice → New"]
+				]
+			},
+			"notes": "The reconciliation check, that the columns sum to the total, is what separates a consultant from a data-entry clerk. Run it every time you add a dimension. If the client later asks for branch and cost centre both, explain that ERPNext supports one cost centre plus additional accounting dimensions, and that adding a second dimension is a design decision rather than a checkbox.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Branch, outlet or state?",
+				"text": "Malaysian SMEs often report by outlet. If the outlets have their own bank accounts and stock, use separate warehouses and one cost centre per outlet rather than 14 cost centres."
+			}
+		},
+		{
+			"kicker": "Lesson 5 · Malaysian SST",
+			"title": "Two tax templates, three accounts, no GST",
+			"bullets": [
+				"Malaysia charges SST, so ignore the GST fields and templates that ship with older data",
+				"An Item Tax Template applies a rate and account to an item, and is what makes mixed-rate invoices correct",
+				"A Sales Taxes and Charges Template applies tax at document level, usually On Net Total",
+				"Sales tax is 10 % on goods and service tax 8 % on services for the sample company, each with its own account",
+				"Keep 'Included in Paid Amount' ticked, otherwise the invoice total and the tax total disagree"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Accounts → Item Tax Template → New", "SST 10% - SM", "Empty tax row table"],
+					[
+						"2",
+						"Add row",
+						"Tax Type: Sales Tax, Account: SST Payable - SM, Rate: 10",
+						"One tax row"
+					],
+					[
+						"3",
+						"New Item Tax Template",
+						"Service Tax 8% - SM, account Service Tax Payable, rate 8",
+						"Second template"
+					],
+					[
+						"4",
+						"Accounts → Sales Taxes and Charges Template → New",
+						"SST Sales 10% - SM",
+						"Charges table"
+					],
+					[
+						"5",
+						"Add row",
+						"On Net Total, account SST Payable - SM, rate 10",
+						"Row with charge type On Net Total"
+					],
+					[
+						"6",
+						"Tick flags",
+						"Included in Print Rate and Included in Paid Amount",
+						"Both checkboxes on"
+					],
+					["7", "Save as default", "Default: Yes", "Template used automatically on new invoices"]
+				]
+			},
+			"notes": "Explain the division of labour: the item tax template decides which account and rate a product carries, and the sales taxes template decides what appears on the invoice footer. For a client selling only goods, one document template is enough. For a mixed business, both templates plus per-item assignment are required, and the expected outcomes in this lesson prove it.",
+			"paths": ["Accounts → Item Tax Template", "Accounts → Sales Taxes and Charges Template"]
+		},
+		{
+			"kicker": "Lesson 5 · Expected outcome",
+			"title": "Predict the tax before you save the invoice",
+			"bullets": [
+				"A test invoice of 1,200.00 net with SST 10 % shows tax 120.00 and grand total 1,320.00",
+				"Submitting it writes Dr Debtors 1,320.00, Cr Sales 1,200.00 and Cr SST Payable 120.00",
+				"An item with the service tax template shows 8 % even on the same invoice",
+				"An item with no tax template shows zero tax and no tax row on the printed document",
+				"The tax account in the general ledger matches the figure on the invoice footer, to the sen"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Net / tax / total", "1,200.00 / 120.00 / 1,320.00", "Sales Invoice totals"],
+					["GL debit", "Debtors 1,320.00", "Accounts → General Ledger"],
+					["GL credits", "Sales 1,200.00 + SST 120.00", "Same report"],
+					["Service tax line", "8 % on its own line", "Mixed test invoice"],
+					["Untaxed item", "0.00 tax", "Same invoice"]
+				]
+			},
+			"notes": "Make learners compute 1,200 × 10 % before they look at the screen. Consultants are expected to predict a total to the sen during a workshop, and the only way to be trusted is repetition. If the totals disagree, the usual causes are a template applied twice, a rate typed on the item as well as the template, or a currency with more than two decimals.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "SST registration matters",
+				"text": "Only SST-registered clients charge SST. If the client is below the threshold, configure zero-rated templates and say so in the configuration document."
+			}
+		}
+	],
+	"lab": {
+		"title": "Lab · Build the Seri Murni company, accounts and tax",
+		"minutes": 60,
+		"steps": [
+			"Create the company Seri Murni Sdn Bhd, abbreviation SM, Malaysia, MYR, FY 2026, Standard chart",
+			"Verify five root groups exist and that every account ends with - SM",
+			"Add Petty Cash, Freight Inward, SST Payable (type Tax) and Service Tax Payable (type Tax)",
+			"Set Round Off Account, Write Off Account, Default Cost Center and Default Warehouse on the company",
+			"Set the default company in Global Defaults and confirm a new invoice picks it up",
+			"Create cost centres Retail - SM, Showroom - SM and Assembly - SM under Main - SM",
+			"Create the SST 10% and Service Tax 8% item tax templates, then the SST Sales 10% document template",
+			"Raise a test invoice of five units at 240.00 with the SST template, check 1,200.00 / 120.00 / 1,320.00, then cancel and delete it",
+			"Complete the Volume 0 configuration worksheet rows for lessons 1 to 5"
+		],
+		"done": "Your tree shows the four new accounts and three cost centres, the test invoice computed 120.00 tax to the sen, and the worksheet has a written choice for every default you set."
+	},
+	"quiz": [
+		{
+			"question": "Why does the company abbreviation matter at creation time?",
+			"options": [
+				"It is only cosmetic and can be changed freely later",
+				"It becomes the suffix on every account, warehouse and cost centre name",
+				"It sets the tax registration number",
+				"It decides the chart of accounts language"
+			],
+			"answer": 1,
+			"why": "The abbreviation is appended to record names such as Debtors - SM. Changing it later means renaming dozens of linked records, so choose it before saving."
+		},
+		{
+			"question": "A client is SST registered and sells goods and repair services. What is the correct setup?",
+			"options": [
+				"One 10 % tax template applied to all invoices",
+				"Per-item tax templates for 10 % sales tax and 8 % service tax, plus a document template",
+				"Two companies, one per tax rate",
+				"A single manual tax line typed on each invoice"
+			],
+			"answer": 1,
+			"why": "Item tax templates carry the per-item rate and account, so a mixed invoice is correct line by line, while the document template controls what appears on the invoice."
+		},
+		{
+			"question": "What happens if you post a journal entry to a group account?",
+			"options": [
+				"It is allowed but greyed out in reports",
+				"ERPNext refuses the posting because group accounts cannot hold entries",
+				"The entry is posted to the first child account",
+				"It posts with a warning only"
+			],
+			"answer": 1,
+			"why": "Group accounts exist to organise the tree. Only leaf accounts accept postings, which is why the Add Account form asks whether the new account is a group."
+		},
+		{
+			"question": "Which default keeps every posting allocated to a dimension?",
+			"options": [
+				"Round Off Account",
+				"Default Cost Center on the company",
+				"Default Warehouse",
+				"Default Price List"
+			],
+			"answer": 1,
+			"why": "The company-level default cost centre pre-fills every document line, so no posting is left without a dimension and cost-centre reports add up."
+		},
+		{
+			"question": "A test invoice of 1,200.00 with a 10 % SST template should show which grand total?",
+			"options": ["1,200.00", "1,320.00", "1,308.00", "1,080.00"],
+			"answer": 1,
+			"why": "Tax is 120.00 on a net of 1,200.00, so the payable total is 1,320.00. A different figure means a template, rate or inclusion flag is wrong."
+		}
+	],
+	"narration": "Welcome to the consultant track. This course is not about how ERPNext is built; it is about standing it up for a client, entering real data and proving the result to the sen. Volume zero starts with the company. Every account name carries the company abbreviation, so choose the two letters before you save. Country selects the chart of accounts template, currency is effectively fixed after the first transaction, and the fiscal year decides which period your postings land in. Then you verify, not the form, but the result: five root groups, every account ending in your abbreviation, a debtors control account, and the company selectable in global defaults. Next, add the accounts your client actually needs: petty cash, freight inward, and two tax accounts, one for sales tax and one for service tax, both flagged as tax accounts. Group accounts never take postings, and ERPNext refuses the voucher. Defaults come next: round off, write off, default cost centre and default warehouse. They look cosmetic, and they pre-fill every document. Then cost centres, built around how the client makes decisions, with a check that the columns add up to the total. Finally Malaysian SST: item tax templates for ten percent goods and eight percent services, a document template on net total, and a test invoice that must show one thousand two hundred net, one hundred twenty tax, and one thousand three hundred twenty payable. In the lab you build it and record every choice."
+}

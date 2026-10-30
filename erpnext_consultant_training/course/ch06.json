@@ -1,0 +1,313 @@
+{
+	"id": "ch06",
+	"number": 6,
+	"title": "Volume 1 · Parties and Pricing",
+	"subtitle": "Lessons 5–8: customers, addresses, suppliers, price lists and the pricing rules that decide what a customer is charged",
+	"level": "Core",
+	"minutes": 75,
+	"outcomes": [
+		"Create customer masters with credit limits, price lists and payment terms that actually control behaviour",
+		"Attach addresses and contacts so printed documents are correct without manual edits",
+		"Create supplier masters with the terms that drive payment proposals",
+		"Build a price list and pricing rule structure, then prove the resolution order on a quotation"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 5 · Customers",
+			"title": "A customer record is a set of defaults plus two controls",
+			"bullets": [
+				"Group and territory organise reporting; price list and payment terms decide behaviour",
+				"The credit limit is the only control that stops a sale, and it lives in the Credit Limits table",
+				"Tax ID and Tax Category carry the client's registration details onto documents",
+				"Payment terms are stored on the customer, then copied to every transaction as a schedule",
+				"A customer with no price list falls back to the company default, which surprises people"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Selling → Customer → New", "Aeon Big Sdn Bhd", "New customer form"],
+					["2", "Group / Territory", "Distributor / Malaysia", "Both set"],
+					["3", "Default Price List", "Retail - SM", "Field filled"],
+					["4", "Tax ID", "C2584563201", "Tax ID saved"],
+					["5", "Credit Limits row", "Company SM, Credit Limit 5,000", "One credit row"],
+					["6", "Payment Terms row", "30 days, 100 %", "Schedule created on documents"],
+					["7", "Save", "(no voucher)", "Customer appears in the list with its group"]
+				]
+			},
+			"notes": "Explain the difference between a default and a control. A price list is a default that a clerk can override; a credit limit is a control that blocks submission. Consultants earn their fee by knowing which of the two the client actually asked for. The 5,000 limit here is deliberate, because a later lesson sells 6,000 to this customer and must be stopped.",
+			"paths": ["Selling → Customer → New"]
+		},
+		{
+			"kicker": "Lesson 5 · Expected outcome",
+			"title": "Defaults that show up without being typed",
+			"bullets": [
+				"A new quotation for the customer pre-fills the Retail price list",
+				"The payment schedule appears on a Sales Invoice as one row due in 30 days",
+				"The customer list groups the record under Distributor and territory Malaysia",
+				"The credit limit is visible on the customer dashboard with zero exposure before any invoice",
+				"A second customer without a price list inherits the default list from selling settings"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Quotation price list", "Retail - SM", "Selling → Quotation → New"],
+					["Invoice schedule", "One row, 30 days", "Sales Invoice → Payment Schedule"],
+					["List grouping", "Distributor / Malaysia", "Customer list"],
+					["Credit exposure", "0.00", "Customer dashboard"],
+					["Fallback list", "Company default", "Customer without a list"]
+				]
+			},
+			"notes": "The fallback case is worth demonstrating because it produces the most common support question: why is this customer being charged retail? The answer is usually that nobody set a price list. Once the learner has seen the fallback, they will check the customer master first instead of blaming the pricing rule.",
+			"callout": {
+				"tone": "tip",
+				"title": "Set payment terms on the customer",
+				"text": "Terms on the master flow into every invoice. Typing them per invoice is how a ledger ends up with three different due dates for one customer."
+			}
+		},
+		{
+			"kicker": "Lesson 6 · Addresses and contacts",
+			"title": "The details that appear on the customer's paperwork",
+			"bullets": [
+				"An address is a separate record linked to the customer, not a field on the customer form",
+				"Mark one address as primary billing and one as primary shipping; documents pick them automatically",
+				"A contact carries the person, phone and email used for collections and statements",
+				"Address data is what makes a Malaysian e-Invoice valid later, so completeness matters now",
+				"Changing an address creates a new record rather than overwriting history"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open customer → Address & Contact", "New Address", "Address form opens"],
+					[
+						"2",
+						"Address fields",
+						"Line 1, city, state Selangor, postcode 47800, country Malaysia",
+						"All fields filled"
+					],
+					["3", "Link", "Customer: Aeon Big Sdn Bhd, Is Primary Billing", "Linked and flagged"],
+					["4", "Save address", "(no voucher)", "Address appears on the customer"],
+					["5", "New Contact", "Name, phone, email", "Contact linked"],
+					["6", "Open a new Sales Invoice", "Customer selected", "Billing address pre-filled"],
+					["7", "Print preview", "(no save)", "Address appears in the invoice header block"]
+				]
+			},
+			"notes": "The print preview is the test, not the form. Clients judge an implementation by what lands in their customer's inbox. Show them that the address came from the customer record and not from a typed line, then explain that a missing postcode or state becomes a rejection when the client moves to e-Invoicing.",
+			"paths": ["Selling → Customer → Address & Contact", "Print preview"]
+		},
+		{
+			"kicker": "Lesson 6 · Expected outcome",
+			"title": "Addresses that survive real documents",
+			"bullets": [
+				"A new invoice shows the customer's primary billing address without manual typing",
+				"The printed invoice shows the address, phone and contact exactly as stored",
+				"Marking a second address primary billing removes the flag from the first",
+				"Merging two duplicate customers keeps one address history rather than losing both",
+				"An address without a state or postcode still saves, but will fail an e-Invoice validation later"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Invoice address", "Pre-filled", "New Sales Invoice"],
+					["Printed header", "Address and contact", "Print preview"],
+					["Primary flag", "Only one address", "Customer addresses list"],
+					["Duplicate merge", "Single customer, address retained", "Users → Rename/Merge"],
+					["Incomplete address", "Saves here, fails validation later", "e-Invoice validation"]
+				]
+			},
+			"notes": "Duplicate customers are endemic in Malaysian SMEs because salespeople create them to avoid paperwork. Teach the merge tool now, and show that merging moves documents to the surviving record. Then make address completeness a go-live gate, because fixing 400 addresses after the first e-Invoice rejection is a week of work nobody budgeted for.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Complete addresses now",
+				"text": "State and postcode are optional for a PDF and mandatory for a MyInvois e-Invoice. Collect them during onboarding, not during your first rejection."
+			}
+		},
+		{
+			"kicker": "Lesson 7 · Suppliers",
+			"title": "Suppliers are simpler, but the terms matter",
+			"bullets": [
+				"Supplier Group drives purchasing reports and the purchase register",
+				"Payment terms in days feed the payment terms template on purchase invoices and the payment proposal",
+				"Tax ID identifies the supplier on documents and later on self-billed e-Invoices",
+				"Default currency matters for import suppliers and must be agreed before the first bill",
+				"A supplier with no payment terms produces an invoice due immediately, which distorts cash forecasts"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Buying → Supplier → New", "Sunrise Components Sdn Bhd", "New supplier form"],
+					["2", "Supplier Group / Country", "Local Suppliers / Malaysia", "Both set"],
+					["3", "Tax ID", "C2019456789", "Saved"],
+					["4", "Default Currency", "MYR", "Currency set"],
+					["5", "Payment Terms row", "30 days, 100 %", "Terms stored"],
+					["6", "Second supplier", "Jaya Packaging, 14 days", "Different terms allowed"],
+					["7", "Save", "(no voucher)", "Supplier list grouped by supplier group"]
+				]
+			},
+			"notes": "Purchasing is where cash flow lives. A supplier master with correct terms turns a manual payment run into a report you can trust. Explain that supplier payment terms are copied to the purchase invoice, and that changing the master later does not rewrite old invoices, which is exactly the behaviour finance wants.",
+			"paths": ["Buying → Supplier → New"]
+		},
+		{
+			"kicker": "Lesson 7 · Expected outcome",
+			"title": "Terms that drive the payment run",
+			"bullets": [
+				"A purchase invoice for the supplier shows the 30-day schedule automatically",
+				"The Accounts Payable ageing report buckets the bill into the right ageing column",
+				"Changing supplier terms does not change existing invoices, which protects history",
+				"Supplier Group filtering returns only local suppliers",
+				"The payment proposal lists due invoices with their due dates rather than bill dates"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["PI schedule", "30 days", "Purchase Invoice → Payment Schedule"],
+					["Ageing bucket", "0–30 days", "Accounts Payable report"],
+					["Old invoices", "Unchanged", "Reopen a submitted PI"],
+					["Group filter", "Local suppliers only", "Supplier list"],
+					["Payment proposal", "Bill with due date", "Accounts → Payment Proposal"]
+				]
+			},
+			"notes": "This is the moment to connect the master data to the month-end. A supplier with no terms has an invoice due the day it is posted, which makes the ageing report useless and the payment proposal unhelpful. Collect terms from the client's existing payables ageing, not from a conversation.",
+			"callout": {
+				"tone": "tip",
+				"title": "Terms live in days, not words",
+				"text": "Record 30 days, not 'end of next month'. If the client genuinely pays at month end, model it as a 30-day term and adjust in the payment proposal."
+			}
+		},
+		{
+			"kicker": "Lesson 8 · Price lists and rules",
+			"title": "Two layers of pricing, and the order they resolve in",
+			"bullets": [
+				"An Item Price is a fact: this item, this list, this rate, from this date",
+				"A Pricing Rule is a calculation: apply a discount or a margin when conditions match",
+				"The customer's price list decides which facts apply; the rule then adjusts them",
+				"Rules can be limited by item, item group, customer, customer group, quantity or date",
+				"Too many overlapping rules is the classic failure: keep one rule per commercial intent"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Selling → Price List → New",
+						"Dealer - SM, currency MYR, selling",
+						"New selling price list"
+					],
+					["2", "New Item Price", "SM-BL200 on Dealer - SM at 216.00", "Dealer price record"],
+					["3", "Selling → Pricing Rule → New", "Dealer Volume Discount, 5 %", "Rule form"],
+					[
+						"4",
+						"Set conditions",
+						"Apply on Selling, customer group Dealer, min qty 10",
+						"Conditions saved"
+					],
+					["5", "Set discount", "Discount Percentage 5", "Discount row"],
+					["6", "New Quotation", "Dealer customer, 10 units", "Rate 216.00, discount 5 % applied"],
+					["7", "Same quotation at 9 units", "Below minimum quantity", "No discount applied"]
+				]
+			},
+			"notes": "Resolution order is the heart of this lesson: the item price supplies the base rate, then the rule adjusts it if every condition matches. When a client says 'the price is wrong', the consultant's job is to walk the layers in order, price list, item price, then rule, and find which one produced the number. Draw it as three boxes on a whiteboard.",
+			"paths": ["Selling → Price List", "Selling → Pricing Rule", "Stock → Item Price"]
+		},
+		{
+			"kicker": "Lesson 8 · Expected outcome",
+			"title": "Predict 205.20 before the quotation opens",
+			"bullets": [
+				"Ten units for a Dealer customer: 216.00 less 5 % gives 205.20 per unit",
+				"Nine units for the same customer: 216.00 with no discount, because the minimum quantity is not met",
+				"Ten units for a Retail customer: 240.00 with no discount, because the rule targets the Dealer group",
+				"Removing the item price leaves zero and no rule can rescue it",
+				"The price list on the customer, not on the item, explains every difference above"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Dealer, 10 units", "205.20 per unit", "Quotation line rate"],
+					["Dealer, 9 units", "216.00 per unit", "Quotation line rate"],
+					["Retail, 10 units", "240.00 per unit", "Quotation line rate"],
+					["No item price", "0.00", "Item with no price record"],
+					["Net total, 10 dealer units", "2,052.00", "Quotation totals"]
+				]
+			},
+			"notes": "Ask for the arithmetic before opening the form, then check the net total as well as the unit rate. Two calculations, one per layer, is the habit. If the learner sees 205.20 on a Retail customer, the rule is scoped too broadly; if they see 216.00 with no discount on a Dealer order of 10, the rule condition is wrong.",
+			"callout": {
+				"tone": "warn",
+				"title": "Overlapping rules",
+				"text": "Two rules that both apply produce a result the client cannot explain to a customer. One rule per commercial intent, named for the intent."
+			}
+		}
+	],
+	"lab": {
+		"title": "Lab · Build the Seri Murni parties and pricing",
+		"minutes": 55,
+		"steps": [
+			"Create Aeon Big Sdn Bhd as a Distributor customer on the Retail price list with a 5,000 credit limit and 30-day terms",
+			"Add a primary billing address in Selangor with a postcode, plus a contact with phone and email",
+			"Create Kedai Elektrik Jaya as a Dealer customer on the Dealer price list with 14-day terms and no credit limit",
+			"Create Sunrise Components as a local supplier with 30-day terms and Jaya Packaging with 14-day terms",
+			"Create the Dealer - SM price list and item prices of 216.00 for the blender and 81.00 for the kettle",
+			"Create a 5 % pricing rule for the Dealer customer group, minimum quantity 10, on selling documents",
+			"Raise a quotation for the dealer customer for 10 blenders and confirm 205.20 per unit and 2,052.00 net",
+			"Repeat the quotation for 9 units and confirm the rate returns to 216.00 with no discount",
+			"Print the quotation for Aeon Big and check the address, contact and payment terms appear correctly"
+		],
+		"done": "All four parties exist with the right terms and lists, the two quotations produce 205.20 and 216.00 as predicted, and the printed quotation carries the customer's address without manual edits."
+	},
+	"quiz": [
+		{
+			"question": "Where is a customer's credit limit stored?",
+			"options": [
+				"On the Sales Invoice",
+				"In the Credit Limits table on the customer",
+				"In Selling Settings",
+				"On the price list"
+			],
+			"answer": 1,
+			"why": "Credit limits are per company and per customer, stored in the customer's credit limits table, and enforced at submit when credit checking is on."
+		},
+		{
+			"question": "A customer has no price list of their own. What rate applies?",
+			"options": [
+				"The item valuation rate",
+				"The price list set as default in selling settings",
+				"Zero, because no list exists",
+				"The last invoice rate for that customer"
+			],
+			"answer": 1,
+			"why": "The customer's own list wins; without one, the company default list from Selling Settings is used, which is the usual cause of unexpected retail pricing."
+		},
+		{
+			"question": "Which statement about pricing rules is correct?",
+			"options": [
+				"A pricing rule replaces the item price",
+				"A pricing rule applies a calculation on top of the rate supplied by the price list",
+				"Pricing rules only work for buying",
+				"A pricing rule changes the item's valuation"
+			],
+			"answer": 1,
+			"why": "Item prices are facts per list; pricing rules adjust them when conditions match. Pricing rules never touch valuation."
+		},
+		{
+			"question": "Why does an incomplete customer address matter before go-live?",
+			"options": [
+				"It slows printing",
+				"Missing state or postcode passes a PDF but fails Malaysian e-Invoice validation",
+				"It prevents payment entry",
+				"It changes the tax rate"
+			],
+			"answer": 1,
+			"why": "e-Invoice validation requires a complete address including state code, so collecting it during onboarding avoids a rejection backlog later."
+		},
+		{
+			"question": "A supplier has no payment terms. What is the practical consequence?",
+			"options": [
+				"The invoice cannot be submitted",
+				"The bill falls due immediately, distorting ageing and the payment proposal",
+				"The supplier is blocked for purchase orders",
+				"Tax is not applied"
+			],
+			"answer": 1,
+			"why": "Without terms the invoice is due on posting, so cash forecasting and ageing become unreliable until the master is corrected."
+		}
+	],
+	"narration": "Volume one, part two: parties and pricing. A customer record is a set of defaults plus two controls. The group and territory organise reporting. The price list and payment terms decide behaviour. The credit limit is the only thing that stops a sale, and it lives in the customer's credit limits table, which is why the sample company sets five thousand here; a later lesson sells six thousand and must be blocked. Payment terms belong on the customer so every invoice inherits them; typing terms per invoice is how one customer ends up with three due dates. Then addresses, which are separate records linked to the customer. Mark one as primary billing, one as primary shipping, add a contact, and check the printed document rather than the form. Completeness matters now, because state and postcode are optional for a PDF and mandatory for an e-Invoice. Suppliers are simpler but the terms drive cash flow: thirty days here, fourteen there, and the payment proposal becomes useful instead of decorative. Finally pricing, which has two layers. An item price is a fact for a price list and a date. A pricing rule is a calculation applied when conditions match. The customer's price list picks the facts, then the rule adjusts them. Ten blenders for a dealer at two hundred sixteen, less five percent, is two hundred five ringgit twenty. Nine units is two hundred sixteen, because the minimum quantity is not met. Predict the number before you open the quotation; that is the consultant's habit."
+}

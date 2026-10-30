@@ -1,0 +1,442 @@
+{
+	"id": "ch02",
+	"number": 2,
+	"title": "Primer · Distribution Concepts in ERPNext",
+	"subtitle": "Buy, hold, move, sell: the commercial ideas behind a distributor's ERPNext setup, and the field or report where each one lives",
+	"level": "Primer",
+	"minutes": 55,
+	"outcomes": [
+		"Describe a distributor's three flows and the documents that carry each one",
+		"Explain channel structure, price lists and the margin stack in commercial terms",
+		"Set a reorder point from average demand, lead time and safety stock",
+		"Choose the right ERPNext behaviour for partial shipments, backorders and returns",
+		"Compute and locate the five KPIs a distribution client will ask about"
+	],
+	"slides": [
+		{
+			"kicker": "Concept 1 · Three flows",
+			"title": "Distribution moves goods, money and information",
+			"bullets": [
+				"Goods flow from supplier to warehouse to customer, and sometimes back again",
+				"Money flows the other way, with terms that decide who funds the delay",
+				"Information flow is the part ERPNext owns: promises, availability and prices",
+				"A distributor's margin is earned by holding stock and taking risk, not by making anything",
+				"Every ERPNext document exists to move one of these three flows and record it"
+			],
+			"table": {
+				"headers": ["Flow", "Moves", "Carried by", "ERPNext evidence"],
+				"rows": [
+					[
+						"Goods",
+						"Supplier to warehouse to customer",
+						"Purchase Receipt, Delivery Note",
+						"Stock Ledger"
+					],
+					[
+						"Money",
+						"Customer to company to supplier",
+						"Payment Entry, Payment Terms",
+						"Payment Ledger"
+					],
+					[
+						"Information",
+						"Promises, prices, availability",
+						"Quotation, Sales Order, Price List",
+						"Reports and dashboards"
+					],
+					[
+						"Reverse",
+						"Customer back to warehouse",
+						"Return and Credit Note",
+						"Stock Ledger plus Sales Return"
+					]
+				]
+			},
+			"notes": "Frame distribution as risk management: the distributor buys before there is demand, holds stock that might not sell, and sells on terms that delay cash. Every configuration decision either reduces that risk or hides it. A consultant who understands this stops treating modules as features and starts asking about lead times, payment terms and fill rates.",
+			"callout": {
+				"tone": "tip",
+				"title": "Ask about the cash cycle first",
+				"text": "How long from paying a supplier to being paid by a customer? That number explains the client's credit limits, terms and stock policy better than any process map."
+			}
+		},
+		{
+			"kicker": "Concept 2 · Channels",
+			"title": "Channels explain why one product has four prices",
+			"bullets": [
+				"A channel is a type of buyer with its own economics, not a label for reporting",
+				"Retail buys in small quantities and pays list price; dealers buy deeper and expect a discount",
+				"Distributors take stock and risk, so they buy at the lowest tier and often get credit",
+				"Exports change currency, tax treatment and shipping cost, so they need their own price basis",
+				"Each channel maps to a price list, a customer group and often a warehouse or delivery rule"
+			],
+			"table": {
+				"headers": ["Channel", "Buys like", "Price basis", "ERPNext setup"],
+				"rows": [
+					[
+						"Retail counter",
+						"Daily, small quantities",
+						"List price, tax inclusive",
+						"Retail price list, walk-in customer"
+					],
+					[
+						"Dealer",
+						"Weekly, cartons",
+						"List less a fixed percentage",
+						"Dealer price list plus pricing rule"
+					],
+					[
+						"Distributor",
+						"Monthly, pallets",
+						"Lowest tier, contractual",
+						"Separate price list and credit limit"
+					],
+					[
+						"Export",
+						"Container loads",
+						"Currency-adjusted, ex-works",
+						"Customer currency, tax exempt template"
+					]
+				]
+			},
+			"notes": "Draw the four channels and ask which one the client's sales team actually manages. Most disputes about pricing are really disputes about channel: someone gave a dealer price to a retail customer. The ERPNext answer is not a discount field but a customer group, a price list and a permission, so the mistake becomes hard to make rather than merely discouraged.",
+			"callout": {
+				"tone": "warn",
+				"title": "One customer, two channels",
+				"text": "A dealer who also buys retail needs two customer records or a clear policy. Otherwise every invoice becomes a negotiation."
+			}
+		},
+		{
+			"kicker": "Concept 3 · Margins",
+			"title": "The margin stack, from landed cost to net margin",
+			"bullets": [
+				"Gross margin is selling price less landed cost, before discounts and overheads",
+				"Landed cost includes freight, duty and handling, not just the supplier's invoice price",
+				"Discounts reduce revenue and therefore margin, while cost stays where it is",
+				"Volume rebates and returns both erode margin after the invoice is issued",
+				"Net margin is what survives after operating costs, which is the client's real question"
+			],
+			"table": {
+				"headers": ["Layer", "Formula", "On a 240.00 sale"],
+				"rows": [
+					["Supplier price", "Invoice price", "120.00"],
+					["Landed cost", "Price + freight + duty", "126.00"],
+					["Gross profit", "Price − landed cost", "114.00"],
+					["After 10 % discount", "Revenue 216.00 − landed cost", "90.00"],
+					["After a return", "Revenue reversed, stock back", "Varies by condition"]
+				]
+			},
+			"notes": "Use real numbers from the sample company so the stack is concrete: a blender at 240.00 with a landed cost of 126.00 earns 114.00 before any discount. This is where a consultant adds value, because clients often quote gross margin on the supplier price alone and then wonder why the year is unprofitable. Landed cost in ERPNext is a document, not a spreadsheet column.",
+			"paths": ["Stock → Landed Cost Voucher", "Accounts → Gross Profit"]
+		},
+		{
+			"kicker": "Concept 4 · Positioning",
+			"title": "Reorder point, safety stock and lead time",
+			"bullets": [
+				"Average daily demand times lead time tells you how much stock covers the wait",
+				"Safety stock covers demand spikes and supplier lateness, so it is added on top",
+				"Reorder point equals demand during lead time plus safety stock",
+				"Lead time is the supplier's promise plus your receiving time, and it is usually understated",
+				"Positioning is per warehouse, because a retail counter and a main store rarely share demand"
+			],
+			"table": {
+				"headers": ["Decision", "Rule", "ERPNext field"],
+				"rows": [
+					[
+						"Average daily demand",
+						"Units sold in a period ÷ days in that period",
+						"Derived from reports"
+					],
+					["Reorder point", "Daily demand × lead time + safety stock", "Reorder Level on the item"],
+					["Safety stock", "Buffer for spikes and lateness", "Safety Stock on the item"],
+					["Lead time", "Supplier days + receiving days", "Lead Time in Days"],
+					["Warehouse scope", "Per location, not per company", "Item → Reorder per warehouse"]
+				]
+			},
+			"notes": "This is the most useful arithmetic in distribution. With demand of two units a day, a seven-day lead time and safety stock of ten, the reorder point is twenty-four units, not twenty. Clients often set the level to a round number that feels safe, and then either run out or tie up cash. Teach the formula, then ask where the numbers came from.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Lead times that include customs",
+				"text": "An import lead time of seven days is really fourteen if the container clears on a good day. Ask for the worst month, not the best."
+			}
+		},
+		{
+			"kicker": "Concept 5 · Set it up",
+			"title": "Set a reorder point from evidence, not instinct",
+			"bullets": [
+				"Use the sample company: two blenders sold per day, seven-day lead time, safety stock ten",
+				"Ask the buyer for the worst lead time last year, then add the receiving delay",
+				"Enter the arithmetic result, not a round number, so the alert fires at the right moment",
+				"Test the alert by posting a stock entry that takes the balance below the level",
+				"If the report never fires, the item is not being sold from the warehouse you configured"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Calculate the reorder point", "2 × 7 + 10", "24 units"],
+					["2", "Open the item", "SM-BL200", "Reorder fields on the item"],
+					["3", "Set the values", "Reorder Level 24, Safety Stock 10", "Both saved"],
+					["4", "Set the warehouse", "Main Warehouse - SM", "Scope is the main store, not retail"],
+					[
+						"5",
+						"Post a stock entry",
+						"Issue enough to fall below 24",
+						"Balance drops below the level"
+					],
+					[
+						"6",
+						"Run Item Reorder report",
+						"Filter to Main Warehouse",
+						"Item appears as needing reorder"
+					]
+				]
+			},
+			"notes": "Insist on the calculation in front of the client, because the number will be defended later. Twenty-four looks arbitrary until someone reconstructs it. The test step matters too: a reorder report that never fires is usually a warehouse-scope mistake, and finding that in the lab is cheaper than finding it during a stock-out.",
+			"paths": ["Stock → Item → Reorder", "Stock → Item Reorder report"]
+		},
+		{
+			"kicker": "Concept 6 · Fulfilment",
+			"title": "The fulfilment sequence and where each step is recorded",
+			"bullets": [
+				"Order capture is a promise; fulfilment is the physical work behind it",
+				"Picking and packing rarely appear as separate ERPNext documents in small distributors",
+				"Shipping is the delivery note, and it is the moment stock and cost of goods move",
+				"Invoicing can follow immediately or wait for proof of delivery",
+				"A consultant defines which steps the system owns, so the client stops keeping a parallel spreadsheet"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Capture the order",
+						"Sales Order with delivery date",
+						"Commitment visible, stock unchanged"
+					],
+					[
+						"2",
+						"Check availability",
+						"Stock Balance for the warehouse",
+						"Free quantity versus ordered"
+					],
+					["3", "Pick and pack", "(warehouse work)", "No ERPNext document required"],
+					["4", "Ship", "Delivery Note from the order", "Stock falls, COGS posts"],
+					["5", "Invoice", "Sales Invoice from the delivery note", "Receivable and revenue appear"],
+					["6", "Collect", "Payment Entry allocated to the invoice", "Invoice Paid, ledger cleared"]
+				]
+			},
+			"notes": "Clients often want a picking list as a document. ERPNext can do it, but a small distributor usually gets more value from an accurate delivery note than from a digital picking step nobody maintains. Decide this explicitly in the workshop and write the decision down, because it defines who does what on the warehouse floor.",
+			"callout": {
+				"tone": "tip",
+				"title": "System steps need owners",
+				"text": "For each step, name the person and the document. Anything without both will be done in a spreadsheet instead."
+			}
+		},
+		{
+			"kicker": "Concept 7 · Exceptions",
+			"title": "Partial shipments, backorders and substitutions",
+			"bullets": [
+				"Partial delivery is normal in distribution and must not create a second order",
+				"A backorder is an open quantity on the original commitment, not a new promise",
+				"Substituting an item changes what the customer receives, so it needs consent and a new line",
+				"Over-delivery must be a decision with a limit, not a warehouse habit",
+				"The order's delivered and billed percentages are the honest status of the promise"
+			],
+			"table": {
+				"headers": ["Situation", "Wrong response", "Consultant response"],
+				"rows": [
+					[
+						"Only 2 of 5 available",
+						"Split into a second order",
+						"Reduce the delivery quantity, keep one order"
+					],
+					[
+						"Customer accepts backorder",
+						"Cancel and re-enter later",
+						"Leave the order open at 40 % delivered"
+					],
+					[
+						"Substitute product",
+						"Change the item on the delivery",
+						"New order line with the customer's agreement"
+					],
+					["Over-delivery", "Type the extra quantity", "Agree a tolerance or issue a new order"],
+					[
+						"Price changed mid-order",
+						"Edit the old order",
+						"New order, because the old one is a commitment"
+					]
+				]
+			},
+			"notes": "These five situations generate most of the month-end confusion in a distributor. The rule behind all of them is that a commitment is history once submitted, so changes are new documents or reduced quantities, never silent edits. Teach the percentages as the status language, so a sales manager can read 40 per cent delivered without opening each line.",
+			"callout": {
+				"tone": "warn",
+				"title": "Never edit a submitted order",
+				"text": "The commitment is what the customer was promised. Reduce quantities on the delivery document, or raise a new order."
+			}
+		},
+		{
+			"kicker": "Concept 8 · Reverse flow",
+			"title": "Returns decide whether margin survives the quarter",
+			"bullets": [
+				"Goods come back for reasons: damage, wrong item, over-supply or a cancelled project",
+				"Returned stock must be separated into resellable and quarantined, or it will be sold twice or lost",
+				"The credit note reverses revenue and tax; the stock entry decides whether value comes back",
+				"Return rates by product tell the client which supplier or process is failing",
+				"Return policy belongs in writing, because the warehouse and the sales team will disagree"
+			],
+			"table": {
+				"headers": ["Situation", "Flow", "ERPNext documents"],
+				"rows": [
+					[
+						"Resellable return",
+						"Customer to sellable stock",
+						"Credit Note plus stock back to Main"
+					],
+					[
+						"Damaged return",
+						"Customer to quarantine",
+						"Credit Note plus stock to Returns Quarantine"
+					],
+					["Wrong item shipped", "Return and re-issue", "Credit Note, Delivery Note, new invoice"],
+					["Supplier return", "Stock back to supplier", "Purchase Return and debit note"],
+					[
+						"Warranty repair",
+						"Customer to service",
+						"Delivery Note in, Delivery Note out, no revenue"
+					]
+				]
+			},
+			"notes": "The warehouse question, where does the returned unit physically go, is a stronger control than any report. If everything returns to main stock, damaged goods get resold and the client discovers it through complaints. Warranty repairs are worth separating because they move stock without revenue, which confuses people who equate delivery notes with sales.",
+			"paths": ["Stock → Stock Entry (Material Receipt)", "Selling → Sales Invoice → Credit Note"]
+		},
+		{
+			"kicker": "Concept 9 · KPIs",
+			"title": "Five numbers a distribution client will ask for",
+			"bullets": [
+				"Fill rate measures how often the order was fulfilled in full from stock",
+				"OTIF adds timing: on time and in full, which is what customers actually experience",
+				"Inventory turns shows how productively cash is tied up in stock",
+				"GMROI asks whether the margin earned justifies the stock investment",
+				"DSO tells you how long customers take to pay, which decides how much credit you can afford"
+			],
+			"table": {
+				"headers": ["KPI", "Formula", "Where in ERPNext"],
+				"rows": [
+					[
+						"Fill rate",
+						"Lines fully shipped ÷ lines ordered",
+						"Sales Order vs Delivery Note analysis"
+					],
+					["OTIF", "Orders on time and complete ÷ orders", "Delivery dates vs actual delivery"],
+					[
+						"Inventory turns",
+						"Cost of goods sold ÷ average stock value",
+						"Gross Profit and Stock Balance"
+					],
+					["GMROI", "Gross margin ÷ average stock at cost", "Gross Profit and Stock Balance"],
+					["DSO", "Receivables ÷ revenue × days", "Accounts Receivable ageing"]
+				]
+			},
+			"notes": "Do not teach these as reporting features; teach them as the questions a client will ask when they suspect the system is not helping. Being able to say 'fill rate is 94 per cent because three SKUs are short' is what makes a consultant credible. Each KPI maps to reports the client already has, so no new tooling is required.",
+			"callout": {
+				"tone": "tip",
+				"title": "Agree the definitions",
+				"text": "Two managers will compute fill rate differently. Write the formula into the report header so the argument is about the number, not the maths."
+			}
+		},
+		{
+			"kicker": "Concept 10 · Consultant check",
+			"title": "What a distribution configuration must settle",
+			"bullets": [
+				"Which channel buys at which price, and how the system prevents the wrong tier",
+				"Where stock sits, and which warehouse serves which customer type",
+				"How much stock covers the lead time, and who acts when the report fires",
+				"Which exceptions are allowed and who authorises them: part delivery, over-delivery, substitution",
+				"Who owns the return decision and where quarantined stock goes"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Channel pricing", "One price list per channel", "Customer → Default Price List"],
+					["Warehouse roles", "Each warehouse has a purpose", "Warehouse list"],
+					["Reorder points", "Computed, not rounded", "Item → Reorder Level"],
+					["Exception rules", "Written and approved", "Configuration worksheet"],
+					[
+						"Returns destination",
+						"Quarantine separate from sellable",
+						"Stock Entry and item defaults"
+					]
+				]
+			},
+			"notes": "Close the primer by making the commercial decisions explicit, because that is the consultant's deliverable. A client who cannot answer these five questions is not ready to configure anything, and saying so politely is part of the job. Once they are answered, the ERPNext settings in Volumes 0 to 2 stop being arbitrary switches and become consequences.",
+			"callout": {
+				"tone": "warn",
+				"title": "Configuration is a consequence",
+				"text": "If the client cannot state the policy, the settings will encode a guess. Write the policy first, then configure."
+			}
+		}
+	],
+	"lab": {
+		"title": "Lab · Size a reorder point and compute five KPIs",
+		"minutes": 45,
+		"steps": [
+			"Using the sample company, calculate the blender reorder point for demand of 2 per day, lead time 7 days and safety stock 10",
+			"Enter the reorder level and safety stock on SM-BL200, scoped to Main Warehouse",
+			"Post a stock entry that takes the balance below the level and confirm the Item Reorder report lists it",
+			"Compute gross profit for a 240.00 sale with a landed cost of 126.00 and write the figure down",
+			"Apply a 10 % dealer discount to the same sale and recompute gross profit",
+			"Compute inventory turns using annual cost of goods of 600,000 and average stock of 150,000",
+			"Compute DSO from receivables of 120,000 and annual revenue of 1,460,000",
+			"Draft the five exception rules for part delivery, over-delivery, substitution, returns and credit limits"
+		],
+		"done": "The reorder point is 24 and the alert fires, gross profit is 114.00 before discount and 90.00 after, turns are 4.0, DSO is 30 days, and five exception rules are written down for the client to approve."
+	},
+	"quiz": [
+		{
+			"question": "A distributor sells 2 units a day, the supplier takes 7 days and safety stock is 10. What is the reorder point?",
+			"options": ["14", "17", "24", "10"],
+			"answer": 2,
+			"why": "Demand during lead time is 2 × 7 = 14, plus safety stock 10 gives a reorder point of 24 units."
+		},
+		{
+			"question": "Why does a distributor need more than one price list?",
+			"options": [
+				"Because ERPNext requires at least two",
+				"Different channels buy at different price bases and margins",
+				"To record exchange rates",
+				"To separate tax rates"
+			],
+			"answer": 1,
+			"why": "Retail, dealer and distributor channels have different economics. A price list per channel, assigned on the customer, prevents the wrong tier being applied."
+		},
+		{
+			"question": "Only 2 of 5 ordered units are available. What is the correct ERPNext behaviour?",
+			"options": [
+				"Split the order into two",
+				"Reduce the delivery note quantity and keep the order open",
+				"Deliver 5 and adjust stock later",
+				"Cancel the order"
+			],
+			"answer": 1,
+			"why": "Reducing the delivered quantity keeps one commitment and shows 40 per cent delivered, which is both accurate and visible in the commitment report."
+		},
+		{
+			"question": "Where should a damaged return be received?",
+			"options": [
+				"Main Warehouse, to keep stock together",
+				"A quarantine warehouse, separate from sellable stock",
+				"Directly to cost of goods sold",
+				"Nowhere, since it will be scrapped"
+			],
+			"answer": 1,
+			"why": "Quarantine prevents damaged goods being resold and lets the client decide between repair, scrap or supplier claim without polluting sellable stock."
+		},
+		{
+			"question": "Which KPI best tells a client whether the margin justifies the stock they hold?",
+			"options": ["Fill rate", "Inventory turns", "GMROI", "DSO"],
+			"answer": 2,
+			"why": "GMROI compares gross margin earned with the average stock investment, answering whether the working capital tied up in inventory is earning its keep."
+		}
+	],
+	"narration": "The second primer is distribution, because a distributor earns margin by holding stock and taking risk. Think in three flows. Goods move from supplier to warehouse to customer and sometimes back. Money moves the other way, delayed by the terms you agree. Information, promises and availability, is the flow ERPNext owns. Channels explain why one product has four prices: retail pays list, dealers expect a discount, distributors buy lowest and take stock, exports add currency and freight. Each channel becomes a price list, a customer group and often a warehouse rule. Then margins: selling price less landed cost, where landed cost includes freight and duty. A blender at two hundred forty with a landed cost of one hundred twenty six earns one hundred fourteen, and a ten percent discount takes that to ninety. Positioning is the arithmetic that keeps the business running: demand during lead time plus safety stock. Two units a day for seven days, plus ten, is twenty four, not a round twenty. Fulfilment runs order, availability, pick, ship, invoice, collect, and the delivery note is where stock and cost of goods move. Exceptions are normal: partial shipments, backorders, substitutions, over-deliveries. A commitment is history once submitted, so reduce quantities or raise documents, never edit. Returns need a quarantine policy. The five KPIs are fill rate, on time in full, inventory turns, GMROI and days sales outstanding. In the lab you compute them."
+}
