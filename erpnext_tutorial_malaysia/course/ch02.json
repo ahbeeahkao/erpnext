@@ -1,0 +1,207 @@
+{
+	"id": "ch02",
+	"number": 2,
+	"title": "Inside the e-Invoicing App",
+	"subtitle": "What erpnext_malaysia does to a Sales Invoice, what it stores, and what it deliberately leaves alone",
+	"level": "Foundation",
+	"minutes": 50,
+	"outcomes": [
+		"Trace a Sales Invoice from submit to LHDN acceptance and back to the log",
+		"Name the four DocTypes and the fields that make the audit trail work",
+		"Explain why custom fields replace patching ERPNext, and how migrations re-assert them",
+		"State clearly what the app does not cover, so no one assumes otherwise",
+		"Install the app and run its health check before trusting a single submission"
+	],
+	"slides": [
+		{
+			"kicker": "Shape",
+			"title": "A small app with a narrow, honest job",
+			"bullets": [
+				"Pipeline: Sales Invoice to mapping to UBL JSON to HTTP client to submission log",
+				"No LHDN SDK and no requests library: Frappe plus the Python standard library only",
+				"Nothing in ERPNext core is modified, so upgrades cannot silently revert your compliance logic",
+				"The app is a Frappe app in its own folder, installed with bench like any other",
+				"Its scope is supplier-issued Sales Invoices, and it says so in the README"
+			],
+			"notes": "This slide sets expectations. A compliance connector earns trust by being small enough to read. The absence of an SDK is a feature here: the payload shape is visible in ubl.py and the HTTP calls are visible in client.py. Emphasise the no-fork rule, because it is the reason the next ERPNext upgrade will not quietly delete the code that talks to LHDN."
+		},
+		{
+			"kicker": "Data model",
+			"title": "Four tables hold the whole story",
+			"bullets": [
+				"Malaysia E-Invoice Settings is a single record: enable, environment, credentials, defaults",
+				"LHDN Classification Code is your searchable MSIC list, seeded with about twenty common codes",
+				"Malaysia Tax Account Mapping ties each tax account to a MyInvois tax type and rate",
+				"E Invoice Submission Log keeps the document number, UUID, hash, payload, response and status",
+				"Custom fields on Company, Customer, Item and Sales Invoice carry identity and status into normal ERPNext screens"
+			],
+			"table": {
+				"headers": ["DocType", "Rows", "Why it matters"],
+				"rows": [
+					["Malaysia E-Invoice Settings", "One", "Enable switch, credentials, defaults"],
+					["LHDN Classification Code", "Many", "MSIC codes chosen on items"],
+					["Malaysia Tax Account Mapping", "Many", "Account to tax type and rate"],
+					["E Invoice Submission Log", "One per attempt", "UUID, hash, payload, response, status"]
+				]
+			},
+			"notes": "Walk the four tables in the order a support engineer would. Settings answers why nothing is happening. Classification answers why a line was rejected. Tax mapping answers why the tax amount is wrong. The log answers what we actually sent and what LHDN said. If a learner remembers only one table, make it the log."
+		},
+		{
+			"kicker": "Customisation",
+			"title": "Custom fields, not a patched ERPNext",
+			"bullets": [
+				"Company gains Malaysia TIN, registration type, registration number and SST number",
+				"Customer gains the same identity fields, so each buyer can be validated independently",
+				"Item gains an MSIC classification code and an optional MyInvois tax type",
+				"Sales Invoice gains a status field, invoice type, original UUID, general public flag, UUID and submission UID",
+				"after_migrate re-asserts every field, so an ERPNext upgrade cannot quietly drop them"
+			],
+			"notes": "This is the single most important architectural choice in the app. Editing ERPNext's own DocType JSON would work until the next release overwrote it. Instead install.py declares the fields, and every migrate re-creates anything missing. Point out that the same mechanism means you can safely delete a field by accident and get it back on migrate, which is a good recovery story during an incident."
+		},
+		{
+			"kicker": "Event flow",
+			"title": "What happens the moment you submit an invoice",
+			"bullets": [
+				"Sales Invoice on_submit asks the settings whether e-Invoicing is enabled and automatic submission is on",
+				"The job is queued with enqueue_after_commit, so the user's save never waits on an HTTP call to LHDN",
+				"A guard skips invoices already Submitted, Valid or Cancelled, which prevents accidental duplicates",
+				"The job validates locally, builds the document, writes a log row, then calls LHDN",
+				"Any LHDN failure is recorded on the log and surfaces on the invoice, but never rolls back your accounting"
+			],
+			"callout": {
+				"tone": "tip",
+				"title": "Accounting first, compliance second",
+				"text": "Your books must close even when LHDN is down. The app treats e-Invoicing as a follow-on event with its own retry path, not as a condition of saving an invoice."
+			},
+			"notes": "Explain enqueue_after_commit plainly: the job only runs if the database transaction committed, so you can never submit an e-Invoice for an invoice that was rolled back. Then explain why failures do not block: a sales team that cannot invoice because a government API is slow will find a workaround, and the workaround will be worse than a retry queue."
+		},
+		{
+			"kicker": "Code map",
+			"title": "Six modules, each with one responsibility",
+			"bullets": [
+				"models.py holds plain dataclasses: Party, Line and InvoiceData, with no Frappe imports",
+				"mapping.py turns a Sales Invoice into InvoiceData, resolving tax rates and UTC issue time",
+				"ubl.py builds the UBL 2.1 JSON and computes the SHA-256 hash used for idempotency",
+				"validation.py enforces the rules locally so obvious mistakes never reach LHDN",
+				"client.py owns OAuth, retries and error mapping; submission.py owns status, polling and cancellation",
+				"Because the first five are Frappe-free, most of the app can be unit tested without a bench"
+			],
+			"notes": "If the audience is technical, this is the slide to linger on. The import-free boundary is what made 76 tests possible in a sandbox with no database. If the audience is operational, compress it to one sentence: the risky logic is separable and tested, and only the wiring needs a live site to prove."
+		},
+		{
+			"kicker": "Scope",
+			"title": "What this app deliberately does not do",
+			"bullets": [
+				"Self-billed e-Invoices for imports and foreign suppliers are out of scope and need a separate process",
+				"Consolidated B2C batches are not generated automatically; each Sales Invoice is submitted as marked",
+				"Foreign currency invoices are rejected locally rather than converted, because conversion is a policy choice",
+				"It does not create credit notes for you: you build the return in ERPNext and the app submits it",
+				"It does not replace your SST return; it gives you the evidence to prepare one"
+			],
+			"notes": "Honesty here prevents failed expectations later. Each bullet is a decision, not an oversight, and each has a reason. If a learner needs one of these, they need a design conversation, not a settings change. This is also the list to re-read before quoting the app's capability to an auditor."
+		},
+		{
+			"kicker": "Install",
+			"title": "Installing it on a bench",
+			"bullets": [
+				"Copy or link the erpnext_malaysia folder into apps, then pip install it into the bench environment",
+				"bench --site yoursite install-app erpnext_malaysia creates the DocTypes, custom fields and MSIC seeds",
+				"Run bench --site yoursite migrate afterwards, then bench restart so workers pick up the new code",
+				"Enable the scheduler: status polling and retries depend on scheduled jobs, not on page visits",
+				"Grant Settings write access to System Manager only; the client secret lives in a password field"
+			],
+			"paths": [
+				"bench get-app /path/to/erpnext_malaysia",
+				"bench --site yoursite install-app erpnext_malaysia",
+				"bench --site yoursite migrate",
+				"bench --site yoursite enable-scheduler"
+			],
+			"notes": "Say out loud that this app has never been run against a live bench by the people who wrote it, and that the first installation should be a sandbox site. The steps are ordinary Frappe procedure, which is exactly why the risk is low, but the honesty matters more than the confidence. Point out that the repository-local folder is a packaging detail, not an architecture one."
+		},
+		{
+			"kicker": "Verification",
+			"title": "Prove it is wired before you send a real invoice",
+			"bullets": [
+				"Call settings_status to see whether the app thinks it is configured, and what is missing",
+				"Open Malaysia E-Invoice Settings and confirm environment, client id and default tax type",
+				"Open any Sales Invoice and check the Malaysia e-Invoice section and its buttons exist",
+				"List the four DocTypes from the desk search bar to confirm migration completed",
+				"Submit one deliberately simple invoice to your own company as a customer and follow the log"
+			],
+			"notes": "A five-minute check saves a day of debugging. settings_status is a health probe rather than a validator, so read it as 'is the plumbing connected', not 'is my data correct'. The self-invoice test is the safest possible first submission because you control both parties and can cancel within the window if something is wrong."
+		}
+	],
+	"lab": {
+		"title": "Install the app and inspect the plumbing",
+		"minutes": 35,
+		"steps": [
+			"On a sandbox bench, copy erpnext_malaysia into apps, pip install it, then install it on a test site",
+			"Run migrate and restart, then enable the scheduler for the site",
+			"Search for Malaysia E-Invoice Settings and open the single settings record",
+			"Open a Sales Invoice, find the Malaysia e-Invoice section, and hover each of its three buttons",
+			"From the awesome bar, list the four DocTypes and open one E Invoice Submission Log row, if any exist",
+			"Run the settings_status method and write down exactly which field it reports as missing",
+			"Inspect Company, Customer and Item and confirm the Malaysia custom fields are present",
+			"Add an MSIC code from the seeded list to one item and save it"
+		],
+		"done": "The four DocTypes exist, the custom fields appear on the four screens, the invoice shows its Malaysia e-Invoice buttons, and settings_status explains precisely what is still unconfigured."
+	},
+	"quiz": [
+		{
+			"question": "Why does the app add custom fields instead of editing ERPNext's DocType JSON?",
+			"options": [
+				"Custom fields are faster to render",
+				"Edits to ERPNext JSON are overwritten by upgrades, while custom fields are re-asserted on migrate",
+				"ERPNext does not allow extra fields any other way",
+				"Frappe stores custom fields in files rather than the database"
+			],
+			"answer": 1,
+			"why": "Custom fields belong to your site and survive upgrades. The app re-creates them on every migrate so a release cannot silently remove compliance data."
+		},
+		{
+			"question": "Where is the client secret stored?",
+			"options": [
+				"In a plain text field for easy support",
+				"In a password field, with Settings write limited to System Manager",
+				"In site_config.json",
+				"In an environment variable"
+			],
+			"answer": 1,
+			"why": "The secret is a Frappe password field, so it is masked in the UI and stored encrypted. Settings write access is restricted to System Manager."
+		},
+		{
+			"question": "What does enqueue_after_commit guarantee?",
+			"options": [
+				"The e-Invoice is submitted before the invoice saves",
+				"The job only runs if the invoice transaction committed, so no e-Invoice exists for a rolled-back invoice",
+				"The job runs twice for safety",
+				"The user waits for LHDN before the screen closes"
+			],
+			"answer": 1,
+			"why": "The submission job is queued after the database transaction commits, so a failed save cannot leave an e-Invoice behind for an invoice that never existed."
+		},
+		{
+			"question": "LHDN is returning timeouts while your team is closing the month. What should happen?",
+			"options": [
+				"Block invoicing until LHDN recovers",
+				"Keep invoicing: the log records the failure and the retry path submits later",
+				"Disable e-Invoicing permanently",
+				"Enter invoices directly in the MyInvois portal instead"
+			],
+			"answer": 1,
+			"why": "Accounting must not depend on a third party being available. Failures are logged and retried; the invoice stays valid in ERPNext meanwhile."
+		},
+		{
+			"question": "Which DocType would you open to find the exact JSON that was sent to LHDN?",
+			"options": [
+				"Malaysia E-Invoice Settings",
+				"E Invoice Submission Log",
+				"LHDN Classification Code",
+				"Error Log"
+			],
+			"answer": 1,
+			"why": "The submission log stores the submitted document, LHDN's response, the hash, the UUID and the status for each attempt."
+		}
+	],
+	"narration": "Chapter two opens the e-Invoicing box. This app has one job, and it does it in a straight line: a Sales Invoice becomes mapped data, then UBL JSON, then an HTTP call, then a log row. There is no LHDN software kit and no third party HTTP library, only Frappe and the Python standard library, which means you can read every line that touches a compliance decision. Nothing in ERPNext core is patched. The app lives in its own folder and adds four tables: settings, classification codes, tax account mapping, and the submission log. The log is the one to remember, because it holds the document number, the UUID, the hash, the exact payload, LHDN's response and the status. Identity fields reach the normal screens through custom fields on company, customer, item and sales invoice, and every migrate re-creates them, so an upgrade cannot quietly delete your compliance data. On submit, the app checks that it is enabled, queues a background job after the transaction commits, validates locally, writes a log row, then calls LHDN. Your accounting never waits for a government API. If LHDN is down, the invoice saves, the log records the failure, and the retry path picks it up. Just as important is what the app refuses to do: self-billed documents, currency conversion, automatic credit notes and consolidated batches are all out of scope, deliberately. Know the boundary before you promise anything to an auditor. In the lab you install it, run the health check, and inspect the plumbing."
+}

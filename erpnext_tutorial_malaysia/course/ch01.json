@@ -1,0 +1,204 @@
+{
+	"id": "ch01",
+	"number": 1,
+	"title": "The Malaysian e-Invoice Mandate",
+	"subtitle": "What LHDN requires, who has to comply, and the five rules that decide every later design choice",
+	"level": "Foundation",
+	"minutes": 45,
+	"outcomes": [
+		"Explain what an e-Invoice is, and why it is data rather than a PDF document",
+		"Place your own revenue streams in the right lane: B2B, B2C, export or self-billed",
+		"Choose between the four e-Invoice document types and reference originals correctly",
+		"Apply the 72-hour cancellation window and the 300-character reason rule",
+		"Describe how consolidation and the General Public buyer change your B2C process"
+	],
+	"slides": [
+		{
+			"kicker": "The shift",
+			"title": "An e-Invoice is structured data, not a document",
+			"bullets": [
+				"MyInvois receives UBL 2.1 JSON, validates it automatically, and only then issues a UUID and a hash",
+				"The invoice is legally complete when LHDN accepts it, not when your PDF reaches the customer",
+				"The PDF you email is a rendering for humans; the JSON is the record that is audited",
+				"Validation is continuous: a document can be accepted for processing and still come back Invalid later",
+				"Because it is machine-read, identity fields and arithmetic are checked before anybody reads a line item"
+			],
+			"notes": "Open by breaking the mental model that an e-Invoice is a prettier PDF. LHDN's platform ingests structured fields, so a wrong postcode or a one-sen rounding difference is a rejection, not a formatting quirk. The practical consequence: master data quality and arithmetic become compliance issues, not housekeeping. This framing carries the rest of the course.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "The UUID is the invoice",
+				"text": "Until LHDN returns a UUID, you have a draft in a submission queue. Quote that UUID when you talk to LHDN support, and store it against the Sales Invoice."
+			}
+		},
+		{
+			"kicker": "Scope",
+			"title": "Who issues what, and from when",
+			"bullets": [
+				"Compliance is phased by annual turnover, so confirm your own mandatory date with LHDN instead of trusting old slides",
+				"Suppliers issue e-Invoices for sales; buyers can reject them, but rejection is not cancellation",
+				"Business-to-consumer sales can go to LHDN's General Public buyer and be consolidated inside a published window",
+				"Self-billed e-Invoices shift the issuing duty to the buyer for imports and certain agent arrangements",
+				"One company can live in several lanes at once, so map every revenue stream separately before you configure anything"
+			],
+			"notes": "Phases have moved more than once. Rather than memorise numbers from this deck, write down the four lanes and put your own date against each. The lanes matter because they drive different document types, different buyer identity requirements and different reporting habits. A company that sells to consumers through a marketplace and to enterprises on credit has two processes, not one."
+		},
+		{
+			"kicker": "Types",
+			"title": "The four document types and when each applies",
+			"bullets": [
+				"Type 01 is the invoice you issue for a normal, tax-inclusive sale of goods or services",
+				"Type 02 is a credit note: the only correct way to reduce a sale after the cancellation window closes",
+				"Type 03 is a debit note for an increase agreed after the original invoice was validated",
+				"Type 04 is a refund note, used when money physically goes back to the buyer",
+				"Notes in types 02, 03 and 04 must carry the UUID of the original e-Invoice in BillingReference"
+			],
+			"table": {
+				"headers": ["Code", "Document", "Used when", "Needs original UUID"],
+				"rows": [
+					["01", "Invoice", "A new sale", "No"],
+					["02", "Credit Note", "Price or quantity reduction", "Yes"],
+					["03", "Debit Note", "Price or quantity increase", "Yes"],
+					["04", "Refund Note", "Money returned to the buyer", "Yes"]
+				]
+			},
+			"notes": "The note types are where most accounting teams improvise. In ERPNext the natural habit is a return against the invoice, which is correct, but the e-Invoice still has to carry the original UUID. If the reference is missing, LHDN rejects the note and you end up with a ledger credit and no compliant document. Say clearly that a negative-priced new invoice is never an acceptable substitute."
+		},
+		{
+			"kicker": "Corrections",
+			"title": "The 72-hour clock and what happens after it",
+			"bullets": [
+				"Cancellation is allowed only within 72 hours of validation, and only with a written reason",
+				"The reason is capped at 300 characters, so agree short, factual templates in advance",
+				"Cancellation is refused while a referencing credit or debit note is still active",
+				"After 72 hours the correction path is a credit note, sometimes followed by a fresh invoice",
+				"Buyer rejection appears in LHDN as a request; the supplier still has to cancel or credit"
+			],
+			"notes": "Walk through the arithmetic of a real week: an invoice validated on Friday, discovered wrong on Monday, sits right at the edge of the window. That is why the cancellation owner must be reachable, and why the policy should say what to do at 71 hours. Emphasise that a cancelled e-Invoice leaves the invoice in ERPNext intact; the two states have to be reconciled, not assumed to move together."
+		},
+		{
+			"kicker": "Consumers",
+			"title": "B2C, consolidation and the General Public buyer",
+			"bullets": [
+				"LHDN's General Public buyer is TIN EI00000000010 with registration NRIC 000000000000",
+				"Consolidated e-Invoices are allowed only inside a window LHDN publishes, so check current guidance",
+				"Capturing a consumer's TIN and name lets you issue a normal e-Invoice instead of a consolidated one",
+				"Service businesses with named customers should invoice individually wherever the customer agrees",
+				"Reconciliation gets harder when thousands of small sales share one buyer identity, so keep the source invoice numbers"
+			],
+			"notes": "Consolidation is a convenience, not a shortcut around identity. The trap is volume: if every retail sale funnels into one General Public document, your ability to answer a buyer query or a credit note months later depends entirely on the ERPNext side of the link. Explain how the app ticks General Public per invoice, so consolidation is a deliberate choice on each document rather than a global switch."
+		},
+		{
+			"kicker": "Self-billing",
+			"title": "Self-billed e-Invoices, in one slide",
+			"bullets": [
+				"Self-billing means the buyer issues the e-Invoice, typically for imports, foreign suppliers or nominated agents",
+				"The buyer's own TIN becomes the supplier identity on the document, which inverts the usual mapping",
+				"These documents still need classification codes, tax treatment and a billing reference where relevant",
+				"The erpnext_malaysia app covers supplier-issued sales invoices only, so plan a separate process",
+				"Agree who owns self-billing before go-live; it is usually accounts payable, not accounts receivable"
+			],
+			"notes": "Be explicit about scope. Many teams assume their e-Invoicing project is complete once sales invoices submit, then discover imports need self-billed documents. The app deliberately does not fake this, because the payload semantics invert: the issuer is you, but the supplier block is a foreign party. Covering it honestly here prevents a nasty surprise in month two."
+		},
+		{
+			"kicker": "Validation",
+			"title": "What LHDN checks before it looks at your amounts",
+			"bullets": [
+				"Supplier and buyer TIN, registration number and name must be present and well formed",
+				"An address needs line one, city, postcode and a Malaysian state code; a country of MYS is required",
+				"Each line needs a description, a positive quantity, a non-negative price and a five-digit MSIC code",
+				"Documents are ringgit only, so foreign currency sales must be converted before submission",
+				"Totals must reconcile: the tax total must equal the sum of line tax, to the sen"
+			],
+			"callout": {
+				"tone": "warn",
+				"title": "Identity fails first",
+				"text": "In practice most rejections are missing TINs, blank postcodes, unformatted MSIC codes or a non-MYR currency, not subtle tax mistakes."
+			},
+			"notes": "Use this slide to reset expectations about where effort goes. Teams budget for tax complexity and then lose a week on customer addresses. The app validates locally before it calls LHDN, and those local rules mirror what LHDN enforces, which is why the preview button is worth pressing on every unfamiliar customer the first month."
+		},
+		{
+			"kicker": "Failure modes",
+			"title": "Where e-Invoicing projects actually go wrong",
+			"bullets": [
+				"Treating it as a printing problem: a new PDF template, no structured payload, no UUID stored",
+				"Skipping sandbox rehearsal, then discovering buyer addresses are unusable on the first production day",
+				"Nobody owning cancellations, so the 72-hour window expires while the ticket waits in a shared inbox",
+				"No reconciliation between LHDN status and the sales ledger, so SST-02 is filed from a spreadsheet",
+				"Dropping the submission log during housekeeping and losing the only evidence of what was sent"
+			],
+			"notes": "Frame this as a risk register rather than a rant. Each bullet maps to a chapter: mapping to chapter four, sandbox to three, cancellation to seven, reconciliation to eight, retention to eight. Ending the chapter with the failure list gives the learner a reason to stay engaged through the technical middle of the course."
+		}
+	],
+	"lab": {
+		"title": "Map the mandate onto your own business",
+		"minutes": 25,
+		"steps": [
+			"List every revenue stream you invoice today, splitting goods, services, exports and marketplace sales",
+			"Classify each stream as B2B, B2C, export or self-billed, and note the document type it will need",
+			"Write the mandatory date you believe applies to each stream, and the source you will use to confirm it",
+			"List the systems that currently produce invoices, including spreadsheets and marketplace portals",
+			"Pick three real customers and check whether you hold a TIN, a registration number and a complete address",
+			"Decide who may cancel an e-Invoice, and draft two reason templates under 300 characters",
+			"Write one sentence on how a consumer sale will be treated: individual e-Invoice or consolidated"
+		],
+		"done": "You have a one-page mandate map with every revenue stream in a lane, a named cancellation owner, and a written list of the master data gaps you just discovered."
+	},
+	"quiz": [
+		{
+			"question": "When is a Malaysian e-Invoice legally complete?",
+			"options": [
+				"When the PDF is emailed to the customer",
+				"When LHDN validates it and returns a UUID and hash",
+				"When the Sales Invoice is submitted in ERPNext",
+				"When the customer pays"
+			],
+			"answer": 1,
+			"why": "Acceptance by MyInvois is what creates the compliant document. The ERPNext submission and the PDF are your internal and human-facing steps."
+		},
+		{
+			"question": "An invoice was validated four days ago and the amount was wrong. What is the correct correction?",
+			"options": [
+				"Cancel it, because the reason field allows late corrections",
+				"Issue a credit note that references the original UUID",
+				"Edit the Sales Invoice and resubmit it with the same number",
+				"Create a new invoice with a negative amount"
+			],
+			"answer": 1,
+			"why": "The 72-hour cancellation window has closed, so a credit note carrying the original UUID is the only compliant route. Editing a submitted invoice breaks the ledger."
+		},
+		{
+			"question": "A retail customer will not give a TIN. How do you e-Invoice the sale?",
+			"options": [
+				"Leave the buyer blank and submit anyway",
+				"Use LHDN's General Public buyer, and consolidate inside the allowed window",
+				"Use the company's own TIN as the buyer",
+				"Skip the e-Invoice and report it in SST-02 only"
+			],
+			"answer": 1,
+			"why": "LHDN provides a General Public buyer identity for consumers, and consolidation is permitted only within the window LHDN publishes for the period."
+		},
+		{
+			"question": "What happens when a buyer rejects an e-Invoice in MyInvois?",
+			"options": [
+				"The document is cancelled automatically",
+				"It becomes a request for cancellation that the supplier must action",
+				"The supplier must issue a new invoice with no reference",
+				"Nothing, until the buyer pays"
+			],
+			"answer": 1,
+			"why": "Rejection is the buyer's request. The supplier still has to cancel within the window, or correct the sale with a credit note afterwards."
+		},
+		{
+			"question": "Which currency may an e-Invoice submitted to MyInvois use?",
+			"options": [
+				"Any currency, with an exchange rate field",
+				"MYR only",
+				"MYR or SGD",
+				"The company's base currency"
+			],
+			"answer": 1,
+			"why": "The platform accepts Malaysian Ringgit. Foreign currency sales must be converted before the document is built, which is a policy decision, not a formatting one."
+		}
+	],
+	"narration": "Chapter one is the mandate, and it is worth doing properly because every technical decision later follows from it. An e-Invoice is not a PDF with a logo. It is structured UBL JSON submitted to MyInvois, LHDN's platform, validated automatically, and only then given a UUID and a hash. That UUID is what makes the invoice legally complete. The PDF you send is a rendering for humans. Compliance is phased by turnover, so confirm your own start date with LHDN rather than trusting a slide, and give every revenue stream a lane: business to business, business to consumer, export, or self-billed. There are four document types. Zero one is the invoice, zero two a credit note, zero three a debit note, zero four a refund note, and every note must reference the UUID of the original or LHDN rejects it. Cancellation is a narrow window: seventy two hours after validation, with a reason of at most three hundred characters, refused while a referencing note is active. After that, your only correction is a credit note. Consumers can be billed to LHDN's General Public buyer, but consolidation is allowed only inside the window LHDN publishes, so do not treat it as unlimited. LHDN checks identity before it checks amounts: TIN, registration number, MSIC code, state code, ringgit only. Fix the masters first. In the lab you will map your own revenue streams to document types and name the person who owns cancellations."
+}

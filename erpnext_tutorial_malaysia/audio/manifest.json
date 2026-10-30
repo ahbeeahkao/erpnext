@@ -1,0 +1,63 @@
+{
+	"course": "Malaysia e-Invoicing with ERPNext",
+	"voice": "voice-00",
+	"note": "Chapter narration generated from course/*.json narration text. Transcripts are identical to the narration field.",
+	"chapters": {
+		"ch01": {
+			"file": "ch01.mp3",
+			"voice": "voice-00",
+			"chars": 1413,
+			"bytes": 822143,
+			"text": "Chapter one is the mandate, and it is worth doing properly because every technical decision later follows from it. An e-Invoice is not a PDF with a logo. It is structured UBL JSON submitted to MyInvois, LHDN's platform, validated automatically, and only then given a UUID and a hash. That UUID is what makes the invoice legally complete. The PDF you send is a rendering for humans. Compliance is phased by turnover, so confirm your own start date with LHDN rather than trusting a slide, and give every revenue stream a lane: business to business, business to consumer, export, or self-billed. There are four document types. Zero one is the invoice, zero two a credit note, zero three a debit note, zero four a refund note, and every note must reference the UUID of the original or LHDN rejects it. Cancellation is a narrow window: seventy two hours after validation, with a reason of at most three hundred characters, refused while a referencing note is active. After that, your only correction is a credit note. Consumers can be billed to LHDN's General Public buyer, but consolidation is allowed only inside the window LHDN publishes, so do not treat it as unlimited. LHDN checks identity before it checks amounts: TIN, registration number, MSIC code, state code, ringgit only. Fix the masters first. In the lab you will map your own revenue streams to document types and name the person who owns cancellations."
+		},
+		"ch02": {
+			"file": "ch02.mp3",
+			"voice": "voice-00",
+			"chars": 1487,
+			"bytes": 832801,
+			"text": "Chapter two opens the e-Invoicing box. This app has one job, and it does it in a straight line: a Sales Invoice becomes mapped data, then UBL JSON, then an HTTP call, then a log row. There is no LHDN software kit and no third party HTTP library, only Frappe and the Python standard library, which means you can read every line that touches a compliance decision. Nothing in ERPNext core is patched. The app lives in its own folder and adds four tables: settings, classification codes, tax account mapping, and the submission log. The log is the one to remember, because it holds the document number, the UUID, the hash, the exact payload, LHDN's response and the status. Identity fields reach the normal screens through custom fields on company, customer, item and sales invoice, and every migrate re-creates them, so an upgrade cannot quietly delete your compliance data. On submit, the app checks that it is enabled, queues a background job after the transaction commits, validates locally, writes a log row, then calls LHDN. Your accounting never waits for a government API. If LHDN is down, the invoice saves, the log records the failure, and the retry path picks it up. Just as important is what the app refuses to do: self-billed documents, currency conversion, automatic credit notes and consolidated batches are all out of scope, deliberately. Know the boundary before you promise anything to an auditor. In the lab you install it, run the health check, and inspect the plumbing."
+		},
+		"ch03": {
+			"file": "ch03.mp3",
+			"voice": "voice-00",
+			"chars": 1428,
+			"bytes": 773033,
+			"text": "Chapter three is about getting connected without breaking anything. MyInvois has two environments with separate hosts and separate credentials: sandbox on preprod, production on api. The app's environment setting chooses the host pair, which is why a production client id left on sandbox looks like a credentials failure. Get credentials from the taxpayer system in the portal, create an integration, and write down who owns it, because the secret is the one thing you cannot recover from a backup. In settings, defaults matter more than they look. Automatic submission is right for steady state and wrong for your first production week. A default tax type of zero six is correct if you are not SST registered, and quietly wrong if you are. The client requests a token with client credentials and caches it with a sixty second safety margin, refreshing once on a four zero one. If a four zero one repeats, stop retrying: the secret, the environment or the taxpayer account is wrong. Validate TINs in bulk, not on every invoice, because a missing invoice should never wait on a registry call. Remember that issue time is converted to UTC, that documents must be in ringgit, and that a buyer address needs a Malaysian state code. Then prove the loop: run the health check, validate a TIN, preview, submit, wait for valid, and cancel with a reason. In the lab you do exactly that, and you keep the screenshots as training material."
+		},
+		"ch04": {
+			"file": "ch04.mp3",
+			"voice": "voice-00",
+			"chars": 1461,
+			"bytes": 865611,
+			"text": "Chapter four is master data, and it is where most first submissions die. LHDN checks identity before it checks amounts. Every supplier and buyer needs a TIN, a registration type and a registration number, and the app validates the format locally while LHDN validates existence. Then the address: line one, city, postcode and a Malaysian state code, country Malaysia. The app reads the party's primary address, so two primary addresses, or none, gives you an unpredictable payload. States map to codes zero one through sixteen, with aliases like Penang to zero seven. Each line needs a five digit MSIC code, resolved from the item first and the settings default second, and a wrong but well formed code passes validation while being silently wrong, so classification needs review, not just a rule. Units map to UN codes, so numbers becomes C sixty two and kilograms becomes K G M, with a fallback to C sixty two when your unit is unmapped. Tax types are zero one sales, zero two service, zero three tourism, zero four high value goods, zero five low value goods, with zero six and E always at zero rate. Rates resolve from the item tax snapshot, then the tax account mapping, then the default. Consumers use the General Public buyer, ticked per invoice. Learn the rejection shortlist: missing TIN, bad MSIC, blank state or postcode, non ringgit currency, duplicate number, tax mismatch. In the lab you build three compliant customers and fix every preview error."
+		},
+		"ch05": {
+			"file": "ch05.mp3",
+			"voice": "voice-00",
+			"chars": 1443,
+			"bytes": 829040,
+			"text": "Chapter five is the payload, and the goal is simple: make the arithmetic LHDN receives add up to the sen. The document is UBL expressed as JSON, where every scalar is wrapped in an underscore key, and it is serialised deterministically, so the same invoice always produces the same bytes. That is why a hash can act as a fingerprint. The header carries the invoice number, the posting date, an issue time converted to UTC, the invoice type, the currency, and the legal monetary totals. The invoice number becomes a permanent LHDN identifier, so naming series is a compliance decision. Each line carries its quantity with a UN unit code, its net amount, its unit price, an allowance charge when discounted, and the MSIC classification. Tax appears twice: once per line and once in the header, which is what allows mixed rates on one invoice. Rates resolve from the ERPNext item tax snapshot first, then the tax account mapping, then the default, and anything outside tax types zero one to zero five is forced to zero. Line tax is then reconciled against the invoice tax total, so a mismatch is an error, not a surprise from LHDN. Discounts are allowances, never negative prices. A rounding gap over five sen on the payable amount is a warning, and the document still goes. Use the preview as a review tool: it is free, it never calls LHDN, and it shows errors, warnings, the JSON and the hash. In the lab you audit a mixed-rate invoice by hand."
+		},
+		"ch06": {
+			"file": "ch06.mp3",
+			"voice": "voice-00",
+			"chars": 1377,
+			"bytes": 780347,
+			"text": "Chapter six is what happens after you press submit. The invoice is queued as a background job, validated locally, written to a log row, and only then sent to LHDN. The submission call returns a submission UID with accepted and rejected documents, which is not the same as validation. Acceptance means LHDN has queued the document; a scheduled poll every ten minutes fetches the details and writes valid or invalid back to the log and the invoice. Learn the statuses: queued and retry are internal, submitted is waiting, valid is done, invalid needs data changes, rejected was refused at intake, cancelled is deliberate, error needs investigation. Failures come in three families. Transport problems like a timeout, a four two nine or a five hundred are retried with backoff that honours retry after. Authentication problems get one transparent refresh, then need a human. Business problems need the data fixed, not another attempt. The most dangerous failure is the lost response: LHDN accepted the document, the answer never arrived, and a naive retry creates a duplicate. The app searches by invoice number and adopts what it finds, so never just resubmit. Monitoring is three saved filters: waiting, broken, and done today. A stuck invoice has an order: read the error, read the request and response, refresh, let retry run, then fix. In the lab you break things on purpose."
+		},
+		"ch07": {
+			"file": "ch07.mp3",
+			"voice": "voice-00",
+			"chars": 1443,
+			"bytes": 835309,
+			"text": "Chapter seven is corrections, where compliance meets accounting discipline. There are two ways to undo an e-Invoice. Cancellation erases the document and is only possible within seventy two hours of validation. A credit note preserves history: the original stays valid and the reduction becomes a new document that must reference the original UUID. The rule is time first, then dependency. Inside the window with nothing referencing the document, cancel. Otherwise, credit. In ERPNext a return against the invoice produces the type zero two credit note, and the app reads the referenced invoice's stored UUID. If the original was never validated, there is no UUID, and that needs a human decision. Three LHDN errors are worth memorising: operation period over means the window closed, incorrect state usually means it is already cancelled, and active referencing documents means a note still points at it, so you unwind from the newest backwards. Buyer rejection is not cancellation: the buyer requests it, the supplier performs it, and if the request arrives too late the answer is a credit note. Mirroring ERPNext cancellations defaults to off, deliberately, because a refused cancellation leaves a cancelled ledger document with a valid e-Invoice. Write the policy before go live: who may cancel, the reason templates, when a credit note is mandatory, and how fast you answer a buyer. In the lab you cancel, get refused, credit, and unwind."
+		},
+		"ch08": {
+			"file": "ch08.mp3",
+			"voice": "voice-00",
+			"chars": 1464,
+			"bytes": 801663,
+			"text": "Chapter eight takes the project live. Start with a gate that can fail: settings configured with production credentials, twenty sandbox documents across business, consumer, credit note and cancellation scenarios, every active customer validated, every item classified, the scheduler running, and one named person who owns the daily log review. Get a signature. Then cut over gently. Create production credentials in advance, switch the environment, and turn automatic submission off for the first week. Submit the first ten manually, reading the preview and the log each time, and enable automation only after three quiet days. Dual running means single issuance with a manual exception path, never two systems that both issue, and it needs an end date. Reconcile monthly in three directions: the sales ledger, the LHDN documents in valid status, and the figures you will declare. Match on document number, list every exception with a reason, and sign the sheet. Monitor four or five numbers with named owners, above all the percentage valid on first pass. Keep a playbook: keep invoicing through an outage, check credentials before retrying, and turn automation off the moment invalid documents surge. Keep the logs, restrict access by role, and test a restore once. Then run the first ninety days as a calendar: daily reviews, a first reconciliation, a month end with evidence, and a policy review at month three. In the lab you rehearse the twenty document gate."
+		}
+	}
+}

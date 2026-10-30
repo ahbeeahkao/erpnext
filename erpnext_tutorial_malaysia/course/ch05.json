@@ -1,0 +1,201 @@
+{
+	"id": "ch05",
+	"number": 5,
+	"title": "Tax, Totals and the UBL Document",
+	"subtitle": "Making the arithmetic LHDN receives add up, line by line, to the sen",
+	"level": "Core",
+	"minutes": 55,
+	"outcomes": [
+		"Describe the shape of a UBL 2.1 JSON invoice and the elements LHDN reads",
+		"Read a preview payload and verify header totals against line amounts",
+		"Explain how the app resolves tax type and rate for each line",
+		"Handle discounts, allowances and rounding differences without breaking reconciliation",
+		"Use the document hash to reason about idempotency and change detection"
+	],
+	"slides": [
+		{
+			"kicker": "Payload",
+			"title": "What the app actually sends",
+			"bullets": [
+				"UBL 2.1 expressed as JSON, with every scalar wrapped as {\"_\": value} as the mapping requires",
+				"InvoiceTypeCode carries listVersionID 1.1, tax scheme id OTH and classification list id CLASS",
+				"The envelope identifies supplier, customer, lines, tax totals and legal monetary totals",
+				"Serialisation is deterministic, so an unchanged invoice always produces the same bytes",
+				"That determinism is what makes a hash a reliable identity for a document"
+			],
+			"notes": "If the audience is technical, show a real payload from the preview dialog. The {\"_\": …} wrapping is the single most confusing part of UBL JSON, and seeing it once is better than describing it five times. The important business point is determinism: same data, same bytes, same hash, which underpins duplicate prevention."
+		},
+		{
+			"kicker": "Header",
+			"title": "The header fields, and what each one decides",
+			"bullets": [
+				"ID is the Sales Invoice name, so your naming series becomes LHDN's document number",
+				"IssueDate comes from the posting date; IssueTime is converted to UTC with a trailing Z",
+				"DocumentCurrencyCode must be MYR, since no other currency is accepted",
+				"InvoiceTypeCode decides invoice, credit, debit or refund, and drives the reference requirement",
+				"LegalMonetaryTotal carries line extension, tax total and the payable amount"
+			],
+			"table": {
+				"headers": ["Element", "Source", "Watch out for"],
+				"rows": [
+					["ID", "Sales Invoice name", "Must be unique at LHDN forever"],
+					["IssueDate / IssueTime", "Posting date and time", "Time is UTC, not local"],
+					["InvoiceTypeCode", "Custom field or derived", "Notes must reference an original"],
+					["DocumentCurrencyCode", "Invoice currency", "MYR only"],
+					["PayableAmount", "Total including tax", "May differ from grand total by rounding"]
+				]
+			},
+			"notes": "Naming series is a compliance decision because the invoice number becomes a permanent LHDN identifier. If your series reuses numbers across sites or after a test environment reset, you will hit duplicate rejections. The other trap is the UTC timestamp: a late-night invoice can appear on the previous UTC day, which is fine, but a confused accountant will file a ticket about it."
+		},
+		{
+			"kicker": "Lines",
+			"title": "Inside an invoice line",
+			"bullets": [
+				"InvoicedQuantity carries the quantity and a unitCode, with trailing zeros removed",
+				"LineExtensionAmount is the net amount after line discount, matching ERPNext's net amount",
+				"PriceAmount is the unit rate, and AllowanceCharge appears when the line was discounted",
+				"Item carries the description and the CommodityClassification with the MSIC code",
+				"Each line repeats its own tax treatment, which is what makes mixed-rate invoices possible"
+			],
+			"notes": "Line-level tax repetition surprises people who expect one tax block per invoice. It exists so that a single invoice can mix taxable and exempt supplies, which Malaysian businesses do constantly. The AllowanceCharge element is worth highlighting: a discount is expressed as a positive charge amount, not a negative price, and getting the sign wrong makes the arithmetic fail later."
+		},
+		{
+			"kicker": "Tax",
+			"title": "How the app decides each line's tax type and rate",
+			"bullets": [
+				"First it reads the item tax rate snapshot that ERPNext wrote from the item tax template",
+				"Then it resolves invoice tax rows through the account-to-tax-type mapping",
+				"Then it falls back to the settings default, which is zero six with a zero rate",
+				"Tax types other than 01 to 05 are forced to a zero rate, so exemption cannot carry an amount",
+				"Per-line tax amounts are then reconciled against the invoice's total taxes and charges"
+			],
+			"callout": {
+				"tone": "malaysia",
+				"title": "SST is not GST",
+				"text": "Malaysia has used SST since 2018. Nothing in this app relies on ERPNext's GST fields, and old GST tax templates should be retired before go-live."
+			},
+			"notes": "This ordering is the heart of the app's tax logic. Reading the ERPNext snapshot first means the payload agrees with the ledger by construction. The reconciliation step is the safety net: if line tax does not add up to the invoice tax total, validation blocks the submission rather than sending arithmetic LHDN will reject. Mixed rates are normal, not exotic."
+		},
+		{
+			"kicker": "Adjustments",
+			"title": "Discounts, allowances and rounding",
+			"bullets": [
+				"Line discounts become AllowanceCharge when quantity times rate exceeds the net amount",
+				"Negative prices are rejected by validation, so discounts must be modelled as discounts",
+				"Invoice-level rounding adjustments appear as a difference between grand total and payable amount",
+				"A difference above five sen is recorded as a warning on the log, and submission still proceeds",
+				"Never edit the payload by hand: fix the invoice so the document is reproducible"
+			],
+			"notes": "Rounding is where finance and compliance meet. LHDN wants totals that reconcile; ERPNext wants to round the grand total to the nearest sen. The app's five-sen tolerance and warning is a pragmatic compromise. Explain that the warning is a prompt to look, not an error, and that a pattern of warnings usually means the tax configuration needs attention."
+		},
+		{
+			"kicker": "Hash",
+			"title": "The hash is a fingerprint you can trust",
+			"bullets": [
+				"The document hash is a SHA-256 of the serialised payload, computed before submission",
+				"Identical invoices produce identical hashes, which is how the app refuses to submit twice",
+				"The hash is stored on the log beside the exact bytes that were sent",
+				"Any change to a customer name, address or amount changes the hash, so change detection is trivial",
+				"Comparing a stored hash with a fresh preview is the fastest way to prove nothing drifted"
+			],
+			"notes": "Hashes sound cryptographic and intimidating, but the business use is simple: it is a tamper-evident receipt of what was sent. If an auditor asks whether the invoice changed after submission, recompute and compare. The same property powers idempotency, because a second submission attempt with the same hash is recognisably the same document."
+		},
+		{
+			"kicker": "Preview",
+			"title": "Using the preview as a review tool",
+			"bullets": [
+				"Preview returns ok, errors, warnings, the document itself and the hash, without contacting LHDN",
+				"Errors block submission; warnings are recorded and the document still goes out",
+				"The preview dialog shows the UBL JSON so an accountant can read what will be sent",
+				"Preview is free and unlimited, so use it on every unusual invoice for the first month",
+				"A clean preview is the cheapest possible test of master data correctness"
+			],
+			"paths": [
+				"Sales Invoice → Malaysia e-Invoice → Preview e-Invoice",
+				"Sales Invoice → Malaysia e-Invoice → Submit to MyInvois",
+				"Sales Invoice → Malaysia e-Invoice → e-Invoice Status"
+			],
+			"notes": "Encourage a habit rather than a rule: preview anything unfamiliar. The dialog is deliberately plain, because the audience is an accountant checking a customer name and a total, not a developer reading JSON. Point out that a clean preview with a stable hash is a strong signal that the document will be accepted."
+		},
+		{
+			"kicker": "Reconciliation",
+			"title": "Proving the payload agrees with your ledger",
+			"bullets": [
+				"Compare the payload's line extensions with the Sales Invoice net amounts, line by line",
+				"Compare the tax total with ERPNext's total taxes and charges, allowing only rounding",
+				"Compare the payable amount with the grand total and explain anything over five sen",
+				"Check the invoice type and billing reference on every note document",
+				"Keep the preview hash with the approval if a human signed off on a manual submission"
+			],
+			"notes": "This is the discipline that makes month-end possible. The payload is a second expression of the same transaction, so any divergence is a bug or a mapping problem. Doing it on a sample of invoices monthly catches configuration drift early. If a reviewer signs off a manual submission, the hash gives the sign-off something concrete to point at."
+		}
+	],
+	"lab": {
+		"title": "Audit the arithmetic of a mixed-rate invoice",
+		"minutes": 40,
+		"steps": [
+			"Create a Sales Invoice with three lines: a 10 percent sales tax item, an 8 percent service tax item, and an exempt item",
+			"Add a line-level discount to the first line and an invoice-level rounding adjustment",
+			"Preview the document and expand the UBL JSON inside the dialog",
+			"Verify the InvoicedQuantity and unitCode for each line, and note how trailing zeros were dropped",
+			"Check that the discounted line carries an AllowanceCharge and that its sign is positive",
+			"Add the per-line tax amounts by hand and compare with the header TaxTotal",
+			"Change one quantity, preview again, and record how the hash changed",
+			"Restore the original quantity and confirm the hash returns to its first value"
+		],
+		"done": "You can predict the header tax total and the payable amount before previewing, you saw the discount expressed as an allowance, and the hash returned to its original value when the data did."
+	},
+	"quiz": [
+		{
+			"question": "Which element tells LHDN whether a document is an invoice or a credit note?",
+			"options": ["DocumentCurrencyCode", "InvoiceTypeCode", "LegalMonetaryTotal", "InvoicedQuantity"],
+			"answer": 1,
+			"why": "InvoiceTypeCode carries 01 to 04, and types 02 to 04 also trigger the requirement for a billing reference to the original."
+		},
+		{
+			"question": "An invoice has a 20 sen rounding difference between ERPNext grand total and the payload payable amount. What happens?",
+			"options": [
+				"Submission is blocked",
+				"A warning is recorded on the log and the submission still proceeds",
+				"The payable amount is silently adjusted",
+				"The invoice is cancelled automatically"
+			],
+			"answer": 1,
+			"why": "The app tolerates small rounding differences for the payable amount, records a warning, and lets the document go. Errors are reserved for arithmetic that does not reconcile."
+		},
+		{
+			"question": "Why does the app compute a hash before submitting?",
+			"options": [
+				"To encrypt the payload",
+				"To identify the document uniquely and prevent duplicate submissions",
+				"To sign the request with LHDN",
+				"To compress the JSON"
+			],
+			"answer": 1,
+			"why": "The SHA-256 hash of the deterministic payload identifies the document, so a repeat attempt can be recognised rather than resubmitted."
+		},
+		{
+			"question": "A line has tax type E for exemption but carries a 5 percent rate. What does the app do?",
+			"options": [
+				"Submits it as 5 percent",
+				"Forces the rate to zero, because exemption cannot carry a tax amount",
+				"Changes the tax type to 01",
+				"Rejects the invoice at LHDN and never locally"
+			],
+			"answer": 1,
+			"why": "Only types 01 to 05 can carry a rate. Exemption and not-applicable codes are normalised to zero so the payload stays internally consistent."
+		},
+		{
+			"question": "You want to prove nothing changed since an invoice was submitted last month. What do you do?",
+			"options": [
+				"Re-open the Sales Invoice and compare totals by eye",
+				"Preview now and compare the hash with the one stored on the log",
+				"Ask LHDN support for a copy",
+				"Check the payment ledger"
+			],
+			"answer": 1,
+			"why": "Deterministic serialisation means an unchanged document hashes identically. A hash match is proof the payload has not drifted."
+		}
+	],
+	"narration": "Chapter five is the payload, and the goal is simple: make the arithmetic LHDN receives add up to the sen. The document is UBL expressed as JSON, where every scalar is wrapped in an underscore key, and it is serialised deterministically, so the same invoice always produces the same bytes. That is why a hash can act as a fingerprint. The header carries the invoice number, the posting date, an issue time converted to UTC, the invoice type, the currency, and the legal monetary totals. The invoice number becomes a permanent LHDN identifier, so naming series is a compliance decision. Each line carries its quantity with a UN unit code, its net amount, its unit price, an allowance charge when discounted, and the MSIC classification. Tax appears twice: once per line and once in the header, which is what allows mixed rates on one invoice. Rates resolve from the ERPNext item tax snapshot first, then the tax account mapping, then the default, and anything outside tax types zero one to zero five is forced to zero. Line tax is then reconciled against the invoice tax total, so a mismatch is an error, not a surprise from LHDN. Discounts are allowances, never negative prices. A rounding gap over five sen on the payable amount is a warning, and the document still goes. Use the preview as a review tool: it is free, it never calls LHDN, and it shows errors, warnings, the JSON and the hash. In the lab you audit a mixed-rate invoice by hand."
+}

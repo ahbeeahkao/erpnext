@@ -1,0 +1,24 @@
+{
+	"name": "erpnext-myinvois-course",
+	"private": true,
+	"version": "1.0.0",
+	"description": "Malaysia e-Invoicing with ERPNext — a complete narrated slide-deck course with labs, quizzes and speaker notes",
+	"type": "module",
+	"scripts": {
+		"dev": "node scripts/serve.mjs",
+		"serve": "node scripts/serve.mjs",
+		"lint": "eslint .",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"test": "node --test \"tests/*.test.mjs\"",
+		"smoke": "node tests/smoke.mjs",
+		"check": "npm run lint && npm run format:check && npm test && npm run smoke"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.30.0",
+		"eslint": "^9.30.0",
+		"globals": "^16.0.0",
+		"jsdom": "^30.1.3",
+		"prettier": "2.7.1"
+	}
+}

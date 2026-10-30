@@ -1,0 +1,210 @@
+{
+	"id": "ch08",
+	"number": 8,
+	"title": "Go Live, Reconcile and Audit",
+	"subtitle": "Production credentials, dual running, monthly reconciliation and the runbook your team actually uses",
+	"level": "Capstone",
+	"minutes": 60,
+	"outcomes": [
+		"Assess readiness against a gate that a finance lead can sign",
+		"Move from sandbox to production with a first-week control that catches mistakes",
+		"Reconcile LHDN documents to the sales ledger and to your SST return",
+		"Design monitoring, alerting and an incident playbook for LHDN outages",
+		"Plan retention, audit access and the first ninety days of operation"
+	],
+	"slides": [
+		{
+			"kicker": "Gate",
+			"title": "The readiness gate, in six questions",
+			"bullets": [
+				"Do the settings report themselves as configured, with production credentials and the right environment",
+				"Have you submitted at least twenty sandbox documents covering B2B, B2C, credit note and cancellation",
+				"Is every active customer's TIN, registration number and primary address complete and validated",
+				"Does every active item carry an MSIC code, and does every unit map to a UN code",
+				"Is the scheduler running, the secret stored, and the roles restricted to the right people",
+				"Has a named person accepted responsibility for the daily log review"
+			],
+			"callout": {
+				"tone": "tip",
+				"title": "Sign it, do not discuss it",
+				"text": "A one-page checklist with a name and a date turns go-live from a conversation into a decision. Without a signature, the gate is a suggestion."
+			},
+			"notes": "A gate only works if it can fail. Each question must be answerable with evidence, not opinion. The twentieth sandbox document matters because the first ten are always clean and the interesting rejections happen on unusual customers. The named owner for daily review is the question most often answered with a shrug, and it is the one that predicts whether the project survives month two."
+		},
+		{
+			"kicker": "Cutover",
+			"title": "Moving to production without a big-bang weekend",
+			"bullets": [
+				"Create production credentials in MyInvois and store them before the cutover window",
+				"Switch the environment to Production and turn automatic submission off for the first week",
+				"Submit the first ten invoices manually, reading the preview and the log each time",
+				"Enable automatic submission once three consecutive days pass without a data rejection",
+				"Keep the old manual process available for the first month, as a documented fallback only"
+			],
+			"table": {
+				"headers": ["Day", "Mode", "Control"],
+				"rows": [
+					["Cutover", "Manual submit", "Preview every invoice"],
+					["Days 1-3", "Manual submit", "Daily log review with finance"],
+					["Day 4 onwards", "Automatic", "Exceptions only"],
+					["Month 2", "Automatic", "Weekly review"]
+				]
+			},
+			"notes": "Manual submission for a week sounds slow and is the cheapest insurance you can buy. The preview shows what will be sent, and the log shows what came back, so the first week teaches the team the real failure modes with no volume pressure. Automatic submission then removes the human step once the data is proven, not before."
+		},
+		{
+			"kicker": "Dual running",
+			"title": "Dual running without double invoicing",
+			"bullets": [
+				"One document must have one issuer: the app, not a person typing into the portal",
+				"Keep portal access for checking, cancelling and fixing, never for issuing new invoices",
+				"Track every exception in one place so dual running has a visible backlog and an end date",
+				"Reconcile the ledger to the log daily during cutover week, weekly afterwards",
+				"Retire the parallel process on a stated date, or it becomes permanent"
+			],
+			"notes": "Dual running fails when it means 'either system'. The rule is single issuance with a manual exception path. Explain how to spot the failure: two accepted documents for the same sale, or an invoice in ERPNext that never reached LHDN because someone typed it into the portal instead. An end date is the only thing that stops a parallel process becoming a habit."
+		},
+		{
+			"kicker": "Reconciliation",
+			"title": "The monthly three-way reconciliation",
+			"bullets": [
+				"Count and value documents in Valid status for the period, by invoice type",
+				"Compare that list with submitted Sales Invoices in the same period, matching on document number",
+				"Compare taxable value and tax with the figures you will declare in your SST return",
+				"List every exception with a reason: Invalid, Rejected, Error, Cancelled, or missing from the log",
+				"Agree the exceptions with finance, sign the sheet, and keep it with the filing evidence"
+			],
+			"table": {
+				"headers": ["Check", "Source A", "Source B"],
+				"rows": [
+					["Completeness", "Sales invoice register", "Submission log, Valid"],
+					["Taxable value", "SST return workings", "Sum of payload line amounts"],
+					["Tax charged", "GL SST accounts", "Sum of payload tax totals"],
+					["Exceptions", "Exception list", "Approved adjustments"]
+				]
+			},
+			"notes": "Three-way means ledger, LHDN documents and the tax return. Any two agreeing is not enough, because the interesting failures live between the pairs. Matching on document number is simple and reliable if your naming series is disciplined. The signed exception sheet is what turns a reconciliation into evidence."
+		},
+		{
+			"kicker": "Monitoring",
+			"title": "What to watch, and how often",
+			"bullets": [
+				"Daily: rows in Error, rows Invalid from the previous day, and any Submitted older than an hour",
+				"Weekly: attempts distribution, cancellations by reason, and warnings on valid documents",
+				"Monthly: reconciliation sheet, percent valid first pass, and time from submit to valid",
+				"Alert thresholds should name a person and an action, not just a number",
+				"Review the alert list quarterly; a noisy alert trains people to ignore the real one"
+			],
+			"notes": "The metric that matters most is percent valid first pass, because it measures data quality rather than effort. Time to valid measures LHDN and your scheduler. Cancellations by reason measure process discipline. Keep the list to four or five numbers, each with an owner, or it becomes a dashboard nobody opens."
+		},
+		{
+			"kicker": "Incidents",
+			"title": "The incident playbook",
+			"bullets": [
+				"LHDN outage: keep invoicing, let documents queue, and record the window for later explanation",
+				"Mass authentication failures: check the secret, the environment and the taxpayer status before retrying",
+				"A storm of Invalid documents: turn automatic submission off immediately and fix the mapping",
+				"Duplicate rejections: check whether a submission already succeeded before touching anything",
+				"Every incident ends with a log entry, a root cause and a control change"
+			],
+			"notes": "A playbook is a list of first moves, not a manual. The two emergency controls are turning automatic submission off and stopping manual submissions; everything else is diagnosis. Recording the outage window matters because auditors and customers will ask why certain invoices were late, and memory is unreliable three months later."
+		},
+		{
+			"kicker": "Evidence",
+			"title": "Retention, audit access and privacy",
+			"bullets": [
+				"Keep submission logs including the request and response bodies for the retention period finance agrees",
+				"Logs in Valid, Submitted, Cancelled and Rejected statuses should not be deleted from the interface",
+				"Give auditors read access through roles, and export rather than copy from screens",
+				"Buyer identity data is personal data, so access should be need-to-know and reviewed",
+				"Test a restore of the log data once, so retention is a capability rather than an intention"
+			],
+			"notes": "Retention is the requirement that gets discovered late. The log is not just an operational table; it is the evidence of what was submitted and what LHDN said. Immutability plus role-based access plus a tested restore is a defensible position. Mention PDPA lightly: e-Invoice data includes names and registration numbers, so broad read access has a privacy dimension."
+		},
+		{
+			"kicker": "Ninety days",
+			"title": "The first ninety days after go-live",
+			"bullets": [
+				"Week 1: daily log review, manual submissions only, fix master data as it surfaces",
+				"Week 2: enable automation, run the first reconciliation against the ledger",
+				"Month 1: file with the reconciliation sheet, review cancellations by reason, adjust templates",
+				"Month 2: measure percent valid first pass and time to valid, agree improvement targets",
+				"Month 3: re-validate TINs, review the policy, and confirm the retention and restore process still works"
+			],
+			"notes": "End with a calendar rather than a philosophy. Ninety days is long enough to see a month-end and short enough to stay on a team's attention span. If the percent valid first pass is high and cancellations are rare and well-reasoned, the project is genuinely done, not merely installed."
+		}
+	],
+	"lab": {
+		"title": "Rehearse production: the twenty-document gate",
+		"minutes": 50,
+		"steps": [
+			"Build a twenty-document sandbox matrix: ten invoices, three with mixed tax rates, three B2C, two credit notes, one cancellation and one deliberate failure",
+			"Submit every document and record the status, hash and UUID in a tracking sheet",
+			"Fix the deliberate failure from the log, resubmit, and record how the status changed",
+			"Reconcile the twenty documents against a mock sales register and explain every difference",
+			"Produce a one-page reconciliation sheet with counts, values, tax and an exceptions list",
+			"Write the daily and weekly monitoring checklist, each item naming a person and an action",
+			"Draft the incident playbook entry for an LHDN outage longer than four hours",
+			"Run a restore test of the submission log on a staging copy and record how long it took"
+		],
+		"done": "You have a signed twenty-document matrix with zero unexplained differences, a monitoring checklist with named owners, and a tested restore time you would be willing to quote to an auditor."
+	},
+	"quiz": [
+		{
+			"question": "What should happen in the first week after switching to production credentials?",
+			"options": [
+				"Automatic submission, to prove throughput",
+				"Manual submission with a preview and log review on every invoice",
+				"Submit nothing until month end",
+				"Cancel all sandbox documents first"
+			],
+			"answer": 1,
+			"why": "Manual submission for a week, with previews and daily log reviews, catches master data defects before volume hides them. Automation comes after three clean days."
+		},
+		{
+			"question": "Which metric best measures master data quality?",
+			"options": [
+				"Number of submissions per day",
+				"Percentage of documents valid on first pass",
+				"Average token lifetime",
+				"Number of log rows"
+			],
+			"answer": 1,
+			"why": "First-pass validity measures how often the data was right before LHDN looked at it. Volume and row counts measure activity, not quality."
+		},
+		{
+			"question": "A storm of Invalid documents appears after a tax configuration change. What is the first control?",
+			"options": [
+				"Ask LHDN for an extension",
+				"Turn automatic submission off and fix the mapping before more invoices go out",
+				"Increase Max Retries",
+				"Switch to a new naming series"
+			],
+			"answer": 1,
+			"why": "Stopping the flow limits the damage. Retries cannot fix a mapping bug, and a new numbering series creates evidence gaps."
+		},
+		{
+			"question": "What makes a monthly reconciliation audit-ready?",
+			"options": [
+				"A screenshot of the dashboard",
+				"A signed sheet matching ledger, LHDN documents and the SST return, with every exception explained",
+				"A count of cancellations",
+				"The scheduler log"
+			],
+			"answer": 1,
+			"why": "Evidence means three-way agreement plus a signed explanation of every difference. Dashboards and counts are working papers, not conclusions."
+		},
+		{
+			"question": "LHDN is down for four hours during invoicing. What is the correct response?",
+			"options": [
+				"Stop invoicing until it recovers",
+				"Keep invoicing, let documents queue, and record the outage window",
+				"Enter invoices manually in the portal",
+				"Cancel the queued documents and reissue later"
+			],
+			"answer": 1,
+			"why": "Accounting should not stop for a third-party outage. Documents queue and submit when the service returns, and the window is recorded for later explanation."
+		}
+	],
+	"narration": "Chapter eight takes the project live. Start with a gate that can fail: settings configured with production credentials, twenty sandbox documents across business, consumer, credit note and cancellation scenarios, every active customer validated, every item classified, the scheduler running, and one named person who owns the daily log review. Get a signature. Then cut over gently. Create production credentials in advance, switch the environment, and turn automatic submission off for the first week. Submit the first ten manually, reading the preview and the log each time, and enable automation only after three quiet days. Dual running means single issuance with a manual exception path, never two systems that both issue, and it needs an end date. Reconcile monthly in three directions: the sales ledger, the LHDN documents in valid status, and the figures you will declare. Match on document number, list every exception with a reason, and sign the sheet. Monitor four or five numbers with named owners, above all the percentage valid on first pass. Keep a playbook: keep invoicing through an outage, check credentials before retrying, and turn automation off the moment invalid documents surge. Keep the logs, restrict access by role, and test a restore once. Then run the first ninety days as a calendar: daily reviews, a first reconciliation, a month end with evidence, and a policy review at month three. In the lab you rehearse the twenty document gate."
+}
