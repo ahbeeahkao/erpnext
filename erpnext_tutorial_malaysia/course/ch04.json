@@ -1,0 +1,213 @@
+{
+	"id": "ch04",
+	"number": 4,
+	"title": "Master Data and the Document Mapping",
+	"subtitle": "TIN, registration numbers, MSIC, addresses and units: what LHDN checks before it looks at your amounts",
+	"level": "Core",
+	"minutes": 55,
+	"outcomes": [
+		"Complete supplier and buyer identity to the standard LHDN validates",
+		"Assign MSIC classification codes at item level and understand the fallback",
+		"Map units of measure to UN/ECE codes and predict how quantities are serialised",
+		"Handle B2C buyers, foreign buyers and General Public correctly",
+		"Diagnose the ten rejections that account for most failed submissions"
+	],
+	"slides": [
+		{
+			"kicker": "Identity",
+			"title": "TIN is a registry fact, not a form field",
+			"bullets": [
+				"Every supplier and buyer needs a TIN, a registration type and a registration number",
+				"Registration types are BRN for companies, NRIC or passport for individuals, and army numbers",
+				"The app validates format locally and can validate existence against LHDN's registry",
+				"Company identity comes from custom fields on the Company record, not from the address",
+				"A missing registration number is the most common reason a first submission fails"
+			],
+			"notes": "Frame TIN as something you look up, not something you type until it looks right. The app checks length and shape, and LHDN checks existence. The practical workflow is a workbook of customers, validated in bulk, with exceptions escalated to sales. Emphasise that a TIN printed on letterhead is not proof, because registration numbers can change when a business restructures."
+		},
+		{
+			"kicker": "Address",
+			"title": "One primary address, fully filled",
+			"bullets": [
+				"LHDN needs address line one, city, postcode and a state code, with country MYS",
+				"The app reads the party's primary address, so make sure exactly one is marked primary",
+				"State names are mapped to codes 01 to 16, including common aliases such as Penang to 07",
+				"A blank postcode or a foreign country on a Malaysian buyer fails validation before submission",
+				"Warehouse and billing addresses are irrelevant here: it is the party's address that matters"
+			],
+			"callout": {
+				"tone": "warn",
+				"title": "The primary address is a single point of failure",
+				"text": "Two primary addresses, or none, gives you an unpredictable payload. Audit primary flags across your customer list as a one-off cleanup."
+			},
+			"notes": "Address problems are boring and expensive. Point out how ERPNext stores addresses as separate documents linked to parties: the app queries for the primary link. That means a customer with a lovely complete address that is not flagged primary will still fail. The state alias mapping is worth demonstrating live, because it turns a lookup task into a five-second check."
+		},
+		{
+			"kicker": "Classification",
+			"title": "MSIC on every line, chosen per item",
+			"bullets": [
+				"Each invoice line carries a five-digit MSIC classification code describing what was sold",
+				"The app resolves it from the item first, then from the settings default",
+				"Seeded codes cover common activities, and you extend the list as your catalogue grows",
+				"A wrong but well-formed code passes validation and is still wrong, which is the dangerous case",
+				"Ask the question at item creation: what activity does selling this represent"
+			],
+			"notes": "Classification is where finance and sales have to agree. Technically any five-digit code satisfies validation, so the only defence is a review process. Recommend grouping items by business activity and assigning codes in bulk, then spot-checking a sample with the finance lead. The seeded list is a starting point of about twenty codes, not a complete MSIC catalogue."
+		},
+		{
+			"kicker": "Units",
+			"title": "Units of measure and how quantities serialise",
+			"bullets": [
+				"UBL expects a UN/ECE unit code, so Nos becomes C62 and kilograms become KGM",
+				"The app maps common ERPNext units and falls back to C62 when it finds no match",
+				"Quantities are sent without trailing zeros, so 2 units is 2 and not 2.0000",
+				"UOM conversion happens in ERPNext before submission, so the payload carries the invoiced unit",
+				"A blank unit or an exotic custom UOM is a data defect, not a mapping bug"
+			],
+			"notes": "The fallback to C62 is pragmatic and slightly dangerous: an unmapped unit silently becomes 'numbers of pieces'. Ask the team to list every unit they invoice in and confirm the mapping once, rather than discovering it quarterly. This is a good example of the app choosing a safe default over a hard failure, and the reason to review warnings on the log."
+		},
+		{
+			"kicker": "Tax types",
+			"title": "Seven tax type codes and where the rate comes from",
+			"bullets": [
+				"01 Sales Tax, 02 Service Tax, 03 Tourism Tax, 04 High-Value Goods, 05 Sales Tax on Low Value Goods",
+				"06 Not Applicable and E Tax Exemption always carry a zero rate",
+				"Rates resolve in order: the item tax rate snapshot, then the tax account mapping, then the default",
+				"Tax accounts must be mapped once, otherwise every invoice silently falls back to the default",
+				"Mixed-rate invoices work because each line carries its own type and rate"
+			],
+			"table": {
+				"headers": ["Code", "Tax type", "Rate behaviour"],
+				"rows": [
+					["01", "Sales Tax", "From item tax template or tax account"],
+					["02", "Service Tax", "From item tax template or tax account"],
+					["03", "Tourism Tax", "Per-person, configured per line"],
+					["04", "High-Value Goods Tax", "Threshold based"],
+					["05", "Sales Tax on Low Value Goods", "Imported low-value goods"],
+					["06 / E", "Not Applicable / Exemption", "Forced to zero"]
+				]
+			},
+			"notes": "This is the slide that explains why the app reads item tax rates first: ERPNext already computes per-line tax through item tax templates, so reusing that snapshot keeps the e-Invoice consistent with the ledger. If a line falls through to the default, the log tells you and the tax total will not match the invoice, which is the signal to fix the mapping."
+		},
+		{
+			"kicker": "Buyers",
+			"title": "B2C, foreign buyers and the General Public",
+			"bullets": [
+				"Tick General Public Buyer to bill LHDN's placeholder buyer EI00000000010",
+				"Foreign buyers need a foreign TIN and address if you have them; otherwise raise it with LHDN guidance",
+				"An export still needs a valid classification and unit, even where tax is zero",
+				"Buyers who refuse to share identity should be a documented policy decision, not a per-clerk choice",
+				"A customer's TIN change is a master data event with an effective date, so keep notes"
+			],
+			"notes": "General Public is a per-invoice tick, not a global mode, which is deliberate: it forces the clerk to make a decision. For foreign buyers, be honest that the rules are evolving and that the correct treatment depends on the nature of the supply. The safest general advice is to agree a policy with your tax advisor and encode it in the customer master with clear names."
+		},
+		{
+			"kicker": "Diagnosis",
+			"title": "The rejection shortlist and its fixes",
+			"bullets": [
+				"Missing TIN or registration number: complete the party, or use General Public for consumers",
+				"MSIC not five digits: fix the item classification, not the settings default",
+				"Blank state or postcode: repair the primary address before submitting",
+				"Non-MYR currency: decide the conversion policy with finance, then reissue in ringgit",
+				"Duplicate invoice number: LHDN refuses it, so submit each Sales Invoice once and use a new series after a test",
+				"Tax totals that do not reconcile: check item tax templates and tax account mapping together"
+			],
+			"table": {
+				"headers": ["Symptom", "Usual cause", "Fix in"],
+				"rows": [
+					["TIN is required", "Party master incomplete", "Customer / Company"],
+					["Classification should be five digits", "No or bad MSIC", "Item"],
+					["State is not recognised", "Blank or misspelt state", "Address"],
+					["Currency must be MYR", "Foreign currency invoice", "Invoice"],
+					["Duplicate document number", "Resubmitted same invoice", "Naming series / log"]
+				]
+			},
+			"notes": "Give the team a symptom-to-fix table and they stop escalating every rejection. The key insight is that almost none of these require the app to change: they are master data repairs. The duplicate-number case is the one that confuses people, because the ERPNext document looks fine and the rejection comes from LHDN's uniqueness rule."
+		},
+		{
+			"kicker": "Programme",
+			"title": "Treat master data as a project with an owner",
+			"bullets": [
+				"Export every customer and item into a review workbook with TIN, registration, address and MSIC columns",
+				"Validate the top hundred customers against LHDN and log the responses",
+				"Assign MSIC codes by business activity and review the distribution, not just the blanks",
+				"Freeze identity fields with permissions or property setters so they cannot drift",
+				"Re-validate quarterly and after any customer restructuring or merger"
+			],
+			"notes": "This slide is the bridge from theory to a plan. A data cleanse has a beginning and an end, and it needs an owner in finance, not IT. Freezing fields is the part teams skip: a well-meaning sales administrator editing a TIN after go-live can produce a mismatch between the ledger and LHDN records that takes a credit note to unwind."
+		}
+	],
+	"lab": {
+		"title": "Build a compliant invoice dataset from scratch",
+		"minutes": 40,
+		"steps": [
+			"Complete the Company record: TIN, registration type, registration number, SST number and a primary address",
+			"Create three customers: a B2B buyer with a TIN, a consumer for General Public, and a foreign buyer",
+			"Give each customer exactly one primary address with line one, city, postcode and a state, and no extras",
+			"Create three items with invoice units, and assign each a five-digit MSIC code from the seeded list",
+			"Map your SST accounts to tax types 01 and 02 in Malaysia Tax Account Mapping",
+			"Preview an invoice for each customer and fix every error the preview returns, one at a time",
+			"Deliberately blank one postcode and confirm the preview blocks submission with a clear message",
+			"Restore the postcode, preview again, and save the hash so you can compare it after any change"
+		],
+		"done": "All three previews return ok with zero errors and a hash, you can explain the message you saw for the blank postcode, and every item has a classification code you would defend to an auditor."
+	},
+	"quiz": [
+		{
+			"question": "An item has no MSIC code and the settings default is blank. What does the preview show?",
+			"options": [
+				"It submits with an empty classification",
+				"A validation error demanding a five-digit classification code",
+				"It falls back to the item group code",
+				"It uses the tax type as the classification"
+			],
+			"answer": 1,
+			"why": "Classification is mandatory per line. Without an item code or a default, local validation blocks submission before LHDN sees it."
+		},
+		{
+			"question": "Where does the app look first for a line's tax rate?",
+			"options": [
+				"The tax account mapping",
+				"The item tax rate snapshot that ERPNext writes from the item tax template",
+				"The settings default tax type",
+				"The customer's tax category"
+			],
+			"answer": 1,
+			"why": "The item tax rate snapshot reflects what ERPNext actually charged, so it is the most faithful source. Mapping and defaults are fallbacks."
+		},
+		{
+			"question": "A customer's address is complete but the invoice still fails on state. Why?",
+			"options": [
+				"The state name cannot be mapped to a code, or the address is not the primary one",
+				"LHDN rejects Selangor on Fridays",
+				"The postcode belongs to another state",
+				"The customer has no phone number"
+			],
+			"answer": 0,
+			"why": "The app reads the primary address and maps the state name to a code. Either the mapping failed or the address it read is not the primary one."
+		},
+		{
+			"question": "What is the risk of an unmapped custom UOM?",
+			"options": [
+				"The invoice is rejected",
+				"It silently falls back to unit code C62, so quantities are described as pieces",
+				"The quantity is multiplied by the conversion factor",
+				"The line is dropped from the payload"
+			],
+			"answer": 1,
+			"why": "The fallback keeps submissions working, but the unit description can be wrong. That is why warnings on the log deserve a periodic read."
+		},
+		{
+			"question": "An invoice is rejected as a duplicate document number. What is the right response?",
+			"options": [
+				"Change the currency and resubmit",
+				"Check the submission log: the document was probably already accepted, so do not submit again",
+				"Add a prefix to every invoice number from now on",
+				"Ask LHDN to delete the first one"
+			],
+			"answer": 1,
+			"why": "Uniqueness is enforced by LHDN. The log tells you whether the earlier attempt succeeded; resubmitting the same document will keep failing."
+		}
+	],
+	"narration": "Chapter four is master data, and it is where most first submissions die. LHDN checks identity before it checks amounts. Every supplier and buyer needs a TIN, a registration type and a registration number, and the app validates the format locally while LHDN validates existence. Then the address: line one, city, postcode and a Malaysian state code, country Malaysia. The app reads the party's primary address, so two primary addresses, or none, gives you an unpredictable payload. States map to codes zero one through sixteen, with aliases like Penang to zero seven. Each line needs a five digit MSIC code, resolved from the item first and the settings default second, and a wrong but well formed code passes validation while being silently wrong, so classification needs review, not just a rule. Units map to UN codes, so numbers becomes C sixty two and kilograms becomes K G M, with a fallback to C sixty two when your unit is unmapped. Tax types are zero one sales, zero two service, zero three tourism, zero four high value goods, zero five low value goods, with zero six and E always at zero rate. Rates resolve from the item tax snapshot, then the tax account mapping, then the default. Consumers use the General Public buyer, ticked per invoice. Learn the rejection shortlist: missing TIN, bad MSIC, blank state or postcode, non ringgit currency, duplicate number, tax mismatch. In the lab you build three compliant customers and fix every preview error."
+}

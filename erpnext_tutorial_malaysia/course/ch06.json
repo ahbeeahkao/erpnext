@@ -1,0 +1,211 @@
+{
+	"id": "ch06",
+	"number": 6,
+	"title": "Submission, Status and Failure",
+	"subtitle": "Queue, retry, adopt and poll: what happens between clicking submit and LHDN saying Valid",
+	"level": "Advanced",
+	"minutes": 60,
+	"outcomes": [
+		"Walk the full lifecycle from Sales Invoice submit to a Valid or Invalid verdict",
+		"Read every log status and know which ones need a human",
+		"Distinguish an accepted submission from a validated document",
+		"Diagnose rate limits, timeouts and authentication failures from the log alone",
+		"Recover safely from a lost response without creating a duplicate"
+	],
+	"slides": [
+		{
+			"kicker": "Timeline",
+			"title": "The lifecycle in one picture",
+			"bullets": [
+				"Invoice submit queues a background job, which builds and validates the document locally",
+				"A log row is written before the HTTP call, so a crash still leaves evidence",
+				"LHDN answers 202 with a submission UID plus accepted and rejected document lists",
+				"Accepted documents then wait for asynchronous validation by a scheduled poll",
+				"The poll writes Valid or Invalid, with validation results, back to the log and the invoice"
+			],
+			"table": {
+				"headers": ["Stage", "Record", "What you learn"],
+				"rows": [
+					["Local validation", "Log row, status Queued", "Which field is missing"],
+					["POST submission", "Submission UID", "Accepted or rejected at intake"],
+					["Scheduled poll", "UUID and status", "Valid or Invalid, with reasons"],
+					["Retries", "Attempts counter", "Whether LHDN or the network is at fault"]
+				]
+			},
+			"notes": "Draw this on a whiteboard if you can: one horizontal line, four checkpoints. The key teaching point is that acceptance and validation are different events separated by minutes or hours, which is why an accountant refreshing a form cannot tell whether a document is fine. Only the log knows the whole sequence."
+		},
+		{
+			"kicker": "Statuses",
+			"title": "What each status means, and who acts",
+			"bullets": [
+				"Queued and Retry are internal: the app still intends to submit",
+				"Submitted means LHDN accepted the document for processing, not that it is valid",
+				"Valid means validation passed and a UUID exists; this is the state you want everywhere",
+				"Invalid means LHDN processed it and found a problem; the validation results say what",
+				"Rejected means LHDN refused the document at intake, usually numbering or malformed data",
+				"Cancelled and Error close the loop: one is deliberate, the other needs investigation"
+			],
+			"table": {
+				"headers": ["Status", "Meaning", "Action"],
+				"rows": [
+					["Queued / Retry", "Waiting or backing off", "Leave it, check later"],
+					["Submitted", "Accepted, awaiting validation", "Wait for the poll"],
+					["Valid", "Validated, UUID issued", "None"],
+					["Invalid", "Validation failed", "Fix data, submit a correction"],
+					["Rejected", "Refused at intake", "Read the reason, fix, resubmit"],
+					["Cancelled / Error", "Closed or failed", "Audit or investigate"]
+				]
+			},
+			"notes": "Most support time is wasted because people cannot name the state they are looking at. Drill the difference between Submitted and Valid until it is automatic. Also make the point that Valid with a warning is still a valid document: warnings are for the month-end review, not for immediate panic."
+		},
+		{
+			"kicker": "Intake",
+			"title": "Accepted is not validated",
+			"bullets": [
+				"The submission call returns a submission UID plus per-document outcomes",
+				"Rejection at this stage is about the envelope: duplicates, malformed JSON, unknown taxpayer",
+				"Acceptance only means LHDN has queued the document for validation",
+				"The scheduled poll runs every ten minutes and fetches document details by UUID",
+				"An Invalid verdict carries validation results that point at specific fields"
+			],
+			"notes": "This is the distinction that breaks dashboards. A naive report counting accepted submissions will overstate compliance, sometimes badly. Teach people to count Valid documents. If validation never arrives, the first suspect is the scheduler, the second is the token, and only the third is the app."
+		},
+		{
+			"kicker": "Failures",
+			"title": "Three families of failure and how each is handled",
+			"bullets": [
+				"Transport problems: timeouts, 429 and 5xx are retried with exponential backoff honouring Retry-After",
+				"Authentication problems: one transparent token refresh, then an error that needs a human",
+				"Business problems: validation errors, duplicates and rejected documents need data changes, not retries",
+				"Retries are bounded by Max Retries, after which the row is marked Error and surfaced",
+				"Retry budget is deliberately small, because endless retries hide a systemic defect"
+			],
+			"notes": "Explain the difference between a transient fault and a permanent one, because retrying a permanent failure is how queues fill up and rate limits get worse. Retry-After is LHDN telling you when to come back, and honouring it is both polite and effective. When the retry budget is exhausted, the app marks the row rather than pretending."
+		},
+		{
+			"kicker": "Recovery",
+			"title": "The lost response, and why it is the dangerous one",
+			"bullets": [
+				"A network failure after LHDN accepted a document leaves you with no UUID and no error",
+				"The retry first searches LHDN by invoice number before submitting again",
+				"If the document exists, the app adopts it and records the UUID instead of duplicating",
+				"Before adoption existed, the standard failure was a duplicate invoice that could not be cancelled",
+				"Adoption depends on the invoice number being unique and meaningful, which is why naming series matter"
+			],
+			"callout": {
+				"tone": "warn",
+				"title": "Never 'just resubmit'",
+				"text": "Resubmitting after a timeout is how duplicates are born. Refresh the log, let recovery search LHDN, and only submit again when the search is conclusive."
+			},
+			"notes": "This is the most valuable operational slide in the course. Explain the sequence concretely: submit, LHDN accepts, the response is lost, the retry adopts. Then explain what to do if the adoption search is inconclusive: check the MyInvois portal by invoice number before forcing anything. Duplicate prevention is cheaper than duplicate cleanup, and cancellation windows make cleanup urgent."
+		},
+		{
+			"kicker": "Duplicates",
+			"title": "Duplicate invoice numbers and idempotency",
+			"bullets": [
+				"LHDN enforces uniqueness on document numbers permanently, across all your submissions",
+				"A re-run of the same Sales Invoice is caught by the document hash on accepted log rows",
+				"A deliberately reissued invoice needs a new number, because it is genuinely a new document",
+				"Test environments that reuse production numbering create avoidable duplicates later",
+				"Keep the log forever: it is the only record of which numbers have been consumed"
+			],
+			"notes": "Idempotency here has two layers: a document hash guard inside the app, and an invoice-number uniqueness rule at LHDN. Explain that they protect different things, and that neither helps if a clerk manually creates a second invoice with the same number. The naming series conversation from chapter five comes back here with teeth."
+		},
+		{
+			"kicker": "Monitoring",
+			"title": "Watching the queue without watching it all day",
+			"bullets": [
+				"Confirm the scheduler is enabled, otherwise nothing polls and everything looks stuck",
+				"Filter the log by status to build three views: needs attention, waiting, done",
+				"Alert on Error or Invalid rows older than a business day, not on every failure",
+				"Watch the attempts counter: rising attempts across many rows means an infrastructure fault",
+				"Review Submitted rows older than an hour before month-end close, not after"
+			],
+			"notes": "Monitoring should produce a small number of decisions, not a stream of notifications. Three saved filters cover most operations: everything waiting, everything broken, everything done today. The attempts counter is an underrated signal, because a single retry is noise while a hundred rows on their third attempt is an outage."
+		},
+		{
+			"kicker": "Runbook",
+			"title": "A stuck invoice, step by step",
+			"bullets": [
+				"Open the log row and read the error text before touching anything else",
+				"Check the stored request and response bodies to see what LHDN actually said",
+				"Refresh the status once, in case validation has completed since the last poll",
+				"If the status is Error with a transport message, let the retry job run before intervening",
+				"If the document was rejected for data, fix the master data and use resubmit"
+			],
+			"paths": [
+				"E Invoice Submission Log → filter by Sales Invoice",
+				"Sales Invoice → Malaysia e-Invoice → e-Invoice Status → Refresh from MyInvois",
+				"Malaysia E-Invoice Settings → check Environment and credentials"
+			],
+			"notes": "A runbook beats intelligence under pressure. The order matters: read, verify, refresh, wait, fix. Skipping to 'fix' is what creates duplicates. Encourage teams to paste the log's error text into their ticket rather than a screenshot of the invoice, because the error is the diagnostic and the invoice is just the patient."
+		}
+	],
+	"lab": {
+		"title": "Failure drills on sandbox",
+		"minutes": 45,
+		"steps": [
+			"Submit three clean invoices and watch each log row move from Queued to Submitted and then Valid",
+			"Deliberately remove an item's MSIC code and submit a fourth invoice to see local validation refuse it",
+			"Restore the code, submit, and confirm the new log row reaches Valid with a different hash",
+			"Break the client secret in settings, submit an invoice, and read the authentication error on the log",
+			"Restore the secret, run the status refresh, and confirm the queued document recovers",
+			"Force a duplicate by submitting the same Sales Invoice name again through the API and read the rejection",
+			"Open one log row and identify the request body, the response body, the UUID and the attempts counter"
+		],
+		"done": "You have four log rows covering Valid, blocked-by-validation, authentication failure and duplicate, and you can explain each status transition using only the fields on the log."
+	},
+	"quiz": [
+		{
+			"question": "LHDN returns 202 with the document in acceptedDocuments. What is the status now?",
+			"options": ["Valid", "Submitted, awaiting asynchronous validation", "Cancelled", "Invalid"],
+			"answer": 1,
+			"why": "Acceptance only queues the document. A UUID and a Valid verdict arrive later, when the scheduled poll fetches document details."
+		},
+		{
+			"question": "What is the difference between Invalid and Rejected?",
+			"options": [
+				"They are synonyms",
+				"Invalid failed validation after intake; Rejected was refused at intake, often for duplicates or a malformed envelope",
+				"Invalid means LHDN is down",
+				"Rejected means the buyer refused the invoice"
+			],
+			"answer": 1,
+			"why": "Rejection happens at submission time, usually on numbering or payload structure. Invalid comes later from asynchronous validation and points at data."
+		},
+		{
+			"question": "A submission times out with no response. What should the app do on retry?",
+			"options": [
+				"Submit again with a new invoice number",
+				"Search LHDN by invoice number and adopt the document if it exists",
+				"Mark the invoice as cancelled",
+				"Wait 24 hours and start over"
+			],
+			"answer": 1,
+			"why": "Lost-response recovery searches for the document first. Adopting an existing document avoids the duplicate that a blind resubmission would create."
+		},
+		{
+			"question": "LHDN answers 429 with a Retry-After header. What is correct behaviour?",
+			"options": [
+				"Ignore the header and retry immediately",
+				"Back off for the interval LHDN specifies, then retry within the retry budget",
+				"Disable e-Invoicing",
+				"Submit the rest of the batch faster to catch up"
+			],
+			"answer": 1,
+			"why": "Retry-After is an instruction, not a suggestion. Honouring it avoids deepening the rate limit and is built into the client."
+		},
+		{
+			"question": "Every submitted invoice stays at Submitted for a day. What is the first thing to check?",
+			"options": [
+				"The customer TINs",
+				"Whether the site scheduler is running, since polling is a scheduled job",
+				"The item classifications",
+				"The invoice payment terms"
+			],
+			"answer": 1,
+			"why": "Validation status only advances when the poll runs. A disabled scheduler leaves every document at Submitted regardless of LHDN's verdict."
+		}
+	],
+	"narration": "Chapter six is what happens after you press submit. The invoice is queued as a background job, validated locally, written to a log row, and only then sent to LHDN. The submission call returns a submission UID with accepted and rejected documents, which is not the same as validation. Acceptance means LHDN has queued the document; a scheduled poll every ten minutes fetches the details and writes valid or invalid back to the log and the invoice. Learn the statuses: queued and retry are internal, submitted is waiting, valid is done, invalid needs data changes, rejected was refused at intake, cancelled is deliberate, error needs investigation. Failures come in three families. Transport problems like a timeout, a four two nine or a five hundred are retried with backoff that honours retry after. Authentication problems get one transparent refresh, then need a human. Business problems need the data fixed, not another attempt. The most dangerous failure is the lost response: LHDN accepted the document, the answer never arrived, and a naive retry creates a duplicate. The app searches by invoice number and adopts what it finds, so never just resubmit. Monitoring is three saved filters: waiting, broken, and done today. A stuck invoice has an order: read the error, read the request and response, refresh, let retry run, then fix. In the lab you break things on purpose."
+}

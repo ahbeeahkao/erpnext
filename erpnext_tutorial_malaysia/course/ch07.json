@@ -1,0 +1,216 @@
+{
+	"id": "ch07",
+	"number": 7,
+	"title": "Credit Notes, Cancellation and Corrections",
+	"subtitle": "The correction rules that decide whether your ledger and LHDN agree at year end",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Choose correctly between cancelling an e-Invoice and issuing a credit note",
+		"Reference original UUIDs on credit, debit and refund notes",
+		"Operate within the 72-hour window and the 300-character reason limit",
+		"Handle buyer rejection and active referencing documents without stalling the ledger",
+		"Design a written cancellation policy with named approvers and reason templates"
+	],
+	"slides": [
+		{
+			"kicker": "Decision",
+			"title": "Two ways to undo, one right answer",
+			"bullets": [
+				"Cancellation erases the document's validity and is only possible within 72 hours",
+				"A credit note preserves history: the original stays valid and the reduction is a new document",
+				"If money has moved, a refund note may also be needed alongside or after the credit note",
+				"The decision is driven by elapsed time and by whether a referencing note already exists",
+				"Write the decision rule down, because it will be made under pressure at 6pm on a Friday"
+			],
+			"notes": "Frame the choice as a rule, not a judgement call. Time first, then dependency. If it is inside 72 hours and nothing references the document, cancellation is clean. Otherwise the credit note is the compliant path, even if it feels heavier. The Friday-evening framing is deliberate: policy is what you rely on when nobody senior is available."
+		},
+		{
+			"kicker": "Notes",
+			"title": "Credit, debit and refund notes in ERPNext terms",
+			"bullets": [
+				"A return against a Sales Invoice creates the ERPNext credit note, and the app submits it as type 02",
+				"Debit notes increase a sale and are usually created as a separate invoice with an explicit type",
+				"Refund notes accompany money returned to the buyer, not just a balance reduction",
+				"Every note needs a billing reference: the app reads the referenced invoice's stored UUID",
+				"The reference is mandatory: local validation refuses a note without it"
+			],
+			"table": {
+				"headers": ["Situation", "ERPNext action", "e-Invoice type"],
+				"rows": [
+					["Price reduction after 72 hours", "Return against invoice", "02 Credit Note"],
+					["Forgotten charge", "New invoice or debit note", "03 Debit Note"],
+					["Money returned to buyer", "Payment entry plus refund", "04 Refund Note"],
+					["Wrong buyer, inside 72 hours", "Cancel and reissue", "01 Invoice"]
+				]
+			},
+			"notes": "Translate compliance into ERPNext muscle memory. Accounts staff already know how to create a return; what they do not know is that the app must find the original UUID to build the reference. That means the original invoice must have been submitted successfully. If the original was never validated, there is no UUID to reference and the correction needs a human decision."
+		},
+		{
+			"kicker": "Cancellation",
+			"title": "Making the cancellation call correctly",
+			"bullets": [
+				"Cancellation sends a state change to LHDN with status cancelled and a mandatory reason",
+				"The reason is capped at 300 characters, so keep templates short and factual",
+				"Only documents validated within 72 hours can be cancelled; after that LHDN refuses",
+				"A cancellation is refused while a referencing credit or debit note is active",
+				"Cancelling the e-Invoice does not cancel the ERPNext invoice: decide both, in the right order"
+			],
+			"table": {
+				"headers": ["LHDN error", "Meaning", "What to do"],
+				"rows": [
+					["OperationPeriodOver", "72 hours have passed", "Issue a credit note instead"],
+					[
+						"IncorrectState",
+						"Already cancelled or not cancellable",
+						"Read the log, refresh status"
+					],
+					[
+						"ActiveReferencingDocuments",
+						"A note still references it",
+						"Cancel or credit the note first"
+					]
+				]
+			},
+			"notes": "The three error names are worth memorising because they tell you exactly which rule you hit. OperationPeriodOver is a hard no. IncorrectState usually means somebody else already cancelled, or the status is stale. ActiveReferencingDocuments is the interesting one: it enforces the ordering rule that a correction must be unwound from the newest document backwards."
+		},
+		{
+			"kicker": "Rehearsal",
+			"title": "Buyer rejection is a request, not a cancellation",
+			"bullets": [
+				"A buyer rejecting a document in MyInvois puts it into a rejected state on their side",
+				"The supplier must still cancel it, because the supplier is the issuer",
+				"The client supports the reject verb for integrations that act for buyers",
+				"Rejection reasons should flow into your ticket system so the cause is fixed at source",
+				"Track rejections as a quality metric: they usually indicate a wrong buyer identity or amount"
+			],
+			"notes": "This confuses almost everyone the first time. A buyer cannot unilaterally remove a supplier's invoice from LHDN; they can request cancellation. If the request arrives after the 72-hour window, the answer is a credit note, and the buyer needs to hear that early. Recommend a short mailbox template for this conversation, because it happens under time pressure."
+		},
+		{
+			"kicker": "ERPNext",
+			"title": "Mirroring ERPNext cancellations safely",
+			"bullets": [
+				"The setting Cancel e-Invoice when Sales Invoice is Cancelled is off by default, deliberately",
+				"When enabled, cancellation attempts are logged and never block the ERPNext cancellation",
+				"If the LHDN cancellation fails, you have a cancelled ledger document and a valid e-Invoice to fix by hand",
+				"Order matters: cancel the e-Invoice first, then the ERPNext invoice, when you control the sequence",
+				"Reconcile any exception the same day; a silent mismatch is worse than a failed attempt"
+			],
+			"callout": {
+				"tone": "warn",
+				"title": "The half-cancelled state",
+				"text": "A cancelled Sales Invoice with a valid e-Invoice at LHDN is a real, common state. It needs a named person and a same-day fix, not a monthly cleanup."
+			},
+			"notes": "Explain why the setting defaults to off: automatic mirroring sounds tidy but can produce half-cancelled states when LHDN refuses. Half-cancelled means the books say one thing and the tax platform says another, which is an audit finding. Either keep the setting off and cancel deliberately in both places, or turn it on with a daily exception review. Do not pretend the choice is free."
+		},
+		{
+			"kicker": "Corrections",
+			"title": "Four common corrections and the compliant route",
+			"bullets": [
+				"Wrong amount, inside 72 hours: cancel the e-Invoice, correct the invoice, submit the new version",
+				"Wrong amount, after 72 hours: credit note the difference, then invoice correctly if needed",
+				"Wrong buyer identity: cancel and reissue inside the window, otherwise credit and reissue",
+				"Goods returned in part: a return against the invoice producing a type 02 note for the returned quantity",
+				"Cancelled sale before delivery: cancel both the e-Invoice and the ERPNext invoice, then reconcile stock"
+			],
+			"notes": "Give people a lookup table rather than principles under stress. Each row names a situation and the compliant sequence. The goods-return case is the most common and the easiest: ERPNext already models it, so the only new skill is confirming the UUID reference was picked up. The cancelled-sale case adds a stock wrinkle, which is a reminder that e-Invoicing does not suspend inventory logic."
+		},
+		{
+			"kicker": "Evidence",
+			"title": "The audit trail a cancellation leaves behind",
+			"bullets": [
+				"The log stores the cancellation reason, the response and the time of the request",
+				"Keep the original request and response bodies, not just the final status",
+				"Reasons should be factual and reusable, for example duplicate submission or wrong billing entity",
+				"Review cancellations monthly by reason to find recurring process defects",
+				"Retention should match your statutory record-keeping obligations, agreed with finance"
+			],
+			"notes": "Auditors do not ask whether you cancelled documents; they ask why, how often and who approved. A reason field full of 'error' answers none of those questions. Show how a monthly pivot by reason turns a compliance obligation into a process improvement loop. This is also where the 300-character limit becomes a virtue: it forces brevity and reuse."
+		},
+		{
+			"kicker": "Policy",
+			"title": "Write the policy before go-live",
+			"bullets": [
+				"Name who may cancel an e-Invoice: usually a finance lead plus one backup",
+				"Define the reason templates and forbid free text for the first three months",
+				"State when a credit note is mandatory, and who signs off on it",
+				"Set a response time for buyer rejection requests, measured in business hours",
+				"Review the policy after the first month, when you know which cases actually occur"
+			],
+			"notes": "Policy is the cheapest control you will ever write, and the least likely to exist. The 72-hour window makes response time a compliance variable, so a policy without an owner and a service level is decoration. Keep the document to one page: who, when, what wording, how fast, reviewed when."
+		}
+	],
+	"lab": {
+		"title": "Cancel, correct and unwind in the right order",
+		"minutes": 40,
+		"steps": [
+			"Submit a clean invoice on sandbox and confirm the log reaches Valid with a UUID",
+			"Cancel the e-Invoice with a factual reason under 300 characters and confirm the cancelled state",
+			"Attempt the same cancellation again and read the IncorrectState error on the log",
+			"Submit a second invoice, then create a return against it and submit the type 02 credit note",
+			"Confirm the credit note's payload carries a BillingReference equal to the original UUID",
+			"Try to cancel the original invoice now and read the ActiveReferencingDocuments error",
+			"Cancel the credit note first, then cancel the original, and record the order in your runbook",
+			"Write the three reason templates your team will use, each under 300 characters"
+		],
+		"done": "Your log shows a cancellation, an IncorrectState refusal, an active-reference refusal and a successful unwind in the correct order, and the reasons are written for reuse rather than for today's incident."
+	},
+	"quiz": [
+		{
+			"question": "An invoice was validated 80 hours ago and the price was wrong. What is compliant?",
+			"options": [
+				"Cancel it, because the reason field allows late corrections",
+				"Issue a credit note referencing the original UUID",
+				"Edit the invoice and resubmit with the same number",
+				"Delete the invoice and create a new one"
+			],
+			"answer": 1,
+			"why": "The 72-hour window has passed, so cancellation is refused by LHDN. A credit note carrying the original UUID is the correct correction."
+		},
+		{
+			"question": "What does ActiveReferencingDocuments mean when cancelling?",
+			"options": [
+				"The invoice has unpaid installments",
+				"A credit or debit note referencing this document is still active",
+				"The customer has rejected the invoice",
+				"The submission UID has expired"
+			],
+			"answer": 1,
+			"why": "LHDN refuses to cancel a document while a note references it, so you unwind from the newest document backwards."
+		},
+		{
+			"question": "A buyer rejects an e-Invoice. Who must cancel it?",
+			"options": [
+				"The buyer, since they rejected it",
+				"The supplier, because they issued it",
+				"LHDN support",
+				"Nobody: rejection is final"
+			],
+			"answer": 1,
+			"why": "Rejection is a request. The issuer must perform the cancellation, within the same 72-hour window, with a reason."
+		},
+		{
+			"question": "You enable mirroring of ERPNext cancellations. What operational risk do you accept?",
+			"options": [
+				"Invoices will be submitted twice",
+				"A cancelled ERPNext invoice can be left with a valid e-Invoice if LHDN refuses the cancellation",
+				"Credit notes will be created automatically",
+				"Customers will be notified twice"
+			],
+			"answer": 1,
+			"why": "Mirroring never blocks the ERPNext cancellation, so a refusal leaves a half-cancelled state that needs a same-day manual fix."
+		},
+		{
+			"question": "Which reason is best for a cancellation record?",
+			"options": [
+				"Error",
+				"Wrong billing entity: reissued under ABC Sdn Bhd",
+				"Customer asked",
+				"Please cancel"
+			],
+			"answer": 1,
+			"why": "Reasons should be factual, reusable and specific enough to survive an audit months later, within the 300-character limit."
+		}
+	],
+	"narration": "Chapter seven is corrections, where compliance meets accounting discipline. There are two ways to undo an e-Invoice. Cancellation erases the document and is only possible within seventy two hours of validation. A credit note preserves history: the original stays valid and the reduction becomes a new document that must reference the original UUID. The rule is time first, then dependency. Inside the window with nothing referencing the document, cancel. Otherwise, credit. In ERPNext a return against the invoice produces the type zero two credit note, and the app reads the referenced invoice's stored UUID. If the original was never validated, there is no UUID, and that needs a human decision. Three LHDN errors are worth memorising: operation period over means the window closed, incorrect state usually means it is already cancelled, and active referencing documents means a note still points at it, so you unwind from the newest backwards. Buyer rejection is not cancellation: the buyer requests it, the supplier performs it, and if the request arrives too late the answer is a credit note. Mirroring ERPNext cancellations defaults to off, deliberately, because a refused cancellation leaves a cancelled ledger document with a valid e-Invoice. Write the policy before go live: who may cancel, the reason templates, when a credit note is mandatory, and how fast you answer a buyer. In the lab you cancel, get refused, credit, and unwind."
+}

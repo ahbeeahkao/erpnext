@@ -94,6 +94,13 @@ Then set the taxpayer identity once, on the masters:
 
 ---
 
+## Training
+
+A narrated, hands-on course for this app lives in
+[`erpnext_tutorial_malaysia`](../erpnext_tutorial_malaysia): eight chapters, eight sandbox labs and a
+production readiness gate, covering the mandate, installation, credentials, mapping, the payload,
+submission failures, corrections, and go-live.
+
 ## Field mapping (Sales Invoice → UBL)
 
 | UBL element | Source |

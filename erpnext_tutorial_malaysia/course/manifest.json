@@ -1,0 +1,16 @@
+{
+	"title": "Malaysia e-Invoicing with ERPNext",
+	"subtitle": "Eight chapters from the LHDN mandate to a signed-off production runbook",
+	"version": "1.0.0",
+	"audience": "Finance leads, accounts receivable teams, ERPNext implementers and system administrators in Malaysia",
+	"chapters": [
+		{ "id": "ch01", "file": "ch01.json" },
+		{ "id": "ch02", "file": "ch02.json" },
+		{ "id": "ch03", "file": "ch03.json" },
+		{ "id": "ch04", "file": "ch04.json" },
+		{ "id": "ch05", "file": "ch05.json" },
+		{ "id": "ch06", "file": "ch06.json" },
+		{ "id": "ch07", "file": "ch07.json" },
+		{ "id": "ch08", "file": "ch08.json" }
+	]
+}

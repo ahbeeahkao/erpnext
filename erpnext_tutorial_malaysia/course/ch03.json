@@ -1,0 +1,215 @@
+{
+	"id": "ch03",
+	"number": 3,
+	"title": "Sandbox Setup and Credentials",
+	"subtitle": "From an empty settings page to a token LHDN accepts, without putting a production invoice at risk",
+	"level": "Foundation",
+	"minutes": 45,
+	"outcomes": [
+		"Register for the MyInvois sandbox and obtain client credentials",
+		"Distinguish the sandbox and production hosts, and know why mixing them fails",
+		"Fill the settings form correctly, including timeouts, retries and default tax type",
+		"Validate a TIN against LHDN and use the result to clean up master data",
+		"Keep secrets out of tickets, screenshots and source control"
+	],
+	"slides": [
+		{
+			"kicker": "Environments",
+			"title": "Two environments, two sets of hosts",
+			"bullets": [
+				"Sandbox uses preprod-api and preprod-identity hosts; production uses api and identity",
+				"Credentials are issued per environment and are not interchangeable",
+				"Sandbox documents are disposable: they exist to rehearse, so never reconcile from them",
+				"The app's Environment setting selects the host pair, so a wrong value looks like an authentication failure",
+				"Treat the switch to Production as a change request, not a dropdown tweak"
+			],
+			"table": {
+				"headers": ["Setting", "Sandbox", "Production"],
+				"rows": [
+					["API host", "preprod-api.myinvois.hasil.gov.my", "api.myinvois.hasil.gov.my"],
+					[
+						"Identity host",
+						"preprod-identity.myinvois.hasil.gov.my",
+						"identity.myinvois.hasil.gov.my"
+					],
+					["Data", "Disposable", "Legal record"],
+					["Credentials", "Sandbox client id and secret", "Production client id and secret"]
+				]
+			},
+			"notes": "The most common first-day mistake is a production client id with the environment left on Sandbox, or the reverse. The symptom is a token error that reads like a credentials problem, which sends people to reset secrets they did not need to touch. Show the two host pairs explicitly so the learner can reason about which pair their instance is talking to."
+		},
+		{
+			"kicker": "Credentials",
+			"title": "Getting client credentials from the portal",
+			"bullets": [
+				"Register the taxpayer in the MyInvois portal, then open the Taxpayer System area",
+				"Create an integration to receive a client id and client secret for that taxpayer",
+				"The client id identifies the system; the secret authenticates it and must be rotated when staff change",
+				"Intermediaries also need an On Behalf Of TIN, which becomes onbehalfof in the token request",
+				"Record who created the integration and where the secret is stored before you close the browser tab"
+			],
+			"notes": "Portal navigation changes, so teach the shape rather than the pixel positions: taxpayer, then integration, then credentials. The On Behalf Of field only applies to intermediaries acting for another taxpayer; if you are not one, leaving it blank is correct. Insist on a named owner for the integration, because it is the thing you cannot recover from a backup."
+		},
+		{
+			"kicker": "Settings",
+			"title": "Filling the settings form, field by field",
+			"bullets": [
+				"Enable Malaysia e-Invoicing is off by default, so the hooks do nothing until you switch it on",
+				"Submit Automatically on Sales Invoice Submit decides whether submission is queued or manual",
+				"Use Short Queue sends jobs to the short queue for faster turnaround during testing",
+				"Request Timeout defaults to 30 seconds and Max Retries to 3; raise them only with evidence",
+				"Default Classification and Default Tax Type are fallbacks, not substitutes for correct master data"
+			],
+			"table": {
+				"headers": ["Field", "Default", "Guidance"],
+				"rows": [
+					["Environment", "Sandbox", "Stay here until the readiness gate passes"],
+					["Submit Automatically", "Yes", "Turn off for the first production week"],
+					["Allow General Public Buyer", "Yes", "Required for B2C and consolidated invoices"],
+					["Request Timeout", "30 s", "Raise only for slow links, never to mask failures"],
+					["Max Retries", "3", "Higher budgets hide systemic problems"],
+					["Default Tax Type", "06 Not Applicable", "Use 01 or 02 if you are SST registered"]
+				]
+			},
+			"notes": "Defaults encode opinions, so explain them. Automatic submission is right for a steady state and wrong for a first production week, when a human should read each result. A default tax type of 06 is correct for a business that is not SST registered and dangerously wrong for one that is, because the tax amount then quietly disappears from the payload."
+		},
+		{
+			"kicker": "Authentication",
+			"title": "How the token flow behaves under pressure",
+			"bullets": [
+				"The client requests a token with client_credentials and the InvoicingAPI scope",
+				"Tokens are cached per identity host, client id and on-behalf-of combination, with a 60-second safety margin",
+				"A 401 triggers exactly one refresh and retry, which absorbs ordinary expiry without alarming users",
+				"Repeated 401s mean credentials, environment or taxpayer status, not a network problem",
+				"Every authentication failure is written to the submission log, so support has evidence"
+			],
+			"notes": "The one-refresh rule exists to avoid infinite loops. If a token is rejected twice, something structural is wrong: the secret was rotated, the taxpayer was suspended, or the environment is wrong. Teach the learner to read the error body rather than retry blindly. Caching matters in production because token requests are the most common source of rate limiting."
+		},
+		{
+			"kicker": "Master data",
+			"title": "Validate TINs before you invoice, not after",
+			"bullets": [
+				"The client exposes LHDN's taxpayer validate endpoint for a TIN plus identity type and value",
+				"A 200 means the identity exists and matches; a 404 means it does not",
+				"Use validation as a cleanup project for your top hundred customers, not as a per-invoice gate",
+				"Incorrect TINs are a master data defect, and the fix belongs in the customer record",
+				"Re-validate quarterly, because registrations are cancelled and businesses are struck off"
+			],
+			"notes": "Explain the difference between a format check and a registry check. The app validates TIN format locally and can ask LHDN whether the identity exists. The second is authoritative but rate limited, so the sensible pattern is bulk validation, then periodic re-validation. If a customer's TIN fails, do not invent one: issue to General Public or ask the customer."
+		},
+		{
+			"kicker": "Time and money",
+			"title": "Timezones, currencies and the fields that surprise people",
+			"bullets": [
+				"Issue time is converted from the site timezone to UTC and written with a trailing Z",
+				"Issue date comes from the posting date, so back-dated invoices are not necessarily rejected but are visible",
+				"Documents must be in ringgit, so foreign currency invoices are refused rather than converted",
+				"The buyer address needs a Malaysian state code, which the app derives from the state name",
+				"Quantities lose trailing zeros, so two units are sent as 2 rather than 2.0000"
+			],
+			"notes": "UTC conversion is the quiet source of off-by-one-day confusion: a 7am invoice in Kuala Lumpur is the previous day in UTC. LHDN compares dates in its own way, so keep posting dates honest. The currency rule is a policy trap: a company that invoices in USD needs a converted MYR invoice for LHDN, and that has accounting consequences which should be decided before go-live."
+		},
+		{
+			"kicker": "Security",
+			"title": "Secrets, roles and who may press submit",
+			"bullets": [
+				"The secret lives in a password field and is masked in the interface, but it can still be copied by an administrator",
+				"Only System Manager should be able to edit settings; accounts staff need read access at most",
+				"Never paste a secret into a ticket, a chat or a screenshot; rotate it if you do",
+				"Define who may submit and who may cancel, and make the second list much shorter",
+				"Keep submission logs readable to accounts and auditors but not editable by them"
+			],
+			"notes": "Frappe's password fields are encrypted at rest but retrievable by privileged users, so role design carries the real weight. The two-person rule for cancellation is a governance control, not a technical one, and it belongs in the same policy document as the reason templates from chapter one. Rotating a secret is a five-minute job; a leaked secret is a compliance incident."
+		},
+		{
+			"kicker": "Proof",
+			"title": "The first end-to-end proof on sandbox",
+			"bullets": [
+				"Run settings_status and fix every field it reports as missing",
+				"Validate your own TIN and one customer TIN, and record the responses",
+				"Preview a simple invoice and read the generated UBL JSON plus its hash",
+				"Submit it, then watch the log move from Queued to Submitted and eventually Valid",
+				"Cancel it with a reason and confirm LHDN returns a cancelled state with the reason recorded"
+			],
+			"callout": {
+				"tone": "tip",
+				"title": "One invoice, all six states",
+				"text": "A single sandbox invoice can show you Queued, Submitted, Valid, Cancelled and, if you corrupt the data, Invalid. That is the cheapest education you will get."
+			},
+			"notes": "This is the rehearsal that makes production boring. Ask the learner to screenshot each state, because screenshots become the training material for the accounts team. If validation never completes, check the scheduler before you suspect the app: a site with no scheduler looks exactly like a broken polling loop."
+		}
+	],
+	"lab": {
+		"title": "Wire up sandbox and prove the whole loop",
+		"minutes": 35,
+		"steps": [
+			"Create or log in to a MyInvois sandbox taxpayer and generate integration credentials",
+			"Enter client id, secret and Environment Sandbox in Malaysia E-Invoice Settings and save",
+			"Run settings_status and confirm it no longer reports missing credentials",
+			"Validate your own company TIN through the app's validate endpoint and read the response",
+			"Create a customer with a valid sandbox TIN, a primary address and a postcode",
+			"Preview a one-line invoice, copy the hash, then submit it and wait for the log to reach Valid",
+			"Record the UUID on the invoice, then cancel the e-Invoice with a reason under 300 characters",
+			"Refresh the status and confirm the log and the invoice both show the cancelled state"
+		],
+		"done": "The log holds a Valid document with a UUID and a hash, your cancellation appears with its reason, and you can name the host pair your site was talking to at each step."
+	},
+	"quiz": [
+		{
+			"question": "You pasted production credentials but the environment still says Sandbox. What happens?",
+			"options": [
+				"It works, because credentials determine the host",
+				"The token request goes to the sandbox identity host and fails",
+				"The app silently switches to production",
+				"LHDN returns a 404 on the invoice"
+			],
+			"answer": 1,
+			"why": "The environment setting picks the host pair. Sandbox credentials are unknown to the sandbox host, and the failure looks like an authentication error."
+		},
+		{
+			"question": "What does a 401 from MyInvois usually mean in this app?",
+			"options": [
+				"The invoice totals do not reconcile",
+				"Credentials, environment or taxpayer status need attention after the automatic refresh",
+				"The MSIC code is invalid",
+				"Nothing: 401 is retried forever"
+			],
+			"answer": 1,
+			"why": "One refresh is attempted transparently. A second 401 means the secret, the environment or the taxpayer account is wrong, and retrying will not help."
+		},
+		{
+			"question": "Why validate TINs in bulk rather than on every invoice?",
+			"options": [
+				"LHDN charges per validation",
+				"It adds a rate-limited call to every invoice and turns a data problem into an availability problem",
+				"Validation is only valid for 24 hours",
+				"Bulk validation is more accurate"
+			],
+			"answer": 1,
+			"why": "A missing invoice cannot wait on a registry call. Clean masters in bulk, then re-validate periodically so stale TINs are caught."
+		},
+		{
+			"question": "A foreign currency Sales Invoice reaches the app. What should you expect?",
+			"options": [
+				"It is converted automatically at the company exchange rate",
+				"It is rejected locally because only MYR is supported",
+				"It is submitted with DocumentCurrencyCode set to the invoice currency",
+				"It is queued until the currency changes"
+			],
+			"answer": 1,
+			"why": "MyInvois accepts ringgit only, so the app validates the currency and blocks submission rather than inventing a conversion."
+		},
+		{
+			"question": "Status is stuck on Submitted and never becomes Valid. What should you check first?",
+			"options": [
+				"The client secret",
+				"Whether the site scheduler is running, because polling is a scheduled job",
+				"The customer's postcode",
+				"The invoice naming series"
+			],
+			"answer": 1,
+			"why": "Validation is asynchronous and polling runs on the scheduler. Without it, documents sit at Submitted indefinitely even though LHDN has already validated them."
+		}
+	],
+	"narration": "Chapter three is about getting connected without breaking anything. MyInvois has two environments with separate hosts and separate credentials: sandbox on preprod, production on api. The app's environment setting chooses the host pair, which is why a production client id left on sandbox looks like a credentials failure. Get credentials from the taxpayer system in the portal, create an integration, and write down who owns it, because the secret is the one thing you cannot recover from a backup. In settings, defaults matter more than they look. Automatic submission is right for steady state and wrong for your first production week. A default tax type of zero six is correct if you are not SST registered, and quietly wrong if you are. The client requests a token with client credentials and caches it with a sixty second safety margin, refreshing once on a four zero one. If a four zero one repeats, stop retrying: the secret, the environment or the taxpayer account is wrong. Validate TINs in bulk, not on every invoice, because a missing invoice should never wait on a registry call. Remember that issue time is converted to UTC, that documents must be in ringgit, and that a buyer address needs a Malaysian state code. Then prove the loop: run the health check, validate a TIN, preview, submit, wait for valid, and cancel with a reason. In the lab you do exactly that, and you keep the screenshots as training material."
+}
