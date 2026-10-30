@@ -1,0 +1,325 @@
+{
+	"id": "ch03",
+	"number": 3,
+	"title": "Volume 1 · The Item Master",
+	"subtitle": "Lessons 1–4: item groups, a complete stock item, serial and batch tracking, and the prices and reorder rules behind them",
+	"level": "Core",
+	"minutes": 70,
+	"outcomes": [
+		"Build an item group tree that finance and operations both accept",
+		"Create a stock item with every field that affects valuation and tax",
+		"Turn on serial and batch tracking deliberately, and know what changes afterwards",
+		"Set item prices and reorder rules so buying and selling behave predictably"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Item groups",
+			"title": "Group items by how the business talks about them",
+			"bullets": [
+				"Item groups are a reporting tree: they decide how stock value and sales appear in the item-wise reports",
+				"Group by commercial family, not by supplier, because suppliers change and product families do not",
+				"A services group keeps non-stock items out of inventory reports entirely",
+				"Keep the tree three levels deep at most; deeper trees are never used for analysis",
+				"Set the item group before creating items, because moving items later leaves a messy audit trail"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Stock → Item Group → New",
+						"Appliances, parent All Item Groups",
+						"New group under the root"
+					],
+					["2", "Add Item Group", "Components, parent All Item Groups", "Second group"],
+					["3", "Add Item Group", "Packaging", "Third group"],
+					[
+						"4",
+						"Add Item Group",
+						"Services, parent All Item Groups",
+						"Fourth group for non-stock items"
+					],
+					["5", "Add Item Group", "Blenders, parent Appliances", "Nested third level"],
+					["6", "Open All Item Groups", "Is Group: Yes", "Root group cannot hold items"],
+					["7", "Save all", "(no voucher)", "Tree shows four top groups and one child"]
+				]
+			},
+			"notes": "Ask the client's sales manager and their accountant to agree the tree in the same meeting. Sales think in product families, finance thinks in revenue lines, and the item group serves both if it is chosen with intent. A tree that mirrors the storeroom layout is a common mistake, because the storeroom changes and the report does not.",
+			"paths": ["Stock → Item Group → New"]
+		},
+		{
+			"kicker": "Lesson 1 · Expected outcome",
+			"title": "A tree that reports, not just organises",
+			"bullets": [
+				"The Item list filtered by Appliances shows only appliance items, including nested Blenders",
+				"Stock Balance grouped by item group shows a row per group, with Services excluded because it holds non-stock items",
+				"A new item cannot be saved without an item group",
+				"Deleting a group that contains items is refused, which protects history",
+				"The tree renders with indentation, so the nesting is visible to the client"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Filter Appliances", "Includes Blenders items", "Stock → Item list"],
+					["Stock by group", "One row per group", "Stock Balance report"],
+					["Missing group", "Save refused", "New item without a group"],
+					["Delete with items", "Refused", "Item Group form"],
+					["Depth", "3 levels", "Item Group tree"]
+				]
+			},
+			"notes": "The delete test teaches an important pattern: master data that has been used becomes undeletable, and the correct action is to disable it. Show the Disabled checkbox now, because the client will ask in month two why a discontinued group cannot be removed. Disabling keeps reports historical and correct.",
+			"callout": {
+				"tone": "tip",
+				"title": "Disable, do not delete",
+				"text": "Used master records can only be disabled. Plan names carefully so you never need to tidy up a tree that history depends on."
+			}
+		},
+		{
+			"kicker": "Lesson 2 · The stock item",
+			"title": "Every field on the item that changes a number later",
+			"bullets": [
+				"Maintain Stock decides whether the item touches the stock ledger at all",
+				"Valuation Rate is the opening cost; it becomes the basis for FIFO or moving-average valuation",
+				"Default Unit of Measure drives both buying and selling unless the document overrides it",
+				"Income and Expense accounts decide where the sales and cost of goods lines post",
+				"The item tax template attaches the 10 % sales tax to the product, not to the invoice"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Stock → Item → New", "Item Code: SM-BL200", "Code accepted exactly as typed"],
+					["2", "Item Name / Group", "Seri Murni Blender 200 / Blenders", "Name and group set"],
+					["3", "Default Unit of Measure", "Nos", "Unit field filled"],
+					["4", "Maintain Stock", "Ticked (stock item)", "Stock section appears on the form"],
+					["5", "Valuation Rate", "120.00", "Rate saved"],
+					["6", "Income / Expense Account", "Sales - SM / Cost of Goods Sold - SM", "Accounts set"],
+					["7", "Item Tax Template", "SST 10% - SM", "Template attached"],
+					[
+						"8",
+						"Item Defaults row",
+						"Company SM, Default Warehouse Main Warehouse - SM",
+						"Warehouse pre-fills on documents"
+					]
+				]
+			},
+			"notes": "Walk the field list in the order finance thinks, not the order the screen presents. The two numbers that matter are valuation rate and expense account, because they decide gross profit. Explain that changing an item's valuation rate after stock exists does not revalue stock; only a stock reconciliation or repost does.",
+			"paths": ["Stock → Item → New"]
+		},
+		{
+			"kicker": "Lesson 2 · Expected outcome",
+			"title": "The item behaves as designed on a real document",
+			"bullets": [
+				"A Purchase Receipt for the item defaults to Nos and Main Warehouse without typing",
+				"A Sales Invoice line for it picks up the 10 % SST template automatically",
+				"The item dashboard shows zero stock, zero value and no transactions",
+				"Stock reports include the item with quantity 0 rather than omitting it",
+				"The item list filter by group Blenders returns it"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Default UOM", "Nos", "New Purchase Receipt line"],
+					["Default warehouse", "Main Warehouse - SM", "Same line"],
+					["Tax on invoice line", "SST 10 %", "New Sales Invoice line"],
+					["Dashboard stock", "0", "Item → Dashboard tab"],
+					["Item list", "Found under Blenders", "Stock → Item filter"]
+				]
+			},
+			"notes": "The dashboard test is the fastest way to convince a client that nothing has happened yet. It also becomes the diagnostic screen later, so teach it now: stock balance, valuation, and recent transactions in one panel. If the tax template does not appear automatically, the item lacks the template or the invoice has an overriding document template.",
+			"callout": {
+				"tone": "warn",
+				"title": "Valuation Rate is not a price",
+				"text": "It is a cost used for opening stock. If you put the selling price here, every margin report will be wrong from day one."
+			}
+		},
+		{
+			"kicker": "Lesson 3 · Tracking",
+			"title": "Serials, batches and services, chosen once",
+			"bullets": [
+				"Serial numbers identify individual units and are mandatory for warranty-bearing appliances",
+				"Batches identify a production run or expiry group, which suits packaging and consumables",
+				"Both flags must be set before the first stock transaction, because history cannot be retracked",
+				"A service item has Maintain Stock off, so it never appears in a stock report",
+				"Tracking adds data entry at receipt, so only track what the business genuinely needs to trace"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open SM-BL200", "Has Serial No: ticked", "Serial section appears"],
+					["2", "Stock → Item → New", "SM-PKG-BOX, Packaging, Maintain Stock on", "New stock item"],
+					[
+						"3",
+						"Set tracking",
+						"Has Batch No: ticked, shelf life in days 365",
+						"Batch section appears"
+					],
+					[
+						"4",
+						"New Item",
+						"FREIGHT-SVC, Services group, Maintain Stock off",
+						"Service item without stock sections"
+					],
+					["5", "Service item accounts", "Expense: Freight Inward - SM", "Expense account set"],
+					["6", "Save all", "(no voucher)", "Item list shows three items with different flags"],
+					["7", "Try a receipt of SM-BL200", "Serial numbers required", "ERPNext asks for serials"]
+				]
+			},
+			"notes": "This is a commercial conversation wearing a technical flag. Serial tracking is right when the client sells warranties or handles recalls; batch tracking is right for anything with a shelf life or a supplier lot. Both cost time at receipt, and a client who is not ready will simply type the same serial twice, so explain the discipline before enabling.",
+			"paths": ["Stock → Item"]
+		},
+		{
+			"kicker": "Lesson 3 · Expected outcome",
+			"title": "Tracking changes what the documents ask for",
+			"bullets": [
+				"A Purchase Receipt for the serial item opens a serial number table that must be filled",
+				"The batch item asks for a batch number and shows an expiry date derived from shelf life",
+				"The service item never appears in stock balances or stock ledger reports",
+				"Serial numbers created at receipt can be found in the Serial No list with their status",
+				"Selling a serial item later requires choosing an existing serial, which is what keeps warranty data honest"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Serial receipt", "Serial table required", "Purchase Receipt for SM-BL200"],
+					["Batch expiry", "Receipt date + 365 days", "Batch row on the receipt"],
+					["Service item", "Absent from stock reports", "Stock Balance"],
+					["Serial list", "Serial with status Active", "Stock → Serial No"],
+					["Selling", "Serial must be selected", "Delivery Note"]
+				]
+			},
+			"notes": "Ask the client to name one process that depends on tracking: a warranty claim, a supplier recall, or an expiry rule. If they cannot, do not enable it. This is one of the clearest examples of consultant judgement in the whole course, because the feature is easy to switch on and expensive to maintain.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Tracking and e-Invoicing",
+				"text": "Serials and batches are internal controls. The MyInvois e-Invoice carries quantity and description, so tracking does not change the submitted document, only your traceability."
+			}
+		},
+		{
+			"kicker": "Lesson 4 · Price and reorder",
+			"title": "Prices on the item, rules that override them",
+			"bullets": [
+				"Item Price records hold the rate per price list, and a missing record means a zero price on documents",
+				"Reorder Level and Safety Stock drive the material request and reorder reports the buyer relies on",
+				"Lead Time in Days is the number the planning report uses to warn you before you run out",
+				"Minimum Order Qty belongs on the supplier side of the relationship, not the item",
+				"Every price has an effective date, so a price change is history, not an edit"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "New Item Price", "SM-BL200, Retail - SM, 240.00", "Retail price record"],
+					["2", "New Item Price", "SM-BL200, Dealer - SM, 216.00", "Second price record"],
+					["3", "Open SM-BL200", "Reorder Level 20, Safety Stock 10", "Reorder fields set"],
+					["4", "Set", "Lead Time in Days: 7", "Planning aware of supplier delay"],
+					["5", "Save item", "(no voucher)", "Values persist"],
+					[
+						"6",
+						"Item → Reorder report",
+						"Run for Main Warehouse",
+						"Item listed with reorder level"
+					],
+					["7", "New Quotation", "Add SM-BL200 with Retail list", "Rate pre-fills 240.00"]
+				]
+			},
+			"notes": "Prices live in their own records so that changing a price never rewrites an old quotation. Explain the difference between an item price and a pricing rule: the price is a fact for a list, the rule is a calculation applied on top. Reorder level without lead time produces alerts too late, so collect both from the buyer in the same conversation.",
+			"paths": ["Stock → Item Price", "Stock → Item → Reorder"]
+		},
+		{
+			"kicker": "Lesson 4 · Expected outcome",
+			"title": "Predict the rate before the document loads",
+			"bullets": [
+				"A quotation for a customer on the Retail list pre-fills 240.00 per unit",
+				"The same item for a Dealer-list customer pre-fills 216.00",
+				"Removing the item price leaves the rate at zero, which is the signal something is missing",
+				"The reorder report lists the item once stock falls below 20 in the selected warehouse",
+				"Price history shows both records with their dates and no overwriting"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Retail rate", "240.00", "New Quotation, Retail customer"],
+					["Dealer rate", "216.00", "New Quotation, Dealer customer"],
+					["No item price", "0.00", "Item with no price record"],
+					["Reorder report", "Item listed below 20", "Stock → Item Reorder"],
+					["Price history", "2 records, dated", "Item Price list"]
+				]
+			},
+			"notes": "The zero-rate case is the lesson: ERPNext does not guess a price, and a zero line item on a quotation is a data defect, not a system bug. Train the sales team to notice it before the customer does. Closing the loop between item price, price list on the customer, and default price list in selling settings is exactly the kind of three-field reasoning a consultant is paid for.",
+			"callout": {
+				"tone": "tip",
+				"title": "Price lists are per customer",
+				"text": "The customer's price list wins. If a rate looks wrong, check the customer record before editing the item price."
+			}
+		}
+	],
+	"lab": {
+		"title": "Lab · Build the Seri Murni item master",
+		"minutes": 50,
+		"steps": [
+			"Create item groups Appliances, Components, Packaging, Services and the child group Blenders",
+			"Create SM-BL200 as a stock item, Nos, valuation 120.00, SST template, serial tracked, Main Warehouse default",
+			"Create SM-KT100 kettle as a non-serial stock item with the same tax template",
+			"Create SM-PKG-BOX as a batch-tracked packaging item with 365-day shelf life",
+			"Create SM-RM-MOTOR as a batch-tracked component item, valuation 60.00, defaulting to Assembly Floor",
+			"Create FREIGHT-SVC as a non-stock service item expensing to Freight Inward",
+			"Add Retail 240.00 and Dealer 216.00 item prices for SM-BL200, and 90.00 retail for the kettle",
+			"Set reorder level 20, safety stock 10 and lead time 7 days on the blender",
+			"Raise a draft Purchase Receipt for 1 box to prove the unit conversion, then discard it",
+			"Open the item dashboard and confirm zero stock, zero value and no transactions"
+		],
+		"done": "Five items exist with the right tracking flags and accounts, a quotation pre-fills 240.00 from the Retail list, and the reorder report shows the blender with its threshold."
+	},
+	"quiz": [
+		{
+			"question": "Which item field decides whether an item affects the stock ledger?",
+			"options": ["Item Group", "Maintain Stock (is stock item)", "Default UOM", "Valuation Rate"],
+			"answer": 1,
+			"why": "Only items marked as stock items create stock ledger entries. Service items stay out of inventory and post only to expense or income accounts."
+		},
+		{
+			"question": "A client wants warranty tracking. What do you enable, and when?",
+			"options": [
+				"Batch numbers, at any time",
+				"Serial numbers, before the first receipt of that item",
+				"Serial numbers, after go-live, since history is re-trackable",
+				"Nothing: warranty is handled outside ERPNext"
+			],
+			"answer": 1,
+			"why": "Serials identify individual units for warranty and recall. The flag must be set before stock moves, because existing transactions cannot be retracked."
+		},
+		{
+			"question": "What happens when a quotation is raised for an item with no Item Price record?",
+			"options": [
+				"ERPNext uses the valuation rate",
+				"The rate comes through as zero",
+				"The quotation cannot be saved",
+				"The default price list rate is used"
+			],
+			"answer": 1,
+			"why": "ERPNext does not invent selling prices. A missing price record leaves the rate at zero, which is a data defect the sales team must catch."
+		},
+		{
+			"question": "Where does the 10 % SST rate belong for a taxable product?",
+			"options": [
+				"On the invoice, typed each time",
+				"On the item, through its item tax template",
+				"On the customer record",
+				"On the warehouse"
+			],
+			"answer": 1,
+			"why": "The item tax template carries the rate and account per product, so mixed-rate invoices compute correctly line by line without manual entry."
+		},
+		{
+			"question": "Which combination makes the reorder report useful?",
+			"options": [
+				"Reorder level only",
+				"Reorder level, safety stock and lead time",
+				"Valuation rate and item group",
+				"Price list and tax template"
+			],
+			"answer": 1,
+			"why": "The level says when to act, safety stock absorbs demand variation, and lead time tells the buyer how early to act to avoid a stock-out."
+		}
+	],
+	"narration": "Volume one is the item master, and items are where costing decisions wear product names. Start with item groups. They are a reporting tree, so group by commercial family, not by supplier, and keep it three levels deep. Then a complete stock item. Maintain stock decides whether the item touches inventory at all. Valuation rate is a cost, not a price, and putting the selling price there ruins every margin report from day one. The default unit drives buying and selling, the income and expense accounts decide where sales and cost of goods post, and the item tax template attaches tax to the product rather than the invoice. Next, tracking. Serial numbers identify individual units and suit warranty appliances; batches group production runs and suit packaging with expiry. Both flags must be set before the first stock movement, because history cannot be retracked. A service item has maintain stock off, so it never appears in stock reports. Only track what the business genuinely needs to trace, and ask for one process that depends on it. Finally, prices and reorder rules. Item price records hold a rate per price list and per date, so a price change is history rather than an edit. Reorder level needs safety stock and lead time to be useful. And remember the zero-rate trap: if a quotation shows zero, a price record is missing, not a system bug. In the lab you build five items across all three types and prove the price and tax behaviour."
+}

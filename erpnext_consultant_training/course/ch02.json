@@ -1,0 +1,393 @@
+{
+	"id": "ch02",
+	"number": 2,
+	"title": "Volume 0 · Making the System Usable",
+	"subtitle": "Lessons 6–10: units of measure, warehouses, users and roles, permissions, naming series and the settings that bite later",
+	"level": "Foundation",
+	"minutes": 80,
+	"outcomes": [
+		"Configure units of measure and conversions that survive real purchasing",
+		"Create a warehouse tree with correct stock and adjustment accounts",
+		"Create users with roles that match what each person actually does",
+		"Restrict rows and actions with user permissions and role permissions",
+		"Set the stock and selling settings that decide valuation, credit control and document numbering"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 6 · Units of measure",
+			"title": "Units that multiply without breaking valuation",
+			"bullets": [
+				"UOMs are master data: a typo here becomes a wrong stock balance that looks plausible",
+				"Create only the units the client buys and sells in, then convert between them explicitly",
+				"No unit is more real than another: one Box equals twelve Nos is a conversion factor, not a separate product",
+				"Tick 'Must be whole number' for physical units so nobody invoices 0.4 of a blender",
+				"Weight-based units need decimals, so decide per unit instead of applying one rule everywhere"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Stock → Unit of Measure → New", "Box", "Empty UOM record"],
+					["2", "Tick", "Must be whole number", "Checkbox saved on"],
+					["3", "New UOM", "Set (whole number, for bundles)", "Second unit created"],
+					["4", "New UOM", "Kilogram, whole number off", "Decimal quantity allowed"],
+					[
+						"5",
+						"Stock → UOM Conversion Factor → New",
+						"Box → Nos, factor 12",
+						"One conversion row"
+					],
+					["6", "Save", "(no voucher)", "Conversion appears in the UOM list for Box"]
+				]
+			},
+			"notes": "The classic consultant failure is discovering, three months in, that stock was received in boxes at the piece rate. Build conversions before any stock movement, and test one conversion on a draft Purchase Receipt. If the client buys in boxes of twelve and sells single pieces, both units are legitimate and the conversion factor is the contract between them.",
+			"paths": ["Stock → Unit of Measure", "Stock → UOM Conversion Factor"]
+		},
+		{
+			"kicker": "Lesson 6 · Expected outcome",
+			"title": "One box, twelve pieces, one valuation",
+			"bullets": [
+				"A test Purchase Receipt of 1 Box posts a stock balance of 12 Nos, not 1",
+				"The stock ledger shows quantity in the stock UOM, with the box quantity preserved on the document",
+				"Entering 0.5 against a whole-number unit is refused at save",
+				"Valuation stays per Nos, so the rate you type per box is divided correctly",
+				"Stock reports agree with the warehouse total when converted back to boxes"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Receipt of 1 Box", "12 Nos in stock", "Stock → Stock Balance"],
+					["Stock ledger row", "Quantity 12", "Stock → Stock Ledger"],
+					["Half box", "Refused", "Purchase Receipt save"],
+					["Valuation", "Per Nos", "Item → Valuation Rate"],
+					["Round trip", "12 Nos = 1 Box", "Convert quantity on the item"]
+				]
+			},
+			"notes": "Ask the learner to predict the stock balance before saving, then check it. This is the same prediction habit used for tax totals, and it is the core skill of a functional consultant. Watch for the trap where the client's purchase UOM is a box but the item's stock UOM is Nos: the conversion must exist before the first receipt, or the balance will be wrong and reposting is required.",
+			"callout": {
+				"tone": "warn",
+				"title": "Conversions after go-live",
+				"text": "Adding a conversion factor later does not rewrite history. If stock already moved in the wrong unit, you need a stock reconciliation, not a settings change."
+			}
+		},
+		{
+			"kicker": "Lesson 7 · Warehouses",
+			"title": "A warehouse tree with accounts behind it",
+			"bullets": [
+				"Warehouses are physical locations and each one must point at a stock account for valuation postings",
+				"Separate warehouses for main stock, retail counter, assembly and returns make movement visible",
+				"A returns warehouse is not bureaucracy: it is how you separate resellable stock from quarantined stock",
+				"Warehouse names carry the abbreviation, so reports read 'Main Warehouse - SM' consistently",
+				"Set the default warehouse once at company level, then override per document when reality demands it"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Stock → Warehouse → New", "Main Warehouse", "New warehouse under the company"],
+					["2", "Check abbreviation", "… - SM", "Name ends with the company suffix"],
+					["3", "Add Warehouse", "Retail Counter", "Second warehouse"],
+					["4", "Add Warehouse", "Assembly Floor", "Third warehouse"],
+					["5", "Add Warehouse", "Returns Quarantine", "Fourth warehouse"],
+					[
+						"6",
+						"Set Parent Warehouse",
+						"All under the company root",
+						"Tree renders with four leaves"
+					],
+					["7", "Save each", "(no voucher)", "Each warehouse is selectable on stock documents"]
+				]
+			},
+			"notes": "Four warehouses is the smallest tree that teaches the concepts and still fits a real distributor: buy into main, move to retail, consume components on the assembly floor, quarantine returns. Explain that stock never 'teleports': a transfer is a document, and the trial balance stays the same during a transfer because both sides use the same stock account unless you deliberately use different accounts per warehouse.",
+			"paths": ["Stock → Warehouse → New"]
+		},
+		{
+			"kicker": "Lesson 7 · Expected outcome",
+			"title": "Balances per warehouse that reconcile to the total",
+			"bullets": [
+				"Stock Balance report lists all four warehouses with zero quantity before any transaction",
+				"A transfer of 5 units from Main to Retail leaves the company total unchanged at 5",
+				"The stock ledger shows two rows: −5 in Main and +5 in Retail on the same timestamp",
+				"Warehouse-wise profit and loss shows stock value per location when accounts differ",
+				"The default warehouse on a new Stock Entry is Main Warehouse - SM"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Warehouse count", "4", "Stock → Warehouse list"],
+					["After transfer", "Main 0, Retail 5", "Stock Balance per warehouse"],
+					["Ledger rows", "Two rows, ±5", "Stock Ledger"],
+					["Company total", "5 units", "Stock Balance, total row"],
+					["Default", "Main Warehouse - SM", "New Stock Entry"]
+				]
+			},
+			"notes": "The transfer test proves two ideas at once: that stock is tracked per location and that a transfer is not a purchase or a sale. If the learner sees a value change during a transfer, the warehouses are pointing at different stock accounts, which is a deliberate design for some businesses but must be explained, not accidental.",
+			"callout": {
+				"tone": "tip",
+				"title": "Name warehouses by place, not by person",
+				"text": "'Ali's Store' becomes a problem when Ali leaves. Use the physical location and keep people in the warehouse contact fields."
+			}
+		},
+		{
+			"kicker": "Lesson 8 · Users and roles",
+			"title": "Give each person the smallest menu that works",
+			"bullets": [
+				"A user is a login; a role is a bundle of DocType permissions; a role profile is a reusable bundle of roles",
+				"Create named users, never shared logins, because the audit trail is worthless otherwise",
+				"Accounts User can create invoices but not cancel them; Accounts Manager can do both",
+				"Stock User fits a storekeeper; Sales User fits a showroom assistant; System Manager is for the consultant only",
+				"Set the timezone per user so document timestamps read correctly in reports"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Users → New User",
+						"anis@serimurni.my, first and last name",
+						"User form with roles table"
+					],
+					["2", "Add role", "Accounts Manager", "Role row added"],
+					["3", "New User", "farid@serimurni.my, Stock User", "Storekeeper login"],
+					["4", "New User", "consultant@serimurni.my, System Manager", "Consultant login"],
+					["5", "Each user", "Timezone: Asia/Kuala_Lumpur", "Timezone saved"],
+					["6", "Save and set password", "Temporary password", "User can log in"],
+					[
+						"7",
+						"Role Profile → New",
+						"Finance Team = Accounts User + Accounts Manager",
+						"Reusable profile"
+					]
+				]
+			},
+			"notes": "Demonstrate the login rather than describing it. Sign out as administrator, sign in as the storekeeper, and let the learner see a shorter menu. That single experience prevents most of the 'everyone is an administrator' outcomes that make implementations hard to audit. Role profiles save time later when the client hires a fifth accounts person.",
+			"paths": ["Users → User", "Users → Role Profile"]
+		},
+		{
+			"kicker": "Lesson 8 · Expected outcome",
+			"title": "Menus that match job descriptions",
+			"bullets": [
+				"The storekeeper can see Stock and Buying but has no Accounts menu",
+				"The accounts manager can create and cancel invoices; the accounts user cannot cancel",
+				"The consultant sees everything, which is why you never demo as the consultant",
+				"Each user profile shows the correct role list and timezone",
+				"Switching users is a one-click test, so run it before every training session"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Storekeeper menu", "Stock and Buying only", "Login as farid@"],
+					["Accounts User cancel", "Blocked", "Open a submitted invoice"],
+					["Accounts Manager cancel", "Allowed", "Login as anis@"],
+					["Role profile", "Finance Team", "Users → Role Profile"],
+					["Timezone", "Asia/Kuala_Lumpur", "User profile"]
+				]
+			},
+			"notes": "The cancel test is the one that matters commercially: an accounts user who can cancel submitted invoices can silently corrupt the sales ledger. Explain the difference between a role and a role profile, then show how a permission shows up as a greyed-out button rather than an error, which is friendlier for training.",
+			"callout": {
+				"tone": "warn",
+				"title": "Never train as Administrator",
+				"text": "Administrator bypasses every permission. Demo and train with a real user account, otherwise you will promise buttons that staff cannot see."
+			}
+		},
+		{
+			"kicker": "Lesson 9 · Permissions and numbering",
+			"title": "Row-level restrictions and document numbers",
+			"bullets": [
+				"Role permissions control what a role may do to a DocType: read, write, submit, cancel, delete",
+				"User permissions restrict which rows a user sees, for example only their own warehouse",
+				"Permlevel fields are hidden from lower levels, which is how credit limits stay with finance",
+				"Naming series decide what the client's customers see as an invoice number, so agree the format first",
+				"A meaningful series such as SI-2026-00001 is easier to quote on the phone than a random hash"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Users → Role Permission Manager",
+						"Sales User → Sales Invoice → Read, Write, Create",
+						"Three ticks set"
+					],
+					[
+						"2",
+						"Users → User Permission → New",
+						"User farid@, Allow Warehouse: Main Warehouse",
+						"Row-level restriction saved"
+					],
+					["3", "Accounts → Naming Series", "Sales Invoice: SI-.YYYY.-", "Series updated"],
+					["4", "Naming Series", "Purchase Order: PO-.YYYY.-", "Second series updated"],
+					["5", "Create a Sales Invoice", "(save)", "Number reads SI-2026-00001"],
+					["6", "Login as farid@", "Open Stock Balance", "Only Main Warehouse rows appear"]
+				]
+			},
+			"notes": "Two different ideas are often confused here: role permissions decide verbs, user permissions decide rows. The warehouse restriction is the most valuable example for a distributor, because it stops a storekeeper from posting into another outlet's stock. Naming series is where consultants earn goodwill, because invoice numbers are visible to customers and cannot be changed retroactively.",
+			"paths": [
+				"Users → Role Permission Manager",
+				"Users → User Permission",
+				"Accounts → Naming Series"
+			]
+		},
+		{
+			"kicker": "Lesson 9 · Expected outcome",
+			"title": "Restricted users see less, not errors",
+			"bullets": [
+				"The storekeeper's stock report lists one warehouse and the totals are that warehouse only",
+				"The storekeeper can create a Stock Entry but cannot cancel a submitted Sales Invoice",
+				"New invoices follow the agreed series and never skip a number within a period",
+				"The sales user sees the invoice form but not the credit limit field at permlevel 1",
+				"Administrator still sees everything, which is the control case for every permission test"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Storekeeper stock report", "1 warehouse", "Stock Balance as farid@"],
+					["Cancel attempt", "Button hidden or blocked", "Submitted Sales Invoice"],
+					["Invoice number", "SI-2026-00001", "New Sales Invoice"],
+					["Credit limit field", "Hidden", "Customer form as sales user"],
+					["Administrator", "Sees all warehouses", "Same report"]
+				]
+			},
+			"notes": "Always run the permission test twice: once as the restricted user and once as Administrator. If both look the same, no permission was applied. This habit catches the most common implementation defect, which is a system that appears secure in the demo because the demo was done with the wrong account.",
+			"callout": {
+				"tone": "tip",
+				"title": "Numbering is a contract",
+				"text": "Agree the series with the client's auditor before the first real invoice. Renumbering afterwards means cancelled documents and an uncomfortable conversation."
+			}
+		},
+		{
+			"kicker": "Lesson 10 · Settings",
+			"title": "The stock and selling settings that decide behaviour",
+			"bullets": [
+				"Valuation method is chosen once per company: FIFO or moving average, and changed later only through reposting",
+				"Allow Negative Stock off is the single most valuable setting for stock accuracy",
+				"Check Credit Limit on turns customer limits into a submit-time control instead of a report",
+				"Default price list and default warehouse remove two fields from every clerk's daily typing",
+				"Enable the settings deliberately and record why, because a future consultant will otherwise guess"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Stock → Stock Settings", "Valuation Method: FIFO", "Method saved for the company"],
+					["2", "Stock Settings", "Allow Negative Stock: off", "Checkbox clear"],
+					["3", "Stock Settings", "Default Warehouse: Main Warehouse - SM", "Field set"],
+					["4", "Selling → Selling Settings", "Check Credit Limit: on", "Credit control active"],
+					["5", "Selling Settings", "Default Price List: Retail - SM", "Pre-filled on quotations"],
+					[
+						"6",
+						"Stock Settings",
+						"Item Naming By: Item Code",
+						"Item codes typed by the client are kept"
+					],
+					["7", "Save", "(no voucher)", "Settings persist and apply to new documents"]
+				]
+			},
+			"notes": "Explain the consequence of each switch, not the label. Negative stock allowed means valuation can go negative and margins become fictional; credit limit off means the sales team finds out about a bad payer at month end. Item naming by Item Code is a small choice with big consequences: if the client later wants a different code, renaming an item is a database job.",
+			"paths": ["Stock → Stock Settings", "Selling → Selling Settings"]
+		},
+		{
+			"kicker": "Volume 0 · Handover check",
+			"title": "Ten checks before you let anyone transact",
+			"bullets": [
+				"Company, abbreviation, currency and fiscal year confirmed against the client's registration documents",
+				"Chart of accounts reviewed with finance, with tax accounts typed correctly",
+				"Cost centres built and the P&L columns reconcile to the company total",
+				"Units and conversions tested with a draft receipt of one box",
+				"Warehouses created with the default set and a transfer tested",
+				"Users created with role profiles, restricted users verified by logging in as them",
+				"Naming series agreed with the auditor, then tested on a draft document",
+				"Stock settings recorded: valuation method, negative stock, default warehouse",
+				"Selling settings recorded: credit limit, default price list, defaults",
+				"Every choice captured on the configuration worksheet with a date and a name"
+			],
+			"table": {
+				"headers": ["Area", "Evidence you keep", "Signed by"],
+				"rows": [
+					["Company and accounts", "Screenshot of tree and company tab", "Finance lead"],
+					["Tax", "Test invoice showing 1,320.00 total", "Finance lead"],
+					["Cost centres", "Cost Center-wise P&L", "Management accountant"],
+					["Users and permissions", "Login screenshots per role", "Operations manager"],
+					["Settings", "Completed configuration worksheet", "Consultant plus client"]
+				]
+			},
+			"notes": "This slide is the deliverable of Volume 0 and the reason it exists: a signed sheet that says the foundation was built deliberately. Consultants who skip it spend month one arguing about who chose what. Keep the evidence in the client's own drive, not yours, so it survives your engagement.",
+			"callout": {
+				"tone": "tip",
+				"title": "Handover is a meeting",
+				"text": "Walk the client through the ten checks and collect signatures. A document nobody read is not evidence; a meeting is."
+			}
+		}
+	],
+	"lab": {
+		"title": "Lab · Finish Volume 0 and sign the handover sheet",
+		"minutes": 55,
+		"steps": [
+			"Create the Box, Set and Kilogram units, then the 1 Box = 12 Nos conversion",
+			"Create Main Warehouse, Retail Counter, Assembly Floor and Returns Quarantine",
+			"Test a draft Purchase Receipt for 1 Box and confirm the stock balance reads 12 Nos",
+			"Create three users with the roles from the lesson, setting timezone Asia/Kuala_Lumpur",
+			"Create a Finance Team role profile containing Accounts User and Accounts Manager",
+			"Add a user permission restricting farid@ to Main Warehouse and prove it in the stock report",
+			"Set Sales Invoice and Purchase Order naming series, then confirm the next invoice number",
+			"Set valuation FIFO, negative stock off, credit limit check on and the default price list",
+			"Complete the ten-point handover check and collect a name and date against every row"
+		],
+		"done": "Every one of the ten checks passes with evidence attached, the conversion test posted 12 Nos for one box, and the handover sheet is signed by someone other than you."
+	},
+	"quiz": [
+		{
+			"question": "A client buys in boxes of twelve and sells single pieces. What must exist before the first receipt?",
+			"options": [
+				"Two separate items, one per unit",
+				"A Nos stock unit plus a Box purchase unit with a conversion factor of 12",
+				"Two companies",
+				"Nothing: ERPNext converts automatically"
+			],
+			"answer": 1,
+			"why": "Stock is valued in the stock UOM. A conversion factor of 12 lets the same item be bought in boxes and sold as pieces without inventing a second product."
+		},
+		{
+			"question": "What is the difference between a role permission and a user permission?",
+			"options": [
+				"They are the same thing",
+				"A role permission decides which actions a role may perform; a user permission restricts which rows a user sees",
+				"A user permission grants administrator rights",
+				"Role permissions only affect reports"
+			],
+			"answer": 1,
+			"why": "Roles govern verbs such as create, submit and cancel. User permissions filter records, for example limiting a storekeeper to one warehouse."
+		},
+		{
+			"question": "Why is 'Allow Negative Stock' normally turned off?",
+			"options": [
+				"It slows the system down",
+				"It lets stock and valuation go negative, which makes margins and stock reports fictional",
+				"It blocks backdated entries",
+				"It prevents returns"
+			],
+			"answer": 1,
+			"why": "Negative stock hides a missing receipt and produces meaningless valuation. Keeping it off forces the team to record the real movement first."
+		},
+		{
+			"question": "A transfer of 5 units from Main to Retail should do what to the company's stock total?",
+			"options": [
+				"Increase it by 5",
+				"Leave it unchanged, with −5 in Main and +5 in Retail",
+				"Reduce it by 5",
+				"Create a purchase invoice"
+			],
+			"answer": 1,
+			"why": "A transfer moves quantity between locations. The total stays the same and the stock ledger shows two offsetting rows."
+		},
+		{
+			"question": "Why agree the invoice naming series before the first real invoice?",
+			"options": [
+				"It affects the tax rate",
+				"The number appears on customer-facing documents and cannot be changed retroactively without cancelled records",
+				"It controls the fiscal year",
+				"It determines the chart of accounts"
+			],
+			"answer": 1,
+			"why": "Invoice numbers are a client and auditor contract. Changing the format later leaves a mixed series and questions about the gap."
+		}
+	],
+	"narration": "Volume zero, second half: making the system usable. Start with units. A unit is master data, and a conversion factor is the contract between buying and selling. If the client buys boxes of twelve and sells pieces, you need both units and the factor of twelve before the first receipt, because stock is valued in the stock unit and history cannot be rewritten afterwards. Test it: one box must post twelve pieces, and half a box must be refused. Next, warehouses. Each location points at a stock account, so main stock, retail counter, assembly floor and returns quarantine are four warehouses with one default. Transfer five units and the company total must not move. Then users. A user is a login, a role is a bundle of permissions, and a role profile is a reusable bundle of roles. Create named users, because shared logins destroy the audit trail, and always demonstrate the restricted login rather than the administrator, who bypasses everything. Permissions have two layers: roles decide verbs such as create, submit and cancel, while user permissions decide rows, for example a storekeeper seeing only the main warehouse. Naming series are a contract with the auditor, so agree the format, then test it on a draft. Finally settings: FIFO valuation, negative stock off, credit limit on, default warehouse and price list. Volume zero ends with a ten point handover sheet signed by the client, because a foundation nobody approved is an argument waiting to happen."
+}

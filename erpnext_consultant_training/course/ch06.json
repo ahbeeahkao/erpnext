@@ -1,0 +1,346 @@
+{
+	"id": "ch06",
+	"number": 6,
+	"title": "Volume 2 · When Reality Intervenes",
+	"subtitle": "Lessons 6–10: partial delivery, discounts, returns and credit notes, credit limits, and closing the sales month",
+	"level": "Advanced",
+	"minutes": 85,
+	"outcomes": [
+		"Handle partial delivery and backorders without inventing extra documents",
+		"Apply line discounts and additional discounts, and predict the tax and margin that follow",
+		"Process a return as a credit note that reverses stock, revenue and tax together",
+		"Configure and test a credit limit that genuinely stops a sale",
+		"Close a sales month with agreed reconciliations rather than hope"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 6 · Partial delivery",
+			"title": "Deliver two of five and keep one truth",
+			"bullets": [
+				"Edit the delivery note quantity against the order instead of creating a second order",
+				"The order keeps a per-delivered percentage, so a backorder is visible rather than remembered",
+				"Stock and cost of goods follow the delivered quantity only, never the ordered quantity",
+				"Invoice only what was delivered, then invoice the rest when the stock arrives",
+				"Closing an order with an open quantity requires a decision, not a deletion"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the sales order → Make → Delivery Note",
+						"(convert)",
+						"Five units pre-filled"
+					],
+					["2", "Change line quantity", "2", "Only two units will move"],
+					["3", "Submit", "(submit)", "Per Delivered 40 %"],
+					["4", "Stock Ledger", "Filter by item", "−2 @ 120.00"],
+					[
+						"5",
+						"Convert to Sales Invoice",
+						"(from the delivery note)",
+						"Invoice for 2 units, 480.00 net"
+					],
+					["6", "Submit invoice", "(submit)", "Tax 48.00, total 528.00"],
+					[
+						"7",
+						"Open the order",
+						"(refresh)",
+						"Status To Deliver and Bill, 40 % delivered, 40 % billed"
+					]
+				]
+			},
+			"notes": "Partial delivery is the normal case in distribution, and it is where trainees invent workarounds. Show that ERPNext already models it through the percentage fields, and that the same order stays open for the remainder. If the client's process is 'we ship what we have', make per-delivered reporting part of the daily routine rather than a monthly discovery.",
+			"paths": ["Sales Order → Make → Delivery Note"]
+		},
+		{
+			"kicker": "Lesson 6 · Expected outcome",
+			"title": "Arithmetic that follows the physical movement",
+			"bullets": [
+				"Stock falls by two, so the remaining three still sit in the warehouse",
+				"Cost of goods sold is 240.00, exactly two units at valuation",
+				"The invoice shows 480.00 net, 48.00 tax and 528.00 total",
+				"The order advertises 40 per cent delivered and 40 per cent billed, and stays open",
+				"A second delivery later brings both percentages to 100 without a new order"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Stock", "3 units remaining", "Stock Balance"],
+					["COGS", "240.00", "General Ledger"],
+					["Invoice", "480.00 / 48.00 / 528.00", "Sales Invoice totals"],
+					["Order percentages", "40 / 40", "Sales Order form"],
+					["Order status", "To Deliver and Bill", "Sales Order"]
+				]
+			},
+			"notes": "Ask for the cost of goods before revealing it, because the temptation is to use five units. The valuation follows what left the building. This is also the first place a learner sees a partially completed order that is not an error, which reduces the urge to close and re-create orders that a client's sales team would otherwise duplicate.",
+			"callout": {
+				"tone": "tip",
+				"title": "Never split orders to fake partial delivery",
+				"text": "Two orders for one sale destroys the commitment report and doubles the paperwork. Edit the delivery quantity instead."
+			}
+		},
+		{
+			"kicker": "Lesson 7 · Discounts",
+			"title": "Line discount, additional discount, and what tax does",
+			"bullets": [
+				"A line discount percentage reduces that line's net amount and the tax calculated on it",
+				"An additional discount applies to the whole invoice after line amounts, and taxable value follows",
+				"Discounts are not expenses: revenue falls, and so does the tax the customer pays",
+				"Price overrides are legitimate on a document but should be permission-controlled in practice",
+				"A discount that makes the margin negative is a commercial decision the consultant should surface"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "New Sales Invoice", "Aeon Big, 5 × SM-BL200 at 240.00", "Net 1,200.00"],
+					["2", "Line discount", "10 % on the item row", "Line amount 1,080.00"],
+					["3", "Check tax", "(recalculated)", "Tax 108.00, total 1,188.00"],
+					["4", "Remove line discount", "(clear)", "Back to 1,200.00 / 120.00"],
+					[
+						"5",
+						"Additional discount",
+						"10 % at the bottom of the form",
+						"Net 1,080.00, tax 108.00"
+					],
+					["6", "Gross profit report", "Filter by this invoice", "Revenue 1,080.00, cost 600.00"],
+					["7", "Note the margin", "480.00", "45 % of net revenue"]
+				]
+			},
+			"notes": "Two discount mechanisms, one difference: the line discount is visible per item and better for customer communication, the additional discount is a commercial concession on the whole document. Both reduce taxable value, which is what learners get wrong when they expect tax to stay at 120.00. Tie the lesson back to pricing rules from Volume 1: rules automate what you would otherwise type here.",
+			"paths": ["Selling → Sales Invoice → New", "Item row → Discount and Rate"]
+		},
+		{
+			"kicker": "Lesson 7 · Expected outcome",
+			"title": "Margin maths a consultant can do live",
+			"bullets": [
+				"Ten per cent off 1,200.00 produces 1,080.00 net, 108.00 tax and 1,188.00 total",
+				"Cost of goods stays 600.00 because the physical cost did not change",
+				"Gross profit falls to 480.00, which is 44.4 per cent of net revenue",
+				"The gross profit report agrees with the invoice, so the discount is properly reflected",
+				"Two equivalent discounts entered different ways give the same final totals but different auditability"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Net after discount", "1,080.00", "Invoice totals"],
+					["Tax", "108.00", "Invoice tax row"],
+					["Total", "1,188.00", "Invoice grand total"],
+					["Gross profit", "480.00", "Gross Profit report"],
+					["Margin", "44.4 %", "Calculated by hand"]
+				]
+			},
+			"notes": "Ask the question the client will ask: what did the discount cost us? The answer is 120.00 of revenue and 12.00 of tax, with cost unchanged, so profit falls by 120.00. Being able to answer that during a meeting, without opening a spreadsheet, is a core consultant skill and the reason this course repeats arithmetic so often.",
+			"callout": {
+				"tone": "warn",
+				"title": "Discounts are not free",
+				"text": "Every discount reduces taxable value and revenue but not cost. At 50 % off this item, gross profit is zero."
+			}
+		},
+		{
+			"kicker": "Lesson 8 · Returns",
+			"title": "A credit note is three reversals in one document",
+			"bullets": [
+				"Create the return against the original invoice, never as a new negative-priced invoice",
+				"A return brings stock back, reverses revenue and reverses the tax the customer was charged",
+				"ERPNext links the credit note to the original, which is what makes the ledger auditable",
+				"The payment ledger nets the credit against what the customer still owes",
+				"Returned goods must reappear in stock, so choose the receiving warehouse deliberately"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the paid invoice → Make → Credit Note",
+						"(convert)",
+						"Negative quantity pre-filled"
+					],
+					["2", "Set quantity", "−1 unit", "One unit coming back"],
+					["3", "Set warehouse", "Returns Quarantine", "Return destination chosen"],
+					["4", "Check amounts", "(computed)", "Net −240.00, tax −24.00, total −264.00"],
+					["5", "Submit", "(submit)", "Credit note submitted and linked"],
+					["6", "Stock Ledger", "Filter by item", "+1 @ 120.00"],
+					[
+						"7",
+						"General Ledger",
+						"Filter by credit note",
+						"Dr Sales Return 240.00, Dr SST 24.00, Cr Debtors 264.00"
+					]
+				]
+			},
+			"notes": "Say clearly that the credit note is not an expense: it reverses the sale. The three postings mirror the original invoice exactly, which is how a consultant proves to an auditor that nothing was netted off silently. The warehouse choice matters commercially, because returned goods often need inspection before they are resellable.",
+			"paths": ["Sales Invoice → Make → Credit Note", "Stock → Stock Ledger"]
+		},
+		{
+			"kicker": "Lesson 8 · Expected outcome",
+			"title": "Stock back, revenue reversed, tax refunded",
+			"bullets": [
+				"One unit returns to the quarantine warehouse at its original valuation of 120.00",
+				"Revenue falls by 240.00 through the sales return account, not through a new sales line",
+				"SST Payable falls by 24.00, which is what makes the tax return correct",
+				"Debtors is credited 264.00, leaving a customer credit or reducing the next invoice",
+				"The credit note shows in the same connections chain as the invoice it reverses"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Stock", "+1 in quarantine", "Stock Balance"],
+					["Revenue reversal", "240.00 debit", "General Ledger"],
+					["Tax reversal", "24.00 debit", "General Ledger"],
+					["Debtors", "264.00 credit", "General Ledger"],
+					["Link", "Original invoice reference", "Credit Note → Connections"]
+				]
+			},
+			"notes": "Show the original invoice's status changing from Paid to something reflecting the credit. That visible link is the difference between a compliant reversal and a journal that quietly reduces revenue. If the client's team habitually creates negative invoices, this lesson is the one to repeat in their training.",
+			"callout": {
+				"tone": "warn",
+				"title": "No negative-price invoices",
+				"text": "A brand-new invoice with a minus rate breaks the link to the original sale and, in Malaysia, breaks the e-Invoice reference requirement too."
+			}
+		},
+		{
+			"kicker": "Lesson 9 · Credit limits",
+			"title": "The one setting that stops an order",
+			"bullets": [
+				"Credit checking is switched on once in Selling Settings, then enforced per customer",
+				"The limit is per customer and per company, and exposure includes unpaid invoices and open orders",
+				"Breaching the limit blocks submission with a clear message rather than warning quietly",
+				"An authorised user can override by raising the limit with a documented reason, not by disabling the control",
+				"Limits are a cash-flow control: set them from the client's collection history, not from optimism"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Selling → Selling Settings", "Check Credit Limit: ticked", "Control enabled"],
+					["2", "Open customer Aeon Big", "Credit Limit 5,000", "Limit saved"],
+					["3", "New Sales Order", "6,000.00 of goods", "Form saves as draft"],
+					["4", "Submit the order", "(submit)", "Blocked with a credit limit message"],
+					["5", "Note the exposure", "1,320.00 open invoice", "Exposure counted"],
+					["6", "Raise the limit to 10,000", "Documented approval", "Order now submits"],
+					["7", "Return the limit to 5,000", "(after the test)", "Control restored"]
+				]
+			},
+			"notes": "The value of this lesson is procedural as much as technical: who can raise a limit, with what evidence, and where the decision is recorded. Demonstrate the block, then demonstrate the legitimate override, and then put the limit back. A client who leaves the control off has built a system that records bad debts rather than preventing them.",
+			"paths": ["Selling → Selling Settings", "Selling → Customer → Credit Limits"]
+		},
+		{
+			"kicker": "Lesson 9 · Expected outcome",
+			"title": "A block that is explainable on the phone",
+			"bullets": [
+				"Submitting a 6,000.00 order against a 5,000.00 limit is refused with a message quoting the exposure",
+				"Reducing the order to 3,500.00 allows submission, proving the arithmetic of the control",
+				"Raising the limit to 10,000 permits the original order, and the change is visible in the record",
+				"Draft orders that breach the limit can still be saved, so the sales team can negotiate",
+				"The customer dashboard shows current exposure next to the limit at all times"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["6,000 vs 5,000", "Blocked at submit", "Sales Order submit"],
+					["3,500 vs 5,000", "Allowed", "Reduced order"],
+					["Raised limit", "10,000 permits 6,000", "Customer credit row"],
+					["Draft behaviour", "Saves, blocks on submit", "Sales Order"],
+					["Exposure display", "Limit and utilisation", "Customer dashboard"]
+				]
+			},
+			"notes": "Blocking at submit rather than save is deliberate: salespeople need to draft a quotation while a limit is being discussed. Say that explicitly, because a consultant who blocks at save will be blamed for lost orders. Then agree the override policy in writing, because the control is only as good as the person who can raise the number.",
+			"callout": {
+				"tone": "tip",
+				"title": "Limits need a reviewer",
+				"text": "A limit nobody reviews is a number, not a control. Name the person who may raise it and require a reason."
+			}
+		},
+		{
+			"kicker": "Lesson 10 · Closing the month",
+			"title": "Reconcile the cycle before you call it done",
+			"bullets": [
+				"Three reports prove a sales month: general ledger by party, payment ledger and aged receivables",
+				"Stock value and stock quantity must agree with the warehouse count for every item",
+				"Gross profit is the number management will argue about, so reconcile it to the invoice register",
+				"Exceptions, not totals, are what a consultant hands over: unexplained differences with names against them",
+				"A signed reconciliation sheet is what makes the next month faster than this one"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Customer receivable", "0.00 after payment", "General Ledger by party"],
+					["Payment status", "All invoices Paid or explicitly open", "Payment Ledger"],
+					["Aged receivables", "Only genuine unpaid invoices", "Accounts Receivable report"],
+					["Stock", "Quantity per warehouse matches count", "Stock Balance"],
+					["Gross profit", "Matches invoice register", "Gross Profit report"]
+				]
+			},
+			"notes": "Close the volume where a consultant actually works: on a sheet of exceptions with owners. The four reports here take twenty minutes to run and prevent the month-end argument that consumes a week. Add the habit of writing down what changed this month, because next month's reconciliation starts from that note.",
+			"callout": {
+				"tone": "tip",
+				"title": "Exceptions have names",
+				"text": "'Debtors is out by 1,320' is not a finding. 'Invoice SI-2026-00012 paid on 3 Nov but unallocated, owner Anis' is."
+			}
+		}
+	],
+	"lab": {
+		"title": "Lab · Handle the awkward cases and close the month",
+		"minutes": 65,
+		"steps": [
+			"Create a new order for 5 units and deliver only 2, then invoice 2 units at 480.00 net plus 48.00 tax",
+			"Confirm the order shows 40 % delivered and 40 % billed and remains open for the remainder",
+			"Deliver and invoice the remaining 3 units, and confirm the order completes",
+			"Raise an invoice for 5 units with a 10 % line discount and verify 1,080.00 / 108.00 / 1,188.00",
+			"Create a credit note for 1 unit against a paid invoice into Returns Quarantine",
+			"Verify stock +1, sales return 240.00, SST reversal 24.00 and debtors credit 264.00",
+			"Set the customer credit limit to 5,000 and try to submit a 6,000 order, recording the exact message",
+			"Raise the limit with a documented reason, submit, then restore the original limit",
+			"Run the four month-end reports and write an exception list with a name against each item"
+		],
+		"done": "Partial delivery, discount, return and credit block all produced the predicted numbers, and the exception list has an owner against every difference it contains."
+	},
+	"quiz": [
+		{
+			"question": "How should a partial delivery of 2 out of 5 units be recorded?",
+			"options": [
+				"Create a second order for 3 units",
+				"Reduce the delivery note quantity against the same order",
+				"Deliver all 5 and adjust stock later",
+				"Cancel the order and raise a new one"
+			],
+			"answer": 1,
+			"why": "Editing the delivery quantity keeps one order with per-delivered and per-billed percentages, preserving the commitment trail and the backorder."
+		},
+		{
+			"question": "A 10 % line discount on 1,200.00 with 10 % SST produces which total?",
+			"options": ["1,200.00", "1,320.00", "1,188.00", "1,080.00"],
+			"answer": 2,
+			"why": "The discount reduces net to 1,080.00, tax is recalculated as 108.00, so the total is 1,188.00. Tax follows the taxable value, not the original amount."
+		},
+		{
+			"question": "What are the three effects of a return against a paid invoice?",
+			"options": [
+				"Stock in, revenue reversed, tax reversed",
+				"Stock out, revenue reversed, tax unchanged",
+				"Stock in, revenue unchanged, tax reversed",
+				"Only a debtors adjustment"
+			],
+			"answer": 0,
+			"why": "A credit note brings the goods back into stock, reverses the revenue through sales return and reverses the tax charged, with debtors credited for the tax-inclusive total."
+		},
+		{
+			"question": "Where is credit checking enabled?",
+			"options": [
+				"On each customer only",
+				"In Selling Settings, with limits set per customer",
+				"In Stock Settings",
+				"On the sales invoice form"
+			],
+			"answer": 1,
+			"why": "The control is switched on once in Selling Settings, then each customer's limit decides when it blocks. Limits without the setting do nothing."
+		},
+		{
+			"question": "Which report proves that no customer payment was left unallocated?",
+			"options": ["Gross Profit", "Payment Ledger", "Stock Balance", "Sales Order Analysis"],
+			"answer": 1,
+			"why": "The payment ledger shows what each invoice still owes. An invoice showing as unpaid while cash has arrived indicates an unallocated receipt."
+		}
+	],
+	"narration": "Volume two, second half: what happens when reality intervenes. Partial delivery first. Do not split the order; reduce the delivery quantity against the same order. Two of five units moves stock by two, posts cost of goods of two hundred forty, and leaves the order at forty percent delivered and forty percent billed, still open for the rest. Next, discounts. A line discount of ten percent on one thousand two hundred gives one thousand eighty net, one hundred eight tax and one thousand one hundred eighty eight total, while cost stays six hundred, so gross profit falls to four hundred eighty. Tax follows taxable value, and learners who expect the tax to stay at one hundred twenty will misquote a customer. Then returns. A credit note is three reversals in one document: stock comes back, revenue is reversed through sales return, and the tax is reversed too. One unit at two hundred forty reverses twenty four of tax and credits the customer two hundred sixty four, and because it is created against the original invoice, the link survives an audit. Never create a negative-priced invoice. Credit limits are the one setting that stops an order. Enable credit checking in selling settings, set a five thousand limit, and a six thousand order will not submit. Blocking at submit, not at save, is deliberate. Finally, close the month with four reports and an exception list where every difference has a name against it. In the lab you break, correct and reconcile."
+}

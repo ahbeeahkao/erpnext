@@ -1,0 +1,6 @@
+item_code,item_name,item_group,stock_uom,maintain_stock,has_serial_no,has_batch_no,valuation_rate,item_tax_template,income_account,expense_account,default_warehouse,reorder_level,safety_stock,lead_time_days
+SM-BL200,Seri Murni Blender 200,Blenders,Nos,Yes,Yes,No,120.00,SST 10% - SM,Sales - SM,Cost of Goods Sold - SM,Main Warehouse - SM,20,10,7
+SM-KT100,Seri Murni Kettle 100,Appliances,Nos,Yes,No,No,85.00,SST 10% - SM,Sales - SM,Cost of Goods Sold - SM,Main Warehouse - SM,15,5,7
+SM-PKG-BOX,Shipping Carton 5-ply,Packaging,Nos,Yes,No,Yes,1.50,None,None,Cost of Goods Sold - SM,Main Warehouse - SM,100,50,3
+SM-RM-MOTOR,Blender Motor Assembly,Components,Nos,Yes,No,Yes,60.00,None,None,Cost of Goods Sold - SM,Assembly Floor - SM,30,10,14
+FREIGHT-SVC,Delivery Service,Services,Nos,No,No,No,0.00,Service Tax 8% - SM,Delivery Income - SM,Freight Inward - SM,None,0,0,0
