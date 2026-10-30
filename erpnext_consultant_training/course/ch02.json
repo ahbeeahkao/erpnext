@@ -1,393 +1,442 @@
 {
 	"id": "ch02",
 	"number": 2,
-	"title": "Volume 0 · Making the System Usable",
-	"subtitle": "Lessons 6–10: units of measure, warehouses, users and roles, permissions, naming series and the settings that bite later",
-	"level": "Foundation",
-	"minutes": 80,
+	"title": "Primer · Distribution Concepts in ERPNext",
+	"subtitle": "Buy, hold, move, sell: the commercial ideas behind a distributor's ERPNext setup, and the field or report where each one lives",
+	"level": "Primer",
+	"minutes": 55,
 	"outcomes": [
-		"Configure units of measure and conversions that survive real purchasing",
-		"Create a warehouse tree with correct stock and adjustment accounts",
-		"Create users with roles that match what each person actually does",
-		"Restrict rows and actions with user permissions and role permissions",
-		"Set the stock and selling settings that decide valuation, credit control and document numbering"
+		"Describe a distributor's three flows and the documents that carry each one",
+		"Explain channel structure, price lists and the margin stack in commercial terms",
+		"Set a reorder point from average demand, lead time and safety stock",
+		"Choose the right ERPNext behaviour for partial shipments, backorders and returns",
+		"Compute and locate the five KPIs a distribution client will ask about"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 6 · Units of measure",
-			"title": "Units that multiply without breaking valuation",
+			"kicker": "Concept 1 · Three flows",
+			"title": "Distribution moves goods, money and information",
 			"bullets": [
-				"UOMs are master data: a typo here becomes a wrong stock balance that looks plausible",
-				"Create only the units the client buys and sells in, then convert between them explicitly",
-				"No unit is more real than another: one Box equals twelve Nos is a conversion factor, not a separate product",
-				"Tick 'Must be whole number' for physical units so nobody invoices 0.4 of a blender",
-				"Weight-based units need decimals, so decide per unit instead of applying one rule everywhere"
+				"Goods flow from supplier to warehouse to customer, and sometimes back again",
+				"Money flows the other way, with terms that decide who funds the delay",
+				"Information flow is the part ERPNext owns: promises, availability and prices",
+				"A distributor's margin is earned by holding stock and taking risk, not by making anything",
+				"Every ERPNext document exists to move one of these three flows and record it"
 			],
 			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"headers": ["Flow", "Moves", "Carried by", "ERPNext evidence"],
 				"rows": [
-					["1", "Stock → Unit of Measure → New", "Box", "Empty UOM record"],
-					["2", "Tick", "Must be whole number", "Checkbox saved on"],
-					["3", "New UOM", "Set (whole number, for bundles)", "Second unit created"],
-					["4", "New UOM", "Kilogram, whole number off", "Decimal quantity allowed"],
 					[
-						"5",
-						"Stock → UOM Conversion Factor → New",
-						"Box → Nos, factor 12",
-						"One conversion row"
+						"Goods",
+						"Supplier to warehouse to customer",
+						"Purchase Receipt, Delivery Note",
+						"Stock Ledger"
 					],
-					["6", "Save", "(no voucher)", "Conversion appears in the UOM list for Box"]
-				]
-			},
-			"notes": "The classic consultant failure is discovering, three months in, that stock was received in boxes at the piece rate. Build conversions before any stock movement, and test one conversion on a draft Purchase Receipt. If the client buys in boxes of twelve and sells single pieces, both units are legitimate and the conversion factor is the contract between them.",
-			"paths": ["Stock → Unit of Measure", "Stock → UOM Conversion Factor"]
-		},
-		{
-			"kicker": "Lesson 6 · Expected outcome",
-			"title": "One box, twelve pieces, one valuation",
-			"bullets": [
-				"A test Purchase Receipt of 1 Box posts a stock balance of 12 Nos, not 1",
-				"The stock ledger shows quantity in the stock UOM, with the box quantity preserved on the document",
-				"Entering 0.5 against a whole-number unit is refused at save",
-				"Valuation stays per Nos, so the rate you type per box is divided correctly",
-				"Stock reports agree with the warehouse total when converted back to boxes"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Receipt of 1 Box", "12 Nos in stock", "Stock → Stock Balance"],
-					["Stock ledger row", "Quantity 12", "Stock → Stock Ledger"],
-					["Half box", "Refused", "Purchase Receipt save"],
-					["Valuation", "Per Nos", "Item → Valuation Rate"],
-					["Round trip", "12 Nos = 1 Box", "Convert quantity on the item"]
-				]
-			},
-			"notes": "Ask the learner to predict the stock balance before saving, then check it. This is the same prediction habit used for tax totals, and it is the core skill of a functional consultant. Watch for the trap where the client's purchase UOM is a box but the item's stock UOM is Nos: the conversion must exist before the first receipt, or the balance will be wrong and reposting is required.",
-			"callout": {
-				"tone": "warn",
-				"title": "Conversions after go-live",
-				"text": "Adding a conversion factor later does not rewrite history. If stock already moved in the wrong unit, you need a stock reconciliation, not a settings change."
-			}
-		},
-		{
-			"kicker": "Lesson 7 · Warehouses",
-			"title": "A warehouse tree with accounts behind it",
-			"bullets": [
-				"Warehouses are physical locations and each one must point at a stock account for valuation postings",
-				"Separate warehouses for main stock, retail counter, assembly and returns make movement visible",
-				"A returns warehouse is not bureaucracy: it is how you separate resellable stock from quarantined stock",
-				"Warehouse names carry the abbreviation, so reports read 'Main Warehouse - SM' consistently",
-				"Set the default warehouse once at company level, then override per document when reality demands it"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Stock → Warehouse → New", "Main Warehouse", "New warehouse under the company"],
-					["2", "Check abbreviation", "… - SM", "Name ends with the company suffix"],
-					["3", "Add Warehouse", "Retail Counter", "Second warehouse"],
-					["4", "Add Warehouse", "Assembly Floor", "Third warehouse"],
-					["5", "Add Warehouse", "Returns Quarantine", "Fourth warehouse"],
 					[
-						"6",
-						"Set Parent Warehouse",
-						"All under the company root",
-						"Tree renders with four leaves"
+						"Money",
+						"Customer to company to supplier",
+						"Payment Entry, Payment Terms",
+						"Payment Ledger"
 					],
-					["7", "Save each", "(no voucher)", "Each warehouse is selectable on stock documents"]
-				]
-			},
-			"notes": "Four warehouses is the smallest tree that teaches the concepts and still fits a real distributor: buy into main, move to retail, consume components on the assembly floor, quarantine returns. Explain that stock never 'teleports': a transfer is a document, and the trial balance stays the same during a transfer because both sides use the same stock account unless you deliberately use different accounts per warehouse.",
-			"paths": ["Stock → Warehouse → New"]
-		},
-		{
-			"kicker": "Lesson 7 · Expected outcome",
-			"title": "Balances per warehouse that reconcile to the total",
-			"bullets": [
-				"Stock Balance report lists all four warehouses with zero quantity before any transaction",
-				"A transfer of 5 units from Main to Retail leaves the company total unchanged at 5",
-				"The stock ledger shows two rows: −5 in Main and +5 in Retail on the same timestamp",
-				"Warehouse-wise profit and loss shows stock value per location when accounts differ",
-				"The default warehouse on a new Stock Entry is Main Warehouse - SM"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Warehouse count", "4", "Stock → Warehouse list"],
-					["After transfer", "Main 0, Retail 5", "Stock Balance per warehouse"],
-					["Ledger rows", "Two rows, ±5", "Stock Ledger"],
-					["Company total", "5 units", "Stock Balance, total row"],
-					["Default", "Main Warehouse - SM", "New Stock Entry"]
-				]
-			},
-			"notes": "The transfer test proves two ideas at once: that stock is tracked per location and that a transfer is not a purchase or a sale. If the learner sees a value change during a transfer, the warehouses are pointing at different stock accounts, which is a deliberate design for some businesses but must be explained, not accidental.",
-			"callout": {
-				"tone": "tip",
-				"title": "Name warehouses by place, not by person",
-				"text": "'Ali's Store' becomes a problem when Ali leaves. Use the physical location and keep people in the warehouse contact fields."
-			}
-		},
-		{
-			"kicker": "Lesson 8 · Users and roles",
-			"title": "Give each person the smallest menu that works",
-			"bullets": [
-				"A user is a login; a role is a bundle of DocType permissions; a role profile is a reusable bundle of roles",
-				"Create named users, never shared logins, because the audit trail is worthless otherwise",
-				"Accounts User can create invoices but not cancel them; Accounts Manager can do both",
-				"Stock User fits a storekeeper; Sales User fits a showroom assistant; System Manager is for the consultant only",
-				"Set the timezone per user so document timestamps read correctly in reports"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
 					[
-						"1",
-						"Users → New User",
-						"anis@serimurni.my, first and last name",
-						"User form with roles table"
+						"Information",
+						"Promises, prices, availability",
+						"Quotation, Sales Order, Price List",
+						"Reports and dashboards"
 					],
-					["2", "Add role", "Accounts Manager", "Role row added"],
-					["3", "New User", "farid@serimurni.my, Stock User", "Storekeeper login"],
-					["4", "New User", "consultant@serimurni.my, System Manager", "Consultant login"],
-					["5", "Each user", "Timezone: Asia/Kuala_Lumpur", "Timezone saved"],
-					["6", "Save and set password", "Temporary password", "User can log in"],
 					[
-						"7",
-						"Role Profile → New",
-						"Finance Team = Accounts User + Accounts Manager",
-						"Reusable profile"
+						"Reverse",
+						"Customer back to warehouse",
+						"Return and Credit Note",
+						"Stock Ledger plus Sales Return"
 					]
 				]
 			},
-			"notes": "Demonstrate the login rather than describing it. Sign out as administrator, sign in as the storekeeper, and let the learner see a shorter menu. That single experience prevents most of the 'everyone is an administrator' outcomes that make implementations hard to audit. Role profiles save time later when the client hires a fifth accounts person.",
-			"paths": ["Users → User", "Users → Role Profile"]
-		},
-		{
-			"kicker": "Lesson 8 · Expected outcome",
-			"title": "Menus that match job descriptions",
-			"bullets": [
-				"The storekeeper can see Stock and Buying but has no Accounts menu",
-				"The accounts manager can create and cancel invoices; the accounts user cannot cancel",
-				"The consultant sees everything, which is why you never demo as the consultant",
-				"Each user profile shows the correct role list and timezone",
-				"Switching users is a one-click test, so run it before every training session"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Storekeeper menu", "Stock and Buying only", "Login as farid@"],
-					["Accounts User cancel", "Blocked", "Open a submitted invoice"],
-					["Accounts Manager cancel", "Allowed", "Login as anis@"],
-					["Role profile", "Finance Team", "Users → Role Profile"],
-					["Timezone", "Asia/Kuala_Lumpur", "User profile"]
-				]
-			},
-			"notes": "The cancel test is the one that matters commercially: an accounts user who can cancel submitted invoices can silently corrupt the sales ledger. Explain the difference between a role and a role profile, then show how a permission shows up as a greyed-out button rather than an error, which is friendlier for training.",
+			"notes": "Frame distribution as risk management: the distributor buys before there is demand, holds stock that might not sell, and sells on terms that delay cash. Every configuration decision either reduces that risk or hides it. A consultant who understands this stops treating modules as features and starts asking about lead times, payment terms and fill rates.",
 			"callout": {
-				"tone": "warn",
-				"title": "Never train as Administrator",
-				"text": "Administrator bypasses every permission. Demo and train with a real user account, otherwise you will promise buttons that staff cannot see."
+				"tone": "tip",
+				"title": "Ask about the cash cycle first",
+				"text": "How long from paying a supplier to being paid by a customer? That number explains the client's credit limits, terms and stock policy better than any process map."
 			}
 		},
 		{
-			"kicker": "Lesson 9 · Permissions and numbering",
-			"title": "Row-level restrictions and document numbers",
+			"kicker": "Concept 2 · Channels",
+			"title": "Channels explain why one product has four prices",
 			"bullets": [
-				"Role permissions control what a role may do to a DocType: read, write, submit, cancel, delete",
-				"User permissions restrict which rows a user sees, for example only their own warehouse",
-				"Permlevel fields are hidden from lower levels, which is how credit limits stay with finance",
-				"Naming series decide what the client's customers see as an invoice number, so agree the format first",
-				"A meaningful series such as SI-2026-00001 is easier to quote on the phone than a random hash"
+				"A channel is a type of buyer with its own economics, not a label for reporting",
+				"Retail buys in small quantities and pays list price; dealers buy deeper and expect a discount",
+				"Distributors take stock and risk, so they buy at the lowest tier and often get credit",
+				"Exports change currency, tax treatment and shipping cost, so they need their own price basis",
+				"Each channel maps to a price list, a customer group and often a warehouse or delivery rule"
+			],
+			"table": {
+				"headers": ["Channel", "Buys like", "Price basis", "ERPNext setup"],
+				"rows": [
+					[
+						"Retail counter",
+						"Daily, small quantities",
+						"List price, tax inclusive",
+						"Retail price list, walk-in customer"
+					],
+					[
+						"Dealer",
+						"Weekly, cartons",
+						"List less a fixed percentage",
+						"Dealer price list plus pricing rule"
+					],
+					[
+						"Distributor",
+						"Monthly, pallets",
+						"Lowest tier, contractual",
+						"Separate price list and credit limit"
+					],
+					[
+						"Export",
+						"Container loads",
+						"Currency-adjusted, ex-works",
+						"Customer currency, tax exempt template"
+					]
+				]
+			},
+			"notes": "Draw the four channels and ask which one the client's sales team actually manages. Most disputes about pricing are really disputes about channel: someone gave a dealer price to a retail customer. The ERPNext answer is not a discount field but a customer group, a price list and a permission, so the mistake becomes hard to make rather than merely discouraged.",
+			"callout": {
+				"tone": "warn",
+				"title": "One customer, two channels",
+				"text": "A dealer who also buys retail needs two customer records or a clear policy. Otherwise every invoice becomes a negotiation."
+			}
+		},
+		{
+			"kicker": "Concept 3 · Margins",
+			"title": "The margin stack, from landed cost to net margin",
+			"bullets": [
+				"Gross margin is selling price less landed cost, before discounts and overheads",
+				"Landed cost includes freight, duty and handling, not just the supplier's invoice price",
+				"Discounts reduce revenue and therefore margin, while cost stays where it is",
+				"Volume rebates and returns both erode margin after the invoice is issued",
+				"Net margin is what survives after operating costs, which is the client's real question"
+			],
+			"table": {
+				"headers": ["Layer", "Formula", "On a 240.00 sale"],
+				"rows": [
+					["Supplier price", "Invoice price", "120.00"],
+					["Landed cost", "Price + freight + duty", "126.00"],
+					["Gross profit", "Price − landed cost", "114.00"],
+					["After 10 % discount", "Revenue 216.00 − landed cost", "90.00"],
+					["After a return", "Revenue reversed, stock back", "Varies by condition"]
+				]
+			},
+			"notes": "Use real numbers from the sample company so the stack is concrete: a blender at 240.00 with a landed cost of 126.00 earns 114.00 before any discount. This is where a consultant adds value, because clients often quote gross margin on the supplier price alone and then wonder why the year is unprofitable. Landed cost in ERPNext is a document, not a spreadsheet column.",
+			"paths": ["Stock → Landed Cost Voucher", "Accounts → Gross Profit"]
+		},
+		{
+			"kicker": "Concept 4 · Positioning",
+			"title": "Reorder point, safety stock and lead time",
+			"bullets": [
+				"Average daily demand times lead time tells you how much stock covers the wait",
+				"Safety stock covers demand spikes and supplier lateness, so it is added on top",
+				"Reorder point equals demand during lead time plus safety stock",
+				"Lead time is the supplier's promise plus your receiving time, and it is usually understated",
+				"Positioning is per warehouse, because a retail counter and a main store rarely share demand"
+			],
+			"table": {
+				"headers": ["Decision", "Rule", "ERPNext field"],
+				"rows": [
+					[
+						"Average daily demand",
+						"Units sold in a period ÷ days in that period",
+						"Derived from reports"
+					],
+					["Reorder point", "Daily demand × lead time + safety stock", "Reorder Level on the item"],
+					["Safety stock", "Buffer for spikes and lateness", "Safety Stock on the item"],
+					["Lead time", "Supplier days + receiving days", "Lead Time in Days"],
+					["Warehouse scope", "Per location, not per company", "Item → Reorder per warehouse"]
+				]
+			},
+			"notes": "This is the most useful arithmetic in distribution. With demand of two units a day, a seven-day lead time and safety stock of ten, the reorder point is twenty-four units, not twenty. Clients often set the level to a round number that feels safe, and then either run out or tie up cash. Teach the formula, then ask where the numbers came from.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "Lead times that include customs",
+				"text": "An import lead time of seven days is really fourteen if the container clears on a good day. Ask for the worst month, not the best."
+			}
+		},
+		{
+			"kicker": "Concept 5 · Set it up",
+			"title": "Set a reorder point from evidence, not instinct",
+			"bullets": [
+				"Use the sample company: two blenders sold per day, seven-day lead time, safety stock ten",
+				"Ask the buyer for the worst lead time last year, then add the receiving delay",
+				"Enter the arithmetic result, not a round number, so the alert fires at the right moment",
+				"Test the alert by posting a stock entry that takes the balance below the level",
+				"If the report never fires, the item is not being sold from the warehouse you configured"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Calculate the reorder point", "2 × 7 + 10", "24 units"],
+					["2", "Open the item", "SM-BL200", "Reorder fields on the item"],
+					["3", "Set the values", "Reorder Level 24, Safety Stock 10", "Both saved"],
+					["4", "Set the warehouse", "Main Warehouse - SM", "Scope is the main store, not retail"],
+					[
+						"5",
+						"Post a stock entry",
+						"Issue enough to fall below 24",
+						"Balance drops below the level"
+					],
+					[
+						"6",
+						"Run Item Reorder report",
+						"Filter to Main Warehouse",
+						"Item appears as needing reorder"
+					]
+				]
+			},
+			"notes": "Insist on the calculation in front of the client, because the number will be defended later. Twenty-four looks arbitrary until someone reconstructs it. The test step matters too: a reorder report that never fires is usually a warehouse-scope mistake, and finding that in the lab is cheaper than finding it during a stock-out.",
+			"paths": ["Stock → Item → Reorder", "Stock → Item Reorder report"]
+		},
+		{
+			"kicker": "Concept 6 · Fulfilment",
+			"title": "The fulfilment sequence and where each step is recorded",
+			"bullets": [
+				"Order capture is a promise; fulfilment is the physical work behind it",
+				"Picking and packing rarely appear as separate ERPNext documents in small distributors",
+				"Shipping is the delivery note, and it is the moment stock and cost of goods move",
+				"Invoicing can follow immediately or wait for proof of delivery",
+				"A consultant defines which steps the system owns, so the client stops keeping a parallel spreadsheet"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Users → Role Permission Manager",
-						"Sales User → Sales Invoice → Read, Write, Create",
-						"Three ticks set"
+						"Capture the order",
+						"Sales Order with delivery date",
+						"Commitment visible, stock unchanged"
 					],
 					[
 						"2",
-						"Users → User Permission → New",
-						"User farid@, Allow Warehouse: Main Warehouse",
-						"Row-level restriction saved"
+						"Check availability",
+						"Stock Balance for the warehouse",
+						"Free quantity versus ordered"
 					],
-					["3", "Accounts → Naming Series", "Sales Invoice: SI-.YYYY.-", "Series updated"],
-					["4", "Naming Series", "Purchase Order: PO-.YYYY.-", "Second series updated"],
-					["5", "Create a Sales Invoice", "(save)", "Number reads SI-2026-00001"],
-					["6", "Login as farid@", "Open Stock Balance", "Only Main Warehouse rows appear"]
+					["3", "Pick and pack", "(warehouse work)", "No ERPNext document required"],
+					["4", "Ship", "Delivery Note from the order", "Stock falls, COGS posts"],
+					["5", "Invoice", "Sales Invoice from the delivery note", "Receivable and revenue appear"],
+					["6", "Collect", "Payment Entry allocated to the invoice", "Invoice Paid, ledger cleared"]
 				]
 			},
-			"notes": "Two different ideas are often confused here: role permissions decide verbs, user permissions decide rows. The warehouse restriction is the most valuable example for a distributor, because it stops a storekeeper from posting into another outlet's stock. Naming series is where consultants earn goodwill, because invoice numbers are visible to customers and cannot be changed retroactively.",
-			"paths": [
-				"Users → Role Permission Manager",
-				"Users → User Permission",
-				"Accounts → Naming Series"
-			]
+			"notes": "Clients often want a picking list as a document. ERPNext can do it, but a small distributor usually gets more value from an accurate delivery note than from a digital picking step nobody maintains. Decide this explicitly in the workshop and write the decision down, because it defines who does what on the warehouse floor.",
+			"callout": {
+				"tone": "tip",
+				"title": "System steps need owners",
+				"text": "For each step, name the person and the document. Anything without both will be done in a spreadsheet instead."
+			}
 		},
 		{
-			"kicker": "Lesson 9 · Expected outcome",
-			"title": "Restricted users see less, not errors",
+			"kicker": "Concept 7 · Exceptions",
+			"title": "Partial shipments, backorders and substitutions",
 			"bullets": [
-				"The storekeeper's stock report lists one warehouse and the totals are that warehouse only",
-				"The storekeeper can create a Stock Entry but cannot cancel a submitted Sales Invoice",
-				"New invoices follow the agreed series and never skip a number within a period",
-				"The sales user sees the invoice form but not the credit limit field at permlevel 1",
-				"Administrator still sees everything, which is the control case for every permission test"
+				"Partial delivery is normal in distribution and must not create a second order",
+				"A backorder is an open quantity on the original commitment, not a new promise",
+				"Substituting an item changes what the customer receives, so it needs consent and a new line",
+				"Over-delivery must be a decision with a limit, not a warehouse habit",
+				"The order's delivered and billed percentages are the honest status of the promise"
+			],
+			"table": {
+				"headers": ["Situation", "Wrong response", "Consultant response"],
+				"rows": [
+					[
+						"Only 2 of 5 available",
+						"Split into a second order",
+						"Reduce the delivery quantity, keep one order"
+					],
+					[
+						"Customer accepts backorder",
+						"Cancel and re-enter later",
+						"Leave the order open at 40 % delivered"
+					],
+					[
+						"Substitute product",
+						"Change the item on the delivery",
+						"New order line with the customer's agreement"
+					],
+					["Over-delivery", "Type the extra quantity", "Agree a tolerance or issue a new order"],
+					[
+						"Price changed mid-order",
+						"Edit the old order",
+						"New order, because the old one is a commitment"
+					]
+				]
+			},
+			"notes": "These five situations generate most of the month-end confusion in a distributor. The rule behind all of them is that a commitment is history once submitted, so changes are new documents or reduced quantities, never silent edits. Teach the percentages as the status language, so a sales manager can read 40 per cent delivered without opening each line.",
+			"callout": {
+				"tone": "warn",
+				"title": "Never edit a submitted order",
+				"text": "The commitment is what the customer was promised. Reduce quantities on the delivery document, or raise a new order."
+			}
+		},
+		{
+			"kicker": "Concept 8 · Reverse flow",
+			"title": "Returns decide whether margin survives the quarter",
+			"bullets": [
+				"Goods come back for reasons: damage, wrong item, over-supply or a cancelled project",
+				"Returned stock must be separated into resellable and quarantined, or it will be sold twice or lost",
+				"The credit note reverses revenue and tax; the stock entry decides whether value comes back",
+				"Return rates by product tell the client which supplier or process is failing",
+				"Return policy belongs in writing, because the warehouse and the sales team will disagree"
+			],
+			"table": {
+				"headers": ["Situation", "Flow", "ERPNext documents"],
+				"rows": [
+					[
+						"Resellable return",
+						"Customer to sellable stock",
+						"Credit Note plus stock back to Main"
+					],
+					[
+						"Damaged return",
+						"Customer to quarantine",
+						"Credit Note plus stock to Returns Quarantine"
+					],
+					["Wrong item shipped", "Return and re-issue", "Credit Note, Delivery Note, new invoice"],
+					["Supplier return", "Stock back to supplier", "Purchase Return and debit note"],
+					[
+						"Warranty repair",
+						"Customer to service",
+						"Delivery Note in, Delivery Note out, no revenue"
+					]
+				]
+			},
+			"notes": "The warehouse question, where does the returned unit physically go, is a stronger control than any report. If everything returns to main stock, damaged goods get resold and the client discovers it through complaints. Warranty repairs are worth separating because they move stock without revenue, which confuses people who equate delivery notes with sales.",
+			"paths": ["Stock → Stock Entry (Material Receipt)", "Selling → Sales Invoice → Credit Note"]
+		},
+		{
+			"kicker": "Concept 9 · KPIs",
+			"title": "Five numbers a distribution client will ask for",
+			"bullets": [
+				"Fill rate measures how often the order was fulfilled in full from stock",
+				"OTIF adds timing: on time and in full, which is what customers actually experience",
+				"Inventory turns shows how productively cash is tied up in stock",
+				"GMROI asks whether the margin earned justifies the stock investment",
+				"DSO tells you how long customers take to pay, which decides how much credit you can afford"
+			],
+			"table": {
+				"headers": ["KPI", "Formula", "Where in ERPNext"],
+				"rows": [
+					[
+						"Fill rate",
+						"Lines fully shipped ÷ lines ordered",
+						"Sales Order vs Delivery Note analysis"
+					],
+					["OTIF", "Orders on time and complete ÷ orders", "Delivery dates vs actual delivery"],
+					[
+						"Inventory turns",
+						"Cost of goods sold ÷ average stock value",
+						"Gross Profit and Stock Balance"
+					],
+					["GMROI", "Gross margin ÷ average stock at cost", "Gross Profit and Stock Balance"],
+					["DSO", "Receivables ÷ revenue × days", "Accounts Receivable ageing"]
+				]
+			},
+			"notes": "Do not teach these as reporting features; teach them as the questions a client will ask when they suspect the system is not helping. Being able to say 'fill rate is 94 per cent because three SKUs are short' is what makes a consultant credible. Each KPI maps to reports the client already has, so no new tooling is required.",
+			"callout": {
+				"tone": "tip",
+				"title": "Agree the definitions",
+				"text": "Two managers will compute fill rate differently. Write the formula into the report header so the argument is about the number, not the maths."
+			}
+		},
+		{
+			"kicker": "Concept 10 · Consultant check",
+			"title": "What a distribution configuration must settle",
+			"bullets": [
+				"Which channel buys at which price, and how the system prevents the wrong tier",
+				"Where stock sits, and which warehouse serves which customer type",
+				"How much stock covers the lead time, and who acts when the report fires",
+				"Which exceptions are allowed and who authorises them: part delivery, over-delivery, substitution",
+				"Who owns the return decision and where quarantined stock goes"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Storekeeper stock report", "1 warehouse", "Stock Balance as farid@"],
-					["Cancel attempt", "Button hidden or blocked", "Submitted Sales Invoice"],
-					["Invoice number", "SI-2026-00001", "New Sales Invoice"],
-					["Credit limit field", "Hidden", "Customer form as sales user"],
-					["Administrator", "Sees all warehouses", "Same report"]
-				]
-			},
-			"notes": "Always run the permission test twice: once as the restricted user and once as Administrator. If both look the same, no permission was applied. This habit catches the most common implementation defect, which is a system that appears secure in the demo because the demo was done with the wrong account.",
-			"callout": {
-				"tone": "tip",
-				"title": "Numbering is a contract",
-				"text": "Agree the series with the client's auditor before the first real invoice. Renumbering afterwards means cancelled documents and an uncomfortable conversation."
-			}
-		},
-		{
-			"kicker": "Lesson 10 · Settings",
-			"title": "The stock and selling settings that decide behaviour",
-			"bullets": [
-				"Valuation method is chosen once per company: FIFO or moving average, and changed later only through reposting",
-				"Allow Negative Stock off is the single most valuable setting for stock accuracy",
-				"Check Credit Limit on turns customer limits into a submit-time control instead of a report",
-				"Default price list and default warehouse remove two fields from every clerk's daily typing",
-				"Enable the settings deliberately and record why, because a future consultant will otherwise guess"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Stock → Stock Settings", "Valuation Method: FIFO", "Method saved for the company"],
-					["2", "Stock Settings", "Allow Negative Stock: off", "Checkbox clear"],
-					["3", "Stock Settings", "Default Warehouse: Main Warehouse - SM", "Field set"],
-					["4", "Selling → Selling Settings", "Check Credit Limit: on", "Credit control active"],
-					["5", "Selling Settings", "Default Price List: Retail - SM", "Pre-filled on quotations"],
+					["Channel pricing", "One price list per channel", "Customer → Default Price List"],
+					["Warehouse roles", "Each warehouse has a purpose", "Warehouse list"],
+					["Reorder points", "Computed, not rounded", "Item → Reorder Level"],
+					["Exception rules", "Written and approved", "Configuration worksheet"],
 					[
-						"6",
-						"Stock Settings",
-						"Item Naming By: Item Code",
-						"Item codes typed by the client are kept"
-					],
-					["7", "Save", "(no voucher)", "Settings persist and apply to new documents"]
+						"Returns destination",
+						"Quarantine separate from sellable",
+						"Stock Entry and item defaults"
+					]
 				]
 			},
-			"notes": "Explain the consequence of each switch, not the label. Negative stock allowed means valuation can go negative and margins become fictional; credit limit off means the sales team finds out about a bad payer at month end. Item naming by Item Code is a small choice with big consequences: if the client later wants a different code, renaming an item is a database job.",
-			"paths": ["Stock → Stock Settings", "Selling → Selling Settings"]
-		},
-		{
-			"kicker": "Volume 0 · Handover check",
-			"title": "Ten checks before you let anyone transact",
-			"bullets": [
-				"Company, abbreviation, currency and fiscal year confirmed against the client's registration documents",
-				"Chart of accounts reviewed with finance, with tax accounts typed correctly",
-				"Cost centres built and the P&L columns reconcile to the company total",
-				"Units and conversions tested with a draft receipt of one box",
-				"Warehouses created with the default set and a transfer tested",
-				"Users created with role profiles, restricted users verified by logging in as them",
-				"Naming series agreed with the auditor, then tested on a draft document",
-				"Stock settings recorded: valuation method, negative stock, default warehouse",
-				"Selling settings recorded: credit limit, default price list, defaults",
-				"Every choice captured on the configuration worksheet with a date and a name"
-			],
-			"table": {
-				"headers": ["Area", "Evidence you keep", "Signed by"],
-				"rows": [
-					["Company and accounts", "Screenshot of tree and company tab", "Finance lead"],
-					["Tax", "Test invoice showing 1,320.00 total", "Finance lead"],
-					["Cost centres", "Cost Center-wise P&L", "Management accountant"],
-					["Users and permissions", "Login screenshots per role", "Operations manager"],
-					["Settings", "Completed configuration worksheet", "Consultant plus client"]
-				]
-			},
-			"notes": "This slide is the deliverable of Volume 0 and the reason it exists: a signed sheet that says the foundation was built deliberately. Consultants who skip it spend month one arguing about who chose what. Keep the evidence in the client's own drive, not yours, so it survives your engagement.",
+			"notes": "Close the primer by making the commercial decisions explicit, because that is the consultant's deliverable. A client who cannot answer these five questions is not ready to configure anything, and saying so politely is part of the job. Once they are answered, the ERPNext settings in Volumes 0 to 2 stop being arbitrary switches and become consequences.",
 			"callout": {
-				"tone": "tip",
-				"title": "Handover is a meeting",
-				"text": "Walk the client through the ten checks and collect signatures. A document nobody read is not evidence; a meeting is."
+				"tone": "warn",
+				"title": "Configuration is a consequence",
+				"text": "If the client cannot state the policy, the settings will encode a guess. Write the policy first, then configure."
 			}
 		}
 	],
 	"lab": {
-		"title": "Lab · Finish Volume 0 and sign the handover sheet",
-		"minutes": 55,
+		"title": "Lab · Size a reorder point and compute five KPIs",
+		"minutes": 45,
 		"steps": [
-			"Create the Box, Set and Kilogram units, then the 1 Box = 12 Nos conversion",
-			"Create Main Warehouse, Retail Counter, Assembly Floor and Returns Quarantine",
-			"Test a draft Purchase Receipt for 1 Box and confirm the stock balance reads 12 Nos",
-			"Create three users with the roles from the lesson, setting timezone Asia/Kuala_Lumpur",
-			"Create a Finance Team role profile containing Accounts User and Accounts Manager",
-			"Add a user permission restricting farid@ to Main Warehouse and prove it in the stock report",
-			"Set Sales Invoice and Purchase Order naming series, then confirm the next invoice number",
-			"Set valuation FIFO, negative stock off, credit limit check on and the default price list",
-			"Complete the ten-point handover check and collect a name and date against every row"
+			"Using the sample company, calculate the blender reorder point for demand of 2 per day, lead time 7 days and safety stock 10",
+			"Enter the reorder level and safety stock on SM-BL200, scoped to Main Warehouse",
+			"Post a stock entry that takes the balance below the level and confirm the Item Reorder report lists it",
+			"Compute gross profit for a 240.00 sale with a landed cost of 126.00 and write the figure down",
+			"Apply a 10 % dealer discount to the same sale and recompute gross profit",
+			"Compute inventory turns using annual cost of goods of 600,000 and average stock of 150,000",
+			"Compute DSO from receivables of 120,000 and annual revenue of 1,460,000",
+			"Draft the five exception rules for part delivery, over-delivery, substitution, returns and credit limits"
 		],
-		"done": "Every one of the ten checks passes with evidence attached, the conversion test posted 12 Nos for one box, and the handover sheet is signed by someone other than you."
+		"done": "The reorder point is 24 and the alert fires, gross profit is 114.00 before discount and 90.00 after, turns are 4.0, DSO is 30 days, and five exception rules are written down for the client to approve."
 	},
 	"quiz": [
 		{
-			"question": "A client buys in boxes of twelve and sells single pieces. What must exist before the first receipt?",
-			"options": [
-				"Two separate items, one per unit",
-				"A Nos stock unit plus a Box purchase unit with a conversion factor of 12",
-				"Two companies",
-				"Nothing: ERPNext converts automatically"
-			],
-			"answer": 1,
-			"why": "Stock is valued in the stock UOM. A conversion factor of 12 lets the same item be bought in boxes and sold as pieces without inventing a second product."
+			"question": "A distributor sells 2 units a day, the supplier takes 7 days and safety stock is 10. What is the reorder point?",
+			"options": ["14", "17", "24", "10"],
+			"answer": 2,
+			"why": "Demand during lead time is 2 × 7 = 14, plus safety stock 10 gives a reorder point of 24 units."
 		},
 		{
-			"question": "What is the difference between a role permission and a user permission?",
+			"question": "Why does a distributor need more than one price list?",
 			"options": [
-				"They are the same thing",
-				"A role permission decides which actions a role may perform; a user permission restricts which rows a user sees",
-				"A user permission grants administrator rights",
-				"Role permissions only affect reports"
+				"Because ERPNext requires at least two",
+				"Different channels buy at different price bases and margins",
+				"To record exchange rates",
+				"To separate tax rates"
 			],
 			"answer": 1,
-			"why": "Roles govern verbs such as create, submit and cancel. User permissions filter records, for example limiting a storekeeper to one warehouse."
+			"why": "Retail, dealer and distributor channels have different economics. A price list per channel, assigned on the customer, prevents the wrong tier being applied."
 		},
 		{
-			"question": "Why is 'Allow Negative Stock' normally turned off?",
+			"question": "Only 2 of 5 ordered units are available. What is the correct ERPNext behaviour?",
 			"options": [
-				"It slows the system down",
-				"It lets stock and valuation go negative, which makes margins and stock reports fictional",
-				"It blocks backdated entries",
-				"It prevents returns"
+				"Split the order into two",
+				"Reduce the delivery note quantity and keep the order open",
+				"Deliver 5 and adjust stock later",
+				"Cancel the order"
 			],
 			"answer": 1,
-			"why": "Negative stock hides a missing receipt and produces meaningless valuation. Keeping it off forces the team to record the real movement first."
+			"why": "Reducing the delivered quantity keeps one commitment and shows 40 per cent delivered, which is both accurate and visible in the commitment report."
 		},
 		{
-			"question": "A transfer of 5 units from Main to Retail should do what to the company's stock total?",
+			"question": "Where should a damaged return be received?",
 			"options": [
-				"Increase it by 5",
-				"Leave it unchanged, with −5 in Main and +5 in Retail",
-				"Reduce it by 5",
-				"Create a purchase invoice"
+				"Main Warehouse, to keep stock together",
+				"A quarantine warehouse, separate from sellable stock",
+				"Directly to cost of goods sold",
+				"Nowhere, since it will be scrapped"
 			],
 			"answer": 1,
-			"why": "A transfer moves quantity between locations. The total stays the same and the stock ledger shows two offsetting rows."
+			"why": "Quarantine prevents damaged goods being resold and lets the client decide between repair, scrap or supplier claim without polluting sellable stock."
 		},
 		{
-			"question": "Why agree the invoice naming series before the first real invoice?",
-			"options": [
-				"It affects the tax rate",
-				"The number appears on customer-facing documents and cannot be changed retroactively without cancelled records",
-				"It controls the fiscal year",
-				"It determines the chart of accounts"
-			],
-			"answer": 1,
-			"why": "Invoice numbers are a client and auditor contract. Changing the format later leaves a mixed series and questions about the gap."
+			"question": "Which KPI best tells a client whether the margin justifies the stock they hold?",
+			"options": ["Fill rate", "Inventory turns", "GMROI", "DSO"],
+			"answer": 2,
+			"why": "GMROI compares gross margin earned with the average stock investment, answering whether the working capital tied up in inventory is earning its keep."
 		}
 	],
-	"narration": "Volume zero, second half: making the system usable. Start with units. A unit is master data, and a conversion factor is the contract between buying and selling. If the client buys boxes of twelve and sells pieces, you need both units and the factor of twelve before the first receipt, because stock is valued in the stock unit and history cannot be rewritten afterwards. Test it: one box must post twelve pieces, and half a box must be refused. Next, warehouses. Each location points at a stock account, so main stock, retail counter, assembly floor and returns quarantine are four warehouses with one default. Transfer five units and the company total must not move. Then users. A user is a login, a role is a bundle of permissions, and a role profile is a reusable bundle of roles. Create named users, because shared logins destroy the audit trail, and always demonstrate the restricted login rather than the administrator, who bypasses everything. Permissions have two layers: roles decide verbs such as create, submit and cancel, while user permissions decide rows, for example a storekeeper seeing only the main warehouse. Naming series are a contract with the auditor, so agree the format, then test it on a draft. Finally settings: FIFO valuation, negative stock off, credit limit on, default warehouse and price list. Volume zero ends with a ten point handover sheet signed by the client, because a foundation nobody approved is an argument waiting to happen."
+	"narration": "The second primer is distribution, because a distributor earns margin by holding stock and taking risk. Think in three flows. Goods move from supplier to warehouse to customer and sometimes back. Money moves the other way, delayed by the terms you agree. Information, promises and availability, is the flow ERPNext owns. Channels explain why one product has four prices: retail pays list, dealers expect a discount, distributors buy lowest and take stock, exports add currency and freight. Each channel becomes a price list, a customer group and often a warehouse rule. Then margins: selling price less landed cost, where landed cost includes freight and duty. A blender at two hundred forty with a landed cost of one hundred twenty six earns one hundred fourteen, and a ten percent discount takes that to ninety. Positioning is the arithmetic that keeps the business running: demand during lead time plus safety stock. Two units a day for seven days, plus ten, is twenty four, not a round twenty. Fulfilment runs order, availability, pick, ship, invoice, collect, and the delivery note is where stock and cost of goods move. Exceptions are normal: partial shipments, backorders, substitutions, over-deliveries. A commitment is history once submitted, so reduce quantities or raise documents, never edit. Returns need a quarantine policy. The five KPIs are fill rate, on time in full, inventory turns, GMROI and days sales outstanding. In the lab you compute them."
 }

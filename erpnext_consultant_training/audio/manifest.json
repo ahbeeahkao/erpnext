@@ -6,40 +6,54 @@
 		"ch01": {
 			"file": "ch01.mp3",
 			"voice": "voice-00",
+			"chars": 1433,
+			"bytes": 792259,
+			"text": "Before the walkthroughs, the concepts, because a consultant who cannot explain the books will lose the client's accountant in the first meeting. Accounting runs on one equation: assets equal liabilities plus equity, and every transaction touches it twice. ERPNext enforces that twice-ness by refusing to save an unbalanced journal entry, which makes the rule visible. There are five account types, and the type decides the report: assets, liabilities and equity on the balance sheet, income and expenses on the profit and loss. Malaysian clients often arrive with a chart built in a spreadsheet, so your job is to map each row to a type, not to impose your own taste. Next, accrual accounting: income when earned, expenses when incurred. Tax collected is never income; it is a liability cleared when you file. Then the three ledgers. The general ledger says what the business earned and owns. The stock ledger says where the goods are and what they cost. The payment ledger says who owes what, document by document. One mistake is often invisible in two of the three, which is why month end reconciles all of them. Control accounts and party ledgers must agree, and you never fix a difference by journaling into debtors. Finally, journals: right for accruals and depreciation, wrong as a replacement for a purchase invoice or a sale. Close with four checks and five questions, because trust is built on numbers that survive scrutiny."
+		},
+		"ch02": {
+			"file": "ch02.mp3",
+			"voice": "voice-00",
+			"chars": 1464,
+			"bytes": 878359,
+			"text": "The second primer is distribution, because a distributor earns margin by holding stock and taking risk. Think in three flows. Goods move from supplier to warehouse to customer and sometimes back. Money moves the other way, delayed by the terms you agree. Information, promises and availability, is the flow ERPNext owns. Channels explain why one product has four prices: retail pays list, dealers expect a discount, distributors buy lowest and take stock, exports add currency and freight. Each channel becomes a price list, a customer group and often a warehouse rule. Then margins: selling price less landed cost, where landed cost includes freight and duty. A blender at two hundred forty with a landed cost of one hundred twenty six earns one hundred fourteen, and a ten percent discount takes that to ninety. Positioning is the arithmetic that keeps the business running: demand during lead time plus safety stock. Two units a day for seven days, plus ten, is twenty four, not a round twenty. Fulfilment runs order, availability, pick, ship, invoice, collect, and the delivery note is where stock and cost of goods move. Exceptions are normal: partial shipments, backorders, substitutions, over-deliveries. A commitment is history once submitted, so reduce quantities or raise documents, never edit. Returns need a quarantine policy. The five KPIs are fill rate, on time in full, inventory turns, GMROI and days sales outstanding. In the lab you compute them."
+		},
+		"ch03": {
+			"file": "ch03.mp3",
+			"voice": "voice-00",
 			"chars": 1467,
 			"bytes": 805843,
 			"text": "Welcome to the consultant track. This course is not about how ERPNext is built; it is about standing it up for a client, entering real data and proving the result to the sen. Volume zero starts with the company. Every account name carries the company abbreviation, so choose the two letters before you save. Country selects the chart of accounts template, currency is effectively fixed after the first transaction, and the fiscal year decides which period your postings land in. Then you verify, not the form, but the result: five root groups, every account ending in your abbreviation, a debtors control account, and the company selectable in global defaults. Next, add the accounts your client actually needs: petty cash, freight inward, and two tax accounts, one for sales tax and one for service tax, both flagged as tax accounts. Group accounts never take postings, and ERPNext refuses the voucher. Defaults come next: round off, write off, default cost centre and default warehouse. They look cosmetic, and they pre-fill every document. Then cost centres, built around how the client makes decisions, with a check that the columns add up to the total. Finally Malaysian SST: item tax templates for ten percent goods and eight percent services, a document template on net total, and a test invoice that must show one thousand two hundred net, one hundred twenty tax, and one thousand three hundred twenty payable. In the lab you build it and record every choice."
 		},
-		"ch02": {
-			"file": "ch02.mp3",
+		"ch04": {
+			"file": "ch04.mp3",
 			"voice": "voice-00",
 			"chars": 1467,
 			"bytes": 842414,
 			"text": "Volume zero, second half: making the system usable. Start with units. A unit is master data, and a conversion factor is the contract between buying and selling. If the client buys boxes of twelve and sells pieces, you need both units and the factor of twelve before the first receipt, because stock is valued in the stock unit and history cannot be rewritten afterwards. Test it: one box must post twelve pieces, and half a box must be refused. Next, warehouses. Each location points at a stock account, so main stock, retail counter, assembly floor and returns quarantine are four warehouses with one default. Transfer five units and the company total must not move. Then users. A user is a login, a role is a bundle of permissions, and a role profile is a reusable bundle of roles. Create named users, because shared logins destroy the audit trail, and always demonstrate the restricted login rather than the administrator, who bypasses everything. Permissions have two layers: roles decide verbs such as create, submit and cancel, while user permissions decide rows, for example a storekeeper seeing only the main warehouse. Naming series are a contract with the auditor, so agree the format, then test it on a draft. Finally settings: FIFO valuation, negative stock off, credit limit on, default warehouse and price list. Volume zero ends with a ten point handover sheet signed by the client, because a foundation nobody approved is an argument waiting to happen."
 		},
-		"ch03": {
-			"file": "ch03.mp3",
+		"ch05": {
+			"file": "ch05.mp3",
 			"voice": "voice-00",
 			"chars": 1448,
 			"bytes": 780974,
 			"text": "Volume one is the item master, and items are where costing decisions wear product names. Start with item groups. They are a reporting tree, so group by commercial family, not by supplier, and keep it three levels deep. Then a complete stock item. Maintain stock decides whether the item touches inventory at all. Valuation rate is a cost, not a price, and putting the selling price there ruins every margin report from day one. The default unit drives buying and selling, the income and expense accounts decide where sales and cost of goods post, and the item tax template attaches tax to the product rather than the invoice. Next, tracking. Serial numbers identify individual units and suit warranty appliances; batches group production runs and suit packaging with expiry. Both flags must be set before the first stock movement, because history cannot be retracked. A service item has maintain stock off, so it never appears in stock reports. Only track what the business genuinely needs to trace, and ask for one process that depends on it. Finally, prices and reorder rules. Item price records hold a rate per price list and per date, so a price change is history rather than an edit. Reorder level needs safety stock and lead time to be useful. And remember the zero-rate trap: if a quotation shows zero, a price record is missing, not a system bug. In the lab you build five items across all three types and prove the price and tax behaviour."
 		},
-		"ch04": {
-			"file": "ch04.mp3",
+		"ch06": {
+			"file": "ch06.mp3",
 			"voice": "voice-00",
 			"chars": 1493,
 			"bytes": 782855,
 			"text": "Volume one, part two: parties and pricing. A customer record is a set of defaults plus two controls. The group and territory organise reporting. The price list and payment terms decide behaviour. The credit limit is the only thing that stops a sale, and it lives in the customer's credit limits table, which is why the sample company sets five thousand here; a later lesson sells six thousand and must be blocked. Payment terms belong on the customer so every invoice inherits them; typing terms per invoice is how one customer ends up with three due dates. Then addresses, which are separate records linked to the customer. Mark one as primary billing, one as primary shipping, add a contact, and check the printed document rather than the form. Completeness matters now, because state and postcode are optional for a PDF and mandatory for an e-Invoice. Suppliers are simpler but the terms drive cash flow: thirty days here, fourteen there, and the payment proposal becomes useful instead of decorative. Finally pricing, which has two layers. An item price is a fact for a price list and a date. A pricing rule is a calculation applied when conditions match. The customer's price list picks the facts, then the rule adjusts them. Ten blenders for a dealer at two hundred sixteen, less five percent, is two hundred five ringgit twenty. Nine units is two hundred sixteen, because the minimum quantity is not met. Predict the number before you open the quotation; that is the consultant's habit."
 		},
-		"ch05": {
-			"file": "ch05.mp3",
+		"ch07": {
+			"file": "ch07.mp3",
 			"voice": "voice-00",
 			"chars": 1378,
 			"bytes": 734372,
 			"text": "Volume two is the transaction chain, and this is the heart of consultant training: five documents, three ledgers, and numbers you predict before you press submit. A quotation writes nothing but an offer. It carries the customer's price list, terms and tax, and when it is submitted the general ledger stays empty and stock does not move. A sales order is a commitment. It still posts nothing, but projected quantity falls by five, delivery dates and warehouses are set per line, and the order becomes the source for delivery and billing. The delivery note is where stock finally moves. Five units leave the main warehouse at a valuation of one hundred twenty each, so cost of goods sold is six hundred, and the order says fully delivered. Still no receivable. The sales invoice posts three things at once: debtors one thousand three hundred twenty, revenue one thousand two hundred, and SST payable one hundred twenty. Gross profit becomes six hundred, a fifty percent margin. Then the payment entry. Receive one thousand three hundred twenty into the bank, allocate it to the invoice, and the invoice turns paid and the payment ledger returns to zero. An unallocated receipt is the most common cause of a wrong aged receivables report, so always allocate. In the lab you run the whole cycle and then prove it with three reports: general ledger, payment ledger and gross profit."
 		},
-		"ch06": {
-			"file": "ch06.mp3",
+		"ch08": {
+			"file": "ch08.mp3",
 			"voice": "voice-00",
 			"chars": 1467,
 			"bytes": 760285,

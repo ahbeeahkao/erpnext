@@ -4,8 +4,10 @@ A training course for people who **configure and demonstrate ERPNext for a livin
 course, not a feature tour: every lesson tells you which screen to open, which value to enter, and
 exactly what you should see afterwards.
 
-It runs against one sample company — **Seri Murni Sdn Bhd**, a Malaysian distributor with a small
-assembly operation — so the numbers in the deck are the numbers you should see on your own site.
+It starts with two concept primers — accounting, then distribution — because a consultant who cannot
+explain the books or the commercial model loses the room before the first configuration screen. It
+then runs against one sample company, **Seri Murni Sdn Bhd** (a Malaysian distributor with a small
+assembly operation), so the numbers in the deck are the numbers you should see on your own site.
 
 ```bash
 cd erpnext_consultant_training
@@ -17,6 +19,16 @@ Press `→` to advance, `P` for the consultant note on each slide, `A` for the n
 `F` to print the whole workbook.
 
 ---
+
+## Why the two primers come first
+
+| Primer                    | What it fixes                                                                                                                                                                |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Accounting concepts**   | Double entry, the five account types, accrual vs cash, the three ledgers, control accounts, journals, period close — each mapped to the ERPNext screen where it becomes real |
+| **Distribution concepts** | Goods, money and information flows, channel pricing, the margin stack, reorder points, fulfilment, exceptions, reverse logistics, and the five KPIs a client will ask for    |
+
+If a client's accountant asks "why is SST not revenue?" or their sales director asks "why is fill rate
+94 per cent?", these chapters are where the answer lives — with the report you would open to prove it.
 
 ## What makes this consultant-grade
 
@@ -31,26 +43,29 @@ Press `→` to advance, `P` for the consultant note on each slide, `A` for the n
 Every teaching slide carries a table. Every chapter ends in a lab with a **done when** criterion and
 five quiz questions with explanations.
 
-## Volumes built so far
+## What is built so far
 
-| Volume                      | Chapters   | Lessons | Time    |
-| --------------------------- | ---------- | ------- | ------- |
-| **0 · Foundations**         | ch01, ch02 | 10      | 155 min |
-| **1 · Masters and Pricing** | ch03, ch04 | 8       | 145 min |
-| **2 · Quote to Cash**       | ch05, ch06 | 10      | 175 min |
+| Volume                      | Chapters   | Lessons   | Time    |
+| --------------------------- | ---------- | --------- | ------- |
+| **Primers · Concepts**      | ch01, ch02 | 2 primers | 200 min |
+| **0 · Foundations**         | ch03, ch04 | 10        | 270 min |
+| **1 · Masters and Pricing** | ch05, ch06 | 8         | 250 min |
+| **2 · Quote to Cash**       | ch07, ch08 | 10        | 310 min |
 
 ### Chapters
 
-1. **Volume 0 · Standing Up the Company** — Lessons 1–5: the company record, chart of accounts, company defaults, cost centres, Malaysian SST templates.
-2. **Volume 0 · Making the System Usable** — Lessons 6–10: units and conversions, warehouses, users and roles, permissions and naming series, stock and selling settings, the handover check.
-3. **Volume 1 · The Item Master** — Lessons 1–4: item groups, a complete stock item, serial and batch tracking, prices and reorder rules.
-4. **Volume 1 · Parties and Pricing** — Lessons 5–8: customers, addresses and contacts, suppliers, price lists and pricing rules.
-5. **Volume 2 · Quote to Cash, Step by Step** — Lessons 1–5: quotation → sales order → delivery note → sales invoice → payment, with the four numbers that must be exact.
-6. **Volume 2 · When Reality Intervenes** — Lessons 6–10: partial delivery, discounts, returns and credit notes, credit limits, closing the sales month.
+1. **Primer · Accounting Concepts in ERPNext** — double entry, account types, accrual, the three ledgers, control accounts, tracing a sale to the trial balance, when to use a journal, period close, and five questions before you trust a report.
+2. **Primer · Distribution Concepts in ERPNext** — the three flows, channels and price lists, the margin stack, reorder points and safety stock, the fulfilment sequence, exceptions, reverse logistics, KPIs, and what a distribution configuration must settle.
+3. **Volume 0 · Standing Up the Company** — Lessons 1–5: the company record, chart of accounts, company defaults, cost centres, Malaysian SST templates.
+4. **Volume 0 · Making the System Usable** — Lessons 6–10: units and conversions, warehouses, users and roles, permissions and naming series, stock and selling settings, the handover check.
+5. **Volume 1 · The Item Master** — Lessons 1–4: item groups, a complete stock item, serial and batch tracking, prices and reorder rules.
+6. **Volume 1 · Parties and Pricing** — Lessons 5–8: customers, addresses and contacts, suppliers, price lists and pricing rules.
+7. **Volume 2 · Quote to Cash, Step by Step** — Lessons 1–5: quotation → sales order → delivery note → sales invoice → payment, with the four numbers that must be exact.
+8. **Volume 2 · When Reality Intervenes** — Lessons 6–10: partial delivery, discounts, returns and credit notes, credit limits, closing the sales month.
 
-**Totals:** 55 teaching slides, 73 slides including intros, labs and quizzes,
-55 lab steps, 30 quiz questions, 6 narrations, 830 minutes of syllabus (about 14 hours),
-and a walkthrough table on every teaching slide.
+**Totals:** 75 teaching slides, 99 slides including intros, labs and quizzes, 71 lab steps,
+40 quiz questions, 8 narrations, 1,030 minutes of syllabus (about 17 hours), and a walkthrough table on
+every teaching slide.
 
 ### Planned volumes (declared, not yet written)
 
@@ -92,14 +107,16 @@ arithmetic the data pack declares.
 
 ## How to teach from it
 
-1. **Build the sample company first.** Volumes 0–1 are prerequisites; a learner who jumps to Volume 2
+1. **Run the two primers as a workshop, not a lecture.** Ask the client's accountant to explain one
+   invoice's postings back to you; that conversation tells you whether the project will succeed.
+2. **Build the sample company next.** Volumes 0–1 are prerequisites; a learner who jumps to Volume 2
    will not know why a rate or a tax row appeared.
-2. **Predict, then check.** Ask for the total, the tax and the cost of goods before pressing submit.
+3. **Predict, then check.** Ask for the total, the tax and the cost of goods before pressing submit.
    This is the single habit that separates a consultant from a typist.
-3. **Break something in every session.** Remove an item price, blank a postcode, exceed a credit limit.
+4. **Break something in every session.** Remove an item price, blank a postcode, exceed a credit limit.
    The error message is the lesson.
-4. **Keep an exception register.** Every lab ends with something a client would have to sign.
-5. **Finish with the handover sheet** in chapter 2, then run the sample cycle end to end as a rehearsal.
+5. **Keep an exception register.** Every lab ends with something a client would have to sign.
+6. **Finish with the handover sheet** in chapter 4, then run the sample cycle end to end as a rehearsal.
 
 ## Repository layout
 
@@ -108,8 +125,8 @@ erpnext_consultant_training/
 ├── index.html                 deck shell, no build step
 ├── styles.css                 deck and print styling
 ├── src/app.js                 router, renderer, quizzes, search, notes, print, audio
-├── course/                    manifest.json and ch01.json … ch06.json (source of truth)
-├── audio/                     generated manifest and six chapter narrations
+├── course/                    manifest.json and ch01.json … ch08.json (source of truth)
+├── audio/                     generated manifest and eight chapter narrations
 ├── samples/                   Seri Murni data pack and expected outcomes
 ├── scripts/                   static server and audio manifest builder
 └── tests/                     content gate and jsdom UI smoke test
@@ -140,7 +157,9 @@ character.
 -   **No screenshots or screen recordings**, because no site existed in the environment where this was
     written. Every step is described precisely enough to follow, and every result is stated as a number,
     a status or a report row you can verify.
--   **Three of eleven volumes are built.** The rest are declared in the roadmap and deliberately not
-    faked with thin chapters.
+-   **The primers are briefs, not accounting or distribution textbooks.** They cover the concepts a
+    consultant needs in front of a client, not the full syllabus of a professional qualification.
+-   **Five of eleven volumes are built** (two primers and three volumes). The rest are declared in the
+    roadmap and deliberately not faked with thin chapters.
 -   **Not a tax or audit opinion.** Malaysian SST treatment here is a configuration exercise for the
     sample company; confirm rates and registration obligations with the client's tax advisor.

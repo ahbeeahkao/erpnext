@@ -1,27 +1,64 @@
 {
 	"title": "ERPNext Functional Consultant",
-	"subtitle": "Volumes 0–2: stand up a Malaysian company, build the masters, and run quote-to-cash with exact numbers",
-	"version": "0.3.0",
+	"subtitle": "Primers on accounting and distribution, then volumes 0–2: stand up a Malaysian company, build the masters, and run quote-to-cash with exact numbers",
+	"version": "0.4.0",
 	"audience": "Functional consultants, implementation leads and key users who configure and demonstrate ERPNext",
 	"sample_company": "Seri Murni Sdn Bhd — a Malaysian distributor with a small assembly operation",
 	"volumes": [
-		{ "id": "v0", "title": "Volume 0 · Foundations", "status": "built", "chapters": ["ch01", "ch02"] },
+		{
+			"id": "p1",
+			"title": "Primer · Accounting Concepts",
+			"status": "built",
+			"chapters": ["ch01"]
+		},
+		{
+			"id": "p2",
+			"title": "Primer · Distribution Concepts",
+			"status": "built",
+			"chapters": ["ch02"]
+		},
+		{
+			"id": "v0",
+			"title": "Volume 0 · Foundations",
+			"status": "built",
+			"chapters": ["ch03", "ch04"]
+		},
 		{
 			"id": "v1",
 			"title": "Volume 1 · Masters and Pricing",
 			"status": "built",
-			"chapters": ["ch03", "ch04"]
+			"chapters": ["ch05", "ch06"]
 		},
-		{ "id": "v2", "title": "Volume 2 · Quote to Cash", "status": "built", "chapters": ["ch05", "ch06"] },
-		{ "id": "v3", "title": "Volume 3 · Procure to Pay", "status": "planned", "chapters": [] },
+		{
+			"id": "v2",
+			"title": "Volume 2 · Quote to Cash",
+			"status": "built",
+			"chapters": ["ch07", "ch08"]
+		},
+		{
+			"id": "v3",
+			"title": "Volume 3 · Procure to Pay",
+			"status": "planned",
+			"chapters": []
+		},
 		{
 			"id": "v4",
 			"title": "Volume 4 · Stock Accuracy and Valuation",
 			"status": "planned",
 			"chapters": []
 		},
-		{ "id": "v5", "title": "Volume 5 · Accounting and the Close", "status": "planned", "chapters": [] },
-		{ "id": "v6", "title": "Volume 6 · Manufacturing", "status": "planned", "chapters": [] },
+		{
+			"id": "v5",
+			"title": "Volume 5 · Accounting and the Close",
+			"status": "planned",
+			"chapters": []
+		},
+		{
+			"id": "v6",
+			"title": "Volume 6 · Manufacturing",
+			"status": "planned",
+			"chapters": []
+		},
 		{
 			"id": "v7",
 			"title": "Volume 7 · Projects, Assets, Quality and CRM",
@@ -34,7 +71,12 @@
 			"status": "planned",
 			"chapters": []
 		},
-		{ "id": "v9", "title": "Volume 9 · Malaysia Compliance", "status": "planned", "chapters": [] },
+		{
+			"id": "v9",
+			"title": "Volume 9 · Malaysia Compliance",
+			"status": "planned",
+			"chapters": []
+		},
 		{
 			"id": "v10",
 			"title": "Volume 10 · Migration, UAT and Go-Live",
@@ -43,11 +85,37 @@
 		}
 	],
 	"chapters": [
-		{ "id": "ch01", "file": "ch01.json" },
-		{ "id": "ch02", "file": "ch02.json" },
-		{ "id": "ch03", "file": "ch03.json" },
-		{ "id": "ch04", "file": "ch04.json" },
-		{ "id": "ch05", "file": "ch05.json" },
-		{ "id": "ch06", "file": "ch06.json" }
+		{
+			"id": "ch01",
+			"file": "ch01.json"
+		},
+		{
+			"id": "ch02",
+			"file": "ch02.json"
+		},
+		{
+			"id": "ch03",
+			"file": "ch03.json"
+		},
+		{
+			"id": "ch04",
+			"file": "ch04.json"
+		},
+		{
+			"id": "ch05",
+			"file": "ch05.json"
+		},
+		{
+			"id": "ch06",
+			"file": "ch06.json"
+		},
+		{
+			"id": "ch07",
+			"file": "ch07.json"
+		},
+		{
+			"id": "ch08",
+			"file": "ch08.json"
+		}
 	]
 }

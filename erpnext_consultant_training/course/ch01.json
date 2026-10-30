@@ -1,429 +1,413 @@
 {
 	"id": "ch01",
 	"number": 1,
-	"title": "Volume 0 · Standing Up the Company",
-	"subtitle": "Lessons 1–5: create the company, shape the chart of accounts, set defaults, cost centres and Malaysian SST",
-	"level": "Foundation",
-	"minutes": 75,
+	"title": "Primer · Accounting Concepts in ERPNext",
+	"subtitle": "The ten accounting ideas a functional consultant must be able to explain at a whiteboard, and the ERPNext screen each one lives on",
+	"level": "Primer",
+	"minutes": 55,
 	"outcomes": [
-		"Create a Malaysian company with the right currency, fiscal year and chart of accounts",
-		"Add and reclassify ledger accounts without breaking the report structure",
-		"Set the company defaults that silently drive every later document",
-		"Build a cost centre tree a client can actually report on",
-		"Configure SST sales and service tax so documents compute tax correctly"
+		"Explain double entry and the accounting equation without notes",
+		"Place every account type in the right report and recognise a normal balance",
+		"Describe the three ledgers in ERPNext and what question each one answers",
+		"Know when a situation needs a Journal Entry and when it needs a business document",
+		"Run four checks that prove a client's books agree before you trust any report"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Create the company",
-			"title": "Company, abbreviation, currency and fiscal year",
+			"kicker": "Concept 1 · Double entry",
+			"title": "Every number has two sides, and ERPNext refuses to pretend otherwise",
 			"bullets": [
-				"Everything in ERPNext hangs off the Company record, so this is the first screen a consultant opens",
-				"The abbreviation becomes the suffix on every account and warehouse, so choose two letters and keep them",
-				"Country selects the chart of accounts template; Malaysia brings the standard tree, not a tax setup",
-				"Currency is per company and effectively fixed once the first transaction exists",
-				"Financial year dates decide which period new documents post into by default"
+				"Accounting records the effect of a transaction twice: something received, something given",
+				"Assets equal liabilities plus equity, and every posting preserves that balance",
+				"ERPNext will not save an unbalanced Journal Entry, which is a teaching tool as much as a control",
+				"Ledger rows are created by vouchers and cannot be edited afterwards, only reversed",
+				"Once a client understands this, every report stops looking like magic"
 			],
 			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"headers": ["Idea", "What it means", "Where you meet it"],
+				"rows": [
+					["Accounting equation", "Assets = Liabilities + Equity", "Balance Sheet"],
+					[
+						"Double entry",
+						"Each posting has an equal debit and credit",
+						"Journal Entry, Sales Invoice"
+					],
+					["Voucher", "A document that creates ledger rows on submit", "Any submitted transaction"],
+					[
+						"Immutability",
+						"Posted rows are read-only; corrections are new documents",
+						"General Ledger"
+					],
+					["Balance check", "Unbalanced entries are refused by the system", "Journal Entry save"]
+				]
+			},
+			"notes": "Open the course with the whiteboard, not the screen. Draw the equation, then show that a sale increases an asset and increases income, which sits in equity. A consultant who cannot explain this in five minutes will lose the room to the client's accountant within a week. The ERPNext detail, that unbalanced vouchers are refused, gives the concept teeth.",
+			"callout": {
+				"tone": "tip",
+				"title": "Ask for two sides, always",
+				"text": "When a client describes a transaction, respond with 'what is the other side?'. It is the fastest way to expose a process that has never been thought through."
+			}
+		},
+		{
+			"kicker": "Concept 2 · Account types",
+			"title": "Five types, two normal balances, three reports",
+			"bullets": [
+				"Asset and expense accounts normally carry debit balances; liability, equity and income carry credits",
+				"Account type drives which report an account appears in, not the account's name",
+				"Group accounts organise the tree; only leaf accounts accept postings",
+				"A wrongly typed account is the single most common reason a balance sheet looks strange",
+				"Chart design is a client decision, but type selection is a consultant responsibility"
+			],
+			"table": {
+				"headers": ["Account type", "Normal balance", "Appears in", "ERPNext setting"],
+				"rows": [
+					["Asset", "Debit", "Balance Sheet", "Account Type: Asset or sub-type"],
+					["Liability", "Credit", "Balance Sheet", "Account Type: Liability"],
+					["Equity", "Credit", "Balance Sheet", "Account Type: Equity"],
+					["Income", "Credit", "Profit and Loss", "Account Type: Income"],
+					["Expense", "Debit", "Profit and Loss", "Account Type: Expense"]
+				]
+			},
+			"notes": "Show a P&L and a balance sheet side by side, then click one account and show its type. The link between type and report is what most users miss. Malaysian SMEs often arrive with a chart produced by an accountant in Excel; your job is to map each row to a type, not to redesign the chart to your own taste.",
+			"paths": ["Accounts → Chart of Accounts → Account → Account Type"]
+		},
+		{
+			"kicker": "Concept 3 · Accrual",
+			"title": "Accrual accounting, and why tax is a liability not a cost",
+			"bullets": [
+				"Accrual recognises income when earned and expenses when incurred, not when cash moves",
+				"Cash accounting recognises the same events when money changes hands, which suits tiny businesses",
+				"Under accrual, a sale creates a receivable immediately and the cash arrives later",
+				"SST collected is never revenue: it is a liability owed to LHDN until remitted",
+				"Mixing the two bases inside one company produces reports that cannot be reconciled"
+			],
+			"table": {
+				"headers": ["Basis", "Recognise", "Typical document", "Effect on reports"],
 				"rows": [
 					[
-						"1",
-						"Setup → Company → New",
-						"(open form)",
-						"Empty company form with General, Accounts, Defaults tabs"
+						"Accrual",
+						"When earned or incurred",
+						"Sales Invoice, Purchase Invoice",
+						"Receivables and payables appear"
 					],
-					["2", "Company Name", "Seri Murni Sdn Bhd", "Name copied into the form header"],
-					["3", "Abbreviation", "SM", "Two-letter suffix used by accounts and warehouses"],
+					["Cash", "When money moves", "Payment Entry", "No receivables"],
 					[
-						"4",
-						"Country / Default Currency",
-						"Malaysia / MYR",
-						"Country set, currency set to Malaysian Ringgit"
+						"Accrual adjustment",
+						"At period end",
+						"Journal Entry with reversal date",
+						"Matches cost to period"
+					],
+					["Tax collected", "On the invoice", "Sales Invoice tax row", "Liability, never income"]
+				]
+			},
+			"notes": "This is where clients argue, because their previous system may have been cash-based. ERPNext is accrual by default, and pretending otherwise creates an unworkable receivables ledger. Explain tax as a pass-through early, or someone will report SST as revenue and the gross margin will be wrong by ten per cent forever.",
+			"callout": {
+				"tone": "malaysia",
+				"title": "SST is collected, not earned",
+				"text": "SST Payable is a liability cleared when you file and pay. It never touches the profit and loss account."
+			}
+		},
+		{
+			"kicker": "Concept 4 · The three ledgers",
+			"title": "One transaction, three different books",
+			"bullets": [
+				"The general ledger answers what the business is worth and what it earned",
+				"The stock ledger answers where the goods are and what they cost",
+				"The payment ledger answers who owes whom, invoice by invoice",
+				"Each ledger is fed by different documents, which is why one mistake is invisible in the other two",
+				"A consultant reconciles all three at month end, not just the trial balance"
+			],
+			"table": {
+				"headers": ["Ledger", "Question it answers", "Fed by", "Report"],
+				"rows": [
+					[
+						"General ledger",
+						"What did we earn, own and owe?",
+						"Invoices, payments, journals",
+						"Trial Balance, P&L, Balance Sheet"
 					],
 					[
-						"5",
-						"Financial Year",
-						"01-01-2026 to 31-12-2026",
-						"Fiscal year saved on the Accounts tab"
+						"Stock ledger",
+						"Where is the stock and what is it worth?",
+						"Delivery notes, receipts, transfers, counts",
+						"Stock Balance, Stock Ledger"
 					],
-					["6", "Chart of Accounts", "Standard", "Save creates five account root groups"],
 					[
-						"7",
-						"Click Save",
-						"(submit)",
-						"Company saved; tree of accounts created in the background"
+						"Payment ledger",
+						"Who owes what, document by document?",
+						"Invoices and allocated payments",
+						"Accounts Receivable, Payment Ledger"
+					],
+					[
+						"Reconciliation",
+						"Do all three agree, line by line?",
+						"Month-end checks",
+						"Three reports compared"
 					]
 				]
 			},
-			"notes": "Say the abbreviation out loud before saving: every account becomes '… - SM' and changing it later means renaming dozens of records. Same for the fiscal year, because a wrong year quietly posts opening entries into the wrong period. If the client keeps a non-calendar year, enter it here rather than trying to fix dates document by document.",
-			"paths": ["Setup → Company → New"]
-		},
-		{
-			"kicker": "Lesson 1 · Expected outcome",
-			"title": "What a correctly created company looks like",
-			"bullets": [
-				"Five root groups appear: Application of Funds, Sources of Funds, Equity, Income and Expenses",
-				"Every ledger account ends with the suffix - SM, which proves the abbreviation was applied",
-				"A Debtors control account exists under Accounts Receivable and is linked as the default receivable",
-				"The company is selectable in Global Defaults, which means new documents will inherit it",
-				"Nothing here is tax-specific yet: no SST account and no tax template has been created"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Root groups", "5 groups", "Accounts → Chart of Accounts"],
-					["Account suffix", "… - SM", "Any ledger account row"],
-					["Receivable account", "Debtors - SM", "Company → Accounts tab"],
-					["Fiscal year", "01-01-2026 → 31-12-2026", "Company → Accounts tab"],
-					["Default company", "Seri Murni Sdn Bhd", "Setup → Global Defaults"]
-				]
-			},
-			"notes": "This is the verification habit the whole course teaches: after every configuration step, check a named value in a named place. If the suffix is missing, the company was created with a different abbreviation. If fewer than five roots exist, the chart template did not load and the company should be deleted and recreated before any transaction exists.",
+			"notes": "Draw three columns and put a sales invoice at the top of one, a delivery note at the top of the second, and the payment at the top of the third. This picture explains ninety per cent of month-end confusion, including why a fully paid invoice can still leave a stock problem and why a stock discrepancy does not always move profit in the period the client expects.",
 			"callout": {
 				"tone": "warn",
-				"title": "Do not fix accounts by deleting them",
-				"text": "If the tree is wrong, delete the company while it is empty. Once a voucher exists, accounts can only be disabled, and the tree carries the mistake forever."
+				"title": "One mistake, two ledgers",
+				"text": "Receiving goods without a purchase receipt moves stock in reality and nothing in ERPNext, so both stock and profit are wrong until it is posted."
 			}
 		},
 		{
-			"kicker": "Lesson 2 · Chart of accounts",
-			"title": "Add the three accounts your client will actually need",
+			"kicker": "Concept 5 · Control accounts",
+			"title": "Control accounts and party ledgers",
 			"bullets": [
-				"Keep the template tree and add leaf accounts: renaming the standard tree breaks every report a consultant later runs",
-				"Add Petty Cash as a cash-type ledger so it appears in cash flow and can be reconciled",
-				"Add Freight Inward as an expense so landed cost and purchase charges have a home",
-				"Add SST Payable as an account of type Tax, which is what tax reports expect",
-				"Group accounts hold no postings; leaf accounts do, and getting this wrong produces silent zero-value reports"
+				"The receivable control account holds the total owed by all customers",
+				"Each customer also has a ledger, and the sum of those ledgers must equal the control account",
+				"ERPNext keeps both in one system, so the control account is derived rather than typed",
+				"An unreconciled payment breaks the equality between party ledgers and the control account",
+				"Never post a manual journal to a control account to make a report balance"
+			],
+			"table": {
+				"headers": ["Concept", "Meaning", "ERPNext reality"],
+				"rows": [
+					[
+						"Control account",
+						"Total receivable or payable balance",
+						"Debtors - SM, Creditors - SM"
+					],
+					[
+						"Party ledger",
+						"One customer's or supplier's balance",
+						"General Ledger filtered by party"
+					],
+					["Allocation", "Which invoice a payment settles", "Payment Entry reference"],
+					["Reconciliation", "Party ledgers equal the control account", "Payment Ledger report"]
+				]
+			},
+			"notes": "Consultants see this defect constantly: a journal entry posted to Debtors to fix a small difference, which hides an unallocated receipt and breaks every ageing report. Say plainly that a control account is a check, not a bucket. The correct fix is to allocate the payment or write off with an approved document.",
+			"callout": {
+				"tone": "warn",
+				"title": "Never journal into Debtors",
+				"text": "A manual entry to a control account breaks the link to party ledgers. Fix the allocation or post a proper credit note."
+			}
+		},
+		{
+			"kicker": "Concept 6 · Trace it",
+			"title": "Follow one sale from document to trial balance",
+			"bullets": [
+				"Use the sample company's invoice: 1,200.00 net, 120.00 SST, 1,320.00 total",
+				"Do this on the learner's own site so the numbers are real, not a slide",
+				"The point is to see the same transaction appear in four different reports",
+				"Note which report shows tax separately and which shows only the receivable",
+				"If any step is empty, a document was saved as a draft instead of submitted"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Accounts → Chart of Accounts → Add Account",
-						"Account Name: Petty Cash",
-						"New account under Assets → Current Assets"
+						"Open the submitted invoice",
+						"SI for 5 units at 240.00",
+						"Total 1,320.00, status Unpaid"
 					],
-					["2", "Set Is Group", "No", "Account accepts journal entries"],
-					["3", "Add Account", "Freight Inward, under Expenses", "New expense ledger"],
-					["4", "Add Account", "SST Payable, under Current Liabilities", "Account type selectable"],
-					["5", "Set Account Type", "Tax", "Account flagged as a tax account"],
+					["2", "Accounts → General Ledger", "Filter by voucher", "Dr Debtors 1,320.00"],
+					["3", "Same report", "(scroll)", "Cr Sales 1,200.00, Cr SST Payable 120.00"],
 					[
-						"6",
-						"Add Account",
-						"Service Tax Payable, type Tax",
-						"Second tax ledger for 8 % service tax"
+						"4",
+						"Accounts → Profit and Loss",
+						"Period covering the invoice",
+						"Income 1,200.00, no tax"
 					],
-					["7", "Save each", "(no voucher)", "Tree shows all four with the - SM suffix"]
+					[
+						"5",
+						"Accounts → Balance Sheet",
+						"As at the invoice date",
+						"Debtors 1,320.00, SST 120.00"
+					],
+					["6", "Accounts → Trial Balance", "Same period", "Debits equal credits"]
 				]
 			},
-			"notes": "Consultants are hired for judgement, not clicking. Explain why these four: petty cash because Malaysian SMEs keep a float, freight inward because imports and delivery charges must land somewhere other than a generic expense, and two tax accounts because sales tax and service tax are declared separately. A single 'Tax Payable' account forces the client to unpick it manually at filing time.",
-			"paths": ["Accounts → Chart of Accounts → Add Account"]
+			"notes": "This is the moment theory becomes a habit. Ask the learner to predict what the P&L will show before opening it: they should say income 1,200 and no tax, because tax is a liability. If they say 1,320, revisit the accrual slide. Doing this on their own site, rather than reading a screenshot, is what makes it stick.",
+			"paths": ["Accounts → General Ledger", "Accounts → Profit and Loss", "Accounts → Trial Balance"]
 		},
 		{
-			"kicker": "Lesson 2 · Expected outcome",
-			"title": "Verify the tree, not the form",
+			"kicker": "Concept 7 · Prove it",
+			"title": "Four checks that prove the books agree",
 			"bullets": [
-				"The tree shows Petty Cash under Current Assets and both tax accounts under Current Liabilities",
-				"Opening a leaf account shows no children; opening a group shows an Add Child button",
-				"Trying to post a Journal Entry to a group account is refused with a clear message",
-				"Freight Inward appears in the Profit and Loss report under Expenses, at zero",
-				"The two tax accounts appear in the tax account selector of a tax template"
+				"A trial balance that does not balance means a posting went somewhere impossible",
+				"Debtors in the general ledger must equal the total of customer balances",
+				"The stock account balance must equal the value in the stock ledger",
+				"Bank in the ledger must equal the bank statement once reconciled",
+				"These four checks take ten minutes and prevent a month of argument"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Petty Cash parent", "Current Assets", "Chart of Accounts tree"],
-					["SST Payable type", "Tax", "Account form"],
-					["Group posting", "Blocked", "Try a Journal Entry"],
-					["P&L line", "Freight Inward, 0.00", "Accounts → Profit and Loss"],
-					["Tax selector", "Both tax accounts listed", "Sales Taxes and Charges Template"]
+					["Trial balance", "Total debit equals total credit", "Accounts → Trial Balance"],
+					[
+						"Debtors control",
+						"Equals sum of party balances",
+						"General Ledger vs Accounts Receivable"
+					],
+					[
+						"Stock value",
+						"Ledger balance equals stock value",
+						"Balance Sheet vs Stock Balance value"
+					],
+					["Bank", "Ledger equals reconciled statement", "Bank Reconciliation Tool"],
+					["Retained earnings", "Opening plus current profit", "Balance Sheet"]
 				]
 			},
-			"notes": "The group-posting test is the one learners remember, because ERPNext refuses it explicitly. Run it once in front of the client so they understand why 'add a new account' is sometimes the wrong answer. Keep the account list short and meaningful; a 300-account chart is the most common sign of an implementation done without a designer.",
+			"notes": "Give the learner a routine they can run in front of a client. The stock check is the one that surprises people, because a wrong valuation or a missing repost shows up here and nowhere else. If the stock ledger and the stock account disagree, stop and fix that before closing the period.",
 			"callout": {
 				"tone": "tip",
-				"title": "Name for the report",
-				"text": "Account names are read by managers on the P&L, not by developers. Write 'Freight Inward', not 'Account 5200'."
+				"title": "Ten minutes, every month",
+				"text": "Run these four checks before any management report leaves your desk. It is cheaper than defending a wrong number."
 			}
 		},
 		{
-			"kicker": "Lesson 3 · Company defaults",
-			"title": "The defaults that every document silently inherits",
+			"kicker": "Concept 8 · Journals",
+			"title": "When a journal is right, and when it is a workaround",
 			"bullets": [
-				"Round Off and Write Off accounts decide where rounding and bad-debt differences land",
-				"Default Cost Center pre-fills every line so no posting is ever unallocated",
-				"Global Defaults sets the company used when a user creates a document from the home screen",
-				"Defaults are cheap now and painful later: changing them creates an inconsistency between periods",
-				"Write the choices down in the configuration worksheet, because nobody remembers them at audit time"
+				"A Journal Entry is for adjustments with no business document: accruals, depreciation, corrections",
+				"A purchase invoice is not a journal: it carries supplier, tax and payment terms",
+				"A customer invoice is not a journal: it carries stock, revenue and receivables together",
+				"Journals should be few, named consistently and traceable to a reason",
+				"A client with hundreds of journals per month has a process problem, not an accounting one"
 			],
 			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"headers": ["Situation", "Use", "Why"],
 				"rows": [
 					[
-						"1",
-						"Company → Accounts tab",
-						"Round Off Account: Round Off - SM",
-						"Field accepts the ledger"
+						"Accrued electricity at month end",
+						"Journal Entry with reversal date",
+						"No supplier document yet"
 					],
-					[
-						"2",
-						"Company → Accounts tab",
-						"Write Off Account: Write Off - SM",
-						"Second default set"
-					],
-					[
-						"3",
-						"Company → Accounts tab",
-						"Default Cost Center: Main - SM",
-						"Cost centre pre-filled on new documents"
-					],
-					[
-						"4",
-						"Company → Defaults tab",
-						"Default Warehouse: Main Warehouse - SM",
-						"Used by stock documents"
-					],
-					[
-						"5",
-						"Setup → Global Defaults",
-						"Default Company: Seri Murni Sdn Bhd",
-						"Home screen uses this company"
-					],
-					["6", "Save both forms", "(no voucher)", "Values persist after a refresh"]
+					["Monthly depreciation", "Journal Entry", "No external document exists"],
+					["Supplier bill received", "Purchase Invoice", "Carries tax, terms and payable"],
+					["Customer sale", "Sales Invoice", "Posts revenue, stock and receivable"],
+					["Bank charges", "Payment Entry deduction", "Keeps the payment trail intact"]
 				]
 			},
-			"notes": "These fields are where implementations quietly diverge: one site rounds to a salary-expense account, another to a suspense account, and the P&L becomes incomparable across years. Explain the intent of each default and let the client choose, then record the choice. If a client has no opinion, propose the conventional option and move on.",
-			"paths": ["Setup → Company → Accounts", "Setup → Global Defaults"]
+			"notes": "Consultants inherit journals the previous team used to patch around missing documents. Ask to see a month of them and classify each: adjustment, or workaround. The second category is your implementation backlog. Reversal dates are worth demonstrating because they let a client accrue at month end without editing the entry later.",
+			"paths": ["Accounting → Journal Entry → New"]
 		},
 		{
-			"kicker": "Lesson 3 · Expected outcome",
-			"title": "Prove the defaults are wired",
+			"kicker": "Concept 9 · Period close",
+			"title": "The four adjustments every close needs",
 			"bullets": [
-				"A new Sales Invoice opens with the company already filled in",
-				"Each line shows the default cost centre without the user typing it",
-				"A journal entry can be posted with a 0.05 difference and lands in Round Off",
-				"Stock documents default to Main Warehouse, not to the retail counter",
-				"The configuration worksheet has six completed rows you can show the client"
+				"Accruals match costs to the period they belong to, usually with an automatic reversal",
+				"Prepayments spread a payment over the periods it covers",
+				"Depreciation allocates an asset's cost over its useful life, never in one hit",
+				"A period closing voucher freezes history so back-dated entries cannot rewrite a closed month",
+				"Closing is a sequence with owners and dates, not a Friday afternoon"
+			],
+			"table": {
+				"headers": ["Adjustment", "Purpose", "ERPNext document"],
+				"rows": [
+					["Accrual", "Cost belongs to this month", "Journal Entry with reversal date"],
+					[
+						"Prepayment",
+						"Cost spans several months",
+						"Journal Entry per period, or deferred expense"
+					],
+					["Depreciation", "Allocate asset cost", "Asset Depreciation Entry"],
+					["Closing", "Stop back-dating", "Period Closing Voucher"],
+					["Review", "Confirm the balance sheet", "Trial Balance and stock value check"]
+				]
+			},
+			"notes": "Do not teach closing as a button. Teach it as an order of operations with a checklist and a named owner, then show the documents. If the client has never closed a period, run the first close with them, because that is where the process either becomes real or collapses into a spreadsheet.",
+			"callout": {
+				"tone": "tip",
+				"title": "Close, then report",
+				"text": "Reports generated before the close are drafts. Say so, or the client will quote a number that changes twice."
+			}
+		},
+		{
+			"kicker": "Concept 10 · Consultant check",
+			"title": "Five questions before you trust a client's trial balance",
+			"bullets": [
+				"Are there unallocated payments, which make receivables overstate what is owed?",
+				"Does the stock account equal the stock ledger value, to the sen?",
+				"Are there draft invoices that the business believes are issued?",
+				"Is every control account reconciled to its party ledgers?",
+				"Has the period been closed, or can last month still change?"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["New invoice company", "Seri Murni Sdn Bhd", "Selling → Sales Invoice → New"],
-					["Line cost centre", "Main - SM", "Item table, Cost Center column"],
-					["Rounding account", "Round Off - SM", "Journal Entry with 0.05 difference"],
-					["Default warehouse", "Main Warehouse - SM", "Stock Entry → New"],
-					["Worksheet rows", "6", "Your configuration worksheet"]
+					["Unallocated payments", "None, or explained", "Payment Ledger"],
+					["Stock vs ledger", "Zero difference", "Stock and Account Value report"],
+					["Draft documents", "None past their date", "Sales Invoice and Purchase Invoice lists"],
+					["Control accounts", "Equal to party totals", "General Ledger by party"],
+					["Period lock", "Previous month closed", "Accounts → Period Closing Voucher"]
 				]
 			},
-			"notes": "Use the rounding test deliberately: post a journal entry that is out by five sen and watch ERPNext route the difference. It teaches two things at once, that ERPNext enforces balance and that the round-off account is real, not decorative. Then delete the test voucher so the client's trial balance stays clean.",
+			"notes": "End the primer with the questions a client will one day ask you, phrased so that you can answer them from a report rather than an opinion. A consultant who can run these five checks in fifteen minutes is worth more than one who can configure forty features, because trust is built on numbers that survive scrutiny.",
 			"callout": {
 				"tone": "warn",
-				"title": "Delete your test vouchers",
-				"text": "Cancel and delete every test journal entry before handover. A stray RM 0.05 posting is the first thing an auditor asks about."
-			}
-		},
-		{
-			"kicker": "Lesson 4 · Cost centres",
-			"title": "A cost centre tree the client can report on",
-			"bullets": [
-				"Cost centres are a dimension on postings, so they never change the total, only the analysis",
-				"Build the tree around how the client makes decisions: outlet, channel or production line",
-				"Parent cost centres are groups; only leaves can receive postings",
-				"Every transaction line needs one, which is why the default is set at company level",
-				"Too many cost centres is worse than too few: nobody allocates 40 buckets correctly"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Accounts → Cost Center → New", "Retail - SM", "New child cost centre"],
-					["2", "Set Parent", "Main - SM", "Tree shows Retail under Main"],
-					[
-						"3",
-						"Add Cost Center",
-						"Assembly - SM, parent Main - SM",
-						"Third cost centre in the tree"
-					],
-					["4", "Add Cost Center", "Showroom - SM, parent Retail - SM", "Nested third level"],
-					["5", "Open Main - SM", "Is Group: Yes if it has children", "Group cannot be posted to"],
-					["6", "Save all", "(no voucher)", "Cost centre tree renders with indentation"]
-				]
-			},
-			"notes": "Ask one question before building: 'which number do you want split three ways on the P&L?' The answer defines the dimension. For a distributor with a showroom and an assembly bench, three cost centres are enough. If the client asks for profit by customer, that is a group-by in a report, not a cost centre, and mixing the two is a classic consultant error.",
-			"paths": ["Accounts → Cost Center → New"]
-		},
-		{
-			"kicker": "Lesson 4 · Expected outcome",
-			"title": "Dimension postings that add up to the total",
-			"bullets": [
-				"A journal entry posted to Showroom appears in the cost-centre column of the P&L",
-				"The sum of all cost-centre columns equals the company total for that account",
-				"Posting to the parent Main - SM is refused because it is a group",
-				"The Cost Center field on a new invoice line defaults to Main - SM",
-				"Cost Center-wise Profit and Loss shows four columns, three of them with zero balances"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Tree", "Main → Retail → Showroom, plus Assembly", "Cost Center list"],
-					["Group posting", "Refused", "Journal Entry to Main - SM"],
-					["Report columns", "4 cost centres", "Cost Center-wise Profit and Loss"],
-					["Dimension total", "Equals company total", "Same report, Total row"],
-					["Default on lines", "Main - SM", "Sales Invoice → New"]
-				]
-			},
-			"notes": "The reconciliation check, that the columns sum to the total, is what separates a consultant from a data-entry clerk. Run it every time you add a dimension. If the client later asks for branch and cost centre both, explain that ERPNext supports one cost centre plus additional accounting dimensions, and that adding a second dimension is a design decision rather than a checkbox.",
-			"callout": {
-				"tone": "malaysia",
-				"title": "Branch, outlet or state?",
-				"text": "Malaysian SMEs often report by outlet. If the outlets have their own bank accounts and stock, use separate warehouses and one cost centre per outlet rather than 14 cost centres."
-			}
-		},
-		{
-			"kicker": "Lesson 5 · Malaysian SST",
-			"title": "Two tax templates, three accounts, no GST",
-			"bullets": [
-				"Malaysia charges SST, so ignore the GST fields and templates that ship with older data",
-				"An Item Tax Template applies a rate and account to an item, and is what makes mixed-rate invoices correct",
-				"A Sales Taxes and Charges Template applies tax at document level, usually On Net Total",
-				"Sales tax is 10 % on goods and service tax 8 % on services for the sample company, each with its own account",
-				"Keep 'Included in Paid Amount' ticked, otherwise the invoice total and the tax total disagree"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Accounts → Item Tax Template → New", "SST 10% - SM", "Empty tax row table"],
-					[
-						"2",
-						"Add row",
-						"Tax Type: Sales Tax, Account: SST Payable - SM, Rate: 10",
-						"One tax row"
-					],
-					[
-						"3",
-						"New Item Tax Template",
-						"Service Tax 8% - SM, account Service Tax Payable, rate 8",
-						"Second template"
-					],
-					[
-						"4",
-						"Accounts → Sales Taxes and Charges Template → New",
-						"SST Sales 10% - SM",
-						"Charges table"
-					],
-					[
-						"5",
-						"Add row",
-						"On Net Total, account SST Payable - SM, rate 10",
-						"Row with charge type On Net Total"
-					],
-					[
-						"6",
-						"Tick flags",
-						"Included in Print Rate and Included in Paid Amount",
-						"Both checkboxes on"
-					],
-					["7", "Save as default", "Default: Yes", "Template used automatically on new invoices"]
-				]
-			},
-			"notes": "Explain the division of labour: the item tax template decides which account and rate a product carries, and the sales taxes template decides what appears on the invoice footer. For a client selling only goods, one document template is enough. For a mixed business, both templates plus per-item assignment are required, and the expected outcomes in this lesson prove it.",
-			"paths": ["Accounts → Item Tax Template", "Accounts → Sales Taxes and Charges Template"]
-		},
-		{
-			"kicker": "Lesson 5 · Expected outcome",
-			"title": "Predict the tax before you save the invoice",
-			"bullets": [
-				"A test invoice of 1,200.00 net with SST 10 % shows tax 120.00 and grand total 1,320.00",
-				"Submitting it writes Dr Debtors 1,320.00, Cr Sales 1,200.00 and Cr SST Payable 120.00",
-				"An item with the service tax template shows 8 % even on the same invoice",
-				"An item with no tax template shows zero tax and no tax row on the printed document",
-				"The tax account in the general ledger matches the figure on the invoice footer, to the sen"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Net / tax / total", "1,200.00 / 120.00 / 1,320.00", "Sales Invoice totals"],
-					["GL debit", "Debtors 1,320.00", "Accounts → General Ledger"],
-					["GL credits", "Sales 1,200.00 + SST 120.00", "Same report"],
-					["Service tax line", "8 % on its own line", "Mixed test invoice"],
-					["Untaxed item", "0.00 tax", "Same invoice"]
-				]
-			},
-			"notes": "Make learners compute 1,200 × 10 % before they look at the screen. Consultants are expected to predict a total to the sen during a workshop, and the only way to be trusted is repetition. If the totals disagree, the usual causes are a template applied twice, a rate typed on the item as well as the template, or a currency with more than two decimals.",
-			"callout": {
-				"tone": "malaysia",
-				"title": "SST registration matters",
-				"text": "Only SST-registered clients charge SST. If the client is below the threshold, configure zero-rated templates and say so in the configuration document."
+				"title": "Drafts are not invoices",
+				"text": "A saved-but-unsubmitted invoice posts nothing. Clients routinely believe they have billed a customer who has never been invoiced."
 			}
 		}
 	],
 	"lab": {
-		"title": "Lab · Build the Seri Murni company, accounts and tax",
-		"minutes": 60,
+		"title": "Lab · Trace money through the books and break the balance",
+		"minutes": 45,
 		"steps": [
-			"Create the company Seri Murni Sdn Bhd, abbreviation SM, Malaysia, MYR, FY 2026, Standard chart",
-			"Verify five root groups exist and that every account ends with - SM",
-			"Add Petty Cash, Freight Inward, SST Payable (type Tax) and Service Tax Payable (type Tax)",
-			"Set Round Off Account, Write Off Account, Default Cost Center and Default Warehouse on the company",
-			"Set the default company in Global Defaults and confirm a new invoice picks it up",
-			"Create cost centres Retail - SM, Showroom - SM and Assembly - SM under Main - SM",
-			"Create the SST 10% and Service Tax 8% item tax templates, then the SST Sales 10% document template",
-			"Raise a test invoice of five units at 240.00 with the SST template, check 1,200.00 / 120.00 / 1,320.00, then cancel and delete it",
-			"Complete the Volume 0 configuration worksheet rows for lessons 1 to 5"
+			"Post a Journal Entry: debit Petty Cash 500.00, credit Bank 500.00, cost centre Main",
+			"Open the General Ledger and confirm both lines appear with the same voucher number",
+			"Run the Trial Balance and confirm debits equal credits and Petty Cash reads 500.00",
+			"Deliberately remove the credit line and try to save, recording the exact message ERPNext returns",
+			"Restore the credit, post an accrual of 300.00 to Electricity with a reversal date of the first of next month",
+			"Confirm the reversal entry is created automatically on the reversal date",
+			"Post a Sales Invoice for 1,200.00 plus 120.00 SST and follow it through the P&L and Balance Sheet",
+			"Run the four checks from Concept 7 and write down the result of each"
 		],
-		"done": "Your tree shows the four new accounts and three cost centres, the test invoice computed 120.00 tax to the sen, and the worksheet has a written choice for every default you set."
+		"done": "The unbalanced entry was refused, the accrual reversed itself, the invoice appears as 1,200.00 income and 120.00 liability, and all four reconciliation checks have a written result."
 	},
 	"quiz": [
 		{
-			"question": "Why does the company abbreviation matter at creation time?",
+			"question": "Which statement about double entry in ERPNext is true?",
 			"options": [
-				"It is only cosmetic and can be changed freely later",
-				"It becomes the suffix on every account, warehouse and cost centre name",
-				"It sets the tax registration number",
-				"It decides the chart of accounts language"
+				"ERPNext allows unbalanced journals but warns",
+				"ERPNext refuses to save an unbalanced journal entry",
+				"Only sales documents are double entry",
+				"Double entry applies to stock but not to accounts"
 			],
 			"answer": 1,
-			"why": "The abbreviation is appended to record names such as Debtors - SM. Changing it later means renaming dozens of linked records, so choose it before saving."
+			"why": "Every posting needs equal debits and credits. ERPNext blocks the save, which makes the accounting equation a system rule rather than advice."
 		},
 		{
-			"question": "A client is SST registered and sells goods and repair services. What is the correct setup?",
+			"question": "Which account carries a normal credit balance?",
+			"options": ["Cash", "Cost of Goods Sold", "Sales", "Debtors"],
+			"answer": 2,
+			"why": "Income accounts such as Sales increase on the credit side. Assets and expenses increase on the debit side."
+		},
+		{
+			"question": "Which ledger answers the question 'who owes us, invoice by invoice'?",
+			"options": ["General ledger", "Stock ledger", "Payment ledger", "Trial balance"],
+			"answer": 2,
+			"why": "The payment ledger tracks outstanding amounts per document and is cleared only when payments are allocated to invoices."
+		},
+		{
+			"question": "A client's debtors balance is out by 1,320.00. What is the correct first move?",
 			"options": [
-				"One 10 % tax template applied to all invoices",
-				"Per-item tax templates for 10 % sales tax and 8 % service tax, plus a document template",
-				"Two companies, one per tax rate",
-				"A single manual tax line typed on each invoice"
+				"Post a journal entry to Debtors for the difference",
+				"Check for an unallocated customer payment",
+				"Write it off to expenses",
+				"Change the invoice total"
 			],
 			"answer": 1,
-			"why": "Item tax templates carry the per-item rate and account, so a mixed invoice is correct line by line, while the document template controls what appears on the invoice."
+			"why": "A difference in a control account is almost always an allocation problem. Journaling into the control account hides the cause and breaks the party ledger link."
 		},
 		{
-			"question": "What happens if you post a journal entry to a group account?",
+			"question": "SST collected on an invoice should appear where?",
 			"options": [
-				"It is allowed but greyed out in reports",
-				"ERPNext refuses the posting because group accounts cannot hold entries",
-				"The entry is posted to the first child account",
-				"It posts with a warning only"
+				"Income on the P&L",
+				"As a liability on the balance sheet",
+				"As an expense",
+				"In cost of goods sold"
 			],
 			"answer": 1,
-			"why": "Group accounts exist to organise the tree. Only leaf accounts accept postings, which is why the Add Account form asks whether the new account is a group."
-		},
-		{
-			"question": "Which default keeps every posting allocated to a dimension?",
-			"options": [
-				"Round Off Account",
-				"Default Cost Center on the company",
-				"Default Warehouse",
-				"Default Price List"
-			],
-			"answer": 1,
-			"why": "The company-level default cost centre pre-fills every document line, so no posting is left without a dimension and cost-centre reports add up."
-		},
-		{
-			"question": "A test invoice of 1,200.00 with a 10 % SST template should show which grand total?",
-			"options": ["1,200.00", "1,320.00", "1,308.00", "1,080.00"],
-			"answer": 1,
-			"why": "Tax is 120.00 on a net of 1,200.00, so the payable total is 1,320.00. A different figure means a template, rate or inclusion flag is wrong."
+			"why": "Tax collected is held for LHDN until remitted. Treating it as income overstates revenue by the tax rate."
 		}
 	],
-	"narration": "Welcome to the consultant track. This course is not about how ERPNext is built; it is about standing it up for a client, entering real data and proving the result to the sen. Volume zero starts with the company. Every account name carries the company abbreviation, so choose the two letters before you save. Country selects the chart of accounts template, currency is effectively fixed after the first transaction, and the fiscal year decides which period your postings land in. Then you verify, not the form, but the result: five root groups, every account ending in your abbreviation, a debtors control account, and the company selectable in global defaults. Next, add the accounts your client actually needs: petty cash, freight inward, and two tax accounts, one for sales tax and one for service tax, both flagged as tax accounts. Group accounts never take postings, and ERPNext refuses the voucher. Defaults come next: round off, write off, default cost centre and default warehouse. They look cosmetic, and they pre-fill every document. Then cost centres, built around how the client makes decisions, with a check that the columns add up to the total. Finally Malaysian SST: item tax templates for ten percent goods and eight percent services, a document template on net total, and a test invoice that must show one thousand two hundred net, one hundred twenty tax, and one thousand three hundred twenty payable. In the lab you build it and record every choice."
+	"narration": "Before the walkthroughs, the concepts, because a consultant who cannot explain the books will lose the client's accountant in the first meeting. Accounting runs on one equation: assets equal liabilities plus equity, and every transaction touches it twice. ERPNext enforces that twice-ness by refusing to save an unbalanced journal entry, which makes the rule visible. There are five account types, and the type decides the report: assets, liabilities and equity on the balance sheet, income and expenses on the profit and loss. Malaysian clients often arrive with a chart built in a spreadsheet, so your job is to map each row to a type, not to impose your own taste. Next, accrual accounting: income when earned, expenses when incurred. Tax collected is never income; it is a liability cleared when you file. Then the three ledgers. The general ledger says what the business earned and owns. The stock ledger says where the goods are and what they cost. The payment ledger says who owes what, document by document. One mistake is often invisible in two of the three, which is why month end reconciles all of them. Control accounts and party ledgers must agree, and you never fix a difference by journaling into debtors. Finally, journals: right for accruals and depreciation, wrong as a replacement for a purchase invoice or a sale. Close with four checks and five questions, because trust is built on numbers that survive scrutiny."
 }

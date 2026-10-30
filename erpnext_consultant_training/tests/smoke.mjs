@@ -74,17 +74,17 @@ await app.boot({ fetch: fetchFromDisk });
 
 const chapterOne = app.state.chapters[0];
 
-check("boot loads all six chapters", () => {
-	assert.equal(app.state.chapters.length, 6);
-	assert.equal(app.state.chapters[5].id, "ch06");
+check("boot loads all eight chapters", () => {
+	assert.equal(app.state.chapters.length, 8);
+	assert.equal(app.state.chapters[7].id, "ch08");
 	assert.match(app.state.manifest.title, /Consultant/);
 });
 
 check("sidebar lists every chapter with its number", () => {
 	const items = $$(".chapter-item");
-	assert.equal(items.length, 6);
+	assert.equal(items.length, 8);
 	assert.match(items[0].textContent, /01/);
-	assert.match(items[5].textContent, /Reality|Volume 2/);
+	assert.match(items[7].textContent, /Reality|Volume 2/);
 });
 
 check("the first slide is the chapter intro", () => {
@@ -93,8 +93,16 @@ check("the first slide is the chapter intro", () => {
 	assert.ok($$(".outcomes li").length >= 4);
 });
 
-check("the first teaching slide is a step table", () => {
+check("the primer opens with a concept table", () => {
 	app.goTo(0, 1);
+	const headers = $$("#slide table thead th").map((cell) => cell.textContent.trim());
+	assert.deepEqual(headers, ["Idea", "What it means", "Where you meet it"]);
+	assert.ok($$("#slide table tbody tr").length >= 4);
+	assert.match($("#slide .kicker").textContent, /Concept 1/);
+});
+
+check("a volume lesson opens with a step table", () => {
+	app.goTo(2, 1);
 	const headers = $$("#slide table thead th").map((cell) => cell.textContent.trim());
 	assert.deepEqual(headers, ["Step", "Do this", "Enter", "Expect to see"]);
 	assert.ok($$("#slide table tbody tr").length >= 4);
@@ -102,7 +110,7 @@ check("the first teaching slide is a step table", () => {
 });
 
 check("the following slide is the expected-outcome table", () => {
-	app.goTo(0, 2);
+	app.goTo(2, 2);
 	const headers = $$("#slide table thead th").map((cell) => cell.textContent.trim());
 	assert.equal(headers[0], "Check");
 	assert.equal(headers[1], "Expected value");
@@ -115,9 +123,9 @@ check("the counter knows the chapter length", () => {
 });
 
 check("navigating to another chapter renders it and updates the hash", () => {
-	app.goTo(4, 0);
-	assert.match($("#crumbs").textContent, /Chapter 5/);
-	assert.equal(dom.window.location.hash, "#ch05/0");
+	app.goTo(6, 0);
+	assert.match($("#crumbs").textContent, /Chapter 7/);
+	assert.equal(dom.window.location.hash, "#ch07/0");
 	assert.match($("#slide h1").textContent, /Quote to Cash/);
 });
 
@@ -224,7 +232,7 @@ check("keyboard navigation moves the deck", () => {
 check("the print view contains every chapter, lab and quiz answer", () => {
 	app.buildPrintView();
 	const view = $("#print-view");
-	assert.equal(view.querySelectorAll(".print-chapter").length, 6);
+	assert.equal(view.querySelectorAll(".print-chapter").length, 8);
 	assert.match(view.textContent, /Quiz with answers/);
 	assert.match(view.textContent, /Answer:/);
 });

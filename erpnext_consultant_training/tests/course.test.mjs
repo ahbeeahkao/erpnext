@@ -20,15 +20,15 @@ const corpus = JSON.stringify(chapters);
 describe("course manifest", () => {
 	it("describes a consultant course with a volume roadmap", () => {
 		assert.match(manifest.title, /Consultant/);
-		assert.equal(manifest.chapters.length, 6);
+		assert.equal(manifest.chapters.length, 8);
 		assert.ok(manifest.sample_company.includes("Seri Murni"));
 		assert.ok(manifest.volumes.length >= 10, `${manifest.volumes.length} volumes listed`);
 		const built = manifest.volumes.filter((volume) => volume.status === "built");
 		const planned = manifest.volumes.filter((volume) => volume.status === "planned");
-		assert.equal(built.length, 3, "three volumes are built");
+		assert.equal(built.length, 5, "two primers and three volumes are built");
 		assert.ok(planned.length >= 8, "the remaining volumes are declared as planned");
 		for (const volume of built) {
-			assert.ok(volume.chapters.length >= 2, `${volume.id} needs chapters`);
+			assert.ok(volume.chapters.length >= 1, `${volume.id} needs chapters`);
 			for (const id of volume.chapters) {
 				assert.ok(
 					manifest.chapters.some((entry) => entry.id === id),
@@ -54,7 +54,7 @@ describe("lesson structure", () => {
 			assert.ok(chapter.title.length >= 6);
 			assert.ok(chapter.subtitle.length >= 30);
 			assert.ok(chapter.minutes >= 30);
-			assert.ok(["Foundation", "Core", "Advanced", "Capstone"].includes(chapter.level));
+			assert.ok(["Primer", "Foundation", "Core", "Advanced", "Capstone"].includes(chapter.level));
 			assert.ok(chapter.outcomes.length >= 4 && chapter.outcomes.length <= 6);
 			chapter.outcomes.forEach((outcome) => assert.ok(outcome.length >= 25));
 		});
@@ -68,7 +68,7 @@ describe("lesson structure", () => {
 			assert.equal(new Set(titles).size, titles.length, "duplicate slide title");
 
 			for (const slide of chapter.slides) {
-				assert.match(slide.kicker, /^Lesson \d+|^Volume/, `kicker on ${slide.title}`);
+				assert.match(slide.kicker, /^Lesson \d+|^Concept \d+|^Volume/, `kicker on ${slide.title}`);
 				assert.ok(
 					slide.table,
 					`${chapter.id} "${slide.title}" has no Do/Enter/Expect or Check table`
@@ -87,10 +87,12 @@ describe("lesson structure", () => {
 		});
 
 		it(`${chapter.id} teaches a procedure then proves it`, () => {
+			// Primers are concept-first: they carry one worked procedure and at least one proof table.
+			const required = chapter.level === "Primer" ? 1 : 2;
 			const setup = chapter.slides.filter((slide) => slide.table.headers[0] === "Step");
 			const checks = chapter.slides.filter((slide) => slide.table.headers[0] === "Check");
-			assert.ok(setup.length >= 2, `${chapter.id} needs at least two step tables`);
-			assert.ok(checks.length >= 2, `${chapter.id} needs at least two expected-outcome tables`);
+			assert.ok(setup.length >= required, `${chapter.id} needs at least ${required} step tables`);
+			assert.ok(checks.length >= required, `${chapter.id} needs at least ${required} check tables`);
 			for (const slide of setup) {
 				assert.ok(
 					slide.table.headers.some((header) => header.startsWith("Expect")),
@@ -225,9 +227,9 @@ describe("course as a whole", () => {
 			(sum, chapter) => sum + chapter.slides.filter((slide) => slide.table).length,
 			0
 		);
-		assert.ok(slides >= 50, `${slides} teaching slides`);
+		assert.ok(slides >= 70, `${slides} teaching slides`);
 		assert.ok(steps >= 50, `${steps} lab steps`);
-		assert.ok(minutes >= 420, `${minutes} minutes of syllabus`);
+		assert.ok(minutes >= 900, `${minutes} minutes of syllabus`);
 		assert.equal(tables, slides, "every teaching slide carries a table");
 	});
 
