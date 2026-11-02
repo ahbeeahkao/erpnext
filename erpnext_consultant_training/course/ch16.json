@@ -294,5 +294,50 @@
 			"why": "Production cost includes material, operations and bought-in services used in the build, all of which stay in inventory until sale."
 		}
 	],
+	"memory": {
+		"spine": "Total production cost is fixed; the only question is how many good units must carry it, and scrap never answers that with a journal.",
+		"device": {
+			"kind": "rule",
+			"label": "Good units carry the bad ones",
+			"expansion": [
+				"Finished cost is materials consumed plus operations recorded, divided by good units",
+				"Scrap is a quantity decision on the document, never a cost typed into a journal",
+				"Total production cost is unchanged by scrap, so the good units absorb it",
+				"Subcontracting is material out, service in and material back: three movements, one valuation",
+				"Every ringgit of production cost lands in inventory, not in an expense account"
+			]
+		},
+		"cards": [
+			{
+				"q": "How is cost per finished unit calculated?",
+				"a": "Materials plus operations, divided by good units, with scrap in the numerator and never quietly subtracted.",
+				"hint": "Divide by good units"
+			},
+			{
+				"q": "One of ten units is scrapped. What happens to total cost?",
+				"a": "It stays the same and the nine good units carry it, so unit cost rises.",
+				"hint": "Spread, not lost"
+			},
+			{
+				"q": "How is scrap recorded?",
+				"a": "As a quantity on the manufacture entry or a separate scrap entry, not as a journal.",
+				"hint": "Quantity, not money"
+			},
+			{
+				"q": "How many movements does subcontracting create?",
+				"a": "Three: material out to the subcontractor, the service received, and the finished material back.",
+				"hint": "Out, service, back"
+			},
+			{
+				"q": "Where must production cost land?",
+				"a": "In inventory value. An expense account here means the stock was under costed.",
+				"hint": "Balance sheet first"
+			}
+		],
+		"trap": {
+			"what": "Scrap is written off to an expense account at the end of the month instead of on the document.",
+			"why": "Finished units then carry a cost that excludes the loss, the true unit cost is understated, and the expense appears where nobody looks."
+		}
+	},
 	"narration": "Once a client has built something, the next question is what it cost, and the answer has to survive an argument. A completed build of ten assemblies carries two thousand of material and three hundred of labour, so two hundred thirty each, and the entry, the stock ledger and the stock balance must all say the same thing. Scrap is where costing gets real: one unit fails, the total cost does not move, and the nine good units now carry two hundred fifty five fifty six each. Subcontracting adds a bought-in service, twelve ringgit of coating, and a warehouse that must return to zero. Materials, labour, scrap, service: four components, one valuation, and a worksheet that lets the production manager and the accountant argue with numbers instead of opinions. Teach the four components in order, and insist on the worksheet, because a costing conversation without evidence becomes a personality contest, and the consultant is always the outsider in that room."
 }

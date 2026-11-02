@@ -351,5 +351,50 @@
 			"why": "Vehicles above the capitalisation threshold must be capitalised and depreciated, or the profit and loss statement carries a distorted one-off cost."
 		}
 	],
+	"memory": {
+		"spine": "Capitalise, depreciate, inspect and qualify: four modules, one habit of proving each of them against a register and a report.",
+		"device": {
+			"kind": "phrase",
+			"label": "Capitalise, depreciate, inspect, qualify",
+			"expansion": [
+				"Capitalise: a purchase invoice with an asset item creates the Asset record",
+				"Depreciate: a journal generated from the schedule, monthly, not once in a December panic",
+				"Inspect: Quality Inspection sits between the receipt and the warehouse when configured",
+				"Qualify: lead, then opportunity, then a priced quotation",
+				"Asset register, ledger and schedule must show the same accumulated amount"
+			]
+		},
+		"cards": [
+			{
+				"q": "How is a van capitalised rather than expensed?",
+				"a": "With a purchase invoice whose item is marked as a fixed asset, which creates the Asset record.",
+				"hint": "Asset item, not expense"
+			},
+			{
+				"q": "Where does accumulated depreciation have to agree?",
+				"a": "In three places: the asset register, the depreciation account in the ledger and the schedule.",
+				"hint": "Three views, one number"
+			},
+			{
+				"q": "Lead or opportunity?",
+				"a": "A lead is an unqualified contact, an opportunity is a deal with a value, a date and a probability.",
+				"hint": "Contact versus deal"
+			},
+			{
+				"q": "How is weighted pipeline calculated?",
+				"a": "Sum of value times probability across all open opportunities.",
+				"hint": "Value times confidence"
+			},
+			{
+				"q": "When does a quality inspection happen?",
+				"a": "On receipt, before the goods become available stock, when the item is configured that way.",
+				"hint": "Before it is stock"
+			}
+		],
+		"trap": {
+			"what": "Depreciation is posted once a year as a single large journal in December.",
+			"why": "Eleven months of the profit and loss are wrong and the register never matched the ledger in between, so nobody could catch it early."
+		}
+	},
 	"narration": "Three modules that clients ask for and rarely operate properly. Fixed assets first: sixty thousand of van becomes twelve thousand a year, one thousand a month, and the register must agree with the control account every month. Quality second: an inspection that rejects one of ten units is the difference between an argument with a supplier and a documented claim. CRM third, and only if somebody owns the pipeline: a lead becomes an opportunity with a value and a probability, twenty four hundred at sixty per cent is fourteen hundred forty, and the quotation is the first document the customer sees. Each module adds a control the client has to run, so sequence them and say plainly what you would leave until year two. Assets and quality carry a control that runs itself once configured; CRM only works when a person owns it, so name that person in the workshop before you switch it on, and put the weekly pipeline review in the same meeting as the sales forecast."
 }

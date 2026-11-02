@@ -218,6 +218,108 @@ describe("sample data pack", () => {
 	});
 });
 
+describe("memory layer", () => {
+	const index = read("course/memory.json");
+	const labels = chapters.map((chapter) => chapter.memory?.device?.label);
+
+	for (const chapter of chapters) {
+		it(`${chapter.id} carries a recall block`, () => {
+			const memory = chapter.memory;
+			assert.ok(memory, `${chapter.id} has no memory block`);
+
+			assert.ok(
+				memory.spine.length >= 60 && memory.spine.length <= 160,
+				`${chapter.id} spine is ${memory.spine.length} characters`
+			);
+			assert.match(memory.spine, /[.!]$/, `${chapter.id} spine must read as a sentence`);
+
+			assert.ok(
+				["acronym", "story", "rule", "path", "phrase"].includes(memory.device.kind),
+				`${chapter.id} device kind ${memory.device.kind}`
+			);
+			assert.ok(
+				memory.device.label.length >= 4 && memory.device.label.length <= 48,
+				`${chapter.id} device label is ${memory.device.label.length} characters`
+			);
+			assert.ok(
+				memory.device.expansion.length >= 2 && memory.device.expansion.length <= 8,
+				`${chapter.id} has ${memory.device.expansion.length} expansion lines`
+			);
+			memory.device.expansion.forEach((line) =>
+				assert.ok(line.length >= 25, `${chapter.id} thin expansion line: ${line}`)
+			);
+
+			assert.equal(memory.cards.length, 5, `${chapter.id} needs five recall cards`);
+			for (const card of memory.cards) {
+				assert.ok(card.q.length >= 20 && card.q.length <= 120, `${chapter.id} question length`);
+				assert.match(card.q, /\?$/, `${chapter.id} card must ask a question: ${card.q}`);
+				assert.ok(card.a.length >= 20 && card.a.length <= 200, `${chapter.id} answer length`);
+				assert.ok(card.hint.length >= 10 && card.hint.length <= 60, `${chapter.id} hint length`);
+			}
+
+			assert.ok(memory.trap.what.length >= 30, `${chapter.id} trap has no situation`);
+			assert.ok(memory.trap.why.length >= 30, `${chapter.id} trap has no explanation`);
+		});
+	}
+
+	it("gives every chapter its own device and every card its own question", () => {
+		assert.equal(new Set(labels).size, chapters.length, "two chapters share a device label");
+		const questions = chapters.flatMap((chapter) => chapter.memory.cards.map((card) => card.q));
+		assert.equal(questions.length, 120, "twenty-four chapters of five cards");
+		assert.equal(new Set(questions).size, 120, "a recall question is repeated");
+	});
+
+	it("indexes ten laws in three buckets", () => {
+		assert.equal(index.buckets.length, 3);
+		assert.equal(index.laws.length, 10);
+		assert.equal(index.law_count, index.laws.length);
+		for (const bucket of index.buckets) {
+			assert.ok(bucket.summary.length >= 60, `${bucket.title} has no summary`);
+			assert.ok(
+				index.laws.some((law) => law.bucket === bucket.id),
+				`${bucket.id} has no laws`
+			);
+		}
+		index.laws.forEach((law) => {
+			assert.ok(law.law.length >= 20, `law ${law.n} is thin`);
+			assert.ok(law.detail.length >= 60, `law ${law.n} has no detail`);
+			assert.ok(
+				index.buckets.some((bucket) => bucket.id === law.bucket),
+				`law ${law.n} points at a missing bucket`
+			);
+		});
+	});
+
+	it("ships the printable and importable artefacts, and keeps them in step", () => {
+		const csv = text("memory/cards.csv").trim().split("\n");
+		assert.equal(csv[0], "front,back,tag");
+		assert.equal(csv.length - 1, 120, "one CSV row per recall card");
+		const quote = (value) => `"${String(value).replace(/"/g, '""')}"`;
+		const first = chapters[0].memory.cards[0];
+		assert.ok(csv[1].includes(quote(first.q)), "memory/cards.csv is stale — run npm run memory");
+
+		const sheet = text("memory/cheatsheet.md");
+		assert.ok(sheet.length > 4000);
+		for (const chapter of chapters) {
+			assert.ok(sheet.includes(chapter.memory.device.label), `cheatsheet misses ${chapter.id}`);
+		}
+		for (const law of index.laws) {
+			assert.ok(sheet.includes(law.law), `cheatsheet misses law ${law.n}`);
+		}
+	});
+
+	it("is documented in the README", () => {
+		const readme = text("README.md");
+		assert.match(readme, /Recall/);
+		for (const chapter of chapters) {
+			assert.ok(
+				readme.includes(chapter.memory.device.label),
+				`README misses ${chapter.memory.device.label}`
+			);
+		}
+	});
+});
+
 describe("course as a whole", () => {
 	it("is a consultant-grade volume set", () => {
 		const slides = chapters.reduce((sum, chapter) => sum + chapter.slides.length, 0);
@@ -230,6 +332,8 @@ describe("course as a whole", () => {
 		assert.ok(slides >= 190, `${slides} teaching slides`);
 		assert.ok(steps >= 180, `${steps} lab steps`);
 		assert.ok(minutes >= 2500, `${minutes} minutes of syllabus`);
+		const cards = chapters.reduce((sum, chapter) => sum + chapter.memory.cards.length, 0);
+		assert.equal(cards, 120, "five recall cards per chapter");
 		assert.equal(tables, slides, "every teaching slide carries a table");
 	});
 

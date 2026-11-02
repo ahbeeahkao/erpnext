@@ -309,5 +309,49 @@
 			"why": "Without terms the invoice is due on posting, so cash forecasting and ageing become unreliable until the master is corrected."
 		}
 	],
+	"memory": {
+		"spine": "A party is a set of defaults plus two controls, and pricing resolves in one direction: the item price is a fact, a rule is an override.",
+		"device": {
+			"kind": "path",
+			"label": "Party, address, terms, price",
+			"expansion": [
+				"Customer: group and territory for reporting, price list and payment terms for behaviour",
+				"Address is its own record linked to the party, not a field typed on the customer",
+				"Supplier: group drives purchase reporting, payment terms drive the payment run",
+				"Price resolves as item price, then pricing rule, then the transaction default"
+			]
+		},
+		"cards": [
+			{
+				"q": "Where does a quotation's price list come from?",
+				"a": "The customer's default price list, after which a pricing rule may override the rate on the line.",
+				"hint": "Defaults cascade"
+			},
+			{
+				"q": "Why is an address a separate document?",
+				"a": "One party can hold billing, shipping and contact addresses, and each document picks the one it needs.",
+				"hint": "One record per role"
+			},
+			{
+				"q": "Item Price or Pricing Rule?",
+				"a": "An item price states this item on this list at this rate from this date; a rule tests conditions and overrides it.",
+				"hint": "Fact versus override"
+			},
+			{
+				"q": "Ten units for a dealer at 216.00 less five per cent?",
+				"a": "205.20 per unit, so 2,052.00 net before tax.",
+				"hint": "The chapter anchor"
+			},
+			{
+				"q": "What do supplier payment terms actually drive?",
+				"a": "The payment schedule on the bill, and therefore the payment run and the ageing buckets.",
+				"hint": "Schedule, not text"
+			}
+		],
+		"trap": {
+			"what": "A pricing rule is created without a priority or a validity window.",
+			"why": "Two rules then match the same line and the winner depends on evaluation order, so one customer is charged differently on different days."
+		}
+	},
 	"narration": "Volume one, part two: parties and pricing. A customer record is a set of defaults plus two controls. The group and territory organise reporting. The price list and payment terms decide behaviour. The credit limit is the only thing that stops a sale, and it lives in the customer's credit limits table, which is why the sample company sets five thousand here; a later lesson sells six thousand and must be blocked. Payment terms belong on the customer so every invoice inherits them; typing terms per invoice is how one customer ends up with three due dates. Then addresses, which are separate records linked to the customer. Mark one as primary billing, one as primary shipping, add a contact, and check the printed document rather than the form. Completeness matters now, because state and postcode are optional for a PDF and mandatory for an e-Invoice. Suppliers are simpler but the terms drive cash flow: thirty days here, fourteen there, and the payment proposal becomes useful instead of decorative. Finally pricing, which has two layers. An item price is a fact for a price list and a date. A pricing rule is a calculation applied when conditions match. The customer's price list picks the facts, then the rule adjusts them. Ten blenders for a dealer at two hundred sixteen, less five percent, is two hundred five ringgit twenty. Nine units is two hundred sixteen, because the minimum quantity is not met. Predict the number before you open the quotation; that is the consultant's habit."
 }

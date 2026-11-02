@@ -342,5 +342,50 @@
 			"why": "OperationPeriodOver indicates the 72 hour window has passed, so the correction must be a credit note rather than a cancellation."
 		}
 	],
+	"memory": {
+		"spine": "Master data validates before anything is submitted, a submission returns two lists, and cancellation lives inside 72 hours only.",
+		"device": {
+			"kind": "phrase",
+			"label": "Validate, submit, read, cancel inside 72",
+			"expansion": [
+				"Validate the masters first: TIN, registration number, MSIC code and SST number",
+				"Submit and read the answer: a submission ID, then accepted and rejected lists",
+				"Accepted, validated and cancelled are three different states, not one",
+				"Cancellation inside 72 hours with a reason, refused afterwards",
+				"Consolidate many small sales to the public, and self bill when you invoice yourself"
+			]
+		},
+		"cards": [
+			{
+				"q": "What does a submission return?",
+				"a": "A submission ID, an accepted list carrying validation identifiers, and a rejected list with reasons.",
+				"hint": "One ID and two lists"
+			},
+			{
+				"q": "How long is the cancellation window?",
+				"a": "72 hours after validation, after which only a credit or debit note can correct the document.",
+				"hint": "72, not 24"
+			},
+			{
+				"q": "What are document types 01 to 04?",
+				"a": "Invoice, credit note, debit note and refund note.",
+				"hint": "Four types"
+			},
+			{
+				"q": "When is consolidation allowed?",
+				"a": "For many small sales to the general public grouped into one monthly e-Invoice, not for business buyers.",
+				"hint": "Consumer sales only"
+			},
+			{
+				"q": "What must the finance team be able to see?",
+				"a": "One board showing pending, accepted, rejected and cancelled documents, with the reason for each rejection.",
+				"hint": "Status board"
+			}
+		],
+		"trap": {
+			"what": "A rejected document is resubmitted unchanged.",
+			"why": "The validator rejects it for exactly the same reason while the 72 hour clock keeps running, so the master data or tax code must be fixed first."
+		}
+	},
 	"narration": "e-Invoice is a deadline, not a feature. Everything starts with master data: company and customer TIN, registration, MSIC, address, and a validated TIN before the first submission. When you submit, you get a submission identifier and an accepted list, but accepted only means the portal has the file. Validated is the state that matters, because that is where the UUID and the QR code come from, and that is the legal tax invoice. Cancellation lives inside seventy two hours with a reason, and after that the remedy is a credit note, which the portal enforces with named errors. Consolidate only consumer sales, self-bill only where the rules allow, and give the finance team a daily dashboard routine: clear rejections, cancel what must be cancelled, and confirm nothing is left pending overnight. A monthly tie-out between validated totals and the sales ledger is the check that keeps the project out of trouble."
 }

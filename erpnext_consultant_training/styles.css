@@ -912,6 +912,216 @@ td:first-child {
 	margin-right: 6px;
 }
 
+/* ------------------------------------------------------------------ recall */
+
+.memory-key {
+	border: 1px solid var(--line);
+	border-left: 3px solid var(--accent-2);
+	border-radius: 10px;
+	padding: 14px 16px 8px;
+	background: rgba(127, 176, 162, 0.06);
+	margin: 0 0 18px;
+	max-width: 84ch;
+}
+
+.memory-key .callout-label {
+	color: var(--accent-2);
+}
+
+.memory-expansion {
+	display: grid;
+	gap: 5px;
+	margin: 0 0 10px;
+	padding-left: 18px;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #d6dfec;
+}
+
+.memory-bar {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin: 0 0 14px;
+}
+
+.recall-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	margin: 0 0 20px;
+}
+
+.recall-card {
+	border: 1px solid var(--line);
+	border-radius: 14px;
+	padding: 16px 18px 14px;
+	background: rgba(255, 255, 255, 0.015);
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.recall-card:hover {
+	border-color: #3b4a60;
+}
+
+.recall-card:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+.recall-card.is-flipped {
+	border-color: rgba(216, 161, 90, 0.4);
+	background: rgba(216, 161, 90, 0.06);
+}
+
+.recall-card.is-known {
+	border-color: rgba(127, 176, 138, 0.55);
+}
+
+.recall-index {
+	font-family: var(--mono);
+	font-size: 10.5px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--muted);
+	margin: 0 0 7px;
+}
+
+.recall-q {
+	margin: 0 0 9px;
+	font-size: 14.5px;
+	line-height: 1.45;
+	color: #eef2f8;
+}
+
+.recall-a {
+	margin: 0 0 10px;
+	padding-top: 9px;
+	border-top: 1px dashed var(--line);
+	font-size: 14px;
+	line-height: 1.55;
+	color: #d8e2ef;
+}
+
+.recall-hint {
+	margin: 0 0 10px;
+	font-size: 12.5px;
+	line-height: 1.45;
+	font-style: italic;
+	color: var(--muted);
+}
+
+.recall-known {
+	padding: 4px 10px;
+	font-size: 11.5px;
+}
+
+/* recall sheet overlay */
+
+.overlay-body h3 {
+	font-family: var(--serif);
+	font-size: 19px;
+	font-weight: 500;
+	margin: 4px 0 6px;
+}
+
+.law-group {
+	margin: 0 0 22px;
+}
+
+.law-summary {
+	margin: 0 0 10px;
+	font-size: 13px;
+	color: var(--muted);
+}
+
+.law-list {
+	display: grid;
+	gap: 10px;
+	margin: 0;
+	padding-left: 20px;
+}
+
+.law-text {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.45;
+	color: #eef2f8;
+}
+
+.law-detail {
+	margin: 3px 0 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--muted);
+}
+
+.device-list {
+	display: grid;
+	gap: 6px;
+	margin: 0 0 18px;
+}
+
+.device-row {
+	display: grid;
+	grid-template-columns: 34px 190px 84px minmax(0, 1fr);
+	align-items: baseline;
+	gap: 10px;
+	padding: 9px 12px;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.015);
+	color: var(--text);
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.device-row:hover {
+	border-color: var(--accent);
+	background: rgba(216, 161, 90, 0.07);
+}
+
+.device-num {
+	font-family: var(--mono);
+	font-size: 11px;
+	color: var(--muted);
+}
+
+.device-label {
+	font-family: var(--mono);
+	font-size: 12.5px;
+	color: var(--accent);
+}
+
+.device-kind {
+	font-family: var(--mono);
+	font-size: 10.5px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.device-title {
+	font-size: 12.5px;
+	color: #c3cede;
+}
+
+@media (max-width: 860px) {
+	.recall-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.device-row {
+		grid-template-columns: 30px minmax(0, 1fr);
+	}
+	.device-kind,
+	.device-title {
+		display: none;
+	}
+}
+
 /* ------------------------------------------------------------------ print */
 
 .print-view {

@@ -346,5 +346,50 @@
 			"why": "2,000 of materials plus 300 of operations is 2,300 across 10 good units, which is 230.00 each."
 		}
 	],
+	"memory": {
+		"spine": "A recipe, a promise, a reservation, an issue and a completion: five steps from demand to finished goods, each with its own document.",
+		"device": {
+			"kind": "phrase",
+			"label": "Recipe, promise, reserve, issue, complete",
+			"expansion": [
+				"BOM: quantities and operations, with the cost of both, written so the floor can follow it",
+				"Work order: this item, this quantity, this date, a promise to the floor",
+				"Reservation: planning only, because quantities reserved never move the ledger",
+				"Material Transfer for Manufacture: components move to the work in progress warehouse",
+				"Manufacture: components consumed and finished goods produced in one document"
+			]
+		},
+		"cards": [
+			{
+				"q": "Does a work order move stock?",
+				"a": "No, it reserves. Only the transfer and the manufacture entry move quantity.",
+				"hint": "Promise versus movement"
+			},
+			{
+				"q": "What is work in progress?",
+				"a": "The value of components consumed but not yet finished, sitting in the work in progress warehouse.",
+				"hint": "Half made stock"
+			},
+			{
+				"q": "What does a BOM cost roll up contain?",
+				"a": "Material cost plus operating cost per unit, at the BOM's own rates and operations.",
+				"hint": "Material plus operations"
+			},
+			{
+				"q": "Where are components actually consumed?",
+				"a": "In the Manufacture stock entry, which also produces and values the finished item.",
+				"hint": "One document, two directions"
+			},
+			{
+				"q": "Why must the finished valuation be explainable?",
+				"a": "It becomes the cost of every later sale, so an unexplainable BOM cost is an unexplainable margin.",
+				"hint": "Cost in, cost out"
+			}
+		],
+		"trap": {
+			"what": "Components are issued straight out of the main warehouse and the work in progress step is skipped.",
+			"why": "Nothing is ever in process, so a half finished order looks like a stock loss and the finished goods value cannot be rebuilt."
+		}
+	},
 	"narration": "Manufacturing scares functional consultants because it looks technical, and it is not. A bill of materials is a recipe: two motors at eighty, one housing at forty, half an hour of assembly at sixty an hour, which gives two hundred thirty per unit. A work order turns demand into a reservation: ten assemblies need twenty motors and ten housings, and nothing has moved yet. The material transfer moves components to the floor, where they are work in progress and still not an expense. Completion consumes the components, adds three hundred of operating cost, and produces ten assemblies at two hundred thirty each. Four documents, one cost, no mystery. If the completion differs from the BOM, check the rate, the time and any extra charges before blaming the system, and write the answer in the production worksheet. A client who can explain a cost per unit from four documents will trust the system with their quotations, and that trust is the whole point of the volume."
 }

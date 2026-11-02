@@ -321,5 +321,50 @@
 			"why": "The level says when to act, safety stock absorbs demand variation, and lead time tells the buyer how early to act to avoid a stock-out."
 		}
 	],
+	"memory": {
+		"spine": "One gate decides whether an item touches stock at all, then four decisions decide what every later document will ask for.",
+		"device": {
+			"kind": "acronym",
+			"label": "GUST",
+			"expansion": [
+				"Gate: Maintain Stock. Switched off, the item never reaches the stock ledger",
+				"G: Group and brand, the reporting tree rather than a folder",
+				"U: UOM, the stock UOM plus the conversions that valuation runs on",
+				"S: Serial or batch, decided once because later documents will demand it",
+				"T: Tax, the item tax template that can override the customer default"
+			]
+		},
+		"cards": [
+			{
+				"q": "What does Maintain Stock switched off mean?",
+				"a": "The item never touches the stock ledger, though it can still be bought and sold as a service.",
+				"hint": "The gate before all four"
+			},
+			{
+				"q": "Serial or batch, and when?",
+				"a": "Serial for units traced individually such as warranty appliances, batch for quantities made or received together with expiry.",
+				"hint": "One unit, one lot"
+			},
+			{
+				"q": "An item has no Item Price record for the list. What rate loads?",
+				"a": "Zero, and the document will post at zero unless someone reads the rate before submitting.",
+				"hint": "A missing record means free goods"
+			},
+			{
+				"q": "Which mechanism turns 216.00 into 205.20?",
+				"a": "A pricing rule applying five per cent, resolved after the item price sets the base rate.",
+				"hint": "Rule overrides price"
+			},
+			{
+				"q": "Why is the stock UOM special?",
+				"a": "Every stock ledger row, Bin and valuation figure is kept in it, and other UOMs are only conversions of it.",
+				"hint": "Valuation's native language"
+			}
+		],
+		"trap": {
+			"what": "Batch tracking is switched on for an item that already holds stock.",
+			"why": "The existing quantity has no batch, so the next issue cannot choose one. Opening batches or a reconciliation must come first."
+		}
+	},
 	"narration": "Volume one is the item master, and items are where costing decisions wear product names. Start with item groups. They are a reporting tree, so group by commercial family, not by supplier, and keep it three levels deep. Then a complete stock item. Maintain stock decides whether the item touches inventory at all. Valuation rate is a cost, not a price, and putting the selling price there ruins every margin report from day one. The default unit drives buying and selling, the income and expense accounts decide where sales and cost of goods post, and the item tax template attaches tax to the product rather than the invoice. Next, tracking. Serial numbers identify individual units and suit warranty appliances; batches group production runs and suit packaging with expiry. Both flags must be set before the first stock movement, because history cannot be retracked. A service item has maintain stock off, so it never appears in stock reports. Only track what the business genuinely needs to trace, and ask for one process that depends on it. Finally, prices and reorder rules. Item price records hold a rate per price list and per date, so a price change is history rather than an edit. Reorder level needs safety stock and lead time to be useful. And remember the zero-rate trap: if a quotation shows zero, a price record is missing, not a system bug. In the lab you build five items across all three types and prove the price and tax behaviour."
 }

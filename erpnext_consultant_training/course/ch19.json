@@ -297,5 +297,50 @@
 			"why": "Letterheads and terms are configuration, so handing ownership to the client's administrator removes a recurring support cost and speeds small changes."
 		}
 	],
+	"memory": {
+		"spine": "Documents customers can read, numbers an auditor can follow and messages that arrive once: three controls, all configuration, no code.",
+		"device": {
+			"kind": "phrase",
+			"label": "Readable, numbered, said once",
+			"expansion": [
+				"Print format: sections, fields and totals from the builder, with no code to maintain",
+				"A Malaysian tax invoice needs the company name, registration number and SST number",
+				"Naming series control the numbers, and gaps are the auditor's first question",
+				"A notification watches one event with one condition and one recipient list",
+				"Test print and notification changes on a real document in a real state"
+			]
+		},
+		"cards": [
+			{
+				"q": "What must a Malaysian tax invoice show?",
+				"a": "Company name, registration number and SST number, plus the tax breakdown per line.",
+				"hint": "Not optional"
+			},
+			{
+				"q": "What do auditors ask about numbering first?",
+				"a": "Whether there are gaps or duplicates in the series, and who can edit the prefix.",
+				"hint": "Series integrity"
+			},
+			{
+				"q": "Why does a notification fire twice?",
+				"a": "It is attached to more than one event, or its condition matches both a draft and a submit.",
+				"hint": "One event, one send"
+			},
+			{
+				"q": "What should never be customised with code in this volume?",
+				"a": "Anything the print format builder or notification fields already do, because code does not survive an upgrade.",
+				"hint": "Configuration survives"
+			},
+			{
+				"q": "How is a print format tested?",
+				"a": "With a real submitted document carrying real tax and a real address, never with a blank form.",
+				"hint": "Real document, real state"
+			}
+		],
+		"trap": {
+			"what": "A notification is configured to fire on save as well as on submit.",
+			"why": "Every draft edit emails the customer, people stop reading the messages, and the control that catches late invoices is gone."
+		}
+	},
 	"narration": "Volume eight is where a functional consultant stops looking like an implementer. Print formats built in the builder give the customer a document worth reading, with the registration and tax number where they belong and totals matching the ledger to the cent. Naming series keep numbering sequential, and a cancelled document keeps its number because reusing one breaks the audit trail. Notifications watch a condition: an order above five thousand emails the sales manager, an order of twelve hundred stays quiet. Letterheads and terms templates make every document look like one company, and they are the easiest handover win because the client can maintain them alone. No code, all configuration, and it all survives the next upgrade. Test five things before handover: one page, matching totals, sequential numbering, one notification above the threshold and silence below it, and a letterhead the client can edit without calling you."
 }

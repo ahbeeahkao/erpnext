@@ -425,5 +425,50 @@
 			"why": "Tax is 120.00 on a net of 1,200.00, so the payable total is 1,320.00. A different figure means a template, rate or inclusion flag is wrong."
 		}
 	],
+	"memory": {
+		"spine": "Setup runs broad to narrow, company then tree then defaults then dimensions, and every step is proved with a document afterwards.",
+		"device": {
+			"kind": "phrase",
+			"label": "Broad to narrow, then prove it",
+			"expansion": [
+				"Company first: abbreviation, currency and fiscal year, because everything else hangs off it",
+				"Then the tree: keep the template, add leaf accounts, never rename the standard tree",
+				"Then defaults: round off and write off accounts that every document silently inherits",
+				"Then dimensions: cost centres split a posting for analysis, never the total",
+				"Then tax: SST templates and accounts, and no GST anywhere"
+			]
+		},
+		"cards": [
+			{
+				"q": "Which five root groups must a new company show?",
+				"a": "Application of Funds, Sources of Funds, Equity, Income and Expenses. A missing group means the template did not load.",
+				"hint": "Count them in the tree"
+			},
+			{
+				"q": "Why never rename the standard account tree?",
+				"a": "Reports and tax templates look accounts up by name, so renaming breaks every report the client will ever ask for.",
+				"hint": "Add leaves, keep nodes"
+			},
+			{
+				"q": "Where do rounding differences land?",
+				"a": "The Round Off account set in company defaults, never in the customer's receivable.",
+				"hint": "One account, named once"
+			},
+			{
+				"q": "Do cost centres change the trial balance?",
+				"a": "No. A dimension splits a posting for analysis while the total stays exactly the same.",
+				"hint": "Analysis, not amount"
+			},
+			{
+				"q": "A 1,200.00 net invoice at SST 10 per cent, what are tax and total?",
+				"a": "120.00 tax and 1,320.00 grand total. Predict it before the invoice is saved.",
+				"hint": "The course anchor numbers"
+			}
+		],
+		"trap": {
+			"what": "The company abbreviation is changed after documents have been posted.",
+			"why": "The abbreviation is baked into every account name and series prefix already used, so changing it orphans history instead of renaming it."
+		}
+	},
 	"narration": "Welcome to the consultant track. This course is not about how ERPNext is built; it is about standing it up for a client, entering real data and proving the result to the sen. Volume zero starts with the company. Every account name carries the company abbreviation, so choose the two letters before you save. Country selects the chart of accounts template, currency is effectively fixed after the first transaction, and the fiscal year decides which period your postings land in. Then you verify, not the form, but the result: five root groups, every account ending in your abbreviation, a debtors control account, and the company selectable in global defaults. Next, add the accounts your client actually needs: petty cash, freight inward, and two tax accounts, one for sales tax and one for service tax, both flagged as tax accounts. Group accounts never take postings, and ERPNext refuses the voucher. Defaults come next: round off, write off, default cost centre and default warehouse. They look cosmetic, and they pre-fill every document. Then cost centres, built around how the client makes decisions, with a check that the columns add up to the total. Finally Malaysian SST: item tax templates for ten percent goods and eight percent services, a document template on net total, and a test invoice that must show one thousand two hundred net, one hundred twenty tax, and one thousand three hundred twenty payable. In the lab you build it and record every choice."
 }

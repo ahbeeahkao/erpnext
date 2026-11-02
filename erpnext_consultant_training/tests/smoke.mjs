@@ -137,9 +137,79 @@ check("progress is recorded and persisted", () => {
 });
 
 check("the lab slide renders steps and a done criterion", () => {
-	app.goTo(0, app.slidesFor(app.state.chapters[0]).length - 2);
+	app.goTo(0, app.slidesFor(app.state.chapters[0]).length - 3);
 	assert.ok($$(".steps li").length >= 6);
 	assert.match($("#slide .callout").textContent, /Done when/i);
+});
+
+check("the recall slide teaches a device and five flip cards", () => {
+	const chapter = app.state.chapters[4];
+	app.goTo(4, app.slidesFor(chapter).length - 2);
+	assert.match($("#slide .kicker").textContent, /Remember/);
+	assert.equal($("#slide h1").textContent, chapter.memory.device.label);
+	assert.match($("#slide .lede").textContent, new RegExp(chapter.memory.spine.slice(0, 40)));
+	assert.equal($$("#slide .memory-expansion li").length, chapter.memory.device.expansion.length);
+	assert.equal($$("#slide .recall-card").length, 5);
+	assert.equal($$("#slide .recall-a").length, 0, "answers start hidden");
+	assert.equal($$("#slide .callout.warn").length, 1, "the trap is called out");
+});
+
+check("flipping a card reveals its answer and keeps the others hidden", () => {
+	const chapter = app.state.chapters[4];
+	const card = $$("#slide .recall-card")[0];
+	card.click();
+	assert.equal($$("#slide .recall-a").length, 1);
+	assert.match($$("#slide .recall-a")[0].textContent, new RegExp(chapter.memory.cards[0].a.slice(0, 30)));
+	assert.ok($$("#slide .recall-card")[1].querySelector(".recall-hint"));
+});
+
+check("marking a card known persists and counts up", () => {
+	const chapter = app.state.chapters[4];
+	const known = $$("#slide .recall-card")[1].querySelector(".recall-known");
+	known.click();
+	assert.equal(app.state.recall[chapter.id].known.length, 1);
+	assert.ok($$("#slide .recall-card")[1].classList.contains("is-known"));
+	assert.match($("#slide .memory-bar").textContent, /1 of 5/);
+	assert.equal(app.recallProgress().total, 120);
+	const stored = JSON.parse(dom.window.localStorage.getItem("erpnext-consultant/v1"));
+	assert.equal(stored.recall[chapter.id].known.length, 1);
+});
+
+check("reveal all opens every answer at once", () => {
+	const chapter = app.state.chapters[4];
+	app.revealAllRecall(chapter.id, chapter.memory.cards.length);
+	assert.equal($$("#slide .recall-a").length, 5);
+});
+
+check("the recall sheet lists the ten laws and every device", () => {
+	app.openOverlay("cheatsheet");
+	assert.match($("#overlay-title").textContent, /Recall sheet/);
+	assert.equal($$("#overlay .law").length, 10);
+	assert.equal($$("#overlay .device-row").length, 24);
+	assert.match($("#overlay-body").textContent, /Nothing exists until it is submitted/);
+	assert.match(
+		$$("#overlay .device-row")[0].textContent,
+		new RegExp(app.state.chapters[0].memory.device.label)
+	);
+});
+
+check("a device row jumps to that chapter's recall slide", () => {
+	const row = $$("#overlay .device-row")[11];
+	row.click();
+	assert.equal(app.state.chapterIndex, 11);
+	assert.equal(app.state.slideIndex, app.slidesFor(app.state.chapters[11]).length - 2);
+	assert.match($("#slide .kicker").textContent, /Remember/);
+});
+
+check("R opens the recall sheet", () => {
+	dom.window.document.dispatchEvent(new dom.window.KeyboardEvent("keydown", { key: "r", bubbles: true }));
+	assert.match($("#overlay-title").textContent, /Recall sheet/);
+	app.closeOverlay();
+});
+
+check("search finds recall cards, not just slides", () => {
+	const results = app.searchSlides("normal balance");
+	assert.ok(results.some((result) => /^Recall:/.test(result.title)));
 });
 
 check("the quiz renders one card per question and marks answers", () => {
@@ -233,14 +303,18 @@ check("keyboard navigation moves the deck", () => {
 check("the print view contains every chapter, lab and quiz answer", () => {
 	app.buildPrintView();
 	const view = $("#print-view");
-	assert.equal(view.querySelectorAll(".print-chapter").length, 24);
+	// one page of laws plus one page per chapter
+	assert.equal(view.querySelectorAll(".print-chapter").length, 25);
 	assert.match(view.textContent, /Quiz with answers/);
 	assert.match(view.textContent, /Answer:/);
+	assert.match(view.textContent, /The ten laws of ERPNext/);
+	assert.match(view.textContent, /How to remember it/);
 });
 
-check("resetProgress clears stored progress", () => {
+check("resetProgress clears stored progress and recall marks", () => {
 	app.resetProgress();
 	assert.equal(app.progressPercent(), 0);
+	assert.equal(app.recallProgress().known, 0);
 });
 
 console.log(`\n${checks - failures.length}/${checks} smoke checks passed`);

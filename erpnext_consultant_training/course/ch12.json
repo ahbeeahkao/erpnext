@@ -315,5 +315,50 @@
 			"why": "The stock ledger holds every movement with its rate and voucher, so it explains the change rather than just stating the balance."
 		}
 	],
+	"memory": {
+		"spine": "Value in equals value out plus value left, and under FIFO the cost of a sale belongs to the oldest layer, not to the item.",
+		"device": {
+			"kind": "rule",
+			"label": "Value in equals value out plus value left",
+			"expansion": [
+				"Every receipt creates a valuation layer at its own rate",
+				"Issues consume the oldest layer first, so cost follows the queue rather than the item",
+				"Repost Item Valuation recalculates layers from history and rewrites downstream cost",
+				"Negative stock keeps operations moving and leaves valuation guessing",
+				"Three reports must agree before any stock number is presented"
+			]
+		},
+		"cards": [
+			{
+				"q": "Which layer does a sale consume under FIFO?",
+				"a": "The oldest remaining layer, at that layer's own rate.",
+				"hint": "First in, first costed"
+			},
+			{
+				"q": "Receipts at 100 and 120, then one unit sold. What is the cost?",
+				"a": "100, because the oldest layer leaves first and 120 stays in stock.",
+				"hint": "Queue, not average"
+			},
+			{
+				"q": "How is a wrong valuation corrected?",
+				"a": "Repost Item Valuation. A journal would create a second version of the truth beside the ledger.",
+				"hint": "Recalculate history"
+			},
+			{
+				"q": "What does negative stock do to valuation?",
+				"a": "It guesses a rate, usually the last known, so cost of goods sold and stock value both drift.",
+				"hint": "A guess dressed as a number"
+			},
+			{
+				"q": "Which three figures must agree?",
+				"a": "Stock Balance quantity, the stock ledger value and the stock account in the general ledger.",
+				"hint": "Quantity, history, value"
+			}
+		],
+		"trap": {
+			"what": "Landed cost is added after the stock it belongs to has already been sold.",
+			"why": "The sale consumed a layer without the freight, so cost of goods sold is understated and the revaluation creates profit from nothing."
+		}
+	},
 	"narration": "Valuation is where a consultant earns trust, because the owner will check the margin with a calculator. Under FIFO, each receipt creates a layer, and a sale consumes the oldest first. Ten blenders at one hundred twenty and ten at one hundred thirty gives twenty five hundred of stock. Sell twelve and cost of goods sold is one thousand four hundred sixty, leaving eight units worth one thousand forty. That identity, value in equals value out plus value remaining, is the test for every valuation problem. When a rate was wrong or freight arrived late, the answer is a repost item valuation, not a journal entry, and the system will refuse to run it inside a closed period. And negative stock is a decision, not an accident: block it and operations learns to paperwork faster. Decide it, write it down, and the reports stop arguing. Every valuation question ends the same way: show the identity, then show the rows that prove it."
 }

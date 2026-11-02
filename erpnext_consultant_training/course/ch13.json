@@ -352,5 +352,49 @@
 			"why": "Depreciation has no external document, so a journal is its natural form. Sales, purchases and payments all have dedicated documents that also handle tax and parties."
 		}
 	],
+	"memory": {
+		"spine": "Four journal situations recur every month, and each one has a reversal date that decides whether the next period is clean.",
+		"device": {
+			"kind": "rule",
+			"label": "Accrue, prepay, reconcile, reverse",
+			"expansion": [
+				"Accrual: the cost belongs to this month, the invoice arrives next month, and a reversal is set now",
+				"Prepayment: an asset until the cover it buys is consumed, released month by month",
+				"Reconciliation proves every statement line exists in the ledger and every ledger line on the statement",
+				"Corrections are reversals or amendments with a trail, never edits to a submitted entry"
+			]
+		},
+		"cards": [
+			{
+				"q": "When does an accrual reverse?",
+				"a": "On the reversal date set when it was posted, so the actual invoice lands cleanly in the next period.",
+				"hint": "Decide the date at posting time"
+			},
+			{
+				"q": "What is a prepayment before it is consumed?",
+				"a": "An asset: cover that has been paid for but not yet used.",
+				"hint": "Asset until used"
+			},
+			{
+				"q": "What does a clean bank reconciliation prove?",
+				"a": "That every statement line is matched to the ledger, so cash for the period is fully explained with no plug.",
+				"hint": "No suspense account"
+			},
+			{
+				"q": "How is a submitted journal corrected?",
+				"a": "Reverse it, or cancel and amend, because the trail is the whole point.",
+				"hint": "History is append only"
+			},
+			{
+				"q": "Which four journal situations recur monthly?",
+				"a": "Accrual, prepayment release, depreciation and correction.",
+				"hint": "The monthly four"
+			}
+		],
+		"trap": {
+			"what": "A suspense account absorbs whatever the bank reconciliation cannot explain.",
+			"why": "Cash is then explained by an account nobody owns, and the balance grows every month until the close cannot be defended."
+		}
+	},
 	"narration": "Journals are where the accounting primer becomes a daily tool. An accrual records a cost before the invoice arrives, and it must reverse, or February carries January's electricity twice. A prepayment is an asset until the cover is used, so one thousand two hundred of insurance becomes one hundred a month, leaving one thousand one hundred on the balance sheet after the first release. Then the bank. Match every statement line, create the bank charge the ledger is missing, and drive the difference to zero with evidence rather than a plug. And when something was posted to the wrong place, amend it inside the open period or reverse it afterwards. Never delete, because the gap is exactly what an auditor looks for first. Practise the four situations until they are reflexes: accrual, prepayment, bank charge, wrong cost centre. Each one has a canonical remedy, and each remedy leaves a document behind, which is what turns a bookkeeping task into a consulting deliverable."
 }

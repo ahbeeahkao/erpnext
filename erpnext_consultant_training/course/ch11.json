@@ -382,5 +382,50 @@
 			"why": "Returned goods remain owned and valued, and quarantine makes that visible so nobody sells them again before inspection."
 		}
 	],
+	"memory": {
+		"spine": "A transfer is a receipt and an issue wearing one voucher, so the total never moves while the location does.",
+		"device": {
+			"kind": "phrase",
+			"label": "One voucher, two rows",
+			"expansion": [
+				"A warehouse is a location with its own ledger, so each one must earn its place",
+				"A transfer moves quantity between warehouses and leaves the total and ownership untouched",
+				"Two stock ledger rows, same rate, one voucher: one outgoing and one incoming",
+				"Stock Reconciliation is the only honest correction after a physical count",
+				"Reorder level is the trigger, reorder quantity is the batch it suggests"
+			]
+		},
+		"cards": [
+			{
+				"q": "How many stock ledger rows does a transfer create?",
+				"a": "Two, an outgoing and an incoming row at the same rate, written by one voucher.",
+				"hint": "In and out, one document"
+			},
+			{
+				"q": "What corrects a count difference?",
+				"a": "A Stock Reconciliation with the counted quantity, including counts that are zero.",
+				"hint": "Truth on paper"
+			},
+			{
+				"q": "Which three numbers must agree after any movement?",
+				"a": "Bin quantity, the stock ledger running total and the Stock Balance report.",
+				"hint": "Three views of one number"
+			},
+			{
+				"q": "Reorder level or reorder quantity?",
+				"a": "The level triggers the alert, the quantity is how much the suggestion orders.",
+				"hint": "When versus how much"
+			},
+			{
+				"q": "Does reserving stock for a work order move the ledger?",
+				"a": "No. Reserved quantity is planning only, and only a Stock Entry moves stock.",
+				"hint": "Plan versus post"
+			}
+		],
+		"trap": {
+			"what": "A transfer is posted to fix a count difference between two warehouses.",
+			"why": "The total is unchanged, so the system now agrees with itself and disagrees with the shelf, and the error only moves."
+		}
+	},
 	"narration": "Stock is the part of ERPNext where a small configuration mistake becomes a very large number. Start with the warehouse tree: four leaves, one root, each with the same stock account, because a wrong default account turns every transfer into a valuation difference. A material transfer moves five blenders from main to retail and leaves the total untouched, which is the check to make every single time. Then the stock count. Fifty units on the system, forty seven on the shelf, three units short at one hundred twenty is three hundred sixty of cost, and the reconciliation posts it to a stock adjustment account that finance must recognise. Finally the reorder rule: two units a day for seven days plus ten safety is twenty four, not a round twenty. Set those three things properly and the stock reports stop being arguments, and start being the evidence the client takes to their auditor at the first stock review."
 }

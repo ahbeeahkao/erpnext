@@ -414,5 +414,49 @@
 			"why": "Tax collected is held for LHDN until remitted. Treating it as income overstates revenue by the tax rate."
 		}
 	],
+	"memory": {
+		"spine": "Every transaction has two sides, ERPNext posts both, and the trial balance only proves you entered it twice in the same place.",
+		"device": {
+			"kind": "acronym",
+			"label": "DEAD CLIC",
+			"expansion": [
+				"DEAD: debits increase Expenses, Assets and Drawings",
+				"CLIC: credits increase Liabilities, Income and Capital",
+				"Type first, sign second: the account type fixes the normal balance",
+				"A debit is not 'good' and a credit is not 'bad', they are directions"
+			]
+		},
+		"cards": [
+			{
+				"q": "A sale posts to which two accounts before any tax?",
+				"a": "Debtors (asset) debit and Sales (income) credit; tax adds a liability, it is never income.",
+				"hint": "Receivable up, income up, tax owed"
+			},
+			{
+				"q": "You posted the same invoice twice. What does the trial balance show?",
+				"a": "It still balances. A double posting is wrong but symmetric, so only the ledger or a report catches it.",
+				"hint": "Balance is not correctness"
+			},
+			{
+				"q": "Why is SST a liability rather than a cost?",
+				"a": "The customer paid it to you on the government's behalf, so you hold it until the return is filed.",
+				"hint": "You are the collection agent"
+			},
+			{
+				"q": "Which three books does one transaction touch?",
+				"a": "General ledger for worth and profit, payment ledger for settlement, stock ledger for quantity and value.",
+				"hint": "Three ledgers, one voucher"
+			},
+			{
+				"q": "When is a Journal Entry the right document?",
+				"a": "When no business document exists: accrual, depreciation, correction or opening balance. Never for a sale or a purchase.",
+				"hint": "Adjustment, not trade"
+			}
+		],
+		"trap": {
+			"what": "The receivable control account and the customer statement disagree at month end.",
+			"why": "The control account reads the general ledger while the statement reads the payment ledger, so unallocated cash shows a customer owing money they already paid."
+		}
+	},
 	"narration": "Before the walkthroughs, the concepts, because a consultant who cannot explain the books will lose the client's accountant in the first meeting. Accounting runs on one equation: assets equal liabilities plus equity, and every transaction touches it twice. ERPNext enforces that twice-ness by refusing to save an unbalanced journal entry, which makes the rule visible. There are five account types, and the type decides the report: assets, liabilities and equity on the balance sheet, income and expenses on the profit and loss. Malaysian clients often arrive with a chart built in a spreadsheet, so your job is to map each row to a type, not to impose your own taste. Next, accrual accounting: income when earned, expenses when incurred. Tax collected is never income; it is a liability cleared when you file. Then the three ledgers. The general ledger says what the business earned and owns. The stock ledger says where the goods are and what they cost. The payment ledger says who owes what, document by document. One mistake is often invisible in two of the three, which is why month end reconciles all of them. Control accounts and party ledgers must agree, and you never fix a difference by journaling into debtors. Finally, journals: right for accruals and depreciation, wrong as a replacement for a purchase invoice or a sale. Close with four checks and five questions, because trust is built on numbers that survive scrutiny."
 }

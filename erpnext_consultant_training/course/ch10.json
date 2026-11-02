@@ -339,5 +339,50 @@
 			"why": "The interim account clears when the purchase invoice is submitted, so any remaining balance means at least one receipt is still waiting for its bill."
 		}
 	],
+	"memory": {
+		"spine": "Reverse in the order you posted, put freight into the stock rather than the expense column, and let the allocation do the work.",
+		"device": {
+			"kind": "rule",
+			"label": "Reverse in the order you posted",
+			"expansion": [
+				"A return reverses the receipt first and the bill second, which is the order auditors expect",
+				"An advance is a payment with no invoice, so it is a liability until it is allocated",
+				"Landed cost allocates freight, duty and clearing into the stock valuation, not the profit and loss",
+				"A payment order groups invoices due on one date so the bank sees one instruction",
+				"Every remedy is a new document with a number, and history is never edited"
+			]
+		},
+		"cards": [
+			{
+				"q": "One damaged unit goes back to the supplier. In what order?",
+				"a": "The goods return first, then the bill adjustment, so stock and tax reverse together.",
+				"hint": "Reverse, then bill"
+			},
+			{
+				"q": "How is an advance to a supplier recorded?",
+				"a": "A payment entry with no allocation against an invoice, so it stays a liability rather than an expense.",
+				"hint": "Money before paper"
+			},
+			{
+				"q": "Where does inbound freight belong?",
+				"a": "In a Landed Cost Voucher, allocated across the received units and revaluing the stock they sit in.",
+				"hint": "Into stock, not expense"
+			},
+			{
+				"q": "What must be true after a landed cost allocation?",
+				"a": "The downstream margin reports actually use the new valuation, otherwise the allocation is decoration.",
+				"hint": "Revaluation must be read"
+			},
+			{
+				"q": "What do ageing buckets tell you?",
+				"a": "When money leaves, not whether the bill is correct. Correctness is the three way match.",
+				"hint": "Timing, not truth"
+			}
+		],
+		"trap": {
+			"what": "Freight is booked straight to an expense because the landed cost voucher looks like extra work.",
+			"why": "The cost lands once, stock stays under valued, and every later sale reports a margin that cannot be defended."
+		}
+	},
 	"narration": "Suppliers rarely behave the way the process diagram says. They deliver late, send one damaged unit, ask for money before the goods arrive, and send the freight invoice a fortnight afterwards. Each of those has one right document. A return reverses stock first, then the debit note reverses the creditor and the tax, which is why nine units remain at one hundred twenty six each. An advance is money without an invoice, consumed by allocation rather than by a journal, otherwise it sits on the balance sheet forever and the client's auditor asks why. And landed cost is what turns a one hundred twenty rate into a one hundred twenty six valuation, so a two hundred forty sale earns one hundred fourteen rather than one hundred twenty, and the owner's own arithmetic finally agrees with the report. Get those three right and the supplier ageing conversation becomes arithmetic instead of an argument, which is exactly the conversation a distribution client wants to have in week three."
 }

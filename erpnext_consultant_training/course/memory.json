@@ -1,0 +1,83 @@
+{
+	"note": "The three-rule index behind every chapter's recall slide: ten laws, three buckets, one page.",
+	"law_count": 10,
+	"buckets": [
+		{
+			"id": "true",
+			"title": "What is true",
+			"summary": "Four laws about state: when a record exists, where its numbers live, and why a balanced book can still be wrong."
+		},
+		{
+			"id": "lives",
+			"title": "Where it lives",
+			"summary": "Three laws about structure: hierarchies, ownership of a field, and the order defaults resolve in."
+		},
+		{
+			"id": "moves",
+			"title": "How it moves",
+			"summary": "Three laws about action: one document per event, who may do or see what, and the close that ends a period."
+		}
+	],
+	"laws": [
+		{
+			"n": 1,
+			"bucket": "true",
+			"law": "Nothing exists until it is submitted.",
+			"detail": "A draft writes no ledger row, no stock row and no number in the series. Treat drafts as unfinished work, not as records."
+		},
+		{
+			"n": 2,
+			"bucket": "true",
+			"law": "Quantity lives in the stock ledger, value in the general ledger, and one voucher writes both.",
+			"detail": "Every receipt, delivery or stock entry creates stock ledger entries and, at the same moment, the GL rows that carry their value."
+		},
+		{
+			"n": 3,
+			"bucket": "true",
+			"law": "A wrong posting still balances.",
+			"detail": "Double entry proves that debits equal credits, not that they landed in the right accounts. Only a report or a reconciliation proves correctness."
+		},
+		{
+			"n": 4,
+			"bucket": "true",
+			"law": "History is append-only: cancel and amend, never edit.",
+			"detail": "Submitted documents are evidence. The correction path is a reversal, a credit note or an amendment that keeps the original visible."
+		},
+		{
+			"n": 5,
+			"bucket": "lives",
+			"law": "Masters go broad to narrow: company, then group, then item or party.",
+			"detail": "Item groups, territories, cost centres and account trees are hierarchies that reports roll up. A flat list works only until the first report."
+		},
+		{
+			"n": 6,
+			"bucket": "lives",
+			"law": "Greyed out means a setting upstream owns the field.",
+			"detail": "Batch fields appear when Has Batch No is on, tax fields when a template exists. A disabled field is a message about configuration, not a bug."
+		},
+		{
+			"n": 7,
+			"bucket": "lives",
+			"law": "Defaults cascade: global, company, party or item, then the transaction.",
+			"detail": "Each level may override the one above, which is why one wrong customer price list can look like a broken pricing rule."
+		},
+		{
+			"n": 8,
+			"bucket": "moves",
+			"law": "Exactly one document owns each event; skipping it leaves a permanent trace.",
+			"detail": "Skipping the receipt leaves interim stock uncleared, skipping the delivery leaves the order open. No shortcut leaves no trace."
+		},
+		{
+			"n": 9,
+			"bucket": "moves",
+			"law": "Roles decide what you can do; user permissions decide what you can see.",
+			"detail": "A role grants actions on a DocType, a user permission filters the rows. When a report looks wrong, check both before changing either."
+		},
+		{
+			"n": 10,
+			"bucket": "moves",
+			"law": "Close the period; do not edit the past.",
+			"detail": "The Period Closing Voucher posts the closing entries and locks the period, so later corrections belong to the current period with a note."
+		}
+	]
+}

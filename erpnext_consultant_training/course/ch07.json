@@ -357,5 +357,50 @@
 			"why": "Conversion preserves the link and the values, which is what lets ERPNext track delivered and billed percentages and keeps invoice quantities equal to dispatched quantities."
 		}
 	],
+	"memory": {
+		"spine": "Four documents chase each other from offer to cash, and only the last two of them touch the ledger and the stock.",
+		"device": {
+			"kind": "story",
+			"label": "Four chases",
+			"expansion": [
+				"Quote chases Order: the offer becomes a commitment with dates and warehouses",
+				"Order chases Delivery: the physical event that moves stock and posts cost of goods sold",
+				"Delivery chases Invoice: revenue, receivable and tax in one posting",
+				"Invoice chases Payment: cash in, allocated, outstanding at zero",
+				"Quote and order are promises, delivery and invoice are facts"
+			]
+		},
+		"cards": [
+			{
+				"q": "What does submitting a quotation change?",
+				"a": "Nothing in the ledger and nothing in stock. It is an offer with a validity date.",
+				"hint": "A promise writes nothing"
+			},
+			{
+				"q": "Which document posts cost of goods sold?",
+				"a": "The Delivery Note, using the valuation the stock ledger already holds, not the invoice.",
+				"hint": "The physical event"
+			},
+			{
+				"q": "Five units leave Main Warehouse at 120.00. What is cost of goods sold?",
+				"a": "600.00, and Stock Balance then shows zero with no negative quantity anywhere.",
+				"hint": "Quantity times valuation rate"
+			},
+			{
+				"q": "Why convert the invoice from the delivery note?",
+				"a": "So billed quantity equals dispatched quantity and the order does not stay open as to bill.",
+				"hint": "Match paper to goods"
+			},
+			{
+				"q": "What makes a payment entry clear an invoice?",
+				"a": "Allocation. Cash without allocation leaves the invoice open and the customer looking like a debtor.",
+				"hint": "Allocate or it did not happen"
+			}
+		],
+		"trap": {
+			"what": "The invoice is raised before the goods leave and the delivery note is then forgotten.",
+			"why": "Revenue and receivable rise while stock and cost of goods sold never move, so the margin looks perfect and the warehouse is wrong."
+		}
+	},
 	"narration": "Volume two is the transaction chain, and this is the heart of consultant training: five documents, three ledgers, and numbers you predict before you press submit. A quotation writes nothing but an offer. It carries the customer's price list, terms and tax, and when it is submitted the general ledger stays empty and stock does not move. A sales order is a commitment. It still posts nothing, but projected quantity falls by five, delivery dates and warehouses are set per line, and the order becomes the source for delivery and billing. The delivery note is where stock finally moves. Five units leave the main warehouse at a valuation of one hundred twenty each, so cost of goods sold is six hundred, and the order says fully delivered. Still no receivable. The sales invoice posts three things at once: debtors one thousand three hundred twenty, revenue one thousand two hundred, and SST payable one hundred twenty. Gross profit becomes six hundred, a fifty percent margin. Then the payment entry. Receive one thousand three hundred twenty into the bank, allocate it to the invoice, and the invoice turns paid and the payment ledger returns to zero. An unallocated receipt is the most common cause of a wrong aged receivables report, so always allocate. In the lab you run the whole cycle and then prove it with three reports: general ledger, payment ledger and gross profit."
 }

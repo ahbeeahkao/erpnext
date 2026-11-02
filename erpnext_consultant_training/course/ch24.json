@@ -301,5 +301,50 @@
 			"why": "The signed UAT sheet is the formal acceptance, supported by defect closure and retest evidence."
 		}
 	],
+	"memory": {
+		"spine": "A script the client signs, a weekend in dependency order, a fortnight measured in numbers, and a pack that outlives the consultant.",
+		"device": {
+			"kind": "phrase",
+			"label": "Script, sequence, numbers, hand over",
+			"expansion": [
+				"A test case states the action, the expected number and the evidence, and the client signs it",
+				"Pass means the expected figure appears, not that no error message was shown",
+				"Cut over in dependency order, because each step unblocks the next one",
+				"Hypercare is a fortnight of daily numbers: tickets, invoices, stock errors, close progress and logins",
+				"The handover pack must be usable without the consultant in the room"
+			]
+		},
+		"cards": [
+			{
+				"q": "What makes a UAT case pass?",
+				"a": "The expected figure appears on screen, not merely that the screen did not produce an error.",
+				"hint": "Figures, not silence"
+			},
+			{
+				"q": "Why is cut over ordered rather than parallel?",
+				"a": "Each step produces the input for the next, so reordering it creates work that must be redone.",
+				"hint": "Dependency, not convenience"
+			},
+			{
+				"q": "Which five numbers are measured daily in hypercare?",
+				"a": "Tickets raised, invoices posted, stock errors, close progress and logins.",
+				"hint": "Five numbers a day"
+			},
+			{
+				"q": "What ends hypercare?",
+				"a": "A go or no go decision on evidence where every criterion carries a number and someone signs it.",
+				"hint": "Decision on evidence"
+			},
+			{
+				"q": "What goes into the handover pack?",
+				"a": "Configuration record, mapping workbook, UAT sign off, cut over log, open items and how to run the close.",
+				"hint": "The project's memory"
+			}
+		],
+		"trap": {
+			"what": "UAT is signed off because no errors were raised during the session.",
+			"why": "Nobody compared figures, so the first month end discovers the wrong tax template and the sign off protects the vendor, not the client."
+		}
+	},
 	"narration": "The last two weeks decide how the project is remembered. UAT is not a demo: every case states an action and an expected number, five blenders at two hundred forty plus tax is one thousand three hundred twenty, cost six hundred, gross profit six hundred, and the case passes only when those figures appear. Go or no-go is decided on five rows of evidence, with a written acceptance for anything red. Cut-over is a one-page sequence with owners, and the old system stays readable as a rollback position. Then hypercare: five metrics, fifteen minutes, every morning, ending on the date agreed before go-live. Hand over the runbook, the worksheet, the opening pack and the access review, and step back. The measure of a finished engagement is not the invoice, it is a client running their own close, their own UAT for the next change, and their own access review without calling you, because the rhythm lives in their calendar rather than in your notes."
 }

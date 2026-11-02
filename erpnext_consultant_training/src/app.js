@@ -15,6 +15,10 @@ export const state = {
 	visited: {},
 	quizAnswers: {},
 	notesOpen: false,
+	/** Course-wide memory index: three buckets and ten laws. */
+	memory: null,
+	/** Per chapter recall state: { flipped: [cardIndex], known: [cardIndex] }. */
+	recall: {},
 	audioManifest: null,
 	audio: { available: false, chapterId: null, playing: false, duration: 0 },
 };
@@ -39,6 +43,7 @@ export async function boot(options = {}) {
 	);
 
 	state.audioManifest = await getJson(`${AUDIO_DIR}manifest.json`).catch(() => ({ chapters: {} }));
+	state.memory = await getJson(`${COURSE_DIR}memory.json`).catch(() => null);
 
 	bindEvents();
 	renderSidebar();
@@ -70,6 +75,7 @@ function resolveDom() {
 		btnGrid: document.getElementById("btn-grid"),
 		btnNotes: document.getElementById("btn-notes"),
 		btnSearch: document.getElementById("btn-search"),
+		btnRecall: document.getElementById("btn-recall"),
 		btnHelp: document.getElementById("btn-help"),
 		btnPrint: document.getElementById("btn-print"),
 		overlay: document.getElementById("overlay"),
@@ -102,6 +108,7 @@ export function slidesFor(chapter) {
 		{ type: "intro", chapter },
 		...chapter.slides.map((slide) => ({ type: "content", slide, chapter })),
 		{ type: "lab", lab: chapter.lab, chapter },
+		{ type: "recall", memory: chapter.memory, chapter },
 		{ type: "quiz", quiz: chapter.quiz, chapter },
 	];
 }
@@ -254,6 +261,8 @@ function renderSlide() {
 		renderContent(slide.slide);
 	} else if (slide.type === "lab") {
 		renderLab(slide.lab, slide.chapter);
+	} else if (slide.type === "recall") {
+		renderRecall(slide.memory, slide.chapter);
 	} else {
 		renderQuiz(slide.quiz, slide.chapter);
 	}
@@ -274,6 +283,7 @@ function renderIntro(chapter) {
 		el("span", "chip", `${chapter.slides.length} slides`),
 		el("span", "chip", `Lab · ${chapter.lab.minutes} min`),
 		el("span", "chip", `${chapter.quiz.length} quiz questions`),
+		el("span", "chip", chapter.memory ? `Remember: ${chapter.memory.device.label}` : chapter.level),
 		el("span", "chip", chapter.level)
 	);
 	dom.slide.append(meta);
@@ -326,6 +336,88 @@ function renderLab(lab, chapter) {
 	dom.slide.append(steps);
 
 	dom.slide.append(buildCallout({ tone: "tip", title: "Done when", text: lab.done }));
+	dom.slide.append(footnote());
+}
+
+function renderRecall(memory, chapter) {
+	if (!memory) {
+		dom.slide.append(el("p", "kicker", "Remember"), el("h1", "", "No recall sheet in this build"));
+		return;
+	}
+
+	dom.slide.append(el("p", "kicker", `Remember · chapter ${chapter.number} · ${memory.device.kind}`));
+	dom.slide.append(el("h1", "wide", memory.device.label));
+	dom.slide.append(el("p", "lede", memory.spine));
+
+	const key = document.createElement("section");
+	key.className = "memory-key";
+	key.append(el("p", "callout-label", "What it stands for"));
+	const expansion = document.createElement("ul");
+	expansion.className = "memory-expansion";
+	memory.device.expansion.forEach((line) => expansion.append(el("li", "", line)));
+	key.append(expansion);
+	dom.slide.append(key);
+
+	const recall = recallState(chapter.id);
+	const bar = document.createElement("div");
+	bar.className = "memory-bar";
+	bar.append(el("span", "chip", `${recall.known.length} of ${memory.cards.length} marked known`));
+	bar.append(el("span", "chip", "Answer out loud before you flip"));
+	const reveal = document.createElement("button");
+	reveal.type = "button";
+	reveal.className = "ghost";
+	reveal.textContent = "Reveal all";
+	reveal.addEventListener("click", () => revealAllRecall(chapter.id, memory.cards.length));
+	bar.append(reveal);
+	dom.slide.append(bar);
+
+	const grid = document.createElement("div");
+	grid.className = "recall-grid";
+
+	memory.cards.forEach((card, index) => {
+		const flipped = recall.flipped.includes(index);
+		const known = recall.known.includes(index);
+		const article = document.createElement("article");
+		article.className = `recall-card${flipped ? " is-flipped" : ""}${known ? " is-known" : ""}`;
+		article.dataset.card = String(index);
+		article.tabIndex = 0;
+		article.setAttribute("role", "button");
+		article.setAttribute("aria-expanded", String(flipped));
+		article.append(el("p", "recall-index", `Card ${index + 1}`));
+		article.append(el("p", "recall-q", card.q));
+		article.append(
+			flipped
+				? el("p", "recall-a", card.a)
+				: el("p", "recall-hint", `Tap to reveal · hint: ${card.hint}`)
+		);
+
+		const knownButton = document.createElement("button");
+		knownButton.type = "button";
+		knownButton.className = "ghost recall-known";
+		knownButton.textContent = known ? "Known ✓" : "Got it";
+		knownButton.setAttribute("aria-pressed", String(known));
+		knownButton.addEventListener("click", (event) => {
+			event.stopPropagation();
+			markRecallKnown(chapter.id, index);
+		});
+		article.append(knownButton);
+
+		const toggle = () => flipRecallCard(chapter.id, index);
+		article.addEventListener("click", toggle);
+		article.addEventListener("keydown", (event) => {
+			if (event.key === "Enter" || event.key === " ") {
+				event.preventDefault();
+				event.stopPropagation();
+				toggle();
+			}
+		});
+		grid.append(article);
+	});
+
+	dom.slide.append(grid);
+	dom.slide.append(
+		buildCallout({ tone: "warn", title: "The trap", text: `${memory.trap.what} ${memory.trap.why}` })
+	);
 	dom.slide.append(footnote());
 }
 
@@ -431,6 +523,10 @@ export function slideNotes(slide) {
 	if (slide.type === "intro") {
 		return `Open the chapter by reading the outcomes aloud. The chapter takes about ${slide.chapter.minutes} minutes plus a ${slide.chapter.lab.minutes}-minute lab. Ask each learner to state which outcome they expect to struggle with; revisit that answer at the quiz.`;
 	}
+	if (slide.type === "recall") {
+		const { device, spine } = slide.memory ?? { device: { label: "the device" }, spine: "" };
+		return `Do not read the answers out. Show the device (${device.label}), let each learner say what it stands for, then let them flip all five cards and mark the ones they got wrong. The spine sentence is what they should be able to say on a call: "${spine}" Finish with the trap, because traps are what clients actually remember.`;
+	}
 	if (slide.type === "lab") {
 		return `Give the lab ${slide.lab.minutes} minutes, then debrief. Ask two people to show their screen and explain one step. The lab is written for a site you can break — never run it on production.`;
 	}
@@ -447,7 +543,7 @@ function footnote() {
 	copy.textContent = "Copy notes";
 	copy.addEventListener("click", () => copyNotes());
 
-	const hint = el("span", "chip", "P = notes · ← → = move · / = search");
+	const hint = el("span", "chip", "R = recall · P = notes · ← → = move · / = search");
 	foot.append(copy, hint);
 	return foot;
 }
@@ -488,6 +584,54 @@ function el(tag, className, text) {
 		node.textContent = text;
 	}
 	return node;
+}
+
+// ----------------------------------------------------------------------------- recall
+
+function recallState(chapterId) {
+	const current = state.recall[chapterId] ?? { flipped: [], known: [] };
+	state.recall[chapterId] = current;
+	return current;
+}
+
+export function flipRecallCard(chapterId, index) {
+	const recall = recallState(chapterId);
+	recall.flipped = recall.flipped.includes(index)
+		? recall.flipped.filter((value) => value !== index)
+		: [...recall.flipped, index];
+	save();
+	renderSlide();
+	return recall;
+}
+
+export function markRecallKnown(chapterId, index) {
+	const recall = recallState(chapterId);
+	if (recall.known.includes(index)) {
+		recall.known = recall.known.filter((value) => value !== index);
+	} else {
+		recall.known = [...recall.known, index];
+		if (!recall.flipped.includes(index)) {
+			recall.flipped = [...recall.flipped, index];
+		}
+	}
+	save();
+	renderSlide();
+	return recall;
+}
+
+export function revealAllRecall(chapterId, count = 5) {
+	const recall = recallState(chapterId);
+	recall.flipped = Array.from({ length: count }, (_, index) => index);
+	save();
+	renderSlide();
+	return recall;
+}
+
+/** How many recall cards across the whole course are marked known. */
+export function recallProgress() {
+	const known = Object.values(state.recall).reduce((sum, entry) => sum + (entry.known?.length ?? 0), 0);
+	const total = state.chapters.length * 5;
+	return { known, total };
 }
 
 // ----------------------------------------------------------------------------- quiz
@@ -562,6 +706,7 @@ export function slideTitle(slide) {
 	if (slide.type === "intro") return slide.chapter.title;
 	if (slide.type === "content") return slide.slide.title;
 	if (slide.type === "lab") return `Lab: ${slide.lab.title}`;
+	if (slide.type === "recall") return `Recall: ${slide.memory?.device?.label ?? "how to remember this"}`;
 	return `Quiz: chapter ${slide.chapter.number}`;
 }
 
@@ -585,6 +730,22 @@ function slideSearchText(slide) {
 	if (slide.type === "lab") {
 		return [slide.lab.title, ...slide.lab.steps, slide.lab.done].join(" ");
 	}
+	if (slide.type === "recall") {
+		const memory = slide.memory ?? {
+			spine: "",
+			device: { label: "", expansion: [] },
+			cards: [],
+			trap: {},
+		};
+		return [
+			memory.spine,
+			memory.device.label,
+			...memory.device.expansion,
+			...memory.cards.flatMap((card) => [card.q, card.a, card.hint]),
+			memory.trap.what,
+			memory.trap.why,
+		].join(" ");
+	}
 	return slide.quiz.map((question) => `${question.question} ${question.why}`).join(" ");
 }
 
@@ -597,6 +758,9 @@ function previewText(slide) {
 	}
 	if (slide.type === "lab") {
 		return slide.lab.steps[0] ?? "";
+	}
+	if (slide.type === "recall") {
+		return slide.memory?.spine ?? "";
 	}
 	return `${slide.quiz.length} questions`;
 }
@@ -648,6 +812,60 @@ export function openOverlay(kind = "search") {
 		return;
 	}
 
+	if (kind === "cheatsheet") {
+		dom.overlayTitle.textContent = "Recall sheet · ten laws, twenty-four devices";
+		const laws = state.memory;
+		if (laws?.buckets?.length) {
+			dom.overlayBody.append(
+				el(
+					"p",
+					"lede",
+					"Three buckets instead of ten separate facts: what is true, where it lives, how it moves."
+				)
+			);
+			for (const bucket of laws.buckets) {
+				const group = document.createElement("section");
+				group.className = "law-group";
+				group.append(el("h3", "", bucket.title));
+				group.append(el("p", "law-summary", bucket.summary));
+				const list = document.createElement("ol");
+				list.className = "law-list";
+				laws.laws
+					.filter((law) => law.bucket === bucket.id)
+					.forEach((law) => {
+						const item = document.createElement("li");
+						item.className = "law";
+						item.append(el("p", "law-text", law.law));
+						item.append(el("p", "law-detail", law.detail));
+						list.append(item);
+					});
+				group.append(list);
+				dom.overlayBody.append(group);
+			}
+		}
+
+		dom.overlayBody.append(el("h3", "", "One device per chapter"));
+		const devices = document.createElement("div");
+		devices.className = "device-list";
+		state.chapters.forEach((chapter, index) => {
+			const button = document.createElement("button");
+			button.type = "button";
+			button.className = "device-row";
+			button.append(el("span", "device-num", String(chapter.number).padStart(2, "0")));
+			button.append(el("span", "device-label", chapter.memory?.device.label ?? "no device"));
+			button.append(el("span", "device-kind", chapter.memory?.device.kind ?? ""));
+			button.append(el("span", "device-title", chapter.title));
+			button.addEventListener("click", () => {
+				closeOverlay();
+				goTo(index, slidesFor(chapter).length - 2);
+			});
+			devices.append(button);
+		});
+		dom.overlayBody.append(devices);
+		openDialog();
+		return;
+	}
+
 	if (kind === "grid") {
 		dom.overlayTitle.textContent = `Chapter ${currentChapter().number} · all slides`;
 		const grid = document.createElement("div");
@@ -681,6 +899,7 @@ export function openOverlay(kind = "search") {
 		["G", "Grid of slides in this chapter"],
 		["P", "Toggle speaker notes"],
 		["/", "Search every slide"],
+		["R", "Recall: the ten laws and every chapter's device"],
 		["A", "Play or pause chapter narration"],
 		["T", "Transcript of the narration"],
 		["F", "Fullscreen"],
@@ -840,6 +1059,21 @@ export function buildPrintView() {
 		return;
 	}
 	dom.printView.textContent = "";
+	if (state.memory?.laws?.length) {
+		const laws = document.createElement("section");
+		laws.className = "print-chapter";
+		laws.append(el("h2", "", "The ten laws of ERPNext, in three buckets"));
+		for (const bucket of state.memory.buckets ?? []) {
+			laws.append(el("h3", "", bucket.title), el("p", "", bucket.summary));
+			const list = document.createElement("ol");
+			state.memory.laws
+				.filter((law) => law.bucket === bucket.id)
+				.forEach((law) => list.append(el("li", "", `${law.law} ${law.detail}`)));
+			laws.append(list);
+		}
+		dom.printView.append(laws);
+	}
+
 	state.chapters.forEach((chapter) => {
 		const section = document.createElement("section");
 		section.className = "print-chapter";
@@ -876,6 +1110,20 @@ export function buildPrintView() {
 		});
 		section.append(quiz);
 
+		if (chapter.memory) {
+			section.append(el("h3", "", `How to remember it · ${chapter.memory.device.label}`));
+			section.append(el("p", "", chapter.memory.spine));
+			const expansion = document.createElement("ul");
+			chapter.memory.device.expansion.forEach((line) => expansion.append(el("li", "", line)));
+			section.append(expansion);
+			const cards = document.createElement("ol");
+			chapter.memory.cards.forEach((card) =>
+				cards.append(el("li", "", `${card.q} — ${card.a} (hint: ${card.hint})`))
+			);
+			section.append(cards);
+			section.append(el("p", "", `Trap: ${chapter.memory.trap.what} ${chapter.memory.trap.why}`));
+		}
+
 		dom.printView.append(section);
 	});
 }
@@ -905,6 +1153,7 @@ function bindEvents() {
 	dom.btnGrid.addEventListener("click", () => openOverlay("grid"));
 	dom.btnSearch.addEventListener("click", () => openOverlay("search"));
 	dom.btnHelp.addEventListener("click", () => openOverlay("help"));
+	dom.btnRecall?.addEventListener("click", () => openOverlay("cheatsheet"));
 	dom.btnPrint.addEventListener("click", printCourse);
 	dom.overlayClose.addEventListener("click", closeOverlay);
 	dom.btnMenu.addEventListener("click", () => dom.sidebar.classList.toggle("open"));
@@ -948,6 +1197,8 @@ function onKeydown(event) {
 	} else if (event.key === "/") {
 		event.preventDefault();
 		openOverlay("search");
+	} else if (event.key === "r" || event.key === "R") {
+		openOverlay("cheatsheet");
 	} else if (event.key === "?") {
 		openOverlay("help");
 	} else if (event.key === "a" || event.key === "A") {
@@ -1021,6 +1272,7 @@ function save() {
 				slide: state.slideIndex,
 				visited: state.visited,
 				quizAnswers: state.quizAnswers,
+				recall: state.recall,
 				notesOpen: state.notesOpen,
 			})
 		);
@@ -1041,12 +1293,14 @@ function restore() {
 	}
 	state.visited = stored.visited ?? {};
 	state.quizAnswers = stored.quizAnswers ?? {};
+	state.recall = stored.recall ?? {};
 	state.notesOpen = Boolean(stored.notesOpen);
 }
 
 export function resetProgress() {
 	state.visited = {};
 	state.quizAnswers = {};
+	state.recall = {};
 	state.notesOpen = false;
 	save();
 	renderSidebar();

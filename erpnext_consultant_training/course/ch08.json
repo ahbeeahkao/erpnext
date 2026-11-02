@@ -342,5 +342,49 @@
 			"why": "The payment ledger shows what each invoice still owes. An invoice showing as unpaid while cash has arrived indicates an unallocated receipt."
 		}
 	],
+	"memory": {
+		"spine": "Reality splits one order across many documents, and every remedy is a new document rather than an edit to the last one.",
+		"device": {
+			"kind": "rule",
+			"label": "One order, many documents",
+			"expansion": [
+				"A partial delivery edits the delivery note against the order and never creates a second order",
+				"A discount reduces the line, and tax recalculates on the reduced net",
+				"A return is created against the original invoice, so three things reverse at once",
+				"Credit checking is switched on once in selling settings, then enforced per customer"
+			]
+		},
+		"cards": [
+			{
+				"q": "Two of five units are delivered. What does the order show?",
+				"a": "Partly delivered with three pending, while stock falls by two and the remaining three stay in the warehouse.",
+				"hint": "One order, one truth"
+			},
+			{
+				"q": "Ten per cent off 1,200.00 gives which three numbers?",
+				"a": "1,080.00 net, 108.00 SST and 1,188.00 total.",
+				"hint": "Tax follows the net"
+			},
+			{
+				"q": "How is a credit note created?",
+				"a": "As a return against the original invoice, so stock, revenue and tax all reverse together.",
+				"hint": "Never a negative invoice"
+			},
+			{
+				"q": "Where is credit checking switched on?",
+				"a": "Selling Settings once, after which the limit itself lives on the customer record.",
+				"hint": "Setting, then party"
+			},
+			{
+				"q": "Which three reports close a sales month?",
+				"a": "General ledger by party, payment ledger and aged receivables, and they must agree before anyone says done.",
+				"hint": "Three views, one number"
+			}
+		],
+		"trap": {
+			"what": "A credit note is raised as a new invoice carrying negative quantities.",
+			"why": "Revenue reverses but the original invoice stays open, so the customer balance is overstated and the ageing report lies."
+		}
+	},
 	"narration": "Volume two, second half: what happens when reality intervenes. Partial delivery first. Do not split the order; reduce the delivery quantity against the same order. Two of five units moves stock by two, posts cost of goods of two hundred forty, and leaves the order at forty percent delivered and forty percent billed, still open for the rest. Next, discounts. A line discount of ten percent on one thousand two hundred gives one thousand eighty net, one hundred eight tax and one thousand one hundred eighty eight total, while cost stays six hundred, so gross profit falls to four hundred eighty. Tax follows taxable value, and learners who expect the tax to stay at one hundred twenty will misquote a customer. Then returns. A credit note is three reversals in one document: stock comes back, revenue is reversed through sales return, and the tax is reversed too. One unit at two hundred forty reverses twenty four of tax and credits the customer two hundred sixty four, and because it is created against the original invoice, the link survives an audit. Never create a negative-priced invoice. Credit limits are the one setting that stops an order. Enable credit checking in selling settings, set a five thousand limit, and a six thousand order will not submit. Blocking at submit, not at save, is deliberate. Finally, close the month with four reports and an exception list where every difference has a name against it. In the lab you break, correct and reconcile."
 }

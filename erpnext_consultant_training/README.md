@@ -84,9 +84,78 @@ questions with explanations.
 23. **Volume 10 · Migration: Mapping, Opening Balances and Import** — a signed mapping workbook, imports in dependency order, and an opening trial balance of 96,290.00 on both sides.
 24. **Volume 10 · UAT, Cut-Over and Go-Live** — a UAT script that passes on figures, a one-page cut-over, hypercare measured daily, and a handover pack with five owners.
 
-**Totals:** 24 chapters, 199 teaching slides, 271 slides including intros, labs and quizzes, 199 lab steps,
-120 quiz questions, 24 narrations, 2,630 minutes of syllabus (about 43 hours), and a walkthrough table on every
-teaching slide.
+**Totals:** 24 chapters, 199 teaching slides, 295 slides including intros, labs, recall pages and quizzes, 199 lab
+steps, 120 quiz questions, 120 recall cards, 24 narrations, 2,630 minutes of syllabus (about 43 hours), and a
+walkthrough table on every teaching slide.
+
+---
+
+## Recall layer — how to remember the concept, not just perform it
+
+A learner can follow every step and still blank when a client asks a question. So each chapter ends with a
+**Recall** page: one mnemonic, one sentence they should be able to say on a call, five flip cards, and the trap
+that chapter exists to prevent. The whole course is held together by **ten laws in three buckets**, because
+chunking into three beats memorising ten.
+
+| Bucket             | Laws | What it answers                                                                              |
+| ------------------ | ---- | -------------------------------------------------------------------------------------------- |
+| **What is true**   | 4    | When does a record exist, where do its numbers live, why can a balanced book still be wrong? |
+| **Where it lives** | 3    | How structure works: hierarchies, field ownership, the order defaults resolve in             |
+| **How it moves**   | 3    | How work is done: one document per event, who may do or see what, and the close              |
+
+1. Nothing exists until it is submitted.
+2. Quantity lives in the stock ledger, value in the general ledger, and one voucher writes both.
+3. A wrong posting still balances.
+4. History is append-only: cancel and amend, never edit.
+5. Masters go broad to narrow: company, then group, then item or party.
+6. Greyed out means a setting upstream owns the field.
+7. Defaults cascade: global, company, party or item, then the transaction.
+8. Exactly one document owns each event; skipping it leaves a permanent trace.
+9. Roles decide what you can do; user permissions decide what you can see.
+10. Close the period; do not edit the past.
+
+### One device per chapter
+
+| #   | Chapter                         | Device                                        | Kind    |
+| --- | ------------------------------- | --------------------------------------------- | ------- |
+| 01  | Accounting primer               | **DEAD CLIC**                                 | acronym |
+| 02  | Distribution primer             | **TRIC**                                      | acronym |
+| 03  | Standing up the company         | **Broad to narrow, then prove it**            | phrase  |
+| 04  | Making the system usable        | **Master data before permissions**            | rule    |
+| 05  | The item master                 | **GUST**                                      | acronym |
+| 06  | Parties and pricing             | **Party, address, terms, price**              | path    |
+| 07  | Quote to cash                   | **Four chases**                               | story   |
+| 08  | When reality intervenes         | **One order, many documents**                 | rule    |
+| 09  | Buying, step by step            | **Buying is selling backwards**               | rule    |
+| 10  | Supplier reality                | **Reverse in the order you posted**           | rule    |
+| 11  | Warehouses and counts           | **One voucher, two rows**                     | phrase  |
+| 12  | FIFO and valuation              | **Value in equals value out plus value left** | rule    |
+| 13  | Journals, accruals and the bank | **Accrue, prepay, reconcile, reverse**        | rule    |
+| 14  | Month-end and year-end close    | **Move, judge, calculate, lock**              | phrase  |
+| 15  | BOMs and work orders            | **Recipe, promise, reserve, issue, complete** | phrase  |
+| 16  | Production costing              | **Good units carry the bad ones**             | rule    |
+| 17  | Projects and timesheets         | **Every entry names the project**             | rule    |
+| 18  | Assets, quality and CRM         | **Capitalise, depreciate, inspect, qualify**  | phrase  |
+| 19  | Print, naming, notifications    | **Readable, numbered, said once**             | phrase  |
+| 20  | Permissions and workflows       | **Roles do, permissions see**                 | rule    |
+| 21  | Malaysian tax                   | **One template per rate per direction**       | rule    |
+| 22  | e-Invoice end to end            | **Validate, submit, read, cancel inside 72**  | phrase  |
+| 23  | Migration and opening balances  | **Agree, then parents before children**       | phrase  |
+| 24  | UAT, cut-over and go-live       | **Script, sequence, numbers, hand over**      | phrase  |
+
+A mnemonic is only used where the list is arbitrary (DEAD CLIC, TRIC, GUST). Where the list has logic, the
+chapter uses a rule, a story chain or a path instead, because an invented acronym for something with an internal
+order is the weakest of the four.
+
+### Using it
+
+-   **In the deck:** every chapter now ends with a Recall slide after the lab and before the quiz. Tap a card to flip
+    it, "Got it" marks it known, and progress is saved per browser. Press <kbd>R</kbd> anywhere for the recall sheet:
+    the ten laws plus one row per chapter that jumps straight to its card set.
+-   **Off the deck:** `memory/cheatsheet.md` is a one-page printable for the wall, and `memory/cards.csv` imports
+    into Anki or Quizlet (`front,back,tag`, 120 cards, one tag per chapter) for spaced repetition.
+-   **Teaching it:** run the recall page as a spoken drill. Read the device, ask one learner what it stands for, then
+    let them flip all five cards before the quiz. The trap is the part clients remember, so never skip it.
 
 ---
 
@@ -139,9 +208,11 @@ erpnext_consultant_training/
 ├── styles.css                 deck and print styling
 ├── src/app.js                 router, renderer, quizzes, search, notes, print, audio
 ├── course/                    manifest.json and ch01.json … ch24.json (source of truth)
+├── course/memory.json         the ten laws in three buckets, for the recall sheet
+├── memory/                    cards.csv (Anki/Quizlet) and cheatsheet.md (printable)
 ├── audio/                     generated manifest and chapter narrations
 ├── samples/                   Seri Murni data pack and expected outcomes
-├── scripts/                   static server and audio manifest builder
+├── scripts/                   static server, audio manifest and recall-card builder
 └── tests/                     content gate and jsdom UI smoke test
 ```
 
@@ -155,11 +226,13 @@ npm run lint           # eslint 9 flat config
 npm run format:check   # prettier, repo-pinned version
 npm run check          # lint + format + test + smoke
 node scripts/audio-manifest.mjs   # rebuild the audio manifest from JSON and mp3s
+npm run memory                    # rebuild memory/cards.csv and memory/cheatsheet.md
 ```
 
 If you change a lesson's arithmetic, update `samples/expected-outcomes.json` **and** `samples/documents.csv` in
 the same commit: the test suite fails when the deck and the data pack stop agreeing. If you change a narration,
-re-record that chapter — the transcript is compared character by character.
+re-record that chapter — the transcript is compared character by character. If you edit a chapter's `memory`
+block, run `npm run memory` in the same commit: the test suite fails when the CSV and cheat sheet fall behind.
 
 ## Honest limitations
 
