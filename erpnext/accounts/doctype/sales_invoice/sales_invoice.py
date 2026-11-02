@@ -282,6 +282,7 @@ class SalesInvoice(SellingController):
 				"status_field": "billing_status",
 				"keyword": "Billed",
 				"overflow_type": "billing",
+				"billing_flag": "update_billed_amount_in_sales_order",
 				"extra_cond": """ and exists(select name from `tabSales Invoice`
 				where name=`tabSales Invoice Item`.parent and (is_return=0 or update_billed_amount_in_sales_order=1))""",
 			}
@@ -436,6 +437,8 @@ class SalesInvoice(SellingController):
 
 	def before_submit(self):
 		self.add_remarks()
+		if cint(self.is_created_using_pos):
+			POSService(self).validate_mandatory_pos_fields()
 
 	def on_submit(self):
 		POSService(self).validate_pos_paid_amount()
