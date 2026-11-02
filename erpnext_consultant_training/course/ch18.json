@@ -1,0 +1,355 @@
+{
+	"id": "ch18",
+	"number": 18,
+	"title": "Volume 7 · Assets, Quality and CRM",
+	"subtitle": "Lessons 5–8: capitalise and depreciate a van, inspect what arrives, and convert a lead into a priced quotation",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Capitalise a purchase as an asset and post depreciation every month",
+		"Use quality inspection to reject goods before they reach stock",
+		"Move a lead through opportunity to a priced quotation without losing the trail",
+		"Decide which of these three modules a distributor should switch on first"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 5 · Fixed assets",
+			"title": "Capitalise the van instead of expensing it",
+			"bullets": [
+				"An asset purchase is a purchase invoice with an asset item, which creates the asset record",
+				"Useful life and depreciation method are accounting policy, so get them signed off",
+				"Six figures of van on the balance sheet is very different from six figures of expense",
+				"Every asset needs a location and a custodian, or the register is fiction"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create the asset item",
+						"SM-VAN, is fixed asset, asset category Vehicles",
+						"Item flagged for capitalisation"
+					],
+					[
+						"2",
+						"Purchase invoice",
+						"Van 60,000.00 from the dealer, no stock effect",
+						"Asset created automatically"
+					],
+					[
+						"3",
+						"Open the asset",
+						"Location Main, custodian warehouse supervisor",
+						"Asset ACC-0001"
+					],
+					[
+						"4",
+						"Check the category",
+						"5 years straight line, 0 salvage",
+						"Monthly depreciation 1,000.00"
+					],
+					["5", "Submit the invoice", "Confirm", "Asset status Submitted, value 60,000.00"],
+					["6", "Read the balance sheet", "31-01-2026", "Fixed assets 60,000.00"]
+				]
+			},
+			"notes": "Sixty thousand over five years is twelve thousand a year, or one thousand a month, and that is the number the client's accountant will check first. Capitalising also keeps the profit and loss statement readable, because a van is not a January cost. Get the category approved in writing before the first invoice, since changing depreciation method later means a restatement."
+		},
+		{
+			"kicker": "Lesson 6 · Depreciation",
+			"title": "Post depreciation monthly, not annually in a panic",
+			"bullets": [
+				"Depreciation is a journal the system generates from the schedule",
+				"Straight line on sixty thousand over five years is one thousand a month",
+				"Accumulated depreciation is a separate account, so the asset keeps its cost",
+				"Year-end catch-up postings are a symptom of a missing monthly routine"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Assets → Depreciation → Process Depreciation",
+						"Company SM, 31-01-2026",
+						"Assets due for depreciation"
+					],
+					["2", "Review the schedule", "Van, 1,000.00 for the month", "Single line preview"],
+					["3", "Submit", "Confirm", "Depreciation entry created"],
+					["4", "Read the asset", "ACC-0001", "Accumulated 1,000.00, net book value 59,000.00"],
+					["5", "Read the GL", "Depreciation expense account", "Debit 1,000.00"],
+					["6", "Repeat monthly", "Same routine on the last day", "Twelve entries per year"]
+				]
+			},
+			"notes": "After twelve months the net book value is forty eight thousand, and the depreciation expense for the year is twelve thousand. Ask the learner to state both before opening the report, because those two figures are what the auditor tests. If the client only posts at year end, the monthly management accounts are wrong all year, which undermines every other number the consultant produced."
+		},
+		{
+			"kicker": "Lesson 7 · Quality",
+			"title": "Inspect what arrives before it becomes stock",
+			"bullets": [
+				"Quality inspection sits between the receipt and the warehouse when configured that way",
+				"Rejected quantity stays out of sellable stock, which is the entire point",
+				"Each inspection needs parameters with numeric ranges, or it is a tick box",
+				"Quality results feed the supplier conversation, so keep them per supplier"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Quality → Quality Inspection Template",
+						"Visual check, parameters Appearance and Function",
+						"Template saved"
+					],
+					[
+						"2",
+						"Attach to the item",
+						"SM-BL200 requires inspection on purchase",
+						"Inspection required flag"
+					],
+					[
+						"3",
+						"Receive 10 units",
+						"Purchase receipt against the order",
+						"Quality inspection generated"
+					],
+					[
+						"4",
+						"Record results",
+						"9 accepted, 1 rejected for a cracked housing",
+						"Rejected quantity 1"
+					],
+					["5", "Submit the inspection", "Confirm", "Receipt proceeds with 9 units"],
+					["6", "Check stock", "Bin at Main", "9 units received, not 10"]
+				]
+			},
+			"notes": "One rejected unit means nine accepted, and the supplier conversation now has a document behind it. Quality is often sold as a compliance feature, but its real value in distribution is the argument it wins with a supplier who disputes a return. If a client rejects inspection as bureaucracy, ask them what evidence they use today."
+		},
+		{
+			"kicker": "Lesson 8 · CRM",
+			"title": "From lead to opportunity to priced quotation",
+			"bullets": [
+				"A lead is an unqualified contact; an opportunity is a deal with a value and a date",
+				"Converting keeps the trail, which is what makes pipeline reporting possible",
+				"The quotation carries the price, and it is the first document a customer sees",
+				"Every opportunity needs a probability and a territory, or the pipeline report lies"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "CRM → Lead → New", "Aeon Big, contact and source Trade show", "Lead LD-0001"],
+					[
+						"2",
+						"Convert to opportunity",
+						"10 blenders, value 2,400.00, close date 20-02-2026",
+						"Opportunity OPP-0001"
+					],
+					["3", "Set probability", "60 per cent, territory Selangor", "Weighted value 1,440.00"],
+					[
+						"4",
+						"Create the quotation",
+						"10 SM-BL200 at 240.00 plus SST",
+						"Quotation 2,640.00 total"
+					],
+					["5", "Send and track", "Status Open, valid 30 days", "Quotation in the pipeline"],
+					[
+						"6",
+						"Review the pipeline",
+						"CRM → Opportunity pipeline",
+						"Weighted pipeline includes 1,440.00"
+					]
+				]
+			},
+			"notes": "Sixty per cent of twenty four hundred is fourteen hundred forty, and that weighted number is what a sales director actually manages. Without probability and territory, the pipeline report is a list of hopes. The quotation itself is ordinary work, but the trail from lead to opportunity to quotation to order is what lets the owner see conversion rates for the first time."
+		},
+		{
+			"kicker": "Lesson 6 · Verify depreciation",
+			"title": "Schedule, ledger and register agree",
+			"bullets": [
+				"The asset, the ledger and the register must show the same accumulated amount",
+				"Net book value falls by the monthly charge, and the expense sits in the right period",
+				"A missed month is visible immediately in the schedule, not at year end",
+				"Disposal later depends on this schedule being correct today"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Monthly depreciation", "1,000.00", "Asset → Depreciation Schedule"],
+					["Accumulated depreciation after January", "1,000.00", "Asset ACC-0001"],
+					["Net book value", "59,000.00", "Asset register"],
+					["Depreciation expense", "1,000.00", "Profit and Loss Statement, January"],
+					["Balance sheet fixed assets", "59,000.00", "Balance Sheet, 31-01-2026"]
+				]
+			},
+			"notes": "Three views of one number again: the schedule, the asset record and the balance sheet. When they agree, the client can file the month without adjustment. When they disagree, the cause is nearly always a depreciation entry posted in a closed period or an asset created after the run date, and both are one-minute fixes."
+		},
+		{
+			"kicker": "Lesson 8 · Verify the pipeline",
+			"title": "What the CRM numbers actually prove",
+			"bullets": [
+				"Weighted pipeline equals value times probability, summed across open opportunities",
+				"A quotation without an opportunity is a document with no history",
+				"Conversion rate is the number a sales director will ask for first",
+				"Data quality in CRM is measured by how many fields are blank"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Opportunity value", "2,400.00", "Opportunity OPP-0001"],
+					["Probability", "60 per cent", "Opportunity form"],
+					["Weighted pipeline", "1,440.00", "CRM pipeline report"],
+					["Quotation", "2,640.00 including SST", "Quotation QT-SM-2026-0003"],
+					[
+						"Conversion rate this month",
+						"leading indicator, not yet a rate",
+						"CRM → Lead and Opportunity analysis"
+					]
+				]
+			},
+			"notes": "The weighted figure of fourteen hundred forty is the only CRM number a manager should act on weekly, because it changes with probability rather than with optimism. Quotation total of two thousand six hundred forty is where the tax enters and where sales and finance usually disagree. Show both on one page and the pipeline meeting becomes a forecast rather than a wish list."
+		},
+		{
+			"kicker": "Volume 7 · Reference",
+			"title": "What to switch on first for a distributor",
+			"bullets": [
+				"Assets are mandatory once a client owns vehicles or equipment above their capitalisation threshold",
+				"Quality is worth it when returns or supplier disputes are a recurring cost",
+				"CRM pays only if someone owns the pipeline weekly, otherwise it becomes a data graveyard",
+				"Each module adds a control the client must operate, so sequence them"
+			],
+			"table": {
+				"headers": ["Module", "Switch on when", "First control", "Cost of skipping it"],
+				"rows": [
+					[
+						"Fixed assets",
+						"Any capital purchase above the threshold",
+						"Monthly depreciation run",
+						"Expenses hit one month, audit finding"
+					],
+					[
+						"Quality",
+						"Recurring returns or supplier disputes",
+						"Reject before stock",
+						"Returns processed after the sale"
+					],
+					[
+						"CRM",
+						"A named person owns the pipeline",
+						"Weekly pipeline review",
+						"Quotations with no history"
+					],
+					[
+						"Projects",
+						"Billable service work",
+						"Timesheets approved weekly",
+						"Unbilled work at year end"
+					],
+					[
+						"Subcontracting",
+						"External processing steps",
+						"Subcontractor stock at zero",
+						"Material lost off site"
+					]
+				]
+			},
+			"notes": "Sequencing is the consultant's judgement call, and this table is the argument to have with the client before the proposal. A distributor with three vans needs assets in phase one; a trader who sells on quotation needs CRM before panels. Say what you would switch on first, and say what you would leave until year two."
+		},
+		{
+			"kicker": "Volume 7 · Reference",
+			"title": "The three reports that keep these modules honest",
+			"bullets": [
+				"Asset register value must equal the fixed asset control account",
+				"Quality rejection rate by supplier is the number that changes behaviour",
+				"Pipeline weighted value must match the opportunities it sums, without duplicates",
+				"All three are monthly reads, not annual ones"
+			],
+			"table": {
+				"headers": ["Report", "Expected figure", "Where to look", "Question it answers"],
+				"rows": [
+					[
+						"Asset register",
+						"59,000.00 net book value after January",
+						"Assets → Asset register",
+						"What do we own and what is it worth"
+					],
+					[
+						"Fixed asset control",
+						"59,000.00 in the balance sheet",
+						"Balance Sheet",
+						"Does the ledger agree"
+					],
+					[
+						"Quality rejection rate",
+						"10 per cent for this receipt",
+						"Quality Inspection analysis",
+						"Which supplier costs us returns"
+					],
+					[
+						"Weighted pipeline",
+						"1,440.00 for this opportunity",
+						"CRM → Opportunity pipeline",
+						"What will we sell next month"
+					],
+					[
+						"Depreciation for the month",
+						"1,000.00",
+						"Profit and Loss Statement",
+						"Is the cost in the right period"
+					]
+				]
+			},
+			"notes": "Reconciling the asset register to the control account is the same discipline as debtors and creditors, and it takes two minutes a month. Quality rejection rate and weighted pipeline are softer, but each has a single number a manager can act on. Give the client these five rows as the monthly read, and the modules earn their place."
+		}
+	],
+	"lab": {
+		"title": "Lab · Capitalise a van, depreciate it, inspect a receipt and convert a lead",
+		"minutes": 45,
+		"steps": [
+			"Create the asset item and purchase the van for 60,000.00 on a purchase invoice",
+			"Confirm the asset category produces 1,000.00 of monthly depreciation",
+			"Run depreciation for January and confirm net book value of 59,000.00",
+			"Confirm the depreciation expense of 1,000.00 in the profit and loss statement",
+			"Set up a quality inspection template and attach it to SM-BL200",
+			"Receive 10 units, reject 1 and confirm only 9 reach stock",
+			"Create a lead for Aeon Big and convert it to a 2,400.00 opportunity",
+			"Produce the quotation for 2,640.00 including SST and check the weighted pipeline"
+		],
+		"done": "Done when the van shows 59,000.00 net book value, nine units were received after inspection, and the opportunity carries a 1,440.00 weighted value with a live quotation."
+	},
+	"quiz": [
+		{
+			"question": "A 60,000.00 asset with a five year straight line life depreciates monthly by what?",
+			"options": ["500.00", "1,000.00", "5,000.00", "12,000.00"],
+			"answer": 1,
+			"why": "60,000 divided by five years is 12,000 a year, or 1,000.00 a month over twelve periods."
+		},
+		{
+			"question": "What does the asset register value reconcile to?",
+			"options": [
+				"The bank balance",
+				"The fixed asset control account",
+				"The creditor ageing",
+				"Stock value"
+			],
+			"answer": 1,
+			"why": "The register is the detail behind the control account, so the two must agree, exactly as debtors and creditors do."
+		},
+		{
+			"question": "After a quality inspection rejects one of ten units, what reaches stock?",
+			"options": ["10 units", "9 units", "11 units", "0 units"],
+			"answer": 1,
+			"why": "Rejected quantity stays out of sellable stock, so only the accepted nine units are received into the warehouse."
+		},
+		{
+			"question": "A 2,400.00 opportunity at 60 per cent probability has what weighted value?",
+			"options": ["2,400.00", "1,440.00", "960.00", "600.00"],
+			"answer": 1,
+			"why": "Weighted value is value times probability, so 2,400 × 0.6 = 1,440.00, which is what the pipeline report should show."
+		},
+		{
+			"question": "Which module should a distributor with three delivery vans switch on first?",
+			"options": ["CRM", "Fixed assets", "Quality", "Projects"],
+			"answer": 1,
+			"why": "Vehicles above the capitalisation threshold must be capitalised and depreciated, or the profit and loss statement carries a distorted one-off cost."
+		}
+	],
+	"narration": "Three modules that clients ask for and rarely operate properly. Fixed assets first: sixty thousand of van becomes twelve thousand a year, one thousand a month, and the register must agree with the control account every month. Quality second: an inspection that rejects one of ten units is the difference between an argument with a supplier and a documented claim. CRM third, and only if somebody owns the pipeline: a lead becomes an opportunity with a value and a probability, twenty four hundred at sixty per cent is fourteen hundred forty, and the quotation is the first document the customer sees. Each module adds a control the client has to run, so sequence them and say plainly what you would leave until year two. Assets and quality carry a control that runs itself once configured; CRM only works when a person owns it, so name that person in the workshop before you switch it on, and put the weekly pipeline review in the same meeting as the sales forecast."
+}

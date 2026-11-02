@@ -1,0 +1,350 @@
+{
+	"id": "ch15",
+	"number": 15,
+	"title": "Volume 6 · Bills of Materials and Work Orders",
+	"subtitle": "Lessons 1–4: a bill of materials the floor will follow, a work order that reserves the right stock, and a completion that leaves a sane valuation",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Build a bill of materials with materials, operations and a defensible cost",
+		"Plan a work order from real demand and read what it reserves",
+		"Issue components to the floor without losing the valuation trail",
+		"Complete production so finished goods carry materials plus capacity cost"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Bill of materials",
+			"title": "Write a bill of materials the floor will follow",
+			"bullets": [
+				"A BOM is a recipe: quantities, operations and the cost of both",
+				"Quantities must be per single finished unit, or every work order multiplies the error",
+				"Operations carry time and rate, which is how labour enters the finished cost",
+				"Include only what the floor actually consumes, not what the drawing says in theory"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Manufacturing → Bill of Materials → New",
+						"Item SM-ASM, quantity 1, company SM",
+						"Empty BOM form"
+					],
+					[
+						"2",
+						"Add components",
+						"SM-MTR 2 Nos at 80.00, SM-HSG 1 Nos at 40.00",
+						"Material cost 200.00"
+					],
+					[
+						"3",
+						"Add operation",
+						"Assembly, workstation Assembly Line, 30 minutes",
+						"Operation row accepted"
+					],
+					["4", "Set the rate", "60.00 per hour on the operation", "Operating cost 30.00"],
+					["5", "Save and Submit", "Confirm", "BOM-SM-ASM-001, total cost 230.00"],
+					["6", "Check the tree", "Manufacturing → BOM Tree", "One level, two components"]
+				]
+			},
+			"notes": "Two motors at eighty and one housing at forty is two hundred of material, and half an hour at sixty adds thirty of capacity, so the assembly costs two hundred thirty to make. If the learner cannot predict that number before saving, they will not notice when a supplier price change silently makes every finished unit wrong. The BOM is the only place where a costing error is cheap to fix."
+		},
+		{
+			"kicker": "Lesson 2 · Verify the BOM",
+			"title": "The cost roll-up, proved line by line",
+			"bullets": [
+				"Material cost, operating cost and total must each be visible and explainable",
+				"A BOM without operations still works, but labour then never reaches inventory",
+				"Quantity per unit of one keeps the work order arithmetic trivial",
+				"Every BOM needs an owner, because prices and routings both change"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Material cost", "200.00", "BOM → Costing section"],
+					["Operating cost", "30.00", "BOM → Operations table"],
+					["Total cost per unit", "230.00", "BOM total"],
+					["Selling price assumption", "350.00", "Item price for SM-ASM"],
+					["Gross margin per unit", "120.00, about 34 per cent", "Your own arithmetic"]
+				]
+			},
+			"notes": "A three hundred fifty selling price against two hundred thirty of cost gives one hundred twenty of margin, roughly thirty four per cent, and that single ratio is what the owner will ask about in the first production meeting. Teach the learner to state it before anyone asks, because a consultant who arrives with the margin already computed sets the tone for the whole engagement."
+		},
+		{
+			"kicker": "Lesson 3 · Work order",
+			"title": "Plan a work order from real demand",
+			"bullets": [
+				"A work order is a promise to the floor: this item, this quantity, this date",
+				"Required items are reserved against the warehouse you nominate, not against hope",
+				"The planned start date drives the material request, so set it honestly",
+				"Do not create work orders for stock you have not sold unless the client plans to stock"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Manufacturing → Work Order → New",
+						"Item SM-ASM, quantity 10, BOM-SM-ASM-001",
+						"Required items populated"
+					],
+					[
+						"2",
+						"Set the dates",
+						"Planned start 05-02-2026, planned end 07-02-2026",
+						"Schedule recorded"
+					],
+					["3", "Set source warehouse", "Main - SM for components", "Reserved quantities shown"],
+					["4", "Save and Submit", "Confirm", "WO-SM-2026-0001, status Not Started"],
+					["5", "Read required items", "SM-MTR 20, SM-HSG 10", "Reserved against Main"],
+					[
+						"6",
+						"Check availability",
+						"Stock Balance for both components",
+						"Enough or a shortage flagged"
+					]
+				]
+			},
+			"notes": "Ten assemblies need twenty motors and ten housings, and the work order says so before anything moves. That is the value of the document: it converts a sales promise into a material promise. If availability is short, the conversation happens on the planning screen rather than on the assembly floor, which is a day earlier and considerably cheaper."
+		},
+		{
+			"kicker": "Lesson 4 · Verify the reservation",
+			"title": "What the work order actually reserves",
+			"bullets": [
+				"Reserved quantity is a planning number and does not move the stock ledger",
+				"Stock only moves when material is transferred to the floor",
+				"A work order with no reservation means the item is not stock-tracked or the warehouse is wrong",
+				"Status changes are the audit trail of the production process"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Reserved SM-MTR", "20 units", "Work Order → Required Items"],
+					["Reserved SM-HSG", "10 units", "Work Order → Required Items"],
+					["Stock ledger effect", "none until material transfer", "Stock Ledger for SM-MTR"],
+					["Work order status", "Not Started", "Work Order header"],
+					["Projected quantity at Main", "reduced by the reservation", "Stock → Item dashboard"]
+				]
+			},
+			"notes": "This is where learners confuse planning with posting. Reserved quantities live in the work order and in availability reports, while the stock ledger stays untouched until the transfer. Say the sentence twice: a reservation is a promise, a transfer is a movement. The distinction prevents the classic panic when a client sees stock still in main after an issue was supposedly made."
+		},
+		{
+			"kicker": "Lesson 5 · Material issue",
+			"title": "Issue components to the floor",
+			"bullets": [
+				"Material transfer for manufacture moves components to the work-in-progress warehouse",
+				"The transfer is the moment cost leaves raw stock and joins the production order",
+				"Transfer exactly what the work order asks for, not the whole shelf",
+				"Partial transfers are normal for long builds, and the work order tracks the balance"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open WO-SM-2026-0001 → Create → Material Transfer",
+						"Nothing",
+						"Stock entry pre-filled with components"
+					],
+					[
+						"2",
+						"Set warehouses",
+						"From Main - SM to Assembly Floor - SM",
+						"Transfer type for manufacture"
+					],
+					[
+						"3",
+						"Confirm quantities",
+						"SM-MTR 20, SM-HSG 10",
+						"Transferred quantity equals required"
+					],
+					["4", "Save and Submit", "Confirm", "Stock entry STE-SM-2026-0010 submitted"],
+					[
+						"5",
+						"Check the bins",
+						"Main and Assembly Floor",
+						"Main falls by 20 and 10, floor rises"
+					],
+					[
+						"6",
+						"Check the work order",
+						"Transfer status",
+						"Material transferred, status In Process"
+					]
+				]
+			},
+			"notes": "Twenty motors and ten housings leave main and arrive on the floor, and the total value of the company has not changed. That is the point to make loudly, because the client's accountant will see two ledger rows and ask which one is the cost. Neither is: cost becomes expense only when the finished item is sold."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the WIP",
+			"title": "Work in progress on the floor, in numbers",
+			"bullets": [
+				"Work in progress is the value of components consumed but not yet finished",
+				"The floor warehouse quantity is your visual WIP, and it must match the work order",
+				"No profit appears at this stage, however long the build takes",
+				"A floor balance that outlives the work order is scrap or theft, not WIP"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Components on the floor", "SM-MTR 20, SM-HSG 10", "Stock → Bin, Assembly Floor - SM"],
+					["Value on the floor", "2,000.00", "Stock Balance, Assembly Floor"],
+					[
+						"Main warehouse after issue",
+						"reduced by 20 motors and 10 housings",
+						"Stock → Bin, Main - SM"
+					],
+					["Work order status", "In Process", "Work Order header"],
+					["Profit and loss effect", "none", "Profit and Loss Statement"]
+				]
+			},
+			"notes": "Two thousand of components sitting on the floor is a number a client can see with their own eyes, and that is why the floor warehouse earns its place. When the count on the floor disagrees with the work order, the conversation is about physical control rather than accounting, and it is the warehouse supervisor who owns the answer."
+		},
+		{
+			"kicker": "Lesson 7 · Completion",
+			"title": "Complete the order and value the finished goods",
+			"bullets": [
+				"The manufacture entry consumes components and produces the finished item in one document",
+				"Valuation carries materials plus the operating cost you configured",
+				"A short completion leaves components on the floor, which the next transfer must explain",
+				"Scrap and rework belong in the same work order, not in a separate correction later"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the work order → Create → Manufacture",
+						"Nothing",
+						"Entry with consumed and produced rows"
+					],
+					[
+						"2",
+						"Check the consumed rows",
+						"SM-MTR 20, SM-HSG 10 from Assembly Floor",
+						"Consumption pre-filled"
+					],
+					["3", "Check the produced row", "SM-ASM 10 units into Main - SM", "Finished quantity 10"],
+					[
+						"4",
+						"Confirm operating cost",
+						"0.50 hours × 10 units at 60.00 per hour",
+						"Operating cost 300.00"
+					],
+					["5", "Save and Submit", "Confirm", "Finished goods valued at 230.00 each"],
+					["6", "Read the stock ledger", "Filter SM-ASM", "Incoming 10 at 230.00, value 2,300.00"]
+				]
+			},
+			"notes": "Two thousand of materials plus three hundred of capacity gives two thousand three hundred, or two hundred thirty per assembly, which matches the BOM exactly. When the completion value differs from the BOM, the difference is always one of three things: a rate change on a component, an operation time recorded differently, or additional costs added on the entry."
+		},
+		{
+			"kicker": "Volume 6 · Reference",
+			"title": "Production documents in order",
+			"bullets": [
+				"Each document answers one question and hands the next one a number",
+				"Skipping the material transfer makes the completion consume stock that is not there",
+				"The work order is the only place where planned and actual quantities meet",
+				"Every document has a status that tells you where the build actually stands"
+			],
+			"table": {
+				"headers": ["Document", "When", "Purpose", "What to verify"],
+				"rows": [
+					[
+						"Bill of Materials",
+						"Once per product",
+						"Defines materials, operations and cost",
+						"Cost per unit matches the quote"
+					],
+					[
+						"Work Order",
+						"Per build",
+						"Reserves stock and schedules the floor",
+						"Required quantities are correct"
+					],
+					[
+						"Material Transfer for Manufacture",
+						"At build start",
+						"Moves components to the floor",
+						"Floor quantity equals required"
+					],
+					[
+						"Manufacture entry",
+						"At completion",
+						"Consumes components, produces finished goods",
+						"Valuation equals materials plus operations"
+					],
+					[
+						"Stock Entry for scrap",
+						"When a unit fails",
+						"Removes the failed unit and its cost",
+						"Cost per good unit recalculated"
+					]
+				]
+			},
+			"notes": "Walk this table once with the client's production supervisor and once with their accountant, and you will hear two different questions: can I build it, and what did it cost. Answering both from the same five documents is what makes ERPNext usable on a shop floor rather than merely installed."
+		}
+	],
+	"lab": {
+		"title": "Lab · Build a BOM, run a work order and value the output",
+		"minutes": 45,
+		"steps": [
+			"Create the SM-ASM bill of materials with two motors, one housing and a 30 minute operation",
+			"Confirm the cost roll-up of 200.00 materials and 30.00 operations",
+			"Create a work order for 10 units and confirm the 20 and 10 component requirement",
+			"Issue the components to the Assembly Floor and confirm main warehouse falls",
+			"Confirm the floor holds 2,000.00 of work in progress and no profit has moved",
+			"Complete the work order with 10 finished units and 300.00 of operating cost",
+			"Confirm finished goods valuation of 230.00 per unit and total 2,300.00",
+			"Compare the completion value with the BOM and explain any difference"
+		],
+		"done": "Done when 10 assemblies sit in main at 230.00 each, the floor is empty of components for this order, and the completion value matches the BOM line for line."
+	},
+	"quiz": [
+		{
+			"question": "Two motors at 80.00, one housing at 40.00 and half an hour at 60.00 per hour give a unit cost of what?",
+			"options": ["200.00", "230.00", "260.00", "180.00"],
+			"answer": 1,
+			"why": "Materials are 2 × 80 + 40 = 200, and the operation is 0.5 × 60 = 30, so the BOM costs 230.00 per unit."
+		},
+		{
+			"question": "What does submitting a work order do to the stock ledger?",
+			"options": [
+				"Moves components to the floor",
+				"Nothing, it only reserves",
+				"Produces finished goods",
+				"Creates a purchase order"
+			],
+			"answer": 1,
+			"why": "A work order reserves quantities for planning. Stock moves only when material is transferred to the floor."
+		},
+		{
+			"question": "When does component cost become an expense?",
+			"options": [
+				"At the material transfer",
+				"At work order completion",
+				"When the finished item is sold",
+				"When the BOM is saved"
+			],
+			"answer": 2,
+			"why": "Component and labour cost accumulate in inventory until the finished item is sold, at which point cost of goods sold is recognised."
+		},
+		{
+			"question": "What does the manufacture entry add to finished goods valuation?",
+			"options": [
+				"Only material cost",
+				"Materials plus operating cost",
+				"Selling price",
+				"Only operating cost"
+			],
+			"answer": 1,
+			"why": "The manufacture entry consumes components and adds the operating cost from the BOM, giving the full production cost per unit."
+		},
+		{
+			"question": "10 assemblies cost 2,300.00 to build. Cost per unit is what?",
+			"options": ["230.00", "200.00", "255.56", "300.00"],
+			"answer": 0,
+			"why": "2,000 of materials plus 300 of operations is 2,300 across 10 good units, which is 230.00 each."
+		}
+	],
+	"narration": "Manufacturing scares functional consultants because it looks technical, and it is not. A bill of materials is a recipe: two motors at eighty, one housing at forty, half an hour of assembly at sixty an hour, which gives two hundred thirty per unit. A work order turns demand into a reservation: ten assemblies need twenty motors and ten housings, and nothing has moved yet. The material transfer moves components to the floor, where they are work in progress and still not an expense. Completion consumes the components, adds three hundred of operating cost, and produces ten assemblies at two hundred thirty each. Four documents, one cost, no mystery. If the completion differs from the BOM, check the rate, the time and any extra charges before blaming the system, and write the answer in the production worksheet. A client who can explain a cost per unit from four documents will trust the system with their quotations, and that trust is the whole point of the volume."
+}

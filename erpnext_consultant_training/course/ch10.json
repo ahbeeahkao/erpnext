@@ -1,0 +1,324 @@
+{
+	"id": "ch10",
+	"number": 10,
+	"title": "Volume 3 · Supplier Reality: Returns, Advances and Landed Cost",
+	"subtitle": "Lessons 5–8: debit notes, advance payments, landed cost allocation and the ageing conversation every client has in week three",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Return faulty goods and reverse both stock and tax correctly",
+		"Handle an advance payment without leaving a permanent unallocated balance",
+		"Push freight and duty into stock value so gross profit tells the truth",
+		"Read supplier ageing and explain it to a business owner in one page"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 5 · Purchase return",
+			"title": "Return one damaged blender without breaking the books",
+			"bullets": [
+				"A return reverses the receipt first, then the bill, which is the order auditors expect",
+				"ERPNext creates a debit note from the purchase invoice, so tax reverses with the goods",
+				"Return to Returns Quarantine rather than straight to Main, so the goods are visibly excluded",
+				"Never edit the original receipt; a return is a new document with its own number"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open PR-SM-2026-0001 → Create → Purchase Return",
+						"Nothing",
+						"Negative quantity form pre-filled"
+					],
+					["2", "Quantity", "-1 in warehouse Returns Quarantine - SM", "Negative line accepted"],
+					["3", "Reason", "Damaged in transit", "Remark stored on the return"],
+					["4", "Save and Submit", "Confirm", "Return receipt PR-SM-2026-0002"],
+					[
+						"5",
+						"Open PINV-SM-2026-0001 → Create → Debit Note",
+						"Quantity 1",
+						"Debit note PINV-SM-2026-0002"
+					],
+					["6", "Read the bin", "SM-BL200 at Main and Quarantine", "Main 9, Quarantine 1"]
+				]
+			},
+			"notes": "Doing the return before the debit note is what keeps the stock ledger and the ledger in step. If you reverse the bill first, the stock sits in quarantine with no matching liability and the audit trail needs a manual explanation. Practise the sequence until it is automatic, because the first live return will happen under pressure, minutes before the client's month-end cut-off."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the return",
+			"title": "Nine units, and the tax comes back with them",
+			"bullets": [
+				"Stock falls by the returned quantity at its original valuation",
+				"The debit note reduces the creditor and reverses the input tax proportionally",
+				"The supplier's balance now shows a credit that can offset the next invoice",
+				"Returned goods in quarantine are still owned, so they remain in stock value"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Main warehouse quantity", "9", "Stock → Bin, Main warehouse"],
+					["Quarantine quantity", "1", "Stock → Bin, Returns Quarantine"],
+					["Stock value at Main", "1,080.00", "Stock Balance report"],
+					["Debit note total", "132.00 including 12.00 tax", "Debit note totals"],
+					["Creditor balance", "1,188.00 outstanding", "Accounts Payable, Sunrise Components"]
+				]
+			},
+			"notes": "The debit note total of 132.00 is the one number to make the learner predict, because it proves they understand that tax follows goods. If they say 120.00, they have not seen that a return reverses input tax as well as stock. Make them compute it before opening the debit note, then let them compare."
+		},
+		{
+			"kicker": "Lesson 7 · Advance payment",
+			"title": "Pay before delivery without losing the money",
+			"bullets": [
+				"An advance is a payment with no invoice, recorded as a liability to the supplier",
+				"ERPNext tracks it as Advance Paid, which reduces the outstanding on the next bill",
+				"Allocate the advance to the invoice, otherwise it sits forever as an unexplained credit",
+				"The advance appears separately on the balance sheet until it is consumed"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Payment Entry → New",
+						"Payment type Pay, party Sunrise Components",
+						"Unallocated payment form"
+					],
+					["2", "Paid amount", "660.00 from Bank - SM", "Advance, no invoice selected"],
+					["3", "Save and Submit", "Confirm", "Advance Paid 660.00 on the supplier record"],
+					["4", "Create the purchase invoice", "5 units at 120.00 plus SST", "Total 660.00"],
+					[
+						"5",
+						"Get advances against the invoice",
+						"Include the 660.00 advance",
+						"Outstanding 0.00 after allocation"
+					],
+					["6", "Read supplier ledger", "Sunrise Components", "Advance consumed, invoice settled"]
+				]
+			},
+			"notes": "Advances are where cash leaves before paperwork exists, which is exactly the situation that produces month-end surprises. Show the learner the supplier ledger before and after allocation: before, a 660.00 debit; after, zero. If they can explain that movement, they can explain any advance query the client's finance team raises."
+		},
+		{
+			"kicker": "Lesson 8 · Landed cost",
+			"title": "Put the freight into the stock, not into an expense",
+			"bullets": [
+				"Landed cost allocates freight, duty and clearing charges across the received units",
+				"Without it, gross profit is overstated and every margin report lies by the freight amount",
+				"Allocation can be by quantity, amount or weight, and the choice must match the business",
+				"The voucher creates a stock ledger revaluation and a matching GL entry"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Stock → Landed Cost Voucher → New",
+						"Company SM, receipt PR-SM-2026-0001",
+						"Receipt items listed"
+					],
+					[
+						"2",
+						"Add freight charge",
+						"60.00, expense account Freight Inward - SM",
+						"Charge row added"
+					],
+					["3", "Choose allocation", "By quantity across 10 units", "Rate preview 6.00 per unit"],
+					["4", "Save and Submit", "Confirm", "Voucher LCV-SM-2026-0001 submitted"],
+					["5", "Open Stock Ledger", "Filter SM-BL200", "Revaluation row: value +60.00"],
+					["6", "Check valuation", "Stock Balance for SM-BL200", "126.00 per unit"]
+				]
+			},
+			"notes": "Freight of 60.00 across ten units gives 6.00 each, and valuation moves from 120.00 to 126.00. The moment a learner computes that, they can also explain why the margin on a 240.00 sale is 114.00 rather than 120.00. Landed cost is the single most requested report fix in distribution projects, because owners compare gross profit to their own mental arithmetic."
+		},
+		{
+			"kicker": "Volume 3 · Payment run",
+			"title": "Bundle supplier payments without losing the allocation",
+			"bullets": [
+				"A payment order groups the invoices you intend to pay on one date, so the bank sees one instruction",
+				"Every line must carry its invoice reference, or the allocation is lost when the file is produced",
+				"Payment orders are optional, but they leave an audit trail that a single manual payment cannot",
+				"Reconcile the total before submitting, because a payment order posts real bank entries"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Payment Order → New",
+						"Company SM, payment order date 10-02-2026",
+						"Empty order form"
+					],
+					[
+						"2",
+						"Get invoices from",
+						"Supplier Sunrise Components, due before 28-02-2026",
+						"Invoice PINV-SM-2026-0002 listed"
+					],
+					["3", "Check the amount", "1,188.00 after the debit note", "Total payable 1,188.00"],
+					["4", "Set the bank account", "Bank - SM", "Account carried to every row"],
+					["5", "Save and Submit", "Confirm", "Status Submitted, payment entries created"],
+					["6", "Open Payment Reconciliation", "Supplier Sunrise Components", "Unallocated 0.00"]
+				]
+			},
+			"notes": "Payment orders are the difference between a payment run that takes ten minutes and one that takes an afternoon. Show the learner the generated payment entries and their allocations, because that is the evidence the bank file and the ledger agree. If a client insists on manual payments, at minimum insist on allocation, or the supplier ageing will drift from the bank within a month."
+		},
+		{
+			"kicker": "Lesson 8 · Verify landed cost",
+			"title": "What the revaluation does to the margin",
+			"bullets": [
+				"Landed cost is only useful if the reports downstream pick up the new valuation",
+				"Gross profit compares selling price to the revalued cost, not the purchase rate",
+				"The offsetting entry goes to the expense account you nominated, so freight is not double counted",
+				"Recompute one sale by hand and compare it with the report before showing the client"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Valuation per unit", "126.00", "Stock Balance for SM-BL200"],
+					["Stock value, nine units", "1,134.00", "Stock Balance report total"],
+					[
+						"Landed cost entry",
+						"Dr Stock 60.00, Cr Freight Inward 60.00",
+						"General Ledger, voucher LCV-SM-2026-0001"
+					],
+					["Gross profit on a 240.00 sale", "114.00", "Accounts → Gross Profit report"],
+					["After a 10 % discount at 216.00", "90.00", "Gross Profit, invoice level"]
+				]
+			},
+			"notes": "The point of this check is that the learner can defend the margin number in front of an owner who does the arithmetic in their head. Two hundred forty less one hundred twenty six is one hundred fourteen, and a ten per cent discount leaves ninety. If the report says otherwise, the landed cost was posted after the margin report date or allocated by amount instead of quantity."
+		},
+		{
+			"kicker": "Volume 3 · Reference",
+			"title": "Supplier documents and what each one fixes",
+			"bullets": [
+				"Every remedy is a document with a number, never an edit to history",
+				"Debit notes reverse goods and tax together, keeping the match intact",
+				"Advances are consumed by allocation, not by journal entry",
+				"Landed cost changes valuation, so it must be posted before the margin report is trusted"
+			],
+			"table": {
+				"headers": ["Document", "Use when", "Ledger effect", "Trap to avoid"],
+				"rows": [
+					[
+						"Purchase Return",
+						"Goods go back to the supplier",
+						"Dr Stock Received, Cr Stock",
+						"Doing the debit note first"
+					],
+					[
+						"Debit Note",
+						"Supplier owes you money or goods",
+						"Cr Creditors, Cr SST Input",
+						"Returning only part of the tax"
+					],
+					[
+						"Payment Entry, advance",
+						"Supplier wants money before delivery",
+						"Dr Creditor advance, Cr Bank",
+						"Leaving the advance unallocated"
+					],
+					[
+						"Landed Cost Voucher",
+						"Freight, duty or clearing arrives after receipt",
+						"Dr Stock, Cr expense",
+						"Allocating by amount when units differ"
+					],
+					[
+						"Payment Terms Template",
+						"Standard due dates across suppliers",
+						"None, drives due date",
+						"Typing due dates by hand"
+					]
+				]
+			},
+			"notes": "Treat this page as the remedy list for a support call. Each row answers a question a client will ask in the first month: the goods came back, the supplier wants money up front, freight arrived late. If a consultant can name the document without looking it up, the client stops worrying about the migration."
+		},
+		{
+			"kicker": "Volume 3 · Reference",
+			"title": "Supplier ageing, read properly",
+			"bullets": [
+				"Ageing buckets answer when money leaves, not whether the bill is correct",
+				"An invoice with no due date lands in the oldest bucket and distorts the whole report",
+				"Advances and debit notes appear as negatives, which is correct and often misread",
+				"Reconcile the ageing total to the creditor control account before presenting it"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Total payable", "1,188.00 after the return", "Accounts Payable report"],
+					["Creditors control balance", "1,188.00 credit", "General Ledger, Creditors - SM"],
+					["Ageing buckets", "0 to 30 days, none overdue", "Accounts Payable → Ageing"],
+					["Unallocated advances", "0.00 once consumed by the invoice", "Payment Reconciliation"],
+					[
+						"Interim stock account",
+						"0.00 when every receipt is billed",
+						"General Ledger, Stock Received But Not Billed"
+					]
+				]
+			},
+			"notes": "Presenting supplier ageing to an owner is a consultant skill, not a report skill. Lead with total payable, confirm it ties to the control account, then explain that the older bucket is a cash conversation rather than an accounting error. When the interim account is not zero, a receipt is unbilled, and that is the only real finding worth raising."
+		}
+	],
+	"lab": {
+		"title": "Lab · Return, advance, land the cost and read the ageing",
+		"minutes": 45,
+		"steps": [
+			"Return one damaged blender to Returns Quarantine and record the return receipt number",
+			"Raise the debit note from the purchase invoice and confirm the 132.00 total",
+			"Compute the new stock value at Main and check it against Stock Balance",
+			"Record a 660.00 advance payment to Sunrise Components from the bank",
+			"Create the 660.00 invoice and allocate the advance against it",
+			"Post a landed cost voucher for 60.00 freight across the received units",
+			"Confirm the new valuation per unit and recompute the gross profit on a 240.00 sale",
+			"Open supplier ageing and tie the total to the creditors control account"
+		],
+		"done": "Done when Main holds 9 units at 126.00 each, the supplier has no unallocated advance, and the ageing total equals the creditors control balance to the cent."
+	},
+	"quiz": [
+		{
+			"question": "In which order should a purchase return be handled?",
+			"options": [
+				"Debit note, then return receipt",
+				"Return receipt, then debit note",
+				"Journal entry for both",
+				"Cancel the original invoice"
+			],
+			"answer": 1,
+			"why": "Reversing stock first keeps the stock ledger and the accounting ledger in step, and the debit note then reverses the matching creditor and tax amounts."
+		},
+		{
+			"question": "A debit note for one blender at 120.00 with 10 % tax totals what?",
+			"options": ["120.00", "132.00", "108.00", "240.00"],
+			"answer": 1,
+			"why": "Goods of 120.00 plus 12.00 input tax reverses 132.00 against the supplier, because tax follows the goods out of the business."
+		},
+		{
+			"question": "How is an advance payment cleared against an invoice?",
+			"options": [
+				"By a journal entry",
+				"By allocating it in the payment or invoice",
+				"By cancelling it",
+				"By editing the supplier"
+			],
+			"answer": 1,
+			"why": "ERPNext keeps advances as unallocated amounts and consumes them when you allocate against an invoice, which is what keeps the supplier ledger clean."
+		},
+		{
+			"question": "Landed cost of 60.00 across 10 units changes valuation to what?",
+			"options": ["120.00", "126.00", "132.00", "180.00"],
+			"answer": 1,
+			"why": "Freight is spread over quantity, so 6.00 per unit is added to the 120.00 purchase rate. Gross profit on a 240.00 sale becomes 114.00."
+		},
+		{
+			"question": "What does a non-zero Stock Received But Not Billed balance indicate?",
+			"options": [
+				"A tax error",
+				"A receipt that has not been billed",
+				"An unallocated advance",
+				"Negative stock"
+			],
+			"answer": 1,
+			"why": "The interim account clears when the purchase invoice is submitted, so any remaining balance means at least one receipt is still waiting for its bill."
+		}
+	],
+	"narration": "Suppliers rarely behave the way the process diagram says. They deliver late, send one damaged unit, ask for money before the goods arrive, and send the freight invoice a fortnight afterwards. Each of those has one right document. A return reverses stock first, then the debit note reverses the creditor and the tax, which is why nine units remain at one hundred twenty six each. An advance is money without an invoice, consumed by allocation rather than by a journal, otherwise it sits on the balance sheet forever and the client's auditor asks why. And landed cost is what turns a one hundred twenty rate into a one hundred twenty six valuation, so a two hundred forty sale earns one hundred fourteen rather than one hundred twenty, and the owner's own arithmetic finally agrees with the report. Get those three right and the supplier ageing conversation becomes arithmetic instead of an argument, which is exactly the conversation a distribution client wants to have in week three."
+}

@@ -1,0 +1,343 @@
+{
+	"id": "ch09",
+	"number": 9,
+	"title": "Volume 3 · Buying, Step by Step",
+	"subtitle": "Lessons 1–4: the purchase cycle from order to payment, with the three quantities and three amounts that must match",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Raise a purchase order that purchasing and finance both accept",
+		"Receive goods so that stock and the stock-received account move together",
+		"Bill a supplier and explain the three-way match to an auditor",
+		"Pay the supplier and prove the creditor balance is back to zero"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Purchase order",
+			"title": "Raise a purchase order finance can pay",
+			"bullets": [
+				"A purchase order is a promise to a supplier, so the rate typed here is the rate that will be billed",
+				"Set the delivery date deliberately, because it drives the late-supplier list and the shortage report",
+				"Enter tax as a row in Purchase Taxes and Charges, never as a rounded-up rate in the item line",
+				"Submit only when the buyer and the budget owner agree, since submit locks quantity and rate"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Buying → Supplier → New",
+						"Sunrise Components, group Local Suppliers, currency MYR",
+						"Supplier saved as a draft"
+					],
+					[
+						"2",
+						"Buying → Purchase Order → New",
+						"Supplier Sunrise Components, company Seri Murni Sdn Bhd",
+						"Address and currency fill from the supplier"
+					],
+					[
+						"3",
+						"Items table",
+						"SM-BL200, quantity 10, rate 120.00, required by 20-01-2026",
+						"Amount 1,200.00"
+					],
+					[
+						"4",
+						"Purchase Taxes and Charges",
+						"SST Purchase 10 %, account SST Input - SM",
+						"Total taxes 120.00, grand total 1,320.00"
+					],
+					["5", "Save", "Nothing else", "Draft PO-SM-2026-0001, status Draft"],
+					["6", "Submit", "Confirm", "Status becomes To Receive and Bill, 10 units pending"]
+				]
+			},
+			"notes": "The commonest consultant error here is typing a rate that already includes tax, which inflates the stock value by ten per cent for the life of the item. Keep the item rate net, let the tax row do the adding, and the purchase receipt will post the correct stock value. Confirm the tax template before submitting, because changing a submitted order means amending it and reprinting."
+		},
+		{
+			"kicker": "Lesson 2 · Verify the order",
+			"title": "Read the purchase order before you submit it",
+			"bullets": [
+				"Three numbers decide whether the order is right: net total, tax and grand total",
+				"A zero tax row usually means the supplier has no tax category, not that the item is exempt",
+				"The order must show zero stock effect, because nothing has physically moved yet",
+				"Print the order once and read it as the supplier will, including terms and delivery window"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Net total", "1,200.00", "Purchase Order → Totals"],
+					["Total taxes and charges", "120.00", "Purchase Order → Taxes and Charges"],
+					["Grand total", "1,320.00", "Purchase Order → Totals"],
+					[
+						"Stock ledger rows",
+						"0 for this order",
+						"Stock → Stock Ledger, filter voucher type Purchase Order"
+					],
+					["Status", "To Receive and Bill", "Purchase Order header"]
+				]
+			},
+			"notes": "Ask the learner to compute the grand total before looking at the screen: ten units at 120 gives 1,200, ten per cent gives 120, and the total is 1,320. Being able to predict that figure is what separates a consultant from someone clicking through a demo. If the screen disagrees, the tax template or the supplier's tax category is wrong, and it is cheaper to find that now than at month end."
+		},
+		{
+			"kicker": "Lesson 3 · Purchase receipt",
+			"title": "Receive the goods and let stock move",
+			"bullets": [
+				"The purchase receipt is the document that moves stock and posts the interim stock account",
+				"Receive into the warehouse that will hold the goods, not a generic default",
+				"Partial receipts are normal, so record what arrived rather than what was ordered",
+				"Do not create a stock entry to mimic a receipt, because the bill will never match"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open PO-SM-2026-0001 → Create → Purchase Receipt",
+						"Nothing",
+						"Form pre-fills supplier, item and 10 units"
+					],
+					["2", "Accepted warehouse", "Main - SM", "Bin target is Main warehouse"],
+					["3", "Quantity", "10", "Pending quantity falls to 0 on the order"],
+					["4", "Save and Submit", "Confirm", "Status To Bill, receipt PR-SM-2026-0001"],
+					["5", "Check stock", "Item SM-BL200 at Main", "Bin shows 10 units, valuation 1,200.00"],
+					[
+						"6",
+						"Open Stock Ledger",
+						"Filter voucher PR-SM-2026-0001",
+						"One row: +10 units at 120.00, value 1,200.00"
+					]
+				]
+			},
+			"notes": "Receipts post to Stock Received But Not Billed rather than to a creditor, which is why the balance sheet looks unusual between receipt and bill. That interim account is not an error and must not be cleared by hand: it clears itself when the invoice is submitted. Explain that to a client's accountant early, or they will journal against it and create a permanent difference."
+		},
+		{
+			"kicker": "Lesson 4 · Verify the receipt",
+			"title": "Prove the receipt moved stock, not profit",
+			"bullets": [
+				"A receipt changes the balance sheet only: stock rises and an interim liability rises with it",
+				"The profit and loss account must be untouched at this point, because nothing has been sold",
+				"Valuation per unit is the purchase rate, adjusted later by any landed cost voucher",
+				"Serial and batch items need their numbers recorded at receipt, not after the bill"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Bin quantity at Main", "10", "Stock → Bin, item SM-BL200"],
+					["Stock value", "1,200.00", "Stock Balance report"],
+					["Stock ledger row", "+10 at 120.00, value 1,200.00", "Stock → Stock Ledger"],
+					[
+						"Stock Received But Not Billed",
+						"1,200.00 credit",
+						"Accounts → General Ledger, account Stock Received But Not Billed"
+					],
+					[
+						"Gross profit this month",
+						"unchanged by this receipt",
+						"Accounts → Profit and Loss Statement"
+					]
+				]
+			},
+			"notes": "If the profit and loss statement moves when you receive goods, an expense account has been configured as the default warehouse account, and every future valuation report will be wrong. Fix the default accounts in the Company record and the Warehouse record before going further. This is the single most common misconfiguration found during a first-week audit of a new ERPNext site."
+		},
+		{
+			"kicker": "Lesson 5 · Purchase invoice",
+			"title": "Bill the supplier and respect the three-way match",
+			"bullets": [
+				"The bill brings the creditor into existence and clears the interim stock account",
+				"ERPNext will not let you bill more than you received, which is the control auditors ask about",
+				"Check the rate against the order, because a supplier invoice is not automatically correct",
+				"Set the payment due date from the template rather than typing a number"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open PR-SM-2026-0001 → Create → Purchase Invoice",
+						"Nothing",
+						"Items and 10 units carried over"
+					],
+					[
+						"2",
+						"Supplier invoice number",
+						"SC-2026-0148, date 16-01-2026",
+						"Reference stored for the audit trail"
+					],
+					["3", "Payment terms", "Net 30 from the supplier template", "Due date 15-02-2026"],
+					["4", "Save and Submit", "Confirm", "Status Unpaid, invoice PINV-SM-2026-0001"],
+					[
+						"5",
+						"Read the GL",
+						"Filter voucher PINV-SM-2026-0001",
+						"Dr Stock Received Not Billed 1,200.00, Dr SST Input 120.00, Cr Creditors 1,320.00"
+					],
+					["6", "Try quantity 11 on a copy", "Save", "Error: cannot bill more than received"]
+				]
+			},
+			"notes": "The three-way match is the reason a purchase invoice cannot simply be typed from the supplier's paper. Order, receipt and bill must agree on quantity, and the rate is checked against the order. Show the learner the exact error message when they try to over-bill, because that message is the control working. Malaysian auditors frequently ask to see it demonstrated during system audits."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the bill",
+			"title": "The three-way match in numbers",
+			"bullets": [
+				"Quantity, rate and total must agree across order, receipt and bill",
+				"Tax input sits as an asset account until the SST return is filed",
+				"The creditor balance is now a real liability with a due date and an ageing bucket",
+				"Nothing in the profit and loss moves until the goods are sold"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Order quantity = received = billed", "10 = 10 = 10", "PO, PR and PI side by side"],
+					["Rate", "120.00 on all three documents", "Item table of each document"],
+					["Invoice total", "1,320.00", "Purchase Invoice → Totals"],
+					["Creditors - SM", "1,320.00 credit", "Accounts → General Ledger"],
+					["Supplier ageing", "Not due, 0 days overdue", "Accounts → Accounts Payable report"]
+				]
+			},
+			"notes": "Get into the habit of opening the three documents side by side for the first purchase of any new client, because a mismatch there tells you whether their process will survive an audit. If the invoice was recorded without a receipt, the stock account will be overstated and the interim account will keep a credit balance that nobody can explain. Correct the process, not the ledger."
+		},
+		{
+			"kicker": "Lesson 7 · Payment",
+			"title": "Pay the supplier and close the loop",
+			"bullets": [
+				"A payment entry against the invoice settles the creditor, and allocation is what makes it stick",
+				"Pay from the bank account that actually moved, so bank reconciliation stays possible",
+				"Partial payment is normal: allocate what was paid and leave the rest outstanding",
+				"The invoice status changes to Paid only when the allocated amount equals the total"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Payment Entry → New",
+						"Payment type Pay, party Sunrise Components",
+						"Party account Creditors - SM"
+					],
+					[
+						"2",
+						"Paid from",
+						"Bank - SM, reference TT-2026-0031",
+						"Bank account set on the payment"
+					],
+					["3", "Get outstanding invoices", "Select PINV-SM-2026-0001", "Allocated 1,320.00"],
+					["4", "Save and Submit", "Confirm", "Payment PE-SM-2026-0001 submitted"],
+					["5", "Read the invoice", "PINV-SM-2026-0001", "Status Paid, outstanding 0.00"],
+					[
+						"6",
+						"Read the GL",
+						"Filter voucher PE-SM-2026-0001",
+						"Dr Creditors 1,320.00, Cr Bank 1,320.00"
+					]
+				]
+			},
+			"notes": "Allocation is the step learners skip. An unallocated payment leaves the invoice open, the ageing report wrong, and the client convinced the system is broken. Teach the rule as a sentence they can repeat: a payment is money in the bank, an allocation is the invoice it kills. If an invoice stays open after a payment, open Payment Reconciliation and allocate there."
+		},
+		{
+			"kicker": "Volume 3 · Reference",
+			"title": "What each purchase document touches",
+			"bullets": [
+				"Each document has exactly one job, and skipping one leaves a permanent trace",
+				"Order and bill are commitments, while receipt is the only one that moves stock",
+				"The interim account is a bridge, not a place to park corrections",
+				"Print the chain once per client so their accountant sees the logic before go-live"
+			],
+			"table": {
+				"headers": ["Document", "Ledger effect", "Stock effect", "What breaks if you skip it"],
+				"rows": [
+					[
+						"Purchase Order",
+						"None",
+						"None, only ordered quantity",
+						"No control over rate or delivery date"
+					],
+					[
+						"Purchase Receipt",
+						"Dr Stock, Cr Stock Received But Not Billed",
+						"+10 at 120.00",
+						"Stock and valuation understated"
+					],
+					[
+						"Purchase Invoice",
+						"Dr Stock Received, Dr SST, Cr Creditors",
+						"None",
+						"Creditor missing, input tax lost"
+					],
+					["Payment Entry", "Dr Creditors, Cr Bank", "None", "Invoice stays open, ageing wrong"],
+					[
+						"Debit Note",
+						"Cr Creditors, Cr Stock or expense",
+						"Return removes units",
+						"Supplier balance overstated"
+					]
+				]
+			},
+			"notes": "This table is the one-page answer to the question every client accountant asks in week one. Print it, put it next to the purchase desk, and mark the receipt line, because that is the document operations forget. When a client claims the stock value is wrong, walk this chain in order and the error is always in one of the four rows."
+		}
+	],
+	"lab": {
+		"title": "Lab · Buy, receive, bill and pay ten blenders",
+		"minutes": 45,
+		"steps": [
+			"Create supplier Sunrise Components with Net 30 terms and the SST purchase category",
+			"Raise purchase order for 10 SM-BL200 at 120.00 with SST 10 % and confirm the 1,320.00 total",
+			"Compute the expected tax before submitting, then compare with the screen",
+			"Create the purchase receipt into Main warehouse and confirm bin quantity 10",
+			"Read the stock ledger row and confirm value 1,200.00 at 120.00 per unit",
+			"Create the purchase invoice, set the supplier reference and due date 15-02-2026",
+			"Attempt to bill 11 units on a copy and record the exact error message",
+			"Pay the invoice in full from the bank and confirm the invoice status is Paid"
+		],
+		"done": "Done when the creditor balance for Sunrise Components is zero, the bin at Main shows 10 units worth 1,200.00, and the stock ledger holds exactly one receipt row for this order."
+	},
+	"quiz": [
+		{
+			"question": "Which document moves stock in the purchase cycle?",
+			"options": ["Purchase Order", "Purchase Receipt", "Purchase Invoice", "Payment Entry"],
+			"answer": 1,
+			"why": "Only the purchase receipt creates stock ledger entries. The order is a commitment, the invoice creates the creditor, and the payment settles it."
+		},
+		{
+			"question": "What does a purchase receipt post to the credit side?",
+			"options": ["Creditors", "Stock Received But Not Billed", "Cost of Goods Sold", "SST Input"],
+			"answer": 1,
+			"why": "Receipts credit Stock Received But Not Billed, an interim liability that clears when the purchase invoice is submitted. Creditors appear only at invoice stage."
+		},
+		{
+			"question": "A purchase invoice for 11 units against a receipt of 10 will do what?",
+			"options": [
+				"Submit with a warning",
+				"Refuse with an over-billing error",
+				"Create a debit note",
+				"Reduce stock by one unit"
+			],
+			"answer": 1,
+			"why": "ERPNext blocks billing more than received by default, which is the control auditors test. It is configured in Buying Settings as allow over-billing."
+		},
+		{
+			"question": "An invoice stays open after a payment was submitted. What is the likely cause?",
+			"options": [
+				"Wrong tax template",
+				"The payment was not allocated to the invoice",
+				"The invoice was cancelled",
+				"Stock was negative"
+			],
+			"answer": 1,
+			"why": "A payment reduces the creditor only when it is allocated against the invoice. Unallocated payments leave invoices open and ageing reports wrong."
+		},
+		{
+			"question": "Where do you confirm the valuation per unit after a receipt?",
+			"options": [
+				"Purchase Order totals",
+				"Stock Ledger row or Stock Balance report",
+				"Creditors ageing",
+				"Profit and Loss"
+			],
+			"answer": 1,
+			"why": "The stock ledger row carries quantity, rate and value. Landed cost vouchers later adjust that value, which is why it belongs with valuation, not with purchasing."
+		}
+	],
+	"narration": "Buying is the mirror image of selling, and it is where most consultants lose credibility, because the client's accountant knows this cycle cold. Start with the purchase order: ten blenders at one hundred twenty, plus ten per cent tax, is one thousand three hundred twenty, and the order moves no stock. The receipt is the document that matters, adding ten units at one hundred twenty and crediting stock received but not billed, an interim account that looks strange and is not an error. The bill clears that account, brings in one hundred twenty of input tax, and creates a creditor of one thousand three hundred twenty with a due date. Then the payment, allocated to the invoice, closes it. Three documents, one quantity, one rate, one total. Teach the learner to predict the tax before looking, and to read the three documents side by side, because that habit is what survives an audit. When a client says the system is wrong, walk this chain in order and the answer appears in one of the four rows."
+}

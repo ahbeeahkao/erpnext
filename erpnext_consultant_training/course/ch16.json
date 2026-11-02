@@ -1,0 +1,298 @@
+{
+	"id": "ch16",
+	"number": 16,
+	"title": "Volume 6 · Production Costing, Scrap and Subcontracting",
+	"subtitle": "Lessons 5–8: what a finished unit really cost, how scrap changes the answer, and where subcontracting sits in the ledger",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Read a production cost and reconcile it to the BOM",
+		"Handle scrap so the good units carry the loss",
+		"Subcontract an operation and keep material control",
+		"Explain variance between planned and actual cost to a production manager"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 5 · Production cost",
+			"title": "Read the finished cost before you defend it",
+			"bullets": [
+				"Finished cost is materials consumed plus operations recorded, divided by good units",
+				"The stock ledger row is the proof, not the report total",
+				"A cost that differs from the BOM has exactly three usual causes",
+				"Cost reviewed weekly stops being an argument at month end"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open the manufacture entry", "STE-SM-2026-0011", "Consumed and produced rows"],
+					["2", "Add up materials", "20 × 80.00 plus 10 × 40.00", "2,000.00"],
+					["3", "Add operating cost", "5 hours at 60.00 per hour", "300.00"],
+					["4", "Divide by good units", "2,300.00 across 10 assemblies", "230.00 per unit"],
+					["5", "Compare with the BOM", "BOM total 230.00", "No variance"],
+					[
+						"6",
+						"Record the check",
+						"One line in the production worksheet",
+						"Signed by production and finance"
+					]
+				]
+			},
+			"notes": "The arithmetic here is deliberately identical to the BOM, because the first production run should show no variance. Once a client sees that the system agrees with the recipe, they trust it when the numbers later diverge. Introduce variance only after the clean case is understood, or the learner will assume every difference is a system error."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the cost",
+			"title": "Cost per unit, proved three ways",
+			"bullets": [
+				"Materials, operations and total must agree from the entry, the stock ledger and the BOM",
+				"Valuation per unit appears in the stock ledger row and the stock balance report",
+				"A rounding difference of a cent is normal, a difference of ten per cent is not",
+				"Any difference must be explained in the worksheet before the period closes"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Material cost", "2,000.00", "Manufacture entry consumed rows"],
+					["Operating cost", "300.00", "Manufacture entry operating cost"],
+					["Total cost", "2,300.00", "Manufacture entry total"],
+					["Valuation per unit", "230.00", "Stock Ledger, SM-ASM incoming row"],
+					["Stock value", "2,300.00 for 10 units", "Stock Balance report"]
+				]
+			},
+			"notes": "Three ways of seeing the same number is the fastest way to build confidence in a new system. Ask the learner to read the figure off the entry, off the ledger and off the balance sheet item, then to explain why all three agree. When they can do that unprompted, they can survive any costing meeting."
+		},
+		{
+			"kicker": "Lesson 7 · Scrap",
+			"title": "Scrap one unit and let the good units carry it",
+			"bullets": [
+				"Scrap is a quantity decision, not a cost adjustment typed into a journal",
+				"The total production cost stays the same while the good quantity falls",
+				"Cost per good unit therefore rises, and the finished stock carries that higher value",
+				"Scrap needs a reason code, because the causes are process, material or machine"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the work order",
+						"WO-SM-2026-0001, completed 10 units",
+						"Existing completion"
+					],
+					[
+						"2",
+						"Create the scrap entry",
+						"Stock Entry type Material Issue from Main, quantity 1",
+						"One assembly removed"
+					],
+					[
+						"3",
+						"Set the reason",
+						"Scrap - assembly defect, cost centre Assembly",
+						"Reason stored on the entry"
+					],
+					["4", "Save and Submit", "Confirm", "Stock falls to 9 assemblies"],
+					["5", "Read the cost", "Stock Balance for SM-ASM", "9 units still worth 2,300.00"],
+					["6", "Recompute per unit", "2,300.00 across 9 units", "255.56 per unit"]
+				]
+			},
+			"notes": "Two thousand three hundred across nine units is two hundred fifty five point five six, and that is the number the owner needs to see, because the loss is now visible in the value of the remaining stock. If the scrap were journalled away, the nine good units would look cheaper than they are and the next quotation would be priced on a lie."
+		},
+		{
+			"kicker": "Lesson 8 · Subcontracting",
+			"title": "Subcontract an operation and keep control of the material",
+			"bullets": [
+				"Subcontracting sends material out and buys a service back, and both must be recorded",
+				"The subcontractor warehouse is where your material sits while someone else holds it",
+				"The purchase receipt of the service adds that cost to the finished valuation",
+				"Sending material without a transfer is how stock disappears in a subcontracting business"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create the subcontracting BOM",
+						"SM-ASM with operation Powder Coating marked subcontract",
+						"BOM ready for outsourcing"
+					],
+					[
+						"2",
+						"Raise the purchase order",
+						"Service item Powder Coating, 10 units at 12.00",
+						"Total 120.00"
+					],
+					[
+						"3",
+						"Transfer material",
+						"SM-ASM 10 units to Subcontractor - SM",
+						"Material leaves main"
+					],
+					[
+						"4",
+						"Receive the service",
+						"Purchase receipt against the order",
+						"Units return to main"
+					],
+					["5", "Check valuation", "Stock Balance for SM-ASM", "242.00 per unit including 12.00"],
+					["6", "Reconcile material", "Subcontractor warehouse balance", "Zero, all units returned"]
+				]
+			},
+			"notes": "Twelve ringgit of coating on a two hundred thirty assembly gives two hundred forty two, and the subcontractor warehouse must end at zero. That zero is the control: if material is still sitting with the subcontractor after the service receipt, someone is holding your stock without a document, which is a finding worth raising the same day."
+		},
+		{
+			"kicker": "Lesson 7 · Verify scrap",
+			"title": "What scrap does to the remaining value",
+			"bullets": [
+				"Total production cost is unchanged by scrap, and the good units carry it",
+				"The stock value stays at 2,300.00 with nine units, so the report shows the loss",
+				"A scrap account only appears if you configured the entry to expense it directly",
+				"Recalculate the selling price implication before the next quotation goes out"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Assemblies in stock", "9", "Stock → Bin, Main - SM"],
+					["Stock value", "2,300.00 unchanged", "Stock Balance for SM-ASM"],
+					["Valuation per unit", "255.56", "Stock Ledger, latest row"],
+					[
+						"Scrap entry",
+						"1 unit issued with a reason and cost centre",
+						"Stock Entry STE-SM-2026-0012"
+					],
+					["Margin at 350.00 selling price", "94.44, about 27 per cent", "Your own arithmetic"]
+				]
+			},
+			"notes": "Two hundred fifty five fifty six against a three hundred fifty selling price leaves ninety four forty four, roughly twenty seven per cent, down from thirty four. That fall is the real cost of the defect, and it belongs in the next pricing conversation rather than the scrap bin. Show the learner the margin before and after, and the quality discussion starts by itself."
+		},
+		{
+			"kicker": "Lesson 8 · Verify subcontracting",
+			"title": "Proof the service and the material both landed",
+			"bullets": [
+				"Material out, service in, material back: three movements and one valuation",
+				"The service cost is only in stock if the receipt was against the subcontracting order",
+				"The subcontractor warehouse must return to zero, or material is unaccounted for",
+				"Subcontract purchase invoices still carry tax, and it is input tax like any purchase"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Subcontractor warehouse balance", "0 units", "Stock → Bin, Subcontractor - SM"],
+					["Assemblies back in main", "10 units", "Stock → Bin, Main - SM"],
+					["Valuation per unit", "242.00", "Stock Ledger, latest incoming row"],
+					["Service cost in stock", "120.00 across ten units", "Landed value in the receipt"],
+					["Purchase invoice", "120.00 plus input tax", "Accounts → Purchase Invoice"]
+				]
+			},
+			"notes": "The two numbers that matter are zero and two hundred forty two: nothing left with the supplier, and every returned unit carrying the service cost. If either is wrong, the receipt was raised against the wrong order or the transfer never happened, and both are visible in the same screen. Checking this weekly prevents the year-end scramble that subcontracting projects always produce."
+		},
+		{
+			"kicker": "Volume 6 · Reference",
+			"title": "Cost components and where they land",
+			"bullets": [
+				"Every ringgit of production cost must land in inventory, not in an expense account",
+				"Capacity cost is labour and machine time, and it needs a rate the client can defend",
+				"Scrap and rework are cost of quality, and they belong in the same work order",
+				"Subcontracting adds an external service cost, which is still inventory until sale"
+			],
+			"table": {
+				"headers": ["Component", "Source", "Lands in", "Check"],
+				"rows": [
+					[
+						"Raw material",
+						"Stock issue at valuation",
+						"Work in progress, then finished goods",
+						"Quantity matches the BOM"
+					],
+					[
+						"Direct labour",
+						"Operation time at workstation rate",
+						"Finished goods valuation",
+						"Hours recorded on the entry"
+					],
+					[
+						"Machine cost",
+						"Workstation rate including overhead",
+						"Finished goods valuation",
+						"Rate agreed with finance"
+					],
+					[
+						"Subcontract service",
+						"Purchase invoice for the service",
+						"Finished goods valuation",
+						"Material returned to zero"
+					],
+					[
+						"Scrap",
+						"Material issue with a reason",
+						"Cost of the remaining good units",
+						"Reason code and approver"
+					]
+				]
+			},
+			"notes": "This is the table to leave with a manufacturing client, because their accountant will ask where each element sits and their production manager will ask who controls it. Answering both columns in one page is what turns a system implementation into a costing conversation the client trusts."
+		}
+	],
+	"lab": {
+		"title": "Lab · Cost a build, scrap a unit and subcontract an operation",
+		"minutes": 45,
+		"steps": [
+			"Read the completed manufacture entry and confirm 2,300.00 total cost",
+			"Prove 230.00 per unit from the entry, the stock ledger and the stock balance",
+			"Issue one assembly as scrap with a reason and a cost centre",
+			"Confirm nine units now carry the full 2,300.00 and recompute the unit cost",
+			"Create a subcontracting operation on the BOM for powder coating at 12.00",
+			"Raise the purchase order and transfer ten assemblies to the subcontractor warehouse",
+			"Receive the service and confirm the new valuation of 242.00 per unit",
+			"Prove the subcontractor warehouse balance is zero after receipt"
+		],
+		"done": "Done when scrap leaves nine units at 255.56 each, the subcontracted units carry 242.00, and no material remains in the subcontractor warehouse."
+	},
+	"quiz": [
+		{
+			"question": "A build costs 2,300.00 and one of ten units is scrapped. Cost per good unit becomes what?",
+			"options": ["230.00", "255.56", "207.00", "2,300.00"],
+			"answer": 1,
+			"why": "Total cost stays at 2,300.00 while the good quantity falls to nine, so each unit carries 255.56."
+		},
+		{
+			"question": "How should scrap be recorded?",
+			"options": [
+				"A journal reducing stock",
+				"A stock entry with a reason code",
+				"Editing the work order",
+				"A credit note"
+			],
+			"answer": 1,
+			"why": "Scrap is a quantity event, so it needs a stock entry with a reason, which also keeps the cost with the good units."
+		},
+		{
+			"question": "In subcontracting, where does your material sit while the supplier works on it?",
+			"options": [
+				"Main warehouse",
+				"The subcontractor warehouse",
+				"Goods in transit",
+				"Work in progress"
+			],
+			"answer": 1,
+			"why": "ERPNext holds subcontracted material in a subcontractor warehouse so the balance proves what is with the supplier."
+		},
+		{
+			"question": "What should the subcontractor warehouse balance be after the service is received?",
+			"options": ["Equal to the order quantity", "Zero", "Negative", "Equal to the service cost"],
+			"answer": 1,
+			"why": "All transferred material should return, so a non-zero balance means material is unaccounted for and needs immediate investigation."
+		},
+		{
+			"question": "Which production cost lands in finished goods valuation?",
+			"options": [
+				"Only raw material",
+				"Material, operations and subcontract services",
+				"Only labour",
+				"Selling and admin costs"
+			],
+			"answer": 1,
+			"why": "Production cost includes material, operations and bought-in services used in the build, all of which stay in inventory until sale."
+		}
+	],
+	"narration": "Once a client has built something, the next question is what it cost, and the answer has to survive an argument. A completed build of ten assemblies carries two thousand of material and three hundred of labour, so two hundred thirty each, and the entry, the stock ledger and the stock balance must all say the same thing. Scrap is where costing gets real: one unit fails, the total cost does not move, and the nine good units now carry two hundred fifty five fifty six each. Subcontracting adds a bought-in service, twelve ringgit of coating, and a warehouse that must return to zero. Materials, labour, scrap, service: four components, one valuation, and a worksheet that lets the production manager and the accountant argue with numbers instead of opinions. Teach the four components in order, and insist on the worksheet, because a costing conversation without evidence becomes a personality contest, and the consultant is always the outsider in that room."
+}

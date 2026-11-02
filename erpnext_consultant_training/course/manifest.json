@@ -1,7 +1,7 @@
 {
 	"title": "ERPNext Functional Consultant",
-	"subtitle": "Primers on accounting and distribution, then volumes 0–2: stand up a Malaysian company, build the masters, and run quote-to-cash with exact numbers",
-	"version": "0.4.0",
+	"subtitle": "The complete eleven-volume consultant track: concept primers, setup, quote-to-cash, procure-to-pay, stock, close, manufacturing, projects, automation, Malaysia compliance and go-live",
+	"version": "1.0.0",
 	"audience": "Functional consultants, implementation leads and key users who configure and demonstrate ERPNext",
 	"sample_company": "Seri Murni Sdn Bhd — a Malaysian distributor with a small assembly operation",
 	"volumes": [
@@ -38,50 +38,50 @@
 		{
 			"id": "v3",
 			"title": "Volume 3 · Procure to Pay",
-			"status": "planned",
-			"chapters": []
+			"status": "built",
+			"chapters": ["ch09", "ch10"]
 		},
 		{
 			"id": "v4",
 			"title": "Volume 4 · Stock Accuracy and Valuation",
-			"status": "planned",
-			"chapters": []
+			"status": "built",
+			"chapters": ["ch11", "ch12"]
 		},
 		{
 			"id": "v5",
 			"title": "Volume 5 · Accounting and the Close",
-			"status": "planned",
-			"chapters": []
+			"status": "built",
+			"chapters": ["ch13", "ch14"]
 		},
 		{
 			"id": "v6",
 			"title": "Volume 6 · Manufacturing",
-			"status": "planned",
-			"chapters": []
+			"status": "built",
+			"chapters": ["ch15", "ch16"]
 		},
 		{
 			"id": "v7",
 			"title": "Volume 7 · Projects, Assets, Quality and CRM",
-			"status": "planned",
-			"chapters": []
+			"status": "built",
+			"chapters": ["ch17", "ch18"]
 		},
 		{
 			"id": "v8",
 			"title": "Volume 8 · Automation, Print and Permissions",
-			"status": "planned",
-			"chapters": []
+			"status": "built",
+			"chapters": ["ch19", "ch20"]
 		},
 		{
 			"id": "v9",
 			"title": "Volume 9 · Malaysia Compliance",
-			"status": "planned",
-			"chapters": []
+			"status": "built",
+			"chapters": ["ch21", "ch22"]
 		},
 		{
 			"id": "v10",
 			"title": "Volume 10 · Migration, UAT and Go-Live",
-			"status": "planned",
-			"chapters": []
+			"status": "built",
+			"chapters": ["ch23", "ch24"]
 		}
 	],
 	"chapters": [
@@ -116,6 +116,70 @@
 		{
 			"id": "ch08",
 			"file": "ch08.json"
+		},
+		{
+			"id": "ch09",
+			"file": "ch09.json"
+		},
+		{
+			"id": "ch10",
+			"file": "ch10.json"
+		},
+		{
+			"id": "ch11",
+			"file": "ch11.json"
+		},
+		{
+			"id": "ch12",
+			"file": "ch12.json"
+		},
+		{
+			"id": "ch13",
+			"file": "ch13.json"
+		},
+		{
+			"id": "ch14",
+			"file": "ch14.json"
+		},
+		{
+			"id": "ch15",
+			"file": "ch15.json"
+		},
+		{
+			"id": "ch16",
+			"file": "ch16.json"
+		},
+		{
+			"id": "ch17",
+			"file": "ch17.json"
+		},
+		{
+			"id": "ch18",
+			"file": "ch18.json"
+		},
+		{
+			"id": "ch19",
+			"file": "ch19.json"
+		},
+		{
+			"id": "ch20",
+			"file": "ch20.json"
+		},
+		{
+			"id": "ch21",
+			"file": "ch21.json"
+		},
+		{
+			"id": "ch22",
+			"file": "ch22.json"
+		},
+		{
+			"id": "ch23",
+			"file": "ch23.json"
+		},
+		{
+			"id": "ch24",
+			"file": "ch24.json"
 		}
 	]
 }
