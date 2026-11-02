@@ -1,0 +1,346 @@
+{
+	"id": "ch22",
+	"number": 22,
+	"title": "Volume 9 · e-Invoice (MyInvois) End to End",
+	"subtitle": "Lessons 5–8: master data that passes validation, submission and status reading, the 72 hour cancellation window, consolidated and self-billed documents",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Prepare company and customer data so submission does not fail validation",
+		"Submit an invoice and interpret accepted, rejected and validated responses",
+		"Cancel or reject inside the 72 hour window and know when it is refused",
+		"Decide what to consolidate and when to self-bill"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 5 · Master data",
+			"title": "Prepare the data MyInvois checks first",
+			"bullets": [
+				"TIN, registration number, MSIC code and SST number are validated before anything else",
+				"A customer without a TIN is a general public sale, not a business invoice",
+				"Address and phone format matter, because the portal rejects malformed fields",
+				"Clean masters before the first submission, not after the first rejection"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Company record",
+						"TIN C2584563200, registration 202301234567, MSIC 46510",
+						"Company e-Invoice fields complete"
+					],
+					[
+						"2",
+						"Customer record",
+						"Aeon Big TIN and BRN, address with postcode and state",
+						"Customer validated data stored"
+					],
+					[
+						"3",
+						"Check contact",
+						"Phone with country code, email on the customer",
+						"Required fields present"
+					],
+					["4", "Validate the TIN", "Portal taxpayer validation for the TIN", "TIN valid response"],
+					[
+						"5",
+						"Create a draft invoice",
+						"One line, 2,400.00 plus 240.00",
+						"Invoice ready to submit"
+					],
+					["6", "Run the pre-check", "Missing-field validation", "No blocking errors"]
+				]
+			},
+			"notes": "Validation failures are almost always master data, not software, and they arrive as a rejection notice that the finance team reads as a system failure. Run a pre-check across the customer list before go-live: every business customer needs a TIN, a registration number and a complete address. Half a day of cleaning saves a week of rejected submissions."
+		},
+		{
+			"kicker": "Lesson 6 · Submission",
+			"title": "Submit an invoice and read the response",
+			"bullets": [
+				"Submission returns a submission ID, then accepted and rejected lists",
+				"Accepted means received; validated is a later state with a UUID and a QR code",
+				"A rejected document comes back with an error list, and it is not a tax invoice",
+				"Store the UUID and the long ID against the invoice, because the portal is the source of truth"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the sales invoice",
+						"SINV-SM-2026-0010, submitted",
+						"e-Invoice action available"
+					],
+					["2", "Submit to MyInvois", "Document type 01 Invoice", "Submission UID returned"],
+					["3", "Read the response", "Accepted documents list with one entry", "Status accepted"],
+					[
+						"4",
+						"Wait for validation",
+						"Poll the submission status",
+						"Validated with UUID and long ID"
+					],
+					["5", "Store identifiers", "UUID written to the invoice record", "Traceable for audits"],
+					[
+						"6",
+						"Print or send",
+						"QR code and validation link on the invoice",
+						"Customer can verify"
+					]
+				]
+			},
+			"notes": "Two states matter and clients confuse them: accepted, which means the portal has the file, and validated, which means it is a legal tax invoice with a UUID. Show both on screen, because a finance team that treats accepted as final will print invoices that cannot be verified. The QR code is what the customer scans, so test it once end to end."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the submission",
+			"title": "Accepted versus validated, on one screen",
+			"bullets": [
+				"Submission ID, accepted count and validated UUID are three different facts",
+				"A rejected document is not a tax invoice, so the sale is unsubstantiated until it is fixed",
+				"The QR code and validation link are what the customer uses to check the document",
+				"Record identifiers on the invoice so a later audit can trace the exact document"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Submission identifier", "returned and stored", "Submission log"],
+					["Accepted documents", "1 of 1 for this invoice", "Portal response"],
+					["Validated state", "UUID and long ID present", "Invoice e-Invoice panel"],
+					["Document total", "2,640.00 matches the invoice", "Portal document details"],
+					["QR code", "prints and resolves", "Printed invoice"]
+				]
+			},
+			"notes": "The distinction between accepted and validated is the single most useful thing to teach a finance team, because it decides whether they can post the invoice to the customer. Scroll the printed page and scan the QR code once in front of them; the moment it resolves to the portal, the process becomes real rather than theoretical."
+		},
+		{
+			"kicker": "Lesson 7 · Cancellation",
+			"title": "Reject or cancel inside 72 hours",
+			"bullets": [
+				"Cancellation is limited to 72 hours after validation, and the limit is enforced by the portal",
+				"A cancellation needs a reason of up to 300 characters, so write it carefully",
+				"After the window, the remedy is a credit note or debit note, not a cancellation",
+				"Documents referenced by another document cannot be cancelled while that reference lives"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open the validated invoice", "UUID recorded earlier", "e-Invoice status panel"],
+					[
+						"2",
+						"Choose cancel",
+						"Reason: wrong customer TIN, reissued",
+						"Reason under 300 characters"
+					],
+					["3", "Submit the cancellation", "Confirm", "Status cancelled on the portal"],
+					[
+						"4",
+						"Try after 72 hours",
+						"Same action on an older document",
+						"Error: operation period over"
+					],
+					[
+						"5",
+						"Try a referenced document",
+						"Invoice already referenced by a credit note",
+						"Error: active referencing documents"
+					],
+					["6", "Use the correct remedy", "Credit note and reissue", "New validated document"]
+				]
+			},
+			"notes": "The 72 hour rule is a business deadline, so put it in the finance team's daily routine rather than a document. One person checks the e-Invoice dashboard each morning and cancels what needs cancelling; after that, the credit note route applies. Explain both error messages by name, so nobody spends an afternoon retrying a cancellation that can never succeed."
+		},
+		{
+			"kicker": "Lesson 7 · Verify the cancellation",
+			"title": "What the portal will and will not allow",
+			"bullets": [
+				"Cancellation is possible inside 72 hours with a reason, and refused after it",
+				"A document referenced by a credit note cannot be cancelled while that reference exists",
+				"The refused case must route to a credit note, not to a retry loop",
+				"Log every cancellation with the reason, because the portal keeps its own record"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Cancelled document status", "cancelled on the portal", "Portal document details"],
+					["Reason recorded", "under 300 characters, meaningful", "Cancellation log"],
+					["Late cancellation attempt", "OperationPeriodOver", "Portal error response"],
+					["Referenced document attempt", "ActiveReferencingDocuments", "Portal error response"],
+					["Replacement document", "new validated invoice issued", "Invoice list"]
+				]
+			},
+			"notes": "Two error names cover almost every failed cancellation, and knowing them saves a support call: OperationPeriodOver means the window has passed, ActiveReferencingDocuments means another document depends on this one. Teach the finance team to read the name and pick the remedy, because the portal will not offer an alternative."
+		},
+		{
+			"kicker": "Lesson 8 · Consolidation",
+			"title": "Consolidate small sales and self-bill correctly",
+			"bullets": [
+				"Consolidation groups many small receipts into one monthly e-Invoice for the general public",
+				"It is allowed for B2C within the rules, but not for business customers who need their own document",
+				"Self-billed invoices are issued by the buyer, typically for imports or agent sales",
+				"Both need a policy decision, because they change who is responsible for the submission"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Identify B2C receipts",
+						"Counter sales without a TIN",
+						"List of individual receipts"
+					],
+					[
+						"2",
+						"Consolidate",
+						"One monthly document for the period",
+						"Consolidated e-Invoice created"
+					],
+					[
+						"3",
+						"Check the total",
+						"Sum of the receipts in the month",
+						"Total matches the sales report"
+					],
+					[
+						"4",
+						"Set a self-billing case",
+						"Import purchase from an overseas supplier",
+						"Self-billed document prepared"
+					],
+					["5", "Submit as buyer", "Self-billed invoice type", "Accepted with buyer as issuer"],
+					[
+						"6",
+						"Record the policy",
+						"Which customers are consolidated and why",
+						"Written in the compliance file"
+					]
+				]
+			},
+			"notes": "Consolidation is a legitimate relief for counter sales and a serious problem if applied to business customers, because they cannot claim input tax without their own validated document. Write the policy per customer type, get it signed, and check the monthly consolidated total against the sales report before submitting. Self-billing needs the same clarity, since the buyer becomes the issuer."
+		},
+		{
+			"kicker": "Volume 9 · Reference",
+			"title": "e-Invoice document types and tax codes",
+			"bullets": [
+				"Document type tells the portal what the document is, and the wrong type invalidates it",
+				"Tax type codes map to sales tax, service tax, tourism and the exemption code",
+				"Classification codes describe the product and drive reporting",
+				"Every invoice line needs both a classification and a tax type, not just a rate"
+			],
+			"table": {
+				"headers": ["Element", "Typical value", "Where it comes from", "What breaks if wrong"],
+				"rows": [
+					[
+						"Document type",
+						"01 Invoice, 02 Credit Note, 03 Debit Note, 04 Refund Note",
+						"Document type field",
+						"Portal rejects or misclassifies"
+					],
+					[
+						"Tax type",
+						"01 Sales Tax, 02 Service Tax, E Exemption",
+						"Invoice tax row",
+						"Return and e-Invoice disagree"
+					],
+					[
+						"Classification code",
+						"product classification from the portal list",
+						"Item record",
+						"Validation rejection"
+					],
+					["Unit code", "Nos, KGM, LTR", "UOM mapping", "Line rejected"],
+					[
+						"Tax rate and amount",
+						"10 % or 8 % with the computed amount",
+						"Tax template",
+						"Amount mismatch against invoice"
+					]
+				]
+			},
+			"notes": "This table is the reference sheet to leave with the finance team, because most rejections trace to one of these five rows. Classification codes need mapping for every item sold, which is a morning's work with the portal list open, and the unit code mapping catches people who sell in cartons but invoice in pieces."
+		},
+		{
+			"kicker": "Volume 9 · Reference",
+			"title": "Status board for the finance team",
+			"bullets": [
+				"Finance needs one screen that shows what is pending, rejected or cancelled",
+				"Rejected documents need an owner and a same-day fix, or the tax invoice does not exist",
+				"Weekly reconciliation of e-Invoice totals against the sales ledger catches drift early",
+				"Keep the evidence, because the portal keeps its own copy and yours must match"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Pending submissions", "0 at the end of each day", "e-Invoice dashboard"],
+					["Rejected documents", "0, or listed with an owner", "e-Invoice status list"],
+					["Validated this month", "matches submitted invoices", "Sales invoice register"],
+					["Difference against ledger", "0.00", "Your own reconciliation"],
+					["Cancellations", "within 72 hours, reason recorded", "Portal cancellation log"]
+				]
+			},
+			"notes": "Give the client a daily ten-minute routine: open the dashboard, fix rejections, cancel what must be cancelled, and confirm nothing is pending overnight. Then a monthly check that validated totals equal the sales ledger. That rhythm is what keeps an e-Invoice project out of trouble, because the portal does not wait and neither does the deadline."
+		}
+	],
+	"lab": {
+		"title": "Lab · Prepare, submit, validate and cancel an e-Invoice",
+		"minutes": 45,
+		"steps": [
+			"Complete the company TIN, registration, MSIC and SST fields",
+			"Complete the customer TIN, registration, address and contact",
+			"Validate the customer TIN against the portal before invoicing",
+			"Submit a 2,640.00 invoice as document type 01 and record the submission UID",
+			"Confirm the validated state and store the UUID and long ID",
+			"Cancel the document with a reason and confirm the status",
+			"Attempt a cancellation past 72 hours and record the error name",
+			"Consolidate a month of counter sales and check the total against the sales report"
+		],
+		"done": "Done when the invoice is validated with a stored UUID, the cancellation succeeded inside the window, the expired attempt returned its named error, and the consolidated total matches the sales report."
+	},
+	"quiz": [
+		{
+			"question": "What does an accepted submission mean?",
+			"options": [
+				"The invoice is legally validated",
+				"The portal received the document",
+				"The customer has paid",
+				"The tax is filed"
+			],
+			"answer": 1,
+			"why": "Accepted means the portal received the submission. Validation, with a UUID, is the later state that makes it a legal tax invoice."
+		},
+		{
+			"question": "How long does the portal allow a validated document to be cancelled?",
+			"options": ["24 hours", "48 hours", "72 hours", "7 days"],
+			"answer": 2,
+			"why": "Cancellation is limited to 72 hours after validation, after which the remedy is a credit note or debit note."
+		},
+		{
+			"question": "Which customers should not be consolidated into a monthly e-Invoice?",
+			"options": [
+				"Cash customers",
+				"Business customers needing their own document",
+				"Online orders",
+				"Walk-in buyers"
+			],
+			"answer": 1,
+			"why": "Business customers need their own validated document to claim input tax, so consolidation is limited to B2C within the rules."
+		},
+		{
+			"question": "What does a self-billed invoice mean?",
+			"options": [
+				"The seller issues it",
+				"The buyer issues it",
+				"The portal issues it",
+				"Nobody issues it"
+			],
+			"answer": 1,
+			"why": "In self-billing the buyer issues the document, typically for imports or agent arrangements, which shifts responsibility for submission."
+		},
+		{
+			"question": "Which portal error appears when you cancel too late?",
+			"options": ["IncorrectState", "OperationPeriodOver", "ActiveReferencingDocuments", "InvalidTIN"],
+			"answer": 1,
+			"why": "OperationPeriodOver indicates the 72 hour window has passed, so the correction must be a credit note rather than a cancellation."
+		}
+	],
+	"narration": "e-Invoice is a deadline, not a feature. Everything starts with master data: company and customer TIN, registration, MSIC, address, and a validated TIN before the first submission. When you submit, you get a submission identifier and an accepted list, but accepted only means the portal has the file. Validated is the state that matters, because that is where the UUID and the QR code come from, and that is the legal tax invoice. Cancellation lives inside seventy two hours with a reason, and after that the remedy is a credit note, which the portal enforces with named errors. Consolidate only consumer sales, self-bill only where the rules allow, and give the finance team a daily dashboard routine: clear rejections, cancel what must be cancelled, and confirm nothing is left pending overnight. A monthly tie-out between validated totals and the sales ledger is the check that keeps the project out of trouble."
+}

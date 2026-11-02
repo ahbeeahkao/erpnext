@@ -20,13 +20,13 @@ const corpus = JSON.stringify(chapters);
 describe("course manifest", () => {
 	it("describes a consultant course with a volume roadmap", () => {
 		assert.match(manifest.title, /Consultant/);
-		assert.equal(manifest.chapters.length, 8);
+		assert.equal(manifest.chapters.length, 24);
 		assert.ok(manifest.sample_company.includes("Seri Murni"));
 		assert.ok(manifest.volumes.length >= 10, `${manifest.volumes.length} volumes listed`);
 		const built = manifest.volumes.filter((volume) => volume.status === "built");
 		const planned = manifest.volumes.filter((volume) => volume.status === "planned");
-		assert.equal(built.length, 5, "two primers and three volumes are built");
-		assert.ok(planned.length >= 8, "the remaining volumes are declared as planned");
+		assert.equal(built.length, 13, "two primers and eleven volumes are built");
+		assert.ok(planned.length === 0, "every declared volume is built");
 		for (const volume of built) {
 			assert.ok(volume.chapters.length >= 1, `${volume.id} needs chapters`);
 			for (const id of volume.chapters) {
@@ -227,13 +227,13 @@ describe("course as a whole", () => {
 			(sum, chapter) => sum + chapter.slides.filter((slide) => slide.table).length,
 			0
 		);
-		assert.ok(slides >= 70, `${slides} teaching slides`);
-		assert.ok(steps >= 50, `${steps} lab steps`);
-		assert.ok(minutes >= 900, `${minutes} minutes of syllabus`);
+		assert.ok(slides >= 190, `${slides} teaching slides`);
+		assert.ok(steps >= 180, `${steps} lab steps`);
+		assert.ok(minutes >= 2500, `${minutes} minutes of syllabus`);
 		assert.equal(tables, slides, "every teaching slide carries a table");
 	});
 
-	it("covers the functional consultant ground of volumes 0 to 2", () => {
+	it("covers the functional consultant ground of all eleven volumes", () => {
 		for (const term of [
 			"chart of accounts",
 			"cost center",
@@ -255,6 +255,22 @@ describe("course as a whole", () => {
 			"gross profit",
 			"sst",
 			"fifo",
+			"bill of materials",
+			"work order",
+			"landed cost voucher",
+			"stock reconciliation",
+			"repost item valuation",
+			"period closing voucher",
+			"asset category",
+			"quality inspection",
+			"user permission",
+			"workflow",
+			"print format",
+			"myinvois",
+			"consolidat",
+			"opening balance",
+			"cut-over",
+			"hypercare",
 		]) {
 			assert.ok(corpus.toLowerCase().includes(term.toLowerCase()), `the course never mentions ${term}`);
 		}

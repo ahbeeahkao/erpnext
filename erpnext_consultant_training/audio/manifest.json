@@ -58,6 +58,118 @@
 			"chars": 1467,
 			"bytes": 760285,
 			"text": "Volume two, second half: what happens when reality intervenes. Partial delivery first. Do not split the order; reduce the delivery quantity against the same order. Two of five units moves stock by two, posts cost of goods of two hundred forty, and leaves the order at forty percent delivered and forty percent billed, still open for the rest. Next, discounts. A line discount of ten percent on one thousand two hundred gives one thousand eighty net, one hundred eight tax and one thousand one hundred eighty eight total, while cost stays six hundred, so gross profit falls to four hundred eighty. Tax follows taxable value, and learners who expect the tax to stay at one hundred twenty will misquote a customer. Then returns. A credit note is three reversals in one document: stock comes back, revenue is reversed through sales return, and the tax is reversed too. One unit at two hundred forty reverses twenty four of tax and credits the customer two hundred sixty four, and because it is created against the original invoice, the link survives an audit. Never create a negative-priced invoice. Credit limits are the one setting that stops an order. Enable credit checking in selling settings, set a five thousand limit, and a six thousand order will not submit. Blocking at submit, not at save, is deliberate. Finally, close the month with four reports and an exception list where every difference has a name against it. In the lab you break, correct and reconcile."
+		},
+		"ch09": {
+			"file": "ch09.mp3",
+			"voice": "voice-00",
+			"chars": 1002,
+			"bytes": 234189,
+			"text": "Buying is the mirror image of selling, and it is where most consultants lose credibility, because the client's accountant knows this cycle cold. Start with the purchase order: ten blenders at one hundred twenty, plus ten per cent tax, is one thousand three hundred twenty, and the order moves no stock. The receipt is the document that matters, adding ten units at one hundred twenty and crediting stock received but not billed, an interim account that looks strange and is not an error. The bill clears that account, brings in one hundred twenty of input tax, and creates a creditor of one thousand three hundred twenty with a due date. Then the payment, allocated to the invoice, closes it. Three documents, one quantity, one rate, one total. Teach the learner to predict the tax before looking, and to read the three documents side by side, because that habit is what survives an audit. When a client says the system is wrong, walk this chain in order and the answer appears in one of the four rows."
+		},
+		"ch10": {
+			"file": "ch10.mp3",
+			"voice": "voice-00",
+			"chars": 983,
+			"bytes": 229293,
+			"text": "Suppliers rarely behave the way the process diagram says. They deliver late, send one damaged unit, ask for money before the goods arrive, and send the freight invoice a fortnight afterwards. Each of those has one right document. A return reverses stock first, then the debit note reverses the creditor and the tax, which is why nine units remain at one hundred twenty six each. An advance is money without an invoice, consumed by allocation rather than by a journal, otherwise it sits on the balance sheet forever and the client's auditor asks why. And landed cost is what turns a one hundred twenty rate into a one hundred twenty six valuation, so a two hundred forty sale earns one hundred fourteen rather than one hundred twenty, and the owner's own arithmetic finally agrees with the report. Get those three right and the supplier ageing conversation becomes arithmetic instead of an argument, which is exactly the conversation a distribution client wants to have in week three."
+		},
+		"ch11": {
+			"file": "ch11.mp3",
+			"voice": "voice-00",
+			"chars": 914,
+			"bytes": 226413,
+			"text": "Stock is the part of ERPNext where a small configuration mistake becomes a very large number. Start with the warehouse tree: four leaves, one root, each with the same stock account, because a wrong default account turns every transfer into a valuation difference. A material transfer moves five blenders from main to retail and leaves the total untouched, which is the check to make every single time. Then the stock count. Fifty units on the system, forty seven on the shelf, three units short at one hundred twenty is three hundred sixty of cost, and the reconciliation posts it to a stock adjustment account that finance must recognise. Finally the reorder rule: two units a day for seven days plus ten safety is twenty four, not a round twenty. Set those three things properly and the stock reports stop being arguments, and start being the evidence the client takes to their auditor at the first stock review."
+		},
+		"ch12": {
+			"file": "ch12.mp3",
+			"voice": "voice-00",
+			"chars": 929,
+			"bytes": 235629,
+			"text": "Valuation is where a consultant earns trust, because the owner will check the margin with a calculator. Under FIFO, each receipt creates a layer, and a sale consumes the oldest first. Ten blenders at one hundred twenty and ten at one hundred thirty gives twenty five hundred of stock. Sell twelve and cost of goods sold is one thousand four hundred sixty, leaving eight units worth one thousand forty. That identity, value in equals value out plus value remaining, is the test for every valuation problem. When a rate was wrong or freight arrived late, the answer is a repost item valuation, not a journal entry, and the system will refuse to run it inside a closed period. And negative stock is a decision, not an accident: block it and operations learns to paperwork faster. Decide it, write it down, and the reports stop arguing. Every valuation question ends the same way: show the identity, then show the rows that prove it."
+		},
+		"ch13": {
+			"file": "ch13.mp3",
+			"voice": "voice-00",
+			"chars": 975,
+			"bytes": 245613,
+			"text": "Journals are where the accounting primer becomes a daily tool. An accrual records a cost before the invoice arrives, and it must reverse, or February carries January's electricity twice. A prepayment is an asset until the cover is used, so one thousand two hundred of insurance becomes one hundred a month, leaving one thousand one hundred on the balance sheet after the first release. Then the bank. Match every statement line, create the bank charge the ledger is missing, and drive the difference to zero with evidence rather than a plug. And when something was posted to the wrong place, amend it inside the open period or reverse it afterwards. Never delete, because the gap is exactly what an auditor looks for first. Practise the four situations until they are reflexes: accrual, prepayment, bank charge, wrong cost centre. Each one has a canonical remedy, and each remedy leaves a document behind, which is what turns a bookkeeping task into a consulting deliverable."
+		},
+		"ch14": {
+			"file": "ch14.mp3",
+			"voice": "voice-00",
+			"chars": 1002,
+			"bytes": 231693,
+			"text": "Month end is a process, not an event, and the consultant who builds the process is the one who gets invited back. Five checks come first: the trial balance, the draft documents, the debtors and creditors control accounts, the bank reconciliation, and stock with tax. When all five are signed, the close can start. January carries twelve thousand of sales, six thousand of cost, and four thousand six hundred eighty of net profit once freight, accrual, insurance and the stock adjustment are counted. The closing voucher moves that to retained earnings and marks the period as reported. At year end the same discipline carries balances into the new year, and the frozen date stops anyone rewriting a year that has already been filed. A close calendar with a name against every task is what makes the process repeatable, and the signed five-page pack is what makes it auditable. Build both once, hand the ownership to the client's finance lead, and the consultant's job becomes review rather than rescue."
+		},
+		"ch15": {
+			"file": "ch15.mp3",
+			"voice": "voice-00",
+			"chars": 970,
+			"bytes": 247149,
+			"text": "Manufacturing scares functional consultants because it looks technical, and it is not. A bill of materials is a recipe: two motors at eighty, one housing at forty, half an hour of assembly at sixty an hour, which gives two hundred thirty per unit. A work order turns demand into a reservation: ten assemblies need twenty motors and ten housings, and nothing has moved yet. The material transfer moves components to the floor, where they are work in progress and still not an expense. Completion consumes the components, adds three hundred of operating cost, and produces ten assemblies at two hundred thirty each. Four documents, one cost, no mystery. If the completion differs from the BOM, check the rate, the time and any extra charges before blaming the system, and write the answer in the production worksheet. A client who can explain a cost per unit from four documents will trust the system with their quotations, and that trust is the whole point of the volume."
+		},
+		"ch16": {
+			"file": "ch16.mp3",
+			"voice": "voice-00",
+			"chars": 959,
+			"bytes": 228621,
+			"text": "Once a client has built something, the next question is what it cost, and the answer has to survive an argument. A completed build of ten assemblies carries two thousand of material and three hundred of labour, so two hundred thirty each, and the entry, the stock ledger and the stock balance must all say the same thing. Scrap is where costing gets real: one unit fails, the total cost does not move, and the nine good units now carry two hundred fifty five fifty six each. Subcontracting adds a bought-in service, twelve ringgit of coating, and a warehouse that must return to zero. Materials, labour, scrap, service: four components, one valuation, and a worksheet that lets the production manager and the accountant argue with numbers instead of opinions. Teach the four components in order, and insist on the worksheet, because a costing conversation without evidence becomes a personality contest, and the consultant is always the outsider in that room."
+		},
+		"ch17": {
+			"file": "ch17.mp3",
+			"voice": "voice-00",
+			"chars": 947,
+			"bytes": 236493,
+			"text": "Services work is deceptively simple, and the margin is where consultants get caught. A project is a cost collector: name it on a timesheet, name it on an invoice, and it carries both sides. Twenty hours at one hundred fifty is three thousand of revenue; twenty hours at eighty is one thousand six hundred of cost; the difference is one thousand four hundred, about forty six per cent. Service tax of eight per cent adds two hundred forty and stays a liability. Record non-billable time anyway, because it costs money even though it cannot be invoiced. Then close the project with a variance note, which is the only way the next quote gets better. A project that is never closed teaches nobody anything and quietly repeats its mistakes. Twenty hours, one rate, one invoice, one margin: when a client can state those four numbers from memory, the services practice is under control, and the next quotation is priced on evidence rather than optimism."
+		},
+		"ch18": {
+			"file": "ch18.mp3",
+			"voice": "voice-00",
+			"chars": 966,
+			"bytes": 244173,
+			"text": "Three modules that clients ask for and rarely operate properly. Fixed assets first: sixty thousand of van becomes twelve thousand a year, one thousand a month, and the register must agree with the control account every month. Quality second: an inspection that rejects one of ten units is the difference between an argument with a supplier and a documented claim. CRM third, and only if somebody owns the pipeline: a lead becomes an opportunity with a value and a probability, twenty four hundred at sixty per cent is fourteen hundred forty, and the quotation is the first document the customer sees. Each module adds a control the client has to run, so sequence them and say plainly what you would leave until year two. Assets and quality carry a control that runs itself once configured; CRM only works when a person owns it, so name that person in the workshop before you switch it on, and put the weekly pipeline review in the same meeting as the sales forecast."
+		},
+		"ch19": {
+			"file": "ch19.mp3",
+			"voice": "voice-00",
+			"chars": 936,
+			"bytes": 223533,
+			"text": "Volume eight is where a functional consultant stops looking like an implementer. Print formats built in the builder give the customer a document worth reading, with the registration and tax number where they belong and totals matching the ledger to the cent. Naming series keep numbering sequential, and a cancelled document keeps its number because reusing one breaks the audit trail. Notifications watch a condition: an order above five thousand emails the sales manager, an order of twelve hundred stays quiet. Letterheads and terms templates make every document look like one company, and they are the easiest handover win because the client can maintain them alone. No code, all configuration, and it all survives the next upgrade. Test five things before handover: one page, matching totals, sequential numbering, one notification above the threshold and silence below it, and a letterhead the client can edit without calling you."
+		},
+		"ch20": {
+			"file": "ch20.mp3",
+			"voice": "voice-00",
+			"chars": 912,
+			"bytes": 230253,
+			"text": "Permissions are the least glamorous part of a project and the part that determines whether it survives an audit. Roles follow the org chart, not the software, and the safe default is read, write, create and submit without delete. User permissions restrict a person to their warehouse or territory, and you prove it by logging in as them, because administrators bypass the filter. Then workflow: a discount above ten per cent waits for the sales manager, and the approver is a role so leave does not stop the business. Finally automation, where one wrong template repeats twelve times a year, so review the first cycle. Configure in that order and the client gets control before convenience, and finish with a quarterly access review that the client signs, because a leaver with live access is the finding every audit produces when nobody owns the list, and when nobody has written down who is allowed to do what."
+		},
+		"ch21": {
+			"file": "ch21.mp3",
+			"voice": "voice-00",
+			"chars": 930,
+			"bytes": 217293,
+			"text": "Malaysian tax is the part clients test you on first, because the numbers go to a government portal. Build separate templates for sales tax and service tax, with separate output and input accounts, because the return needs each box separately. Attach item tax templates so the rate follows the product: ten per cent goods, eight per cent services, zero for exempt with a stored certificate. Then the return: twelve hundred output less one hundred twenty input is one thousand eighty payable, and the same three numbers must appear in the tax summary, the ledger and the form. If they do not, the cause is a draft counted, a credit note that did not reverse tax, or a purchase without an input template. Keep the tax advisor's written confirmation with the configuration worksheet, because rates and thresholds change with every budget, and the consultant who documented the basis is the one who gets called back rather than blamed."
+		},
+		"ch22": {
+			"file": "ch22.mp3",
+			"voice": "voice-00",
+			"chars": 913,
+			"bytes": 219789,
+			"text": "e-Invoice is a deadline, not a feature. Everything starts with master data: company and customer TIN, registration, MSIC, address, and a validated TIN before the first submission. When you submit, you get a submission identifier and an accepted list, but accepted only means the portal has the file. Validated is the state that matters, because that is where the UUID and the QR code come from, and that is the legal tax invoice. Cancellation lives inside seventy two hours with a reason, and after that the remedy is a credit note, which the portal enforces with named errors. Consolidate only consumer sales, self-bill only where the rules allow, and give the finance team a daily dashboard routine: clear rejections, cancel what must be cancelled, and confirm nothing is left pending overnight. A monthly tie-out between validated totals and the sales ledger is the check that keeps the project out of trouble."
+		},
+		"ch23": {
+			"file": "ch23.mp3",
+			"voice": "voice-00",
+			"chars": 947,
+			"bytes": 249069,
+			"text": "Migration is where a project is won or lost, and it starts on paper. A mapping workbook with old values, new values and a named owner for every exception is the document the client signs, and it is what ends arguments in month two. Import in dependency order: company, chart of accounts, warehouses and groups, then items, parties and price lists, then users, and only then opening balances. The opening is a journal dated the day before go-live plus a stock reconciliation, and it must balance: ninety six thousand two hundred ninety of assets against three thousand and sixty eight of liabilities and ninety three thousand two hundred twenty two of equity. If it does not balance, the doors stay closed, because every later correction is harder once documents exist. Map on paper, import in order, prove the opening, and only then open the doors to users, with the evidence table signed so the first audit is a page rather than a reconstruction."
+		},
+		"ch24": {
+			"file": "ch24.mp3",
+			"voice": "voice-00",
+			"chars": 949,
+			"bytes": 238989,
+			"text": "The last two weeks decide how the project is remembered. UAT is not a demo: every case states an action and an expected number, five blenders at two hundred forty plus tax is one thousand three hundred twenty, cost six hundred, gross profit six hundred, and the case passes only when those figures appear. Go or no-go is decided on five rows of evidence, with a written acceptance for anything red. Cut-over is a one-page sequence with owners, and the old system stays readable as a rollback position. Then hypercare: five metrics, fifteen minutes, every morning, ending on the date agreed before go-live. Hand over the runbook, the worksheet, the opening pack and the access review, and step back. The measure of a finished engagement is not the invoice, it is a client running their own close, their own UAT for the next change, and their own access review without calling you, because the rhythm lives in their calendar rather than in your notes."
 		}
 	}
 }

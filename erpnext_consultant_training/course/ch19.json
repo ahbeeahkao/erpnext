@@ -1,0 +1,301 @@
+{
+	"id": "ch19",
+	"number": 19,
+	"title": "Volume 8 · Print Formats, Naming and Notifications",
+	"subtitle": "Lessons 1–4: documents the customer can read, series numbers that survive an audit, and notifications that arrive once",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Build a print format from the builder without writing code",
+		"Set naming series per document type and branch so numbering stays gapless",
+		"Configure a notification that fires on the right event and only once",
+		"Standardise letterheads and terms so every document looks like one company"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Print format",
+			"title": "Design a print format the customer will read",
+			"bullets": [
+				"The print format builder gives you sections, fields and totals without a line of code",
+				"Print only the fields the customer needs: prices, quantities, tax and terms",
+				"Test with a real document, because a short address or a long item name breaks layouts",
+				"Attach a letterhead, or every invoice leaves the building looking improvised"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Printing → Print Format → New",
+						"Document type Sales Invoice, standard format",
+						"Builder canvas with sections"
+					],
+					[
+						"2",
+						"Add header fields",
+						"Customer name, address, invoice number, date, due date",
+						"Header block defined"
+					],
+					[
+						"3",
+						"Add the items table",
+						"Item, quantity, rate, amount, tax",
+						"Table with five columns"
+					],
+					["4", "Add totals", "Net total, tax, grand total", "Totals block"],
+					[
+						"5",
+						"Attach letterhead",
+						"Seri Murni Sdn Bhd with registration and SST number",
+						"Branded footer and header"
+					],
+					["6", "Preview", "Invoice SINV-SM-2026-0010", "One page, totals 3,240.00 with tax 240.00"]
+				]
+			},
+			"notes": "A print format is the only part of ERPNext most customers ever see, and it is judged in five seconds. Two rules cover most of it: put the tax number and the amount due at the bottom where people look, and never print internal fields such as cost or margin. Preview with the longest item name and the shortest address you can find."
+		},
+		{
+			"kicker": "Lesson 2 · Verify the print",
+			"title": "What a Malaysian invoice must show",
+			"bullets": [
+				"Company name, registration and SST number are not optional on a tax invoice",
+				"Invoice number, date, customer details and item description must be legible",
+				"Tax must be shown as a separate amount, not folded into the rate",
+				"Terms and payment instructions reduce the number of calls to accounts"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Company registration and SST number", "both printed", "Print preview header"],
+					["Invoice number and date", "SINV-SM-2026-0010, 10-02-2026", "Print preview"],
+					["Net, tax and total", "3,000.00, 240.00, 3,240.00", "Totals block"],
+					["Payment terms", "Net 30, due 12-03-2026", "Footer"],
+					["Internal fields", "cost and margin absent", "Read the whole page"]
+				]
+			},
+			"notes": "The three totals on the page must match the document to the cent, because an invoice that disagrees with the ledger is the fastest way to lose an accountant's confidence. Print one invoice and reconcile it line by line against the form before you hand the client a template. It takes five minutes and prevents months of quiet distrust."
+		},
+		{
+			"kicker": "Lesson 3 · Naming series",
+			"title": "Series numbers that survive an audit",
+			"bullets": [
+				"Naming series control document numbers, and gaps are the first thing an auditor asks about",
+				"Use the prefix fields rather than renaming series mid-year",
+				"Each branch or company needs its own series when documents are filed separately",
+				"Cancelled documents keep their number, because a reused number is worse than a gap"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open Sales Invoice", "Settings → Naming Series", "Series pattern editor"],
+					["2", "Set the pattern", "SINV-SM-2026-.#####", "Example SINV-SM-2026-00010"],
+					["3", "Set the current value", "10 to continue after the last invoice", "Next number 11"],
+					["4", "Save and create a document", "New sales invoice", "Number SINV-SM-2026-00011"],
+					["5", "Cancel a document", "Cancel the new invoice", "Number stays used, not reused"],
+					["6", "Check the next", "Create another invoice", "Number SINV-SM-2026-00012"]
+				]
+			},
+			"notes": "Gaps are acceptable when a document was cancelled; they are not acceptable when a series was renamed or restarted. Explain that distinction once, and the client's auditor will stop raising it as a finding. Align the prefix with the year and the company abbreviation, because the number is often the only identifier on a customer's remittance advice."
+		},
+		{
+			"kicker": "Lesson 4 · Notifications",
+			"title": "Send the right message once, at the right moment",
+			"bullets": [
+				"A notification watches one document event and applies a condition you write in plain fields",
+				"Send too many and people filter them, so target the exception rather than the routine",
+				"Use the document's own fields in the subject so the message is useful without opening it",
+				"Test with a real document and check the recipient list, not just your own inbox"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Settings → Notification → New",
+						"Document type Sales Order, event Submit",
+						"Condition builder"
+					],
+					["2", "Set the condition", "grand_total greater than 5000", "Condition saved"],
+					["3", "Set recipients", "Role Sales Manager and the owner", "Two recipients defined"],
+					[
+						"4",
+						"Compose the message",
+						"Subject with order number, customer and total",
+						"Template stored"
+					],
+					["5", "Submit a 6,000.00 order", "Sales order for Aeon Big", "One email sent"],
+					["6", "Submit a 1,200.00 order", "Below the threshold", "No email sent"]
+				]
+			},
+			"notes": "Notifications are cheap to create and expensive to overuse, so the rule is one message per exception. A six thousand order triggering a note to the sales manager is a control; every order triggering a note is noise. Test with a document above and a document below the threshold, and check that the message arrives once rather than once per recipient plus the queue."
+		},
+		{
+			"kicker": "Lesson 4 · Verify notifications",
+			"title": "One message, one recipient list, one test",
+			"bullets": [
+				"A notification that fires twice trains people to ignore it, which defeats the control",
+				"Recipients should be roles or owners, not a typed list that rots after a resignation",
+				"The message must be useful without opening the document: number, customer, amount",
+				"Test above and below the condition, and check the queue for duplicates"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Email for a 6,000.00 order", "exactly one", "Recipient inbox and Email Queue"],
+					["Email for a 1,200.00 order", "none", "Recipient inbox"],
+					["Recipients", "Sales Manager role plus document owner", "Notification definition"],
+					["Subject line", "order number, customer and total present", "The received email"],
+					["Document link", "opens the submitted order", "Click the link in the email"]
+				]
+			},
+			"notes": "A notification is a control only if it is reliable, so test the failure case as carefully as the success case. Duplicate emails usually come from two notifications watching the same event, which is worth checking in the list before blaming the system. Keep one notification per exception and delete the rest."
+		},
+		{
+			"kicker": "Lesson 5 · Letterhead and terms",
+			"title": "Make every document look like one company",
+			"bullets": [
+				"A letterhead holds the logo, address and registration details used across all documents",
+				"Terms and conditions templates attach to quotations, orders and invoices without retyping",
+				"Both are configuration, so the client's team can maintain them after handover",
+				"Set a default so nobody has to remember to pick the right template"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Settings → Letterhead → New",
+						"Company name, address, registration, SST number",
+						"Letterhead saved"
+					],
+					["2", "Attach the image", "Logo at 200 pixels wide", "Logo renders on preview"],
+					[
+						"3",
+						"Create terms",
+						"Terms and Conditions template Payment Terms",
+						"Template body stored"
+					],
+					[
+						"4",
+						"Set defaults",
+						"Company → default letterhead and terms",
+						"Applied to new documents"
+					],
+					["5", "Print a quotation", "QT-SM-2026-0003", "Header, terms and footer all present"],
+					["6", "Hand over", "Show the client how to edit both", "They maintain it themselves"]
+				]
+			},
+			"notes": "These two settings are what make a system look finished, and they are also the easiest handover win. Show the client's administrator how to change an address or a term without a consultant, and they stop calling you for the small things. That is a commercial decision as much as a technical one."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "What a consultant configures without code",
+			"bullets": [
+				"Everything in this volume is standard configuration, so it survives an upgrade",
+				"Print, series, notifications, letterhead and terms are all client-maintainable",
+				"Custom code is out of scope for a functional consultant, and usually unnecessary",
+				"Each item below has a named owner after handover"
+			],
+			"table": {
+				"headers": ["Configuration", "Where", "Owner after go-live", "Risk if ignored"],
+				"rows": [
+					["Print format", "Printing → Print Format", "Admin", "Documents look unbranded"],
+					[
+						"Naming series",
+						"Document settings",
+						"Finance manager",
+						"Duplicate or gapless-invalid numbers"
+					],
+					[
+						"Notification",
+						"Settings → Notification",
+						"Sales manager",
+						"Exceptions discovered late"
+					],
+					["Letterhead", "Settings → Letterhead", "Admin", "Inconsistent customer documents"],
+					["Terms template", "Settings → Terms", "Finance manager", "Terms retyped and mistyped"]
+				]
+			},
+			"notes": "This page is the answer when a client asks for a custom print script: everything they actually want is here, in configuration, and it will still work after the next upgrade. Say that with confidence, because a functional consultant who reaches for code has left their own discipline."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "Testing print and notification changes",
+			"bullets": [
+				"Test with a real document in a real state, never with a blank form",
+				"Check the edge cases: long names, many lines, zero tax, foreign currency",
+				"Keep a before and after copy of each template, so a change can be reversed",
+				"Re-test after every upgrade, because print and notifications are the first casualties"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Invoice prints on one page", "yes, including terms", "Print preview"],
+					["Totals match the document", "3,240.00 with 240.00 tax", "Compare form and print"],
+					["Series continues", "next number sequential", "New document"],
+					["Notification fires once", "one email for a 6,000.00 order", "Recipient inbox"],
+					["Notification silent below threshold", "no email for 1,200.00", "Recipient inbox"]
+				]
+			},
+			"notes": "Testing is where most consultants lose an afternoon, so make it a checklist rather than an experiment. Five checks, five minutes, and the client sees a document they are happy to send. When an upgrade arrives, run the same five and you know within ten minutes whether anything broke."
+		}
+	],
+	"lab": {
+		"title": "Lab · Brand the invoice, set the series and trigger one notification",
+		"minutes": 45,
+		"steps": [
+			"Create a letterhead with the company registration and SST number",
+			"Build a sales invoice print format with header, items and totals",
+			"Preview an invoice and confirm net 3,000.00, tax 240.00 and total 3,240.00",
+			"Set the naming series to SINV-SM-2026-.##### and continue from the last number",
+			"Create and cancel a document to confirm the number is not reused",
+			"Create a notification for sales orders above 5,000.00 on submit",
+			"Submit a 6,000.00 order and confirm exactly one email",
+			"Submit a 1,200.00 order and confirm no email"
+		],
+		"done": "Done when a printed invoice carries the registration and SST number with totals matching the ledger, the series is sequential without reuse, and the notification fires only above the threshold."
+	},
+	"quiz": [
+		{
+			"question": "Where do you build a print format without code?",
+			"options": ["Custom script", "Print Format Builder", "Server script", "Jinja file"],
+			"answer": 1,
+			"why": "The Print Format Builder assembles sections, fields and totals through configuration, which survives upgrades and needs no development."
+		},
+		{
+			"question": "Why must cancelled documents keep their numbers?",
+			"options": [
+				"To save space",
+				"Because reusing a number breaks the audit trail",
+				"So tax can be claimed",
+				"To speed printing"
+			],
+			"answer": 1,
+			"why": "A cancelled document is still a document, and reusing its number creates two documents with one identity, which auditors treat as a control failure."
+		},
+		{
+			"question": "A notification condition of grand_total greater than 5000 will fire for which order?",
+			"options": ["1,200.00", "3,240.00", "6,000.00", "4,999.00"],
+			"answer": 2,
+			"why": "Only the 6,000.00 order exceeds the threshold. Testing both sides of the condition is part of configuring it."
+		},
+		{
+			"question": "Which detail should be absent from a customer-facing print format?",
+			"options": ["Tax amount", "Payment terms", "Item cost and margin", "Company registration"],
+			"answer": 2,
+			"why": "Cost and margin are internal. Printing them exposes commercial information to the customer and is a common builder mistake."
+		},
+		{
+			"question": "Who should own the letterhead after handover?",
+			"options": [
+				"The consultant permanently",
+				"The client's administrator",
+				"The developer",
+				"Nobody"
+			],
+			"answer": 1,
+			"why": "Letterheads and terms are configuration, so handing ownership to the client's administrator removes a recurring support cost and speeds small changes."
+		}
+	],
+	"narration": "Volume eight is where a functional consultant stops looking like an implementer. Print formats built in the builder give the customer a document worth reading, with the registration and tax number where they belong and totals matching the ledger to the cent. Naming series keep numbering sequential, and a cancelled document keeps its number because reusing one breaks the audit trail. Notifications watch a condition: an order above five thousand emails the sales manager, an order of twelve hundred stays quiet. Letterheads and terms templates make every document look like one company, and they are the easiest handover win because the client can maintain them alone. No code, all configuration, and it all survives the next upgrade. Test five things before handover: one page, matching totals, sequential numbering, one notification above the threshold and silence below it, and a letterhead the client can edit without calling you."
+}

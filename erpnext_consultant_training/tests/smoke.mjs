@@ -74,17 +74,18 @@ await app.boot({ fetch: fetchFromDisk });
 
 const chapterOne = app.state.chapters[0];
 
-check("boot loads all eight chapters", () => {
-	assert.equal(app.state.chapters.length, 8);
-	assert.equal(app.state.chapters[7].id, "ch08");
+check("boot loads all twenty-four chapters", () => {
+	assert.equal(app.state.chapters.length, 24);
+	assert.equal(app.state.chapters[23].id, "ch24");
 	assert.match(app.state.manifest.title, /Consultant/);
 });
 
 check("sidebar lists every chapter with its number", () => {
 	const items = $$(".chapter-item");
-	assert.equal(items.length, 8);
+	assert.equal(items.length, 24);
 	assert.match(items[0].textContent, /01/);
 	assert.match(items[7].textContent, /Reality|Volume 2/);
+	assert.match(items[23].textContent, /UAT|Go-Live/);
 });
 
 check("the first slide is the chapter intro", () => {
@@ -232,7 +233,7 @@ check("keyboard navigation moves the deck", () => {
 check("the print view contains every chapter, lab and quiz answer", () => {
 	app.buildPrintView();
 	const view = $("#print-view");
-	assert.equal(view.querySelectorAll(".print-chapter").length, 8);
+	assert.equal(view.querySelectorAll(".print-chapter").length, 24);
 	assert.match(view.textContent, /Quiz with answers/);
 	assert.match(view.textContent, /Answer:/);
 });

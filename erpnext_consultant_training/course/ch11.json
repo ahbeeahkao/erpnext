@@ -1,0 +1,386 @@
+{
+	"id": "ch11",
+	"number": 11,
+	"title": "Volume 4 · Warehouses, Transfers and Stock Counts",
+	"subtitle": "Lessons 1–4: a warehouse tree that matches how the business moves goods, transfers that keep stock whole, and counts that post the truth",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Lay out a warehouse tree that operations and finance both accept",
+		"Transfer stock between warehouses without changing total quantity or value",
+		"Run a stock count and post the difference to the right account",
+		"Configure reorder rules so shortages surface before a customer does"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Warehouse tree",
+			"title": "Design the warehouse tree before the first transfer",
+			"bullets": [
+				"A warehouse is a location with a ledger, not a shelf, so each one must earn its place",
+				"Every warehouse has default accounts, and a wrong default quietly corrupts valuation",
+				"Goods In Transit only earns its place when goods genuinely leave one site and arrive at another",
+				"Create the tree before any transaction, because moving stock later leaves a migration trail"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Stock → Warehouse → New",
+						"Main - SM, parent All Warehouses, company SM",
+						"Warehouse saved, is group unticked"
+					],
+					[
+						"2",
+						"Add Warehouse",
+						"Retail Counter - SM, parent All Warehouses",
+						"Second leaf warehouse"
+					],
+					[
+						"3",
+						"Add Warehouse",
+						"Assembly Floor - SM, parent All Warehouses",
+						"Third leaf warehouse"
+					],
+					[
+						"4",
+						"Add Warehouse",
+						"Returns Quarantine - SM, parent All Warehouses",
+						"Fourth leaf warehouse"
+					],
+					[
+						"5",
+						"Set accounts on each",
+						"Stock account Stock In Hand - SM",
+						"Same stock account, separate locations"
+					],
+					["6", "Open the tree view", "Stock → Warehouse", "Four leaves under one root, no orphans"]
+				]
+			},
+			"notes": "Clients often want a warehouse per van, per salesperson or per shelf, which turns every report into noise. The test is simple: if you would never ask for the stock ledger of that location alone, it is not a warehouse. Four leaves cover most Malaysian distributors, and adding a fifth later is easy, whereas collapsing seven into four is a weekend of transfers."
+		},
+		{
+			"kicker": "Lesson 2 · Reference",
+			"title": "What each warehouse is actually for",
+			"bullets": [
+				"Location names should describe physical truth, not reporting ambition",
+				"Quarantine keeps damaged or returned goods visible without counting them as sellable",
+				"Assembly floor stock is committed to production, so it belongs in a separate ledger",
+				"A retail counter needs its own ledger because its stock is priced and counted differently"
+			],
+			"table": {
+				"headers": ["Warehouse", "Holds", "Valuation effect", "Consultant rule"],
+				"rows": [
+					[
+						"Main - SM",
+						"Bulk stock for fulfilment",
+						"Primary FIFO layers",
+						"One default selling warehouse"
+					],
+					[
+						"Retail Counter - SM",
+						"Display and walk-in units",
+						"Same valuation, separate quantity",
+						"Counted weekly, not monthly"
+					],
+					[
+						"Assembly Floor - SM",
+						"Components issued to work orders",
+						"Moves to work in progress",
+						"Never sell from here"
+					],
+					[
+						"Returns Quarantine - SM",
+						"Returned or damaged goods",
+						"Still owned, still valued",
+						"Inspect before restocking"
+					],
+					[
+						"Goods In Transit - SM",
+						"Stock between sites",
+						"Moves with the transfer",
+						"Only for real shipments"
+					]
+				]
+			},
+			"notes": "This table is worth pasting into the configuration worksheet, because it converts a vague conversation into four decisions the client signs off. The quarantine warehouse is the one clients resist and later thank you for, since it stops returned goods being sold twice. If a client insists on one warehouse for everything, write down who will reconcile the differences each month."
+		},
+		{
+			"kicker": "Lesson 3 · Material transfer",
+			"title": "Move stock without changing who owns it",
+			"bullets": [
+				"A material transfer shifts quantity between warehouses and leaves the total untouched",
+				"FIFO valuation travels with the goods, so the destination inherits the oldest layer",
+				"Transfer the quantity that physically moved, not the quantity you wish had moved",
+				"Use the Stock Entry transfer type, never a purchase and sale pair inside one company"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Stock → Stock Entry → New",
+						"Type Material Transfer, company SM",
+						"Source and target warehouse fields appear"
+					],
+					[
+						"2",
+						"Set warehouses",
+						"From Main - SM, to Retail Counter - SM",
+						"Same company on both sides"
+					],
+					["3", "Add the item", "SM-BL200, quantity 5", "Source availability 50 units shown"],
+					["4", "Save and Submit", "Confirm", "Stock Entry STE-SM-2026-0001 submitted"],
+					[
+						"5",
+						"Check the bins",
+						"Main and Retail Counter",
+						"Main 45, Retail Counter 5, total 50 unchanged"
+					],
+					[
+						"6",
+						"Read the stock ledger",
+						"Filter the stock entry",
+						"Two rows: -5 at Main, +5 at Retail, same rate"
+					]
+				]
+			},
+			"notes": "Two ledger rows, one quantity, one valuation: that is what a transfer should look like. If the source and destination rates differ without a landed cost, someone has allowed different valuation on the destination warehouse, and the difference lands in a stock adjustment account that nobody owns. Check both rows every time until the client's team does it by habit."
+		},
+		{
+			"kicker": "Lesson 3 · Verify the transfer",
+			"title": "Two rows, one quantity, one valuation",
+			"bullets": [
+				"A transfer should appear as one outgoing and one incoming row at the same rate",
+				"Total quantity and total value across the company must be identical before and after",
+				"A rate difference between the two rows means the destination warehouse has its own valuation",
+				"Stock in transit is only used when goods genuinely travel between sites"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Main quantity", "45 after transferring 5", "Stock → Bin, Main - SM"],
+					["Retail Counter quantity", "5", "Stock → Bin, Retail Counter - SM"],
+					["Total quantity", "50, unchanged", "Stock Balance across both warehouses"],
+					["Rate on both rows", "120.00", "Stock Ledger, filter the stock entry"],
+					["Stock in transit", "0, no transit warehouse used", "Stock Ledger, transit account"]
+				]
+			},
+			"notes": "Two rows at the same rate is what a clean transfer looks like, and anything else is a configuration problem rather than a stock problem. If the destination rate differs, the warehouse carries its own valuation method or its own stock account, and the difference will land in an adjustment account nobody owns. Check both rows before you move on to counting."
+		},
+		{
+			"kicker": "Lesson 4 · Stock count",
+			"title": "Count the shelf and post the difference",
+			"bullets": [
+				"Stock reconciliation is the only honest way to correct a quantity after a physical count",
+				"The difference posts to a stock adjustment account, which finance must recognise as a cost",
+				"Count before you post, and post once, because every reconciliation is a permanent ledger row",
+				"Reconciled units keep the current valuation rather than inventing a new one"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Stock → Stock Reconciliation → New",
+						"Company SM, posting date 31-01-2026",
+						"Empty reconciliation form"
+					],
+					["2", "Add the item", "SM-BL200 at Main, quantity 47", "Current quantity shown as 50"],
+					[
+						"3",
+						"Set the difference account",
+						"Stock Adjustment - SM",
+						"Account required before submit"
+					],
+					["4", "Save and Submit", "Confirm", "Reconciliation SR-SM-2026-0001 submitted"],
+					[
+						"5",
+						"Read the stock ledger",
+						"Filter the reconciliation",
+						"One row: -3 units at 120.00, value 360.00"
+					],
+					[
+						"6",
+						"Check the general ledger",
+						"Stock Adjustment account",
+						"Debit 360.00 posted as a cost"
+					]
+				]
+			},
+			"notes": "Three units short is 360.00 of cost, and the client must decide whether that is shrinkage, a picking error or a missed delivery. The system will not make that call for them, and a consultant should not either. What you do insist on is a count sheet with a signature and a reason code, so the loss has an owner rather than appearing as an unexplained line in the profit and loss statement."
+		},
+		{
+			"kicker": "Lesson 5 · Reorder rules",
+			"title": "Set reorder levels so shortages arrive early",
+			"bullets": [
+				"Reorder level is the trigger, reorder quantity is the batch, and both belong in the item",
+				"The reorder report turns levels into a material request, which is the consultant-friendly path",
+				"Calculate lead time first: two units a day for seven days plus ten safety is twenty four",
+				"A reorder level set by feel produces either stockouts or dead stock within a quarter"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open item SM-BL200", "Reorder section", "Warehouse-wise reorder table"],
+					[
+						"2",
+						"Add warehouse row",
+						"Main - SM, reorder level 24, reorder quantity 20",
+						"Row saved on the item"
+					],
+					["3", "Enable the rule", "Tick the item as reorder enabled", "Rule becomes active"],
+					["4", "Drop stock", "Sell down to 22 units at Main", "Below the reorder level"],
+					[
+						"5",
+						"Run the report",
+						"Stock → Item Reorder Level report",
+						"SM-BL200 listed as below level"
+					],
+					[
+						"6",
+						"Create from the report",
+						"Material Request for 20 units",
+						"Draft request to buying"
+					]
+				]
+			},
+			"notes": "Twenty four is not a round number and that is the point: two units a day for seven days of lead time equals fourteen, plus ten of safety stock. When a client asks why not twenty, the arithmetic answers for you and they stop treating the number as taste. Pair the level with a reorder quantity that matches the supplier's carton, or every purchase order will carry an awkward remainder."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the count and the rule",
+			"title": "What the reports should say afterwards",
+			"bullets": [
+				"Bin quantity, stock ledger total and stock balance must all agree after any movement",
+				"Total stock value across warehouses must be unchanged by transfers and cut only by counts",
+				"The reorder report is a to-do list, so it must be short and actionable",
+				"Any stock adjustment account balance is a conversation, not a rounding difference"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Main quantity", "47 after the transfer and count", "Stock → Bin, Main - SM"],
+					["Retail Counter quantity", "5", "Stock → Bin, Retail Counter - SM"],
+					["Total stock value", "5,640.00 at 120.00 per unit", "Stock Balance report"],
+					["Stock adjustment this period", "360.00", "General Ledger, Stock Adjustment - SM"],
+					["Items below reorder level", "SM-BL200 only", "Item Reorder Level report"]
+				]
+			},
+			"notes": "Ask the learner to prove total value before and after: fifty units at one hundred twenty is six thousand, transfers change nothing, and a three unit shortage leaves forty seven units worth five thousand six hundred forty. When those three numbers agree, the warehouse model is sound and the client can be shown the reports without a caveat."
+		},
+		{
+			"kicker": "Volume 4 · Reference",
+			"title": "Stock entry types and when to use them",
+			"bullets": [
+				"Each stock entry type answers a different question, and choosing wrong leaves a ledger scar",
+				"Receipts and issues belong to purchases and production, not to ad-hoc corrections",
+				"Manufacture is the only type that consumes components and produces a finished item together",
+				"Repack converts one item into another, which suits bundling but not repricing"
+			],
+			"table": {
+				"headers": ["Stock Entry type", "Use when", "Cost effect", "Trap to avoid"],
+				"rows": [
+					[
+						"Material Transfer",
+						"Stock moves between warehouses",
+						"No value change",
+						"Using it for a sale"
+					],
+					[
+						"Material Issue",
+						"Stock leaves without a sale",
+						"Expense at valuation",
+						"Issuing to hide shrinkage"
+					],
+					[
+						"Material Receipt",
+						"Stock appears without a purchase",
+						"Adds value at your rate",
+						"Receipting before paperwork exists"
+					],
+					[
+						"Manufacture",
+						"Components become a finished item",
+						"Absorbs materials and operations",
+						"Forgetting to consume components"
+					],
+					[
+						"Repack",
+						"One item becomes another",
+						"Carries the source value",
+						"Using it to change prices"
+					]
+				]
+			},
+			"notes": "Consultants are asked to fix stock with a stock entry roughly once a week, and the honest answer is usually no. Show the client this table and ask which row their situation belongs to. If the answer is none, the real fix is in the process or the master data, and a stock entry would only hide the problem in a ledger account that nobody reads."
+		}
+	],
+	"lab": {
+		"title": "Lab · Build the warehouse tree, transfer, count and reorder",
+		"minutes": 45,
+		"steps": [
+			"Create the four leaf warehouses under All Warehouses and set the stock account on each",
+			"Record the opening 50 units of SM-BL200 at Main at 120.00",
+			"Transfer 5 units from Main to Retail Counter and prove the total is unchanged",
+			"Read both stock ledger rows and confirm the rate carried across",
+			"Post a stock reconciliation to 47 units at Main with the stock adjustment account",
+			"Confirm the 360.00 posting and the new total value of 5,640.00",
+			"Set reorder level 24 and reorder quantity 20 on the item for Main warehouse",
+			"Sell down below 24 and confirm the item appears in the reorder report"
+		],
+		"done": "Done when both bins agree with the stock ledger, total value is 5,640.00, the stock adjustment account shows 360.00, and the reorder report lists only SM-BL200."
+	},
+	"quiz": [
+		{
+			"question": "What does a material transfer do to total stock value?",
+			"options": [
+				"Increases it by the transfer rate",
+				"Leaves it unchanged",
+				"Decreases it by freight",
+				"Moves it to an expense"
+			],
+			"answer": 1,
+			"why": "A transfer moves quantity and value between warehouses within the same company, so the total quantity and total value are unchanged."
+		},
+		{
+			"question": "Which document corrects a quantity after a physical count?",
+			"options": [
+				"Stock Entry of type Material Issue",
+				"Stock Reconciliation",
+				"Journal Entry",
+				"Purchase Return"
+			],
+			"answer": 1,
+			"why": "Stock Reconciliation compares the counted quantity with the system quantity and posts the difference to a stock adjustment account."
+		},
+		{
+			"question": "With a reorder point of 2 units a day, 7 days of lead time and 10 units of safety stock, the level is what?",
+			"options": ["14", "17", "24", "20"],
+			"answer": 2,
+			"why": "Demand during lead time is 2 × 7 = 14, plus 10 safety gives 24. Round numbers chosen by feel are how stockouts start."
+		},
+		{
+			"question": "Where does a stock reconciliation difference post?",
+			"options": [
+				"Cost of Goods Sold directly",
+				"The stock adjustment account you set",
+				"The creditor account",
+				"The tax account"
+			],
+			"answer": 1,
+			"why": "The difference posts to the stock adjustment account named on the document, which finance treats as an operating cost and reviews monthly."
+		},
+		{
+			"question": "Why keep a Returns Quarantine warehouse?",
+			"options": [
+				"To avoid paying tax on returns",
+				"To keep returned goods visible but unsellable",
+				"To store suppliers' goods",
+				"To hold fixed assets"
+			],
+			"answer": 1,
+			"why": "Returned goods remain owned and valued, and quarantine makes that visible so nobody sells them again before inspection."
+		}
+	],
+	"narration": "Stock is the part of ERPNext where a small configuration mistake becomes a very large number. Start with the warehouse tree: four leaves, one root, each with the same stock account, because a wrong default account turns every transfer into a valuation difference. A material transfer moves five blenders from main to retail and leaves the total untouched, which is the check to make every single time. Then the stock count. Fifty units on the system, forty seven on the shelf, three units short at one hundred twenty is three hundred sixty of cost, and the reconciliation posts it to a stock adjustment account that finance must recognise. Finally the reorder rule: two units a day for seven days plus ten safety is twenty four, not a round twenty. Set those three things properly and the stock reports stop being arguments, and start being the evidence the client takes to their auditor at the first stock review."
+}

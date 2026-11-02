@@ -1,0 +1,356 @@
+{
+	"id": "ch13",
+	"number": 13,
+	"title": "Volume 5 · Journals, Accruals and the Bank",
+	"subtitle": "Lessons 1–4: the four journal situations a consultant meets every month, and a bank reconciliation that closes to zero",
+	"level": "Advanced",
+	"minutes": 55,
+	"outcomes": [
+		"Post accruals and prepayments that reverse cleanly in the next period",
+		"Read any journal entry and say which reports it will move",
+		"Reconcile a bank statement to the ledger without a plug figure",
+		"Correct a misposting with a reversal or amendment rather than an edit"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Journal entry",
+			"title": "Post an accrual that survives the close",
+			"bullets": [
+				"An accrual records a cost in the month it was incurred, before the invoice arrives",
+				"The journal must name the same cost centre and cost type the invoice will later use",
+				"Use a dedicated accrued liabilities account, never the creditor control account",
+				"Every accrual needs a reversal date, or last month's cost is counted twice"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Journal Entry → New",
+						"Entry type Journal Entry, date 31-01-2026",
+						"Empty double-entry grid"
+					],
+					[
+						"2",
+						"First row",
+						"Electricity - SM, debit 800.00, cost centre Main - SM",
+						"Debit row accepted"
+					],
+					["3", "Second row", "Accrued Expenses - SM, credit 800.00", "Difference shows 0.00"],
+					["4", "Reference", "TNB January bill not yet received", "Remark stored for the auditor"],
+					["5", "Save and Submit", "Confirm", "Journal JE-SM-2026-0001 submitted"],
+					[
+						"6",
+						"Read the GL",
+						"Filter the journal voucher",
+						"Dr Electricity 800.00, Cr Accrued Expenses 800.00"
+					]
+				]
+			},
+			"notes": "The accrual is not the hard part; the reversal is. Teach the learner to write the reversal date in the remark before submitting, because the person who reverses it in February is usually someone else. A dedicated accrued liabilities account also keeps the creditor control account honest, which matters the moment the client runs an ageing report and finds a supplier they never bought from."
+		},
+		{
+			"kicker": "Lesson 2 · Verify the journal",
+			"title": "Read a journal the way an auditor does",
+			"bullets": [
+				"A journal touches only the accounts you name, so nothing is hidden by a document type",
+				"Debits must equal credits before you look at any report",
+				"If a party is named, the entry moves the party ledger as well as the account",
+				"A journal that adjusts debtors directly is usually a workaround, not a correction"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Debit total equals credit total", "800.00 = 800.00", "Journal Entry footer"],
+					["Profit and loss effect", "expense up 800.00", "Profit and Loss Statement, January"],
+					["Balance sheet effect", "accrued liabilities up 800.00", "Balance Sheet, 31-01-2026"],
+					["Party ledger rows", "none, no party named", "Accounts → Party Ledger"],
+					["Cost centre split", "Main - SM 800.00", "Cost Center-wise P&L"]
+				]
+			},
+			"notes": "The fastest way to teach this is to ask which two reports move before the entry is submitted, then check. Expense up, liability up, profit down, cash untouched. A learner who can recite that for any journal is ready to sit in front of an accountant, because the accountant's first question is always which line changes."
+		},
+		{
+			"kicker": "Lesson 3 · Prepayment",
+			"title": "Release a prepayment month by month",
+			"bullets": [
+				"A prepayment is an asset until the cover it buys is consumed",
+				"One twelfth per month is the discipline that keeps the balance sheet believable",
+				"Post the release as a journal, not by editing the original payment",
+				"Keep a schedule with twelve dates, because a spreadsheet is the audit evidence"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Purchase invoice",
+						"Insurance Premium 1,200.00 paid for twelve months",
+						"Expense posted on payment"
+					],
+					[
+						"2",
+						"Reclassify",
+						"Journal: Dr Prepaid Insurance 1,200.00, Cr Insurance Expense 1,200.00",
+						"Balance moved to the asset"
+					],
+					[
+						"3",
+						"Monthly release",
+						"Journal: Dr Insurance Expense 100.00, Cr Prepaid Insurance 100.00",
+						"One month consumed"
+					],
+					[
+						"4",
+						"Repeat",
+						"Same journal on the last day of each month",
+						"Eleven remaining, if starting in February"
+					],
+					["5", "Check the balance", "Prepaid Insurance account", "1,100.00 after one release"],
+					[
+						"6",
+						"Attach the schedule",
+						"Twelve dated rows in the worksheet",
+						"Evidence for the auditor"
+					]
+				]
+			},
+			"notes": "Clients rarely object to the reclass, but they do object to eleven manual journals appearing every year. Show them the schedule first and agree who posts it, finance or the consultant, because an unposted release is the most common cause of a prepaid balance that never clears. If the amount is below the client's capitalisation threshold, say so and skip it."
+		},
+		{
+			"kicker": "Lesson 4 · Verify the prepayment",
+			"title": "The prepaid schedule balances",
+			"bullets": [
+				"The prepaid balance must equal the unexpired months multiplied by the monthly amount",
+				"Expense recognised so far plus remaining prepayment equals the original invoice",
+				"A prepayment with no schedule is a suspense account in disguise",
+				"Check the cost centre, because prepaid insurance is often split across branches"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Original prepayment", "1,200.00", "Purchase Invoice for the premium"],
+					["Months released", "1 of 12", "Journal entries this period"],
+					["Prepaid Insurance balance", "1,100.00", "Balance Sheet, 31-01-2026"],
+					["Insurance expense this month", "100.00", "Profit and Loss Statement"],
+					["Expense plus prepaid", "100.00 plus 1,100.00 equals 1,200.00", "Your own arithmetic"]
+				]
+			},
+			"notes": "The identity here is the same shape as the stock identity, and that repetition is useful: whatever the topic, the proof is that the parts add to the whole. When a client's prepaid balance does not divide neatly into twelve, either the cover period is wrong or a month was posted twice, and both are five-minute fixes if caught in the same period."
+		},
+		{
+			"kicker": "Lesson 5 · Bank reconciliation",
+			"title": "Reconcile the statement to the ledger, not to a plug",
+			"bullets": [
+				"Reconciliation proves every line on the statement exists in the ledger, and vice versa",
+				"Unreconciled payments are usually timing, but two in a row means a real error",
+				"Use the bank reconciliation tool so the evidence is stored against each voucher",
+				"Agree the closing balance first, then work backwards through unmatched lines"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Bank Reconciliation",
+						"Bank - SM, 31-01-2026",
+						"Statement and ledger side by side"
+					],
+					[
+						"2",
+						"Enter the statement closing balance",
+						"18,450.00",
+						"Difference against the ledger shown"
+					],
+					[
+						"3",
+						"Match the 1,320.00 receipt",
+						"Aeon Big payment PE-SM-2026-0002",
+						"Row ticked, difference falls"
+					],
+					[
+						"4",
+						"Match the 1,320.00 supplier payment",
+						"Sunrise Components payment",
+						"Second row ticked"
+					],
+					[
+						"5",
+						"Review unmatched lines",
+						"Bank charges 35.00 not in ledger",
+						"Create the charge entry"
+					],
+					["6", "Finish", "Difference 0.00", "Reconciliation dated and saved"]
+				]
+			},
+			"notes": "Bank charges are the classic missing entry: the statement knows about them and the ledger does not, so the difference never clears by matching. Guide the learner to create the small entry rather than leaving a 35.00 variance, because a reconciliation with a plug figure teaches the client that the tool is decorative."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the reconciliation",
+			"title": "What a clean reconciliation actually proves",
+			"bullets": [
+				"Every statement line matched means cash is fully explained for the period",
+				"The reconciled ledger balance equals the statement balance at the cut-off date",
+				"Unpresented cheques and deposits in transit remain as timing differences, and they must be listed",
+				"A zero difference with matched lines is evidence, whereas a zero difference typed by hand is not"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Statement closing balance", "18,450.00", "Bank statement"],
+					["Ledger balance at the same date", "18,450.00", "General Ledger, Bank - SM"],
+					["Matched lines", "all except listed timing items", "Bank Reconciliation screen"],
+					["Unpresented cheques", "listed with numbers and dates", "Reconciliation worksheet"],
+					["Difference", "0.00", "Reconciliation footer"]
+				]
+			},
+			"notes": "This is the one reconciliation a client will sign without argument, because the bank is the independent third party. Use it as the pattern for the others: start from the external document, prove every line, and list the timing differences rather than absorbing them. A consultant who can close a bank reconciliation in ten minutes is trusted with the rest of the close."
+		},
+		{
+			"kicker": "Lesson 7 · Corrections",
+			"title": "Correct a mistake with a reversal, not an edit",
+			"bullets": [
+				"Submitted entries are history, so the remedy is a reversal or an amendment with a trail",
+				"Cancelling a journal removes its ledger effect and leaves the document visible as cancelled",
+				"Amending keeps a link between versions, which is what an auditor reads",
+				"Never delete a document to fix a number, and never journal against a control account"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the wrong journal",
+						"JE-SM-2026-0001, posted to the wrong cost centre",
+						"Submitted document"
+					],
+					[
+						"2",
+						"Choose the remedy",
+						"Amend, because the document is in an open period",
+						"New version marked amended"
+					],
+					["3", "Change the cost centre", "From Retail Counter to Main - SM", "Amounts unchanged"],
+					["4", "Save and Submit", "Confirm", "Amendment recorded with a version history"],
+					[
+						"5",
+						"Alternative remedy",
+						"Cancel and create a reversing journal",
+						"Original shown as cancelled"
+					],
+					["6", "Check both accounts", "Cost centre-wise P&L", "Only Main carries the 800.00"]
+				]
+			},
+			"notes": "Give the learner both remedies and the rule that chooses between them: amend inside the open period, reverse once the period is closed or reported. What is never acceptable is deleting the document, because the gap it leaves is exactly what an auditor looks for. Say that sentence in the workshop and the client's finance team will repeat it."
+		},
+		{
+			"kicker": "Volume 5 · Reference",
+			"title": "When a journal is the right document",
+			"bullets": [
+				"Journals belong to adjustments, not to transactions that have their own document",
+				"If a purchase or sale happened, use the invoice; a journal hides the tax and the party",
+				"Accruals, prepayments, depreciation and corrections are the natural journal cases",
+				"Every journal needs a reason in the remark, because the next reader has no context"
+			],
+			"table": {
+				"headers": ["Situation", "Right document", "Why", "Never do this"],
+				"rows": [
+					[
+						"Goods bought on credit",
+						"Purchase Invoice",
+						"Creates creditor and input tax",
+						"Journal to stock and creditors"
+					],
+					[
+						"Cost incurred, invoice not received",
+						"Journal Entry",
+						"Accrual with a reversal date",
+						"Leave it unrecorded until the bill"
+					],
+					[
+						"Insurance paid for a year",
+						"Invoice plus journals",
+						"Reclassify, then release monthly",
+						"Expense it all in month one"
+					],
+					[
+						"Depreciation",
+						"Journal Entry",
+						"Asset and accumulated depreciation",
+						"Adjust the asset value directly"
+					],
+					["Wrong cost centre", "Amend or reverse", "Keeps the audit trail", "Delete and re-enter"]
+				]
+			},
+			"notes": "Consultants are tempted to solve awkward data with a journal because it is quick, and that is how control accounts end up with unexplained balances. This table gives the learner a defensible answer in the meeting: if the transaction happened, use its document; if only the timing happened, use a journal. The remark field is not optional either, since the next reader is usually the client's auditor."
+		}
+	],
+	"lab": {
+		"title": "Lab · Accrue, prepay, reconcile the bank and correct a posting",
+		"minutes": 45,
+		"steps": [
+			"Post the 800.00 electricity accrual dated 31-01-2026 with a cost centre",
+			"Confirm profit falls by 800.00 and accrued liabilities rise by the same amount",
+			"Reclassify the 1,200.00 insurance premium to prepaid and release one month",
+			"Prove expense plus prepaid equals the original 1,200.00",
+			"Reconcile Bank - SM to a statement closing balance of 18,450.00",
+			"Create the 35.00 bank charge that the statement shows and the ledger does not",
+			"Take the reconciliation difference to 0.00 and save the evidence",
+			"Amend the misposted journal and confirm only the correct cost centre carries it"
+		],
+		"done": "Done when the accrual and the prepayment both reconcile to their identities, the bank reconciliation shows 0.00 difference with every line matched or listed, and the corrected journal has a version trail."
+	},
+	"quiz": [
+		{
+			"question": "Why must an accrual carry a reversal date?",
+			"options": [
+				"So the tax can be claimed",
+				"So the cost is not counted twice when the invoice arrives",
+				"So the party ledger stays clean",
+				"So the bank reconciles"
+			],
+			"answer": 1,
+			"why": "The invoice will post the same cost when it arrives, so the accrual must reverse in the following period to avoid double counting."
+		},
+		{
+			"question": "A 1,200.00 annual insurance premium is released monthly. What is the prepaid balance after one month?",
+			"options": ["1,200.00", "1,100.00", "100.00", "1,000.00"],
+			"answer": 1,
+			"why": "One month of 100.00 is released, leaving 1,100.00 unexpired and sitting as an asset on the balance sheet."
+		},
+		{
+			"question": "The bank reconciliation shows a 35.00 difference caused by a bank charge. What is correct?",
+			"options": [
+				"Ignore it as immaterial",
+				"Create the bank charge entry in the ledger",
+				"Adjust the statement balance",
+				"Post it to accrued liabilities"
+			],
+			"answer": 1,
+			"why": "The statement is the external evidence, so the missing bank charge belongs in the ledger. A plug figure destroys the value of the reconciliation."
+		},
+		{
+			"question": "A journal posted to the wrong cost centre in an open period. Best remedy?",
+			"options": [
+				"Delete the journal",
+				"Amend the document and resubmit",
+				"Post a second journal to the opposite cost centre",
+				"Cancel the fiscal year"
+			],
+			"answer": 1,
+			"why": "Amending inside an open period keeps a version trail. Deleting destroys history, and a second journal leaves two wrong rows instead of one."
+		},
+		{
+			"question": "Which situation genuinely needs a journal rather than a document?",
+			"options": [
+				"A credit sale",
+				"A stock purchase",
+				"Depreciation for the month",
+				"A customer payment"
+			],
+			"answer": 2,
+			"why": "Depreciation has no external document, so a journal is its natural form. Sales, purchases and payments all have dedicated documents that also handle tax and parties."
+		}
+	],
+	"narration": "Journals are where the accounting primer becomes a daily tool. An accrual records a cost before the invoice arrives, and it must reverse, or February carries January's electricity twice. A prepayment is an asset until the cover is used, so one thousand two hundred of insurance becomes one hundred a month, leaving one thousand one hundred on the balance sheet after the first release. Then the bank. Match every statement line, create the bank charge the ledger is missing, and drive the difference to zero with evidence rather than a plug. And when something was posted to the wrong place, amend it inside the open period or reverse it afterwards. Never delete, because the gap is exactly what an auditor looks for first. Practise the four situations until they are reflexes: accrual, prepayment, bank charge, wrong cost centre. Each one has a canonical remedy, and each remedy leaves a document behind, which is what turns a bookkeeping task into a consulting deliverable."
+}

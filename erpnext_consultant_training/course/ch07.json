@@ -240,9 +240,10 @@
 			"title": "Cash in, allocated, and a customer who owes nothing",
 			"bullets": [
 				"A payment entry moves cash and clears the receivable, but only if it is allocated to the invoice",
-				"The invoice status changes to Paid when the payment reference is set",
-				"Bank charges are entered as a deduction on the payment, not as a separate journal",
-				"Unallocated receipts are the most common cause of a wrong aged receivables report",
+				"The bank side of the form sits under Accounts and Transaction Details, the section renamed from Accounts",
+				"Allocation lives in the Reference section, where the Payment References table is what settles the invoice",
+				"Bank charges are rows in Deductions or Loss on the payment, not a separate journal entry",
+				"An unallocated receipt leaves Unallocated Amount sitting in the Writeoff section with the invoice still open",
 				"The payment ledger returns to zero, which is the test that the cycle is complete"
 			],
 			"table": {
@@ -250,14 +251,24 @@
 				"rows": [
 					["1", "Accounts → Payment Entry → New", "Payment type Receive", "Receipt form"],
 					["2", "Party", "Aeon Big Sdn Bhd", "Outstanding invoices listed"],
-					["3", "Get Outstanding Invoices", "(click)", "Invoice 1,320.00 ticked"],
-					["4", "Paid From", "Bank - SM", "Bank account set"],
-					["5", "Amount", "1,320.00", "Allocated amount matches"],
+					[
+						"3",
+						"Accounts and Transaction Details",
+						"Account Paid From Bank - SM, Bank Account (From) current account",
+						"Bank side of the form complete"
+					],
+					[
+						"4",
+						"Reference → Get Outstanding Invoices",
+						"Tick the invoice for 1,320.00",
+						"Payment References row of 1,320.00"
+					],
+					["5", "Amount", "1,320.00", "Unallocated Amount 0.00 under Writeoff"],
 					["6", "Submit", "(submit)", "Invoice status Paid"],
 					["7", "General Ledger", "Filter by payment", "Dr Bank 1,320.00, Cr Debtors 1,320.00"]
 				]
 			},
-			"notes": "The allocation step is the whole lesson. A receipt with no reference clears the bank and leaves the invoice open, which produces an aged receivables report nobody trusts. Demonstrate the wrong way first: post an unallocated payment, show the invoice still unpaid, then cancel it and do it properly.",
+			"notes": "The allocation step is the whole lesson, and the form has moved the goalposts: the bank account now sits under Accounts and Transaction Details, and the invoices sit under Reference as the Payment References table. A receipt with no reference clears the bank, leaves Unallocated Amount in the Writeoff section and keeps the invoice open, which produces an aged receivables report nobody trusts. Demonstrate the wrong way first: post an unallocated payment, show the invoice still unpaid, then cancel it and do it properly.",
 			"paths": ["Accounts → Payment Entry → New", "Accounts → Payment Reconciliation"]
 		},
 		{
