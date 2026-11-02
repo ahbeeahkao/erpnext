@@ -203,7 +203,8 @@
 			"title": "Pay the supplier and close the loop",
 			"bullets": [
 				"A payment entry against the invoice settles the creditor, and allocation is what makes it stick",
-				"Pay from the bank account that actually moved, so bank reconciliation stays possible",
+				"Account Paid From and Bank Account (From) sit in Accounts and Transaction Details, not on a separate tab",
+				"The bank reference goes in Cheque/Reference No, which is what makes the reconciliation match later",
 				"Partial payment is normal: allocate what was paid and leave the rest outstanding",
 				"The invoice status changes to Paid only when the allocated amount equals the total"
 			],
@@ -218,22 +219,28 @@
 					],
 					[
 						"2",
-						"Paid from",
-						"Bank - SM, reference TT-2026-0031",
+						"Accounts and Transaction Details",
+						"Account Paid From Bank - SM",
 						"Bank account set on the payment"
 					],
-					["3", "Get outstanding invoices", "Select PINV-SM-2026-0001", "Allocated 1,320.00"],
-					["4", "Save and Submit", "Confirm", "Payment PE-SM-2026-0001 submitted"],
-					["5", "Read the invoice", "PINV-SM-2026-0001", "Status Paid, outstanding 0.00"],
+					["3", "Cheque/Reference No", "TT-2026-0031", "Bank reference stored for reconciliation"],
 					[
-						"6",
+						"4",
+						"Reference → Get Outstanding Invoices",
+						"Select PINV-SM-2026-0001",
+						"Payment References row of 1,320.00"
+					],
+					["5", "Save and Submit", "Confirm", "Payment PE-SM-2026-0001 submitted"],
+					["6", "Read the invoice", "PINV-SM-2026-0001", "Status Paid, outstanding 0.00"],
+					[
+						"7",
 						"Read the GL",
 						"Filter voucher PE-SM-2026-0001",
 						"Dr Creditors 1,320.00, Cr Bank 1,320.00"
 					]
 				]
 			},
-			"notes": "Allocation is the step learners skip. An unallocated payment leaves the invoice open, the ageing report wrong, and the client convinced the system is broken. Teach the rule as a sentence they can repeat: a payment is money in the bank, an allocation is the invoice it kills. If an invoice stays open after a payment, open Payment Reconciliation and allocate there."
+			"notes": "Allocation is the step learners skip. An unallocated payment leaves the invoice open, the ageing report wrong, and the client convinced the system is broken. Point out the two halves of the form as you teach it: Accounts and Transaction Details for the bank side, and the Reference table for the invoices being killed. Teach the rule as a sentence they can repeat: a payment is money in the bank, an allocation is the invoice it kills. If an invoice stays open after a payment, open Payment Reconciliation and allocate there."
 		},
 		{
 			"kicker": "Volume 3 · Reference",

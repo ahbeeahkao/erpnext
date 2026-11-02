@@ -71,6 +71,7 @@
 			"bullets": [
 				"An advance is a payment with no invoice, recorded as a liability to the supplier",
 				"ERPNext tracks it as Advance Paid, which reduces the outstanding on the next bill",
+				"Leave Payment References empty: an advance is proved by Unallocated Amount in the Writeoff section",
 				"Allocate the advance to the invoice, otherwise it sits forever as an unexplained credit",
 				"The advance appears separately on the balance sheet until it is consumed"
 			],
@@ -83,19 +84,30 @@
 						"Payment type Pay, party Sunrise Components",
 						"Unallocated payment form"
 					],
-					["2", "Paid amount", "660.00 from Bank - SM", "Advance, no invoice selected"],
-					["3", "Save and Submit", "Confirm", "Advance Paid 660.00 on the supplier record"],
-					["4", "Create the purchase invoice", "5 units at 120.00 plus SST", "Total 660.00"],
 					[
-						"5",
+						"2",
+						"Accounts and Transaction Details",
+						"Account Paid From Bank - SM",
+						"Bank side of the form complete"
+					],
+					[
+						"3",
+						"Amount and Writeoff",
+						"660.00 paid, Unallocated Amount 660.00",
+						"Payment References still empty"
+					],
+					["4", "Save and Submit", "Confirm", "Advance Paid 660.00 on the supplier record"],
+					["5", "Create the purchase invoice", "5 units at 120.00 plus SST", "Total 660.00"],
+					[
+						"6",
 						"Get advances against the invoice",
 						"Include the 660.00 advance",
 						"Outstanding 0.00 after allocation"
 					],
-					["6", "Read supplier ledger", "Sunrise Components", "Advance consumed, invoice settled"]
+					["7", "Read supplier ledger", "Sunrise Components", "Advance consumed, invoice settled"]
 				]
 			},
-			"notes": "Advances are where cash leaves before paperwork exists, which is exactly the situation that produces month-end surprises. Show the learner the supplier ledger before and after allocation: before, a 660.00 debit; after, zero. If they can explain that movement, they can explain any advance query the client's finance team raises."
+			"notes": "Advances are where cash leaves before paperwork exists, which is exactly the situation that produces month-end surprises. The empty Payment References table is correct here and worth saying out loud, because learners expect an allocation and try to create one. Show the supplier ledger before and after allocation: before, a 660.00 debit with the whole amount sitting as unallocated; after, zero. If they can explain that movement, they can explain any advance query the client's finance team raises."
 		},
 		{
 			"kicker": "Lesson 8 · Landed cost",
@@ -135,6 +147,7 @@
 			"bullets": [
 				"A payment order groups the invoices you intend to pay on one date, so the bank sees one instruction",
 				"Every line must carry its invoice reference, or the allocation is lost when the file is produced",
+				"Each generated payment entry shows its settlement in the Reference section as a Payment References row",
 				"Payment orders are optional, but they leave an audit trail that a single manual payment cannot",
 				"Reconcile the total before submitting, because a payment order posts real bank entries"
 			],
@@ -156,7 +169,13 @@
 					["3", "Check the amount", "1,188.00 after the debit note", "Total payable 1,188.00"],
 					["4", "Set the bank account", "Bank - SM", "Account carried to every row"],
 					["5", "Save and Submit", "Confirm", "Status Submitted, payment entries created"],
-					["6", "Open Payment Reconciliation", "Supplier Sunrise Components", "Unallocated 0.00"]
+					[
+						"6",
+						"Open a generated payment entry",
+						"Reference → Payment References",
+						"Row of 1,188.00 against PINV-SM-2026-0002"
+					],
+					["7", "Open Payment Reconciliation", "Supplier Sunrise Components", "Unallocated 0.00"]
 				]
 			},
 			"notes": "Payment orders are the difference between a payment run that takes ten minutes and one that takes an afternoon. Show the learner the generated payment entries and their allocations, because that is the evidence the bank file and the ledger agree. If a client insists on manual payments, at minimum insist on allocation, or the supplier ageing will drift from the bank within a month."

@@ -293,9 +293,10 @@
 			"title": "The four adjustments every close needs",
 			"bullets": [
 				"Accruals match costs to the period they belong to, usually with an automatic reversal",
-				"Prepayments spread a payment over the periods it covers",
+				"Prepayments spread a payment over the periods it covers, one twelfth at a time",
 				"Depreciation allocates an asset's cost over its useful life, never in one hit",
-				"A period closing voucher freezes history so back-dated entries cannot rewrite a closed month",
+				"A Period Closing Voucher posts the closing entries and stops anything being back-dated",
+				"Its Process Period Closing Voucher jobs do that posting in chunks, so watch GL Entry Processing Status",
 				"Closing is a sequence with owners and dates, not a Friday afternoon"
 			],
 			"table": {
@@ -308,11 +309,15 @@
 						"Journal Entry per period, or deferred expense"
 					],
 					["Depreciation", "Allocate asset cost", "Asset Depreciation Entry"],
-					["Closing", "Stop back-dating", "Period Closing Voucher"],
+					[
+						"Closing",
+						"Post the entries and stop back-dating",
+						"Period Closing Voucher, then Process Period Closing Voucher"
+					],
 					["Review", "Confirm the balance sheet", "Trial Balance and stock value check"]
 				]
 			},
-			"notes": "Do not teach closing as a button. Teach it as an order of operations with a checklist and a named owner, then show the documents. If the client has never closed a period, run the first close with them, because that is where the process either becomes real or collapses into a spreadsheet.",
+			"notes": "Do not teach closing as a button. Teach it as an order of operations with a checklist and a named owner, then show the documents. Two documents, not one: the Period Closing Voucher is what you create, and the Process Period Closing Voucher rows are the background jobs that post it in chunks. If the client has never closed a period, run the first close with them, because that is where the process either becomes real or collapses into a spreadsheet.",
 			"callout": {
 				"tone": "tip",
 				"title": "Close, then report",

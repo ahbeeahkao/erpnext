@@ -92,43 +92,56 @@
 			"kicker": "Lesson 7 · Period close",
 			"title": "Close the period with the closing voucher",
 			"bullets": [
-				"The closing voucher transfers profit and loss balances to retained earnings",
-				"It is the system's signal that the period is reported, so it also restricts later changes",
-				"Close after the pack is produced and signed, never before",
-				"Recent versions provide Process Period Closing Voucher alongside the legacy document"
+				"The Period Closing Voucher is the document you create; it posts the closing entries and marks the period reported",
+				"Submitting it enqueues Process Period Closing Voucher jobs, one per chunk, and those do the actual posting",
+				"Watch GL Entry Processing Status move to Completed before you trust any figure in the pack",
+				"A failed chunk writes into Error Message, and Accounts Settings carries a legacy controller switch for that case",
+				"Close after the pack is produced and signed, never before, because closing restricts later changes"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Accounts → Process Period Closing Voucher → New",
-						"Company SM, period 31-01-2026",
+						"Accounts → Period Closing Voucher → New",
+						"Company SM, fiscal year FY2026",
 						"Empty closing form"
 					],
-					["2", "Set the posting date", "31-01-2026", "Date inside the open period"],
-					["3", "Save and Submit", "Confirm", "Closing voucher submitted"],
 					[
-						"4",
-						"Read the GL",
-						"Filter the closing voucher",
-						"Income and expense balances transferred"
+						"2",
+						"Set the period",
+						"Period start 01-01-2026, period end 31-01-2026",
+						"Dates inside the open period"
 					],
 					[
-						"5",
+						"3",
+						"Closing Account Head",
+						"Retained Earnings - SM",
+						"Account that receives the closing entries"
+					],
+					["4", "Save and Submit", "Confirm", "ACC-PCV-2026-00001 submitted"],
+					["5", "Watch processing", "GL Entry Processing Status", "In Progress, then Completed"],
+					[
+						"6",
+						"Inspect the job rows",
+						"Process Period Closing Voucher list",
+						"Process-PCV-001 with closing balances"
+					],
+					[
+						"7",
 						"Check retained earnings",
 						"Balance Sheet, 31-01-2026",
 						"Net profit 4,680.00 carried"
 					],
 					[
-						"6",
+						"8",
 						"Attempt a backdated entry",
 						"Journal dated 15-01-2026",
-						"Warning or block for the closed period"
+						"Refused for the closed period"
 					]
 				]
 			},
-			"notes": "Net profit of four thousand six hundred eighty is sales of twelve thousand less cost of goods of six thousand, freight of sixty, accrual of eight hundred, insurance of one hundred and stock adjustment of three hundred sixty. Make the learner compute it before the close, then confirm it lands in retained earnings. That is the moment the closing voucher stops being a mysterious button and becomes an arithmetic check."
+			"notes": "Net profit of four thousand six hundred eighty is sales of twelve thousand less cost of goods of six thousand, freight of sixty, accrual of eight hundred, insurance of one hundred and stock adjustment of three hundred sixty. Make the learner compute it before the close. Then teach the two documents properly: the Period Closing Voucher is yours to create, and the Process Period Closing Voucher rows are the background jobs that post it, so GL Entry Processing Status is the field you watch before anyone signs the pack."
 		},
 		{
 			"kicker": "Lesson 7 · Verify the close",
