@@ -84,7 +84,7 @@ questions with explanations.
 23. **Volume 10 · Migration: Mapping, Opening Balances and Import** — a signed mapping workbook, imports in dependency order, and an opening trial balance of 96,290.00 on both sides.
 24. **Volume 10 · UAT, Cut-Over and Go-Live** — a UAT script that passes on figures, a one-page cut-over, hypercare measured daily, and a handover pack with five owners.
 
-**Totals:** 24 chapters, 198 teaching slides, 270 slides including intros, labs and quizzes, 199 lab steps,
+**Totals:** 24 chapters, 199 teaching slides, 271 slides including intros, labs and quizzes, 199 lab steps,
 120 quiz questions, 24 narrations, 2,630 minutes of syllabus (about 43 hours), and a walkthrough table on every
 teaching slide.
 
