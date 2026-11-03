@@ -180,10 +180,29 @@ Mobile Inventory · Pick for work order WO-0001 · [MOBILE-INV:…]
 
 Dispatch reads the document, so the reason belongs in the document rather than in a chat message.
 
-**Labels print from the browser.** Any movement task can produce a label sheet: one label per whole
-unit (a weighed line gets one label stating the quantity), each with a CODE128 barcode of the item
-code, the batch, the warehouse and the shelf. `@media print` lays them out at 50 × 25 mm on plain
-sheets — a phone cannot drive a Zebra printer directly, but a browser or a print server can.
+**Labels print from the browser, or go to a real printer.** Any movement task can produce a label
+sheet: one label per whole unit (a weighed line gets one label stating the quantity), each with a
+CODE128 barcode of the item code, the batch, the warehouse and the shelf.
+
+Three ways out, in the order a site usually adopts them:
+
+1. **Print** — `@media print` lays the sheet out at the label stock set in Settings
+   (50 × 25 mm carton, 100 × 50 mm pallet/shelf, or 38 × 25 mm strip).
+2. **Save .zpl** — the sheet as printer-ready Zebra Programming Language, one `^XA … ^XZ` job per
+   label. Hand it to the printer's own tool, a USB stick, or a watch folder.
+3. **Send to printer** — appears once a *print bridge* is set in Settings (any small helper on the
+   shop network that forwards raw ZPL to port 9100). The phone POSTs the whole sheet as one job and
+   says plainly when the bridge did not answer.
+
+A browser cannot open a socket to a printer, so the bridge is the honest boundary — but everything
+up to the socket is here, including the layout, the escaping of `^` and `~` in item names, and the
+one-address-per-site setting.
+
+**Is this site ready?** Settings has a read-only **Check this site** button that reports whether
+sign-in works, companies and warehouses are visible, an Inventory Dimension exists for shelves,
+batch lists come back oldest-first, and whether `use_serial_batch_fields` is on (if it is off, the
+site files batches in a Serial and Batch Bundle, and the first pilot document should be checked by
+hand). Five minutes before a pilot beats finding out mid-delivery.
 
 ## Locations without a warehouse for every shelf
 
@@ -274,5 +293,8 @@ public/
 
 ## Roadmap
 
-- **Label templates**: the sheet is fixed at 50 × 25 mm; sites have their own label stock.
-- Direct printer support (CUPS/Bluetooth) needs a helper process, not a browser.
+- **A packaged Android app.** The PWA installs from the browser; a Play-Store build (TWA or
+  Capacitor) needs a machine with the Android SDK and a signing key, neither of which belongs in
+  this repository.
+- **Malay interface.** Every string, not a handful: a separate piece of work.
+- **A written bench-trial script** for a first pilot, once a site with a real ERPNext is available.

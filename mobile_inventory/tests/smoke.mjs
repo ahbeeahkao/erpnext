@@ -291,6 +291,11 @@ try {
 	click(/Print labels/);
 	await wait(500);
 	check("a label sheet is built for the pick", /\d+ labels?/.test(text()) && text().includes("Milk Powder"));
+	check(
+		"labels are laid out at the shop's label size",
+		window.document.querySelector(".label")?.style.width === "50mm"
+	);
+	check("the printer-ready file can be saved", [...window.document.querySelectorAll("button")].some((button) => /Save \.zpl/.test(button.textContent ?? "")));
 	clickIcon("Close labels");
 	await wait(250);
 
@@ -335,6 +340,31 @@ try {
 	await wait(900);
 	check("the pick becomes a draft delivery note", /created as a draft/.test(text()));
 	check("back home after the pick", text().includes("Scan one item"));
+
+	// --- settings: is this site ready, and what label stock is loaded ---------
+	click(/^Settings$/);
+	await wait(600);
+	check("settings offers a site check", text().includes("Is this site ready?"));
+	click(/Check this site/);
+	await wait(900);
+	check(
+		"the site check reports what the site supports",
+		text().includes("Sign-in works") && text().includes("OK")
+	);
+
+	const stockSelect = [...window.document.querySelectorAll("select")].find((select) =>
+		[...select.options].some((option) => option.value === "100x50")
+	);
+	pick(stockSelect, "100x50");
+	await wait(500);
+	click(/^Scan$/);
+	await wait(400);
+	click(/^Settings$/);
+	await wait(600);
+	const remembered = [...window.document.querySelectorAll("select")].find((select) =>
+		[...select.options].some((option) => option.value === "100x50")
+	);
+	check("label stock is remembered across screens", remembered?.value === "100x50");
 } catch (error) {
 	console.error(`smoke test crashed: ${error instanceof Error ? error.message : error}`);
 	errors.push(String(error));

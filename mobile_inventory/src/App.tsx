@@ -119,6 +119,16 @@ export default function App() {
 		[session]
 	);
 
+	const setLabelPrefs = useCallback(
+		async (patch: { labelSize?: Session["labelSize"]; printBridge?: string }) => {
+			if (!session) return;
+			const next = { ...session, ...patch };
+			setSession(next);
+			await saveSession(next);
+		},
+		[session]
+	);
+
 	const enqueue = useCallback(
 		async (op: QueueOp) => {
 			await queue.enqueue(op);
@@ -239,6 +249,13 @@ export default function App() {
 						syncing={queue.syncing}
 						onSync={() => void queue.syncNow()}
 						onDefaultWarehouse={(warehouse) => void setDefaultWarehouse(warehouse)}
+						onLabelSize={(size) => void setLabelPrefs({ labelSize: size })}
+						onPrintBridge={(url) => void setLabelPrefs({ printBridge: url.trim() || undefined })}
+						onDiagnose={async () =>
+							client
+								? client.runDiagnostics()
+								: [{ id: "none", label: "Site check", ok: false, detail: "Not connected." }]
+						}
 						onClearLocal={clearLocal}
 						onDisconnect={() => void disconnect()}
 					/>

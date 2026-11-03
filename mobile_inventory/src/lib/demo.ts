@@ -11,6 +11,7 @@ import type {
 	ExistingDoc,
 	BatchOption,
 	CreatedBatch,
+	DiagnosticCheck,
 	InventoryClient,
 	InventoryDimension,
 	ItemInfo,
@@ -490,6 +491,33 @@ export class DemoClient implements InventoryClient {
 		itemFor(itemCode);
 		const lot = batchId?.trim() || `LOT-${++sequence}`;
 		return this.delay({ name: `BATCH-DEMO-${sequence}`, batch_id: lot }, 140);
+	}
+
+	async runDiagnostics(): Promise<DiagnosticCheck[]> {
+		return this.delay(
+			[
+				{ id: "auth", label: "Sign-in works", ok: true, detail: "Demo mode — no site, no sign-in." },
+				{
+					id: "dimensions",
+					label: "Stock locations (Inventory Dimension)",
+					ok: true,
+					detail: "Dimension “Location” (location) — shelves are recorded.",
+				},
+				{
+					id: "batches",
+					label: "Batches, oldest first",
+					ok: true,
+					detail: "FG-1001: 2 batches returned by the site.",
+				},
+				{
+					id: "serial-batch",
+					label: "Serial & batch fields on Stock Entry",
+					ok: true,
+					detail: "On — batches go on the document rows.",
+				},
+			],
+			260
+		);
 	}
 
 	async inventoryDimensions(): Promise<InventoryDimension[]> {

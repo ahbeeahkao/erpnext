@@ -1582,3 +1582,12 @@ button {
 .kv-table small {
 	color: var(--muted);
 }
+
+.text-warn {
+	color: var(--warn);
+}
+
+.field__hint code {
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.9em;
+}

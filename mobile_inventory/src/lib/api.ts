@@ -29,6 +29,7 @@ import type {
 	BatchOption,
 	Connection,
 	CreatedBatch,
+	DiagnosticCheck,
 	ExistingDoc,
 	InventoryClient,
 	InventoryDimension,
@@ -369,6 +370,95 @@ export class FrappeClient implements InventoryClient {
 		);
 		const row = rows?.[0];
 		return row ? { name: row.name, docstatus: Number(row.docstatus) || 0 } : null;
+	}
+
+	async runDiagnostics(): Promise<DiagnosticCheck[]> {
+		const checks: DiagnosticCheck[] = [];
+		const run = async (id: string, label: string, fn: () => Promise<string>) => {
+			try {
+				checks.push({ id, label, ok: true, detail: await fn() });
+			} catch (error) {
+				checks.push({
+					id,
+					label,
+					ok: false,
+					detail: error instanceof ApiError ? error.message : "The site did not answer.",
+				});
+			}
+		};
+
+		await run("auth", "Sign-in works", async () => {
+			const user = unwrap<string>(
+				await this.request("/api/method/frappe.auth.get_logged_user"),
+				"message"
+			);
+			return `Signed in as ${user || "an unknown user"}.`;
+		});
+
+		await run("company", "Company and warehouses", async () => {
+			const rows = unwrap<Array<{ name: string }>>(
+				await this.request("/api/resource/Company", {
+					query: { fields: JSON.stringify(["name"]), limit_page_length: 5 },
+				}),
+				"data"
+			);
+			if (!rows?.length) throw new ApiError("This user cannot see any company", "server");
+			return `${rows.length} compan${rows.length === 1 ? "y" : "ies"}: ${rows
+				.map((row) => row.name)
+				.slice(0, 3)
+				.join(", ")}.`;
+		});
+
+		await run("warehouse", "Warehouses readable", async () => {
+			const rows = unwrap<Array<{ name: string }>>(
+				await this.request("/api/resource/Warehouse", {
+					query: { fields: JSON.stringify(["name"]), limit_page_length: 200 },
+				}),
+				"data"
+			);
+			if (!rows?.length) throw new ApiError("No warehouses are visible to this user", "server");
+			return `${rows.length} warehouse${rows.length === 1 ? "" : "s"} visible.`;
+		});
+
+		await run("dimensions", "Stock locations (Inventory Dimension)", async () => {
+			const rows = await this.inventoryDimensions();
+			if (!rows.length) {
+				return "No inventory dimension — put-away will name the warehouse only. Add a Location dimension to place stock on a shelf.";
+			}
+			return `Dimension “${rows[0].dimension_name}” (${rows[0].fieldname}) — shelves are recorded.`;
+		});
+
+		await run("batches", "Batches, oldest first", async () => {
+			const items = unwrap<Array<{ name: string }>>(
+				await this.request("/api/resource/Item", {
+					query: {
+						filters: JSON.stringify([["has_batch_no", "=", 1]]),
+						fields: JSON.stringify(["name"]),
+						limit_page_length: 1,
+					},
+				}),
+				"data"
+			);
+			if (!items?.length) return "No batch-tracked items yet — the batch picker stays hidden.";
+			const item = items[0].name;
+			const rows = await this.availableBatches(item, "");
+			return `${item}: ${rows.length} batch${rows.length === 1 ? "" : "es"} returned by the site.`;
+		});
+
+		await run("serial-batch", "Serial & batch fields on Stock Entry", async () => {
+			const rows = unwrap<Array<{ use_serial_batch_fields?: number }>>(
+				await this.request("/api/resource/Stock Settings", {
+					query: { fields: JSON.stringify(["use_serial_batch_fields"]) },
+				}),
+				"data"
+			);
+			const on = Number(rows?.[0]?.use_serial_batch_fields ?? 0) === 1;
+			return on
+				? "On — batches go on the document rows, which is what this app posts."
+				: "Off — this site puts batches in the Serial and Batch Bundle instead. Post one document by hand and check the batch landed before a pilot.";
+		});
+
+		return checks;
 	}
 
 	async inventoryDimensions(): Promise<InventoryDimension[]> {

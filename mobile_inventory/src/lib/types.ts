@@ -1,4 +1,6 @@
 // Shared types for the mobile inventory app.
+import type { LabelSize } from "./zpl";
+
 
 export type AuthMode = "site" | "token" | "demo";
 
@@ -11,6 +13,10 @@ export interface Session {
 	user?: string;
 	company?: string;
 	defaultWarehouse?: string;
+	/** Label stock on the shop's printer. */
+	labelSize?: LabelSize;
+	/** Address of the small helper that forwards ZPL to the printer, if the site has one. */
+	printBridge?: string;
 	/** Demo data is kept separate so it never mixes with real queued work. */
 	demo?: boolean;
 }
@@ -211,6 +217,14 @@ export interface BatchOption {
 }
 
 /** A batch the device just created on the site. `name` is the link value, `batch_id` what a human reads. */
+/** One line of the site check: does this ERPNext actually support what the app asks of it? */
+export interface DiagnosticCheck {
+	id: string;
+	label: string;
+	ok: boolean;
+	detail: string;
+}
+
 export interface CreatedBatch {
 	name: string;
 	batch_id: string;
@@ -348,6 +362,8 @@ export interface InventoryClient {
 
 	/** Creates a Batch for a lot that arrived without one. Needs a site: master data is not queued. */
 	createBatch(itemCode: string, batchId?: string): Promise<CreatedBatch>;
+	/** Read-only checks against the connected site, so a pilot does not discover gaps mid-delivery. */
+	runDiagnostics(): Promise<DiagnosticCheck[]>;
 
 	/** Sales orders with quantity still to deliver. */
 	openSalesOrders(): Promise<SalesOrder[]>;

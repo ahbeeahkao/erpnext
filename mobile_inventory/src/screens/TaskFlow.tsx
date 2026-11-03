@@ -587,8 +587,11 @@ export function TaskFlowScreen({
 			{labelsOpen ? (
 				<LabelSheet
 					labels={labelsForTask(task)}
+					size={session.labelSize}
+					bridgeUrl={session.printBridge}
 					onClose={() => setLabelsOpen(false)}
 					onError={(message) => notify(message, "error")}
+					onMessage={(message) => notify(message, "success")}
 				/>
 			) : null}
 
