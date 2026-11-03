@@ -1,350 +1,391 @@
 {
 	"id": "ch24",
 	"number": 24,
-	"title": "Volume 10 · UAT, Cut-Over and Go-Live",
-	"subtitle": "Lessons 5–8: a UAT script the client signs, a cut-over weekend with a checklist, hypercare that measures itself, and a handover that outlives the consultant",
-	"level": "Capstone",
+	"title": "Volume 9 · e-Invoice (MyInvois) End to End",
+	"subtitle": "Lessons 5–8: master data that passes validation, submission and status reading, the 72 hour cancellation window, consolidated and self-billed documents",
+	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Write and run a UAT script whose pass criteria are numbers, not opinions",
-		"Plan a cut-over with a dependency order and a rollback position",
-		"Run go-live week with a daily hypercare rhythm",
-		"Hand over documentation, ownership and a support cadence"
+		"Prepare company and customer data so submission does not fail validation",
+		"Submit an invoice and interpret accepted, rejected and validated responses",
+		"Cancel or reject inside the 72 hour window and know when it is refused",
+		"Decide what to consolidate and when to self-bill"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · UAT",
-			"title": "Write a UAT script the client will sign",
+			"kicker": "Lesson 5 · Master data",
+			"title": "Prepare the data MyInvois checks first",
 			"bullets": [
-				"Every test case states the action, the expected number and the evidence",
-				"Test by role, because a salesperson and an accountant see different screens",
-				"Include the nasty cases: partial delivery, credit limit, return and discounted order",
-				"Sign-off per module, with a named business owner, not one signature for everything"
+				"TIN, registration number, MSIC code and SST number are validated before anything else",
+				"A customer without a TIN is a general public sale, not a business invoice",
+				"Address and phone format matter, because the portal rejects malformed fields",
+				"Clean masters before the first submission, not after the first rejection"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Write the script",
-						"Case 1: quote to invoice for 5 blenders",
-						"Steps with expected figures"
+						"Company record",
+						"TIN C2584563200, registration 202301234567, MSIC 46510",
+						"Company e-Invoice fields complete"
 					],
 					[
 						"2",
-						"Add the awkward cases",
-						"Partial delivery, discount, return, credit limit",
-						"Four extra cases"
+						"Customer record",
+						"Aeon Big TIN and BRN, address with postcode and state",
+						"Customer validated data stored"
 					],
 					[
 						"3",
-						"Assign testers",
-						"Sales executive, accountant, warehouse supervisor",
-						"One owner per case"
+						"Check contact",
+						"Phone with country code, email on the customer",
+						"Required fields present"
 					],
-					["4", "Run in a test company", "Real data, not the demo data", "Results recorded"],
-					["5", "Log defects", "Screen, expected, actual, severity", "Defect list with owners"],
-					["6", "Sign off", "Module signed by the business owner", "Signed UAT sheet"]
-				]
-			},
-			"notes": "A UAT case without a number is an opinion, and opinions do not survive a steering committee. Case one in our sample is five blenders at two hundred forty plus ten per cent tax, total one thousand three hundred twenty, cost six hundred, gross profit six hundred. When the tester sees those four figures, the case passes; when they do not, the defect is specific enough to fix."
-		},
-		{
-			"kicker": "Lesson 6 · Verify UAT",
-			"title": "Pass criteria that a steering committee accepts",
-			"bullets": [
-				"Every case passes on expected figures, not on the absence of an error message",
-				"Severity one and two defects must be closed, with three and four scheduled",
-				"Each module signs separately so one weak area does not block the rest",
-				"The signed sheet is the client's acceptance of the system, and your protection"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Cases executed", "all planned cases", "UAT tracker"],
-					["Passed on figures", "every case with numbers matching", "UAT evidence column"],
-					["Open severity one defects", "0", "Defect log"],
-					["Modules signed", "sales, purchase, stock, accounts", "Signature sheet"],
-					["Retest evidence", "defect fix confirmed by the tester", "Tracker with dates"]
-				]
-			},
-			"notes": "The figure that matters at the steering committee is zero open severity one defects, not ninety per cent of cases passed. Be explicit about what is deferred, with a date and an owner, because deferred items without owners become the first month's support tickets. A signed sheet with a short deferral list is a better outcome than a verbal yes."
-		},
-		{
-			"kicker": "Lesson 7 · Cut-over",
-			"title": "Plan the weekend in dependency order",
-			"bullets": [
-				"Cut-over is a sequence, and each step unblocks the next one",
-				"Freeze the old system before extracting balances, or the numbers will move",
-				"Have a rollback position: the old system stays readable for one month",
-				"One person owns the clock and one person owns the checklist, never the same person"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Freeze trading", "Old system locked at 18:00 Friday", "Signed freeze note"],
-					["2", "Extract balances", "Trial balance, ageing, stock count", "Three source documents"],
-					[
-						"3",
-						"Load opening",
-						"Journal plus stock reconciliation",
-						"Opening trial balance balanced"
-					],
-					["4", "Verify", "Five opening checks", "96,290.00 both sides"],
-					["5", "Smoke test", "One sale, one purchase, one payment", "Documents post correctly"],
-					["6", "Communicate", "Go-live notice to all users", "Users know where to log in"]
-				]
-			},
-			"notes": "The cut-over plan fits on one page and that is the test of it. If a step has no owner or no evidence, it will be skipped at two in the morning. Keep the old system readable for a month and say so in writing, because that rollback position is what allows the client to say yes on Friday rather than postpone a week."
-		},
-		{
-			"kicker": "Lesson 8 · Go-live",
-			"title": "Hypercare with numbers, then hand over",
-			"bullets": [
-				"Hypercare is a fortnight of daily rhythm: tickets, blockers, and a single decision channel",
-				"Measure the same five things daily so the trend is visible, not the anecdote",
-				"Hand over documentation, owners and a support cadence, or you become the support desk",
-				"The exit criterion is agreed before go-live, not negotiated at the end"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Open the hypercare log", "Tickets with severity and owner", "Daily list"],
-					["2", "Run the daily stand-up", "15 minutes, blockers first", "Decisions recorded"],
-					[
-						"3",
-						"Track five metrics",
-						"invoices, stock errors, ticket count, close progress, user logins",
-						"Daily dashboard"
-					],
-					["4", "Close the fortnight", "Open severity one at zero", "Exit review"],
+					["4", "Validate the TIN", "Portal taxpayer validation for the TIN", "TIN valid response"],
 					[
 						"5",
-						"Hand over documents",
-						"Runbook, config worksheet, UAT sheet, access review",
-						"Signed handover"
+						"Create a draft invoice",
+						"One line, 2,400.00 plus 240.00",
+						"Invoice ready to submit"
 					],
-					["6", "Agree the cadence", "Monthly review for three months", "Calendar invites sent"]
+					["6", "Run the pre-check", "Missing-field validation", "No blocking errors"]
 				]
 			},
-			"notes": "Five metrics, fifteen minutes, every morning for a fortnight: that is hypercare, and it ends on a date the client agreed before go-live. The handover pack is the same documentation produced during the project, which is why it must be written as you go rather than reconstructed. A consultant who leaves a runbook and a calendar invite is the one who gets the phase two call."
+			"notes": "Validation failures are almost always master data, not software, and they arrive as a rejection notice that the finance team reads as a system failure. Run a pre-check across the customer list before go-live: every business customer needs a TIN, a registration number and a complete address. Half a day of cleaning saves a week of rejected submissions."
 		},
 		{
-			"kicker": "Lesson 7 · Verify cut-over",
-			"title": "Evidence for each cut-over step",
+			"kicker": "Lesson 6 · Submission",
+			"title": "Submit an invoice and read the response",
 			"bullets": [
-				"Every step leaves a document, and the documents are what the auditor reads",
-				"The freeze note, the count sheet and the opening trial balance are the core three",
-				"A smoke test that posts correctly is the last gate before users are let in",
-				"Rollback stays available for a month, and saying so reduces go-live anxiety"
+				"Submission returns a submission ID, then accepted and rejected lists",
+				"Accepted means received; validated is a later state with a UUID and a QR code",
+				"A rejected document comes back with an error list, and it is not a tax invoice",
+				"Store the UUID and the long ID against the invoice, because the portal is the source of truth"
 			],
 			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Freeze note", "signed at 18:00 Friday", "Project file"],
-					["Opening trial balance", "96,290.00 both sides", "Accounts at the opening date"],
-					["Stock count", "47 units at 120.00", "Signed count sheet"],
-					["Smoke test documents", "one sale, one purchase, one payment posted", "Document list"],
-					["Rollback position", "old system readable for 30 days", "Written support note"]
-				]
-			},
-			"notes": "Cut-over is judged on documents rather than on a feeling that it went well. Lay the five items on the table at the Sunday evening review, and either they exist or they do not. If the smoke test posted incorrectly, that is the moment to use the rollback position, not Monday morning when users are already entering data."
-		},
-		{
-			"kicker": "Lesson 8 · Verify hypercare",
-			"title": "The numbers that end the fortnight",
-			"bullets": [
-				"Ticket count, invoice count, stock errors, close progress and logins are the five daily measures",
-				"A falling ticket count with a rising invoice count means the client is taking over",
-				"Open severity one at zero for three consecutive days is the usual exit signal",
-				"The exit review is a meeting, not an opinion, and it produces a signed note"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Open severity one tickets", "0 for three consecutive days", "Hypercare log"],
-					["Invoices posted daily", "rising towards normal volume", "Sales invoice register"],
-					["Stock errors", "trending to zero", "Stock reconciliation list"],
-					["Users logging in", "all trained users active", "User login report"],
-					["Exit note", "signed with an agreed support cadence", "Project file"]
-				]
-			},
-			"notes": "Five numbers on one line each day, and the trend does the talking. When tickets fall while invoices rise, the client has absorbed the system, and the exit meeting is a formality rather than a risk. If stock errors are flat rather than falling, the warehouse process is still wrong, and staying another week is cheaper than a year of corrections."
-		},
-		{
-			"kicker": "Volume 10 · Reference",
-			"title": "Go or no-go, decided on evidence",
-			"bullets": [
-				"Each criterion has a number, so the meeting is short and the decision is defensible",
-				"Any single red row is a no-go unless the client formally accepts the risk",
-				"The acceptance must be written, dated and signed by the project sponsor",
-				"A delayed go-live is cheaper than an uncontrolled one, in cost and in reputation"
-			],
-			"table": {
-				"headers": ["Criterion", "Green means", "Evidence", "Owner"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
-						"Opening balances",
-						"trial balance balances to 0.00",
-						"Signed opening pack",
-						"Finance manager"
+						"1",
+						"Open the sales invoice",
+						"SINV-SM-2026-0010, submitted",
+						"e-Invoice action available"
 					],
-					["UAT", "zero open severity one defects", "Signed UAT sheet", "Business owners"],
-					["Access", "roles tested, two administrators named", "Access review sheet", "Admin"],
-					["Training", "every user attended or was covered", "Attendance list", "Department heads"],
+					["2", "Submit to MyInvois", "Document type 01 Invoice", "Submission UID returned"],
+					["3", "Read the response", "Accepted documents list with one entry", "Status accepted"],
 					[
-						"Support",
-						"hypercare dates and channel agreed",
-						"Signed support note",
-						"Project sponsor"
+						"4",
+						"Wait for validation",
+						"Poll the submission status",
+						"Validated with UUID and long ID"
+					],
+					["5", "Store identifiers", "UUID written to the invoice record", "Traceable for audits"],
+					[
+						"6",
+						"Print or send",
+						"QR code and validation link on the invoice",
+						"Customer can verify"
 					]
 				]
 			},
-			"notes": "Put this table on the screen in the go/no-go meeting and work down it row by row; the decision takes fifteen minutes and nobody can claim afterwards that they were not consulted. Green everywhere is a go. One red row is a conversation about risk, documented in the minutes with a name against it."
+			"notes": "Two states matter and clients confuse them: accepted, which means the portal has the file, and validated, which means it is a legal tax invoice with a UUID. Show both on screen, because a finance team that treats accepted as final will print invoices that cannot be verified. The QR code is what the customer scans, so test it once end to end."
 		},
 		{
-			"kicker": "Volume 10 · Reference",
-			"title": "The handover pack that ends the engagement",
+			"kicker": "Lesson 6 · Verify the submission",
+			"title": "Accepted versus validated, on one screen",
 			"bullets": [
-				"The pack is the project's memory, and it must be usable without the consultant",
-				"Configuration worksheet, opening balances, UAT results and runbook are the core four",
-				"Named owners for each cadence, or the pack becomes shelfware",
-				"A short training session on the pack itself is what makes it live"
+				"Submission ID, accepted count and validated UUID are three different facts",
+				"A rejected document is not a tax invoice, so the sale is unsubstantiated until it is fixed",
+				"The QR code and validation link are what the customer uses to check the document",
+				"Record identifiers on the invoice so a later audit can trace the exact document"
 			],
 			"table": {
-				"headers": ["Document", "Purpose", "Owner after handover", "Review cadence"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Configuration worksheet", "What was set and why", "Finance manager", "Half-yearly"],
-					[
-						"Opening balance pack",
-						"Evidence for the audit trail",
-						"Finance manager",
-						"At each audit"
-					],
-					[
-						"UAT results",
-						"Proof the business accepted the system",
-						"Project sponsor",
-						"On major change"
-					],
-					["Runbook", "Daily, weekly and monthly routines", "Operations manager", "Quarterly"],
-					["Access review sheet", "Who can do what", "Admin", "Quarterly"]
+					["Submission identifier", "returned and stored", "Submission log"],
+					["Accepted documents", "1 of 1 for this invoice", "Portal response"],
+					["Validated state", "UUID and long ID present", "Invoice e-Invoice panel"],
+					["Document total", "2,640.00 matches the invoice", "Portal document details"],
+					["QR code", "prints and resolves", "Printed invoice"]
 				]
 			},
-			"notes": "A consultant's reputation is built in the last two weeks, and it is built on how little the client needs to call afterwards. Hand over five documents, name five owners, put five meetings in the calendar, and then step back. The work is finished when the client runs the rhythm without you, not when the invoices are issued."
+			"notes": "The distinction between accepted and validated is the single most useful thing to teach a finance team, because it decides whether they can post the invoice to the customer. Scroll the printed page and scan the QR code once in front of them; the moment it resolves to the portal, the process becomes real rather than theoretical."
+		},
+		{
+			"kicker": "Lesson 7 · Cancellation",
+			"title": "Reject or cancel inside 72 hours",
+			"bullets": [
+				"Cancellation is limited to 72 hours after validation, and the limit is enforced by the portal",
+				"A cancellation needs a reason of up to 300 characters, so write it carefully",
+				"After the window, the remedy is a credit note or debit note, not a cancellation",
+				"Documents referenced by another document cannot be cancelled while that reference lives"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open the validated invoice", "UUID recorded earlier", "e-Invoice status panel"],
+					[
+						"2",
+						"Choose cancel",
+						"Reason: wrong customer TIN, reissued",
+						"Reason under 300 characters"
+					],
+					["3", "Submit the cancellation", "Confirm", "Status cancelled on the portal"],
+					[
+						"4",
+						"Try after 72 hours",
+						"Same action on an older document",
+						"Error: operation period over"
+					],
+					[
+						"5",
+						"Try a referenced document",
+						"Invoice already referenced by a credit note",
+						"Error: active referencing documents"
+					],
+					["6", "Use the correct remedy", "Credit note and reissue", "New validated document"]
+				]
+			},
+			"notes": "The 72 hour rule is a business deadline, so put it in the finance team's daily routine rather than a document. One person checks the e-Invoice dashboard each morning and cancels what needs cancelling; after that, the credit note route applies. Explain both error messages by name, so nobody spends an afternoon retrying a cancellation that can never succeed."
+		},
+		{
+			"kicker": "Lesson 7 · Verify the cancellation",
+			"title": "What the portal will and will not allow",
+			"bullets": [
+				"Cancellation is possible inside 72 hours with a reason, and refused after it",
+				"A document referenced by a credit note cannot be cancelled while that reference exists",
+				"The refused case must route to a credit note, not to a retry loop",
+				"Log every cancellation with the reason, because the portal keeps its own record"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Cancelled document status", "cancelled on the portal", "Portal document details"],
+					["Reason recorded", "under 300 characters, meaningful", "Cancellation log"],
+					["Late cancellation attempt", "OperationPeriodOver", "Portal error response"],
+					["Referenced document attempt", "ActiveReferencingDocuments", "Portal error response"],
+					["Replacement document", "new validated invoice issued", "Invoice list"]
+				]
+			},
+			"notes": "Two error names cover almost every failed cancellation, and knowing them saves a support call: OperationPeriodOver means the window has passed, ActiveReferencingDocuments means another document depends on this one. Teach the finance team to read the name and pick the remedy, because the portal will not offer an alternative."
+		},
+		{
+			"kicker": "Lesson 8 · Consolidation",
+			"title": "Consolidate small sales and self-bill correctly",
+			"bullets": [
+				"Consolidation groups many small receipts into one monthly e-Invoice for the general public",
+				"It is allowed for B2C within the rules, but not for business customers who need their own document",
+				"Self-billed invoices are issued by the buyer, typically for imports or agent sales",
+				"Both need a policy decision, because they change who is responsible for the submission"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Identify B2C receipts",
+						"Counter sales without a TIN",
+						"List of individual receipts"
+					],
+					[
+						"2",
+						"Consolidate",
+						"One monthly document for the period",
+						"Consolidated e-Invoice created"
+					],
+					[
+						"3",
+						"Check the total",
+						"Sum of the receipts in the month",
+						"Total matches the sales report"
+					],
+					[
+						"4",
+						"Set a self-billing case",
+						"Import purchase from an overseas supplier",
+						"Self-billed document prepared"
+					],
+					["5", "Submit as buyer", "Self-billed invoice type", "Accepted with buyer as issuer"],
+					[
+						"6",
+						"Record the policy",
+						"Which customers are consolidated and why",
+						"Written in the compliance file"
+					]
+				]
+			},
+			"notes": "Consolidation is a legitimate relief for counter sales and a serious problem if applied to business customers, because they cannot claim input tax without their own validated document. Write the policy per customer type, get it signed, and check the monthly consolidated total against the sales report before submitting. Self-billing needs the same clarity, since the buyer becomes the issuer."
+		},
+		{
+			"kicker": "Volume 9 · Reference",
+			"title": "e-Invoice document types and tax codes",
+			"bullets": [
+				"Document type tells the portal what the document is, and the wrong type invalidates it",
+				"Tax type codes map to sales tax, service tax, tourism and the exemption code",
+				"Classification codes describe the product and drive reporting",
+				"Every invoice line needs both a classification and a tax type, not just a rate"
+			],
+			"table": {
+				"headers": ["Element", "Typical value", "Where it comes from", "What breaks if wrong"],
+				"rows": [
+					[
+						"Document type",
+						"01 Invoice, 02 Credit Note, 03 Debit Note, 04 Refund Note",
+						"Document type field",
+						"Portal rejects or misclassifies"
+					],
+					[
+						"Tax type",
+						"01 Sales Tax, 02 Service Tax, E Exemption",
+						"Invoice tax row",
+						"Return and e-Invoice disagree"
+					],
+					[
+						"Classification code",
+						"product classification from the portal list",
+						"Item record",
+						"Validation rejection"
+					],
+					["Unit code", "Nos, KGM, LTR", "UOM mapping", "Line rejected"],
+					[
+						"Tax rate and amount",
+						"10 % or 8 % with the computed amount",
+						"Tax template",
+						"Amount mismatch against invoice"
+					]
+				]
+			},
+			"notes": "This table is the reference sheet to leave with the finance team, because most rejections trace to one of these five rows. Classification codes need mapping for every item sold, which is a morning's work with the portal list open, and the unit code mapping catches people who sell in cartons but invoice in pieces."
+		},
+		{
+			"kicker": "Volume 9 · Reference",
+			"title": "Status board for the finance team",
+			"bullets": [
+				"Finance needs one screen that shows what is pending, rejected or cancelled",
+				"Rejected documents need an owner and a same-day fix, or the tax invoice does not exist",
+				"Weekly reconciliation of e-Invoice totals against the sales ledger catches drift early",
+				"Keep the evidence, because the portal keeps its own copy and yours must match"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Pending submissions", "0 at the end of each day", "e-Invoice dashboard"],
+					["Rejected documents", "0, or listed with an owner", "e-Invoice status list"],
+					["Validated this month", "matches submitted invoices", "Sales invoice register"],
+					["Difference against ledger", "0.00", "Your own reconciliation"],
+					["Cancellations", "within 72 hours, reason recorded", "Portal cancellation log"]
+				]
+			},
+			"notes": "Give the client a daily ten-minute routine: open the dashboard, fix rejections, cancel what must be cancelled, and confirm nothing is pending overnight. Then a monthly check that validated totals equal the sales ledger. That rhythm is what keeps an e-Invoice project out of trouble, because the portal does not wait and neither does the deadline."
 		}
 	],
 	"lab": {
-		"title": "Lab · Run UAT, cut over and open the hypercare log",
+		"title": "Lab · Prepare, submit, validate and cancel an e-Invoice",
 		"minutes": 45,
 		"steps": [
-			"Write five UAT cases with exact expected figures for sales, purchase, stock and accounts",
-			"Assign each case to a named business owner and record the tester",
-			"Execute the cases in a test company and log any defect with severity",
-			"Confirm zero open severity one defects before sign-off",
-			"Produce the one-page cut-over plan with owners and evidence",
-			"Freeze, extract, load and prove the opening trial balance",
-			"Smoke test one sale, one purchase and one payment after go-live",
-			"Open the hypercare log and record the five daily metrics"
+			"Complete the company TIN, registration, MSIC and SST fields",
+			"Complete the customer TIN, registration, address and contact",
+			"Validate the customer TIN against the portal before invoicing",
+			"Submit a 2,640.00 invoice as document type 01 and record the submission UID",
+			"Confirm the validated state and store the UUID and long ID",
+			"Cancel the document with a reason and confirm the status",
+			"Attempt a cancellation past 72 hours and record the error name",
+			"Consolidate a month of counter sales and check the total against the sales report"
 		],
-		"done": "Done when all five UAT cases pass on their figures with a signature, the opening balances balance, the smoke tests post correctly, and the hypercare log has an owner and an exit date."
+		"done": "Done when the invoice is validated with a stored UUID, the cancellation succeeded inside the window, the expired attempt returned its named error, and the consolidated total matches the sales report."
 	},
 	"quiz": [
 		{
-			"question": "What makes a UAT case pass?",
+			"question": "What does an accepted submission mean?",
 			"options": [
-				"No error message appeared",
-				"The expected figures match exactly",
-				"The tester liked it",
-				"It ran quickly"
+				"The invoice is legally validated",
+				"The portal received the document",
+				"The customer has paid",
+				"The tax is filed"
 			],
 			"answer": 1,
-			"why": "A case passes on numbers: 1,320.00 total, 600.00 cost, 600.00 gross profit. The absence of an error message proves nothing."
+			"why": "Accepted means the portal received the submission. Validation, with a UUID, is the later state that makes it a legal tax invoice."
 		},
 		{
-			"question": "Which defect state blocks go-live?",
-			"options": ["Any open defect", "Open severity one defects", "Closed defects", "Cosmetic defects"],
-			"answer": 1,
-			"why": "Severity one blocks go-live; lower severities can be scheduled with an owner and a date, recorded at sign-off."
+			"question": "How long does the portal allow a validated document to be cancelled?",
+			"options": ["24 hours", "48 hours", "72 hours", "7 days"],
+			"answer": 2,
+			"why": "Cancellation is limited to 72 hours after validation, after which the remedy is a credit note or debit note."
 		},
 		{
-			"question": "Why keep the old system readable after cut-over?",
+			"question": "Which customers should not be consolidated into a monthly e-Invoice?",
 			"options": [
-				"To save money",
-				"As a rollback position and reference for the first month",
-				"To avoid training",
-				"To reuse licences"
+				"Cash customers",
+				"Business customers needing their own document",
+				"Online orders",
+				"Walk-in buyers"
 			],
 			"answer": 1,
-			"why": "A readable old system gives the client a rollback position and a reference while the new balances settle."
+			"why": "Business customers need their own validated document to claim input tax, so consolidation is limited to B2C within the rules."
 		},
 		{
-			"question": "What is the exit criterion for hypercare?",
+			"question": "What does a self-billed invoice mean?",
 			"options": [
-				"Thirty days elapsed",
-				"Open severity one at zero, agreed before go-live",
-				"The consultant is tired",
-				"The invoice is paid"
+				"The seller issues it",
+				"The buyer issues it",
+				"The portal issues it",
+				"Nobody issues it"
 			],
 			"answer": 1,
-			"why": "The exit is measured against a criterion agreed before go-live, so it is a decision rather than a negotiation at the end."
+			"why": "In self-billing the buyer issues the document, typically for imports or agent arrangements, which shifts responsibility for submission."
 		},
 		{
-			"question": "Which document proves the business accepted the system?",
-			"options": [
-				"The configuration worksheet",
-				"The signed UAT sheet",
-				"The runbook",
-				"The access review"
-			],
+			"question": "Which portal error appears when you cancel too late?",
+			"options": ["IncorrectState", "OperationPeriodOver", "ActiveReferencingDocuments", "InvalidTIN"],
 			"answer": 1,
-			"why": "The signed UAT sheet is the formal acceptance, supported by defect closure and retest evidence."
+			"why": "OperationPeriodOver indicates the 72 hour window has passed, so the correction must be a credit note rather than a cancellation."
 		}
 	],
 	"memory": {
-		"spine": "A script the client signs, a weekend in dependency order, a fortnight measured in numbers, and a pack that outlives the consultant.",
+		"spine": "Master data validates before anything is submitted, a submission returns two lists, and cancellation lives inside 72 hours only.",
 		"device": {
 			"kind": "phrase",
-			"label": "Script, sequence, numbers, hand over",
+			"label": "Validate, submit, read, cancel inside 72",
 			"expansion": [
-				"A test case states the action, the expected number and the evidence, and the client signs it",
-				"Pass means the expected figure appears, not that no error message was shown",
-				"Cut over in dependency order, because each step unblocks the next one",
-				"Hypercare is a fortnight of daily numbers: tickets, invoices, stock errors, close progress and logins",
-				"The handover pack must be usable without the consultant in the room"
+				"Validate the masters first: TIN, registration number, MSIC code and SST number",
+				"Submit and read the answer: a submission ID, then accepted and rejected lists",
+				"Accepted, validated and cancelled are three different states, not one",
+				"Cancellation inside 72 hours with a reason, refused afterwards",
+				"Consolidate many small sales to the public, and self bill when you invoice yourself"
 			]
 		},
 		"cards": [
 			{
-				"q": "What makes a UAT case pass?",
-				"a": "The expected figure appears on screen, not merely that the screen did not produce an error.",
-				"hint": "Figures, not silence"
+				"q": "What does a submission return?",
+				"a": "A submission ID, an accepted list carrying validation identifiers, and a rejected list with reasons.",
+				"hint": "One ID and two lists"
 			},
 			{
-				"q": "Why is cut over ordered rather than parallel?",
-				"a": "Each step produces the input for the next, so reordering it creates work that must be redone.",
-				"hint": "Dependency, not convenience"
+				"q": "How long is the cancellation window?",
+				"a": "72 hours after validation, after which only a credit or debit note can correct the document.",
+				"hint": "72, not 24"
 			},
 			{
-				"q": "Which five numbers are measured daily in hypercare?",
-				"a": "Tickets raised, invoices posted, stock errors, close progress and logins.",
-				"hint": "Five numbers a day"
+				"q": "What are document types 01 to 04?",
+				"a": "Invoice, credit note, debit note and refund note.",
+				"hint": "Four types"
 			},
 			{
-				"q": "What ends hypercare?",
-				"a": "A go or no go decision on evidence where every criterion carries a number and someone signs it.",
-				"hint": "Decision on evidence"
+				"q": "When is consolidation allowed?",
+				"a": "For many small sales to the general public grouped into one monthly e-Invoice, not for business buyers.",
+				"hint": "Consumer sales only"
 			},
 			{
-				"q": "What goes into the handover pack?",
-				"a": "Configuration record, mapping workbook, UAT sign off, cut over log, open items and how to run the close.",
-				"hint": "The project's memory"
+				"q": "What must the finance team be able to see?",
+				"a": "One board showing pending, accepted, rejected and cancelled documents, with the reason for each rejection.",
+				"hint": "Status board"
 			}
 		],
 		"trap": {
-			"what": "UAT is signed off because no errors were raised during the session.",
-			"why": "Nobody compared figures, so the first month end discovers the wrong tax template and the sign off protects the vendor, not the client."
+			"what": "A rejected document is resubmitted unchanged.",
+			"why": "The validator rejects it for exactly the same reason while the 72 hour clock keeps running, so the master data or tax code must be fixed first."
 		}
 	},
-	"narration": "The last two weeks decide how the project is remembered. UAT is not a demo: every case states an action and an expected number, five blenders at two hundred forty plus tax is one thousand three hundred twenty, cost six hundred, gross profit six hundred, and the case passes only when those figures appear. Go or no-go is decided on five rows of evidence, with a written acceptance for anything red. Cut-over is a one-page sequence with owners, and the old system stays readable as a rollback position. Then hypercare: five metrics, fifteen minutes, every morning, ending on the date agreed before go-live. Hand over the runbook, the worksheet, the opening pack and the access review, and step back. The measure of a finished engagement is not the invoice, it is a client running their own close, their own UAT for the next change, and their own access review without calling you, because the rhythm lives in their calendar rather than in your notes."
+	"narration": "e-Invoice is a deadline, not a feature. Everything starts with master data: company and customer TIN, registration, MSIC, address, and a validated TIN before the first submission. When you submit, you get a submission identifier and an accepted list, but accepted only means the portal has the file. Validated is the state that matters, because that is where the UUID and the QR code come from, and that is the legal tax invoice. Cancellation lives inside seventy two hours with a reason, and after that the remedy is a credit note, which the portal enforces with named errors. Consolidate only consumer sales, self-bill only where the rules allow, and give the finance team a daily dashboard routine: clear rejections, cancel what must be cancelled, and confirm nothing is left pending overnight. A monthly tie-out between validated totals and the sales ledger is the check that keeps the project out of trouble."
 }

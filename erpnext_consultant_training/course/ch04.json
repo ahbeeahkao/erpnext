@@ -1,437 +1,450 @@
 {
 	"id": "ch04",
 	"number": 4,
-	"title": "Volume 0 · Making the System Usable",
-	"subtitle": "Lessons 6–10: units of measure, warehouses, users and roles, permissions, naming series and the settings that bite later",
+	"title": "Volume 0 · Driving the Desk Like an Operator",
+	"subtitle": "Lessons 1–10: find any document, filter a list into a tool, build a report in a minute and hand the view to a team",
 	"level": "Foundation",
-	"minutes": 80,
+	"minutes": 65,
 	"outcomes": [
-		"Configure units of measure and conversions that survive real purchasing",
-		"Create a warehouse tree with correct stock and adjustment accounts",
-		"Create users with roles that match what each person actually does",
-		"Restrict rows and actions with user permissions and role permissions",
-		"Set the stock and selling settings that decide valuation, credit control and document numbering"
+		"Navigate to any DocType or document in three keystrokes rather than a menu tree",
+		"Turn a list view into a per-role tool with filters, columns and saved views",
+		"Build a defensible report in Report Builder and say when Script or Query Reports are needed",
+		"Teach an operator the three habits that stop keyboard-and-menu time being the bottleneck",
+		"Hand a saved view to a team knowing how user permissions change what it shows"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 6 · Units of measure",
-			"title": "Units that multiply without breaking valuation",
+			"kicker": "Lesson 1 · The awesome bar",
+			"title": "One search box over every DocType and every document",
 			"bullets": [
-				"UOMs are master data: a typo here becomes a wrong stock balance that looks plausible",
-				"Create only the units the client buys and sells in, then convert between them explicitly",
-				"No unit is more real than another: one Box equals twelve Nos is a conversion factor, not a separate product",
-				"Tick 'Must be whole number' for physical units so nobody invoices 0.4 of a blender",
-				"Weight-based units need decimals, so decide per unit instead of applying one rule everywhere"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Stock → Unit of Measure → New", "Box", "Empty UOM record"],
-					["2", "Tick", "Must be whole number", "Checkbox saved on"],
-					["3", "New UOM", "Set (whole number, for bundles)", "Second unit created"],
-					["4", "New UOM", "Kilogram, whole number off", "Decimal quantity allowed"],
-					[
-						"5",
-						"Stock → UOM Conversion Factor → New",
-						"Box → Nos, factor 12",
-						"One conversion row"
-					],
-					["6", "Save", "(no voucher)", "Conversion appears in the UOM list for Box"]
-				]
-			},
-			"notes": "The classic consultant failure is discovering, three months in, that stock was received in boxes at the piece rate. Build conversions before any stock movement, and test one conversion on a draft Purchase Receipt. If the client buys in boxes of twelve and sells single pieces, both units are legitimate and the conversion factor is the contract between them.",
-			"paths": ["Stock → Unit of Measure", "Stock → UOM Conversion Factor"]
-		},
-		{
-			"kicker": "Lesson 6 · Expected outcome",
-			"title": "One box, twelve pieces, one valuation",
-			"bullets": [
-				"A test Purchase Receipt of 1 Box posts a stock balance of 12 Nos, not 1",
-				"The stock ledger shows quantity in the stock UOM, with the box quantity preserved on the document",
-				"Entering 0.5 against a whole-number unit is refused at save",
-				"Valuation stays per Nos, so the rate you type per box is divided correctly",
-				"Stock reports agree with the warehouse total when converted back to boxes"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Receipt of 1 Box", "12 Nos in stock", "Stock → Stock Balance"],
-					["Stock ledger row", "Quantity 12", "Stock → Stock Ledger"],
-					["Half box", "Refused", "Purchase Receipt save"],
-					["Valuation", "Per Nos", "Item → Valuation Rate"],
-					["Round trip", "12 Nos = 1 Box", "Convert quantity on the item"]
-				]
-			},
-			"notes": "Ask the learner to predict the stock balance before saving, then check it. This is the same prediction habit used for tax totals, and it is the core skill of a functional consultant. Watch for the trap where the client's purchase UOM is a box but the item's stock UOM is Nos: the conversion must exist before the first receipt, or the balance will be wrong and reposting is required.",
-			"callout": {
-				"tone": "warn",
-				"title": "Conversions after go-live",
-				"text": "Adding a conversion factor later does not rewrite history. If stock already moved in the wrong unit, you need a stock reconciliation, not a settings change."
-			}
-		},
-		{
-			"kicker": "Lesson 7 · Warehouses",
-			"title": "A warehouse tree with accounts behind it",
-			"bullets": [
-				"Warehouses are physical locations and each one must point at a stock account for valuation postings",
-				"Separate warehouses for main stock, retail counter, assembly and returns make movement visible",
-				"A returns warehouse is not bureaucracy: it is how you separate resellable stock from quarantined stock",
-				"Warehouse names carry the abbreviation, so reports read 'Main Warehouse - SM' consistently",
-				"Set the default warehouse once at company level, then override per document when reality demands it"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Stock → Warehouse → New", "Main Warehouse", "New warehouse under the company"],
-					["2", "Check abbreviation", "… - SM", "Name ends with the company suffix"],
-					["3", "Add Warehouse", "Retail Counter", "Second warehouse"],
-					["4", "Add Warehouse", "Assembly Floor", "Third warehouse"],
-					["5", "Add Warehouse", "Returns Quarantine", "Fourth warehouse"],
-					[
-						"6",
-						"Set Parent Warehouse",
-						"All under the company root",
-						"Tree renders with four leaves"
-					],
-					["7", "Save each", "(no voucher)", "Each warehouse is selectable on stock documents"]
-				]
-			},
-			"notes": "Four warehouses is the smallest tree that teaches the concepts and still fits a real distributor: buy into main, move to retail, consume components on the assembly floor, quarantine returns. Explain that stock never 'teleports': a transfer is a document, and the trial balance stays the same during a transfer because both sides use the same stock account unless you deliberately use different accounts per warehouse.",
-			"paths": ["Stock → Warehouse → New"]
-		},
-		{
-			"kicker": "Lesson 7 · Expected outcome",
-			"title": "Balances per warehouse that reconcile to the total",
-			"bullets": [
-				"Stock Balance report lists all four warehouses with zero quantity before any transaction",
-				"A transfer of 5 units from Main to Retail leaves the company total unchanged at 5",
-				"The stock ledger shows two rows: −5 in Main and +5 in Retail on the same timestamp",
-				"Warehouse-wise profit and loss shows stock value per location when accounts differ",
-				"The default warehouse on a new Stock Entry is Main Warehouse - SM"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Warehouse count", "4", "Stock → Warehouse list"],
-					["After transfer", "Main 0, Retail 5", "Stock Balance per warehouse"],
-					["Ledger rows", "Two rows, ±5", "Stock Ledger"],
-					["Company total", "5 units", "Stock Balance, total row"],
-					["Default", "Main Warehouse - SM", "New Stock Entry"]
-				]
-			},
-			"notes": "The transfer test proves two ideas at once: that stock is tracked per location and that a transfer is not a purchase or a sale. If the learner sees a value change during a transfer, the warehouses are pointing at different stock accounts, which is a deliberate design for some businesses but must be explained, not accidental.",
-			"callout": {
-				"tone": "tip",
-				"title": "Name warehouses by place, not by person",
-				"text": "'Ali's Store' becomes a problem when Ali leaves. Use the physical location and keep people in the warehouse contact fields."
-			}
-		},
-		{
-			"kicker": "Lesson 8 · Users and roles",
-			"title": "Give each person the smallest menu that works",
-			"bullets": [
-				"A user is a login; a role is a bundle of DocType permissions; a role profile is a reusable bundle of roles",
-				"Create named users, never shared logins, because the audit trail is worthless otherwise",
-				"Accounts User can create invoices but not cancel them; Accounts Manager can do both",
-				"Stock User fits a storekeeper; Sales User fits a showroom assistant; System Manager is for the consultant only",
-				"Set the timezone per user so document timestamps read correctly in reports"
+				"The bar at the top of the Desk searches DocTypes, documents, reports and settings from one field",
+				"Two letters of a doctype and Enter opens the list, which is faster than any menu path you can memorise",
+				"Typing a document name or a customer name jumps straight to the record, not to a search results page",
+				"It also runs commands such as new sales invoice, so the whole Desk keys off this one control",
+				"Teach it first and stop drawing menu trees on whiteboards; they go stale, the search box does not"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Users → New User",
-						"anis@serimurni.my, first and last name",
-						"User form with roles table"
+						"Click the search bar or press the focus shortcut",
+						"(focus)",
+						"Caret in the global search field"
 					],
-					["2", "Add role", "Accounts Manager", "Role row added"],
-					["3", "New User", "farid@serimurni.my, Stock User", "Storekeeper login"],
-					["4", "New User", "consultant@serimurni.my, System Manager", "Consultant login"],
-					["5", "Each user", "Timezone: Asia/Kuala_Lumpur", "Timezone saved"],
-					["6", "Save and set password", "Temporary password", "User can log in"],
-					[
-						"7",
-						"Role Profile → New",
-						"Finance Team = Accounts User + Accounts Manager",
-						"Reusable profile"
-					]
+					["2", "Type sal", "(type)", "DocTypes and commands starting with Sal are listed"],
+					["3", "Press Enter on Sales Invoice", "(enter)", "Sales Invoice list view opens"],
+					["4", "Type SM-SINV", "(type)", "Matching documents appear by name"],
+					["5", "Press Enter on a document", "(enter)", "That document opens directly"],
+					["6", "Type new delivery", "(type)", "A New Delivery Note command appears"]
 				]
 			},
-			"notes": "Demonstrate the login rather than describing it. Sign out as administrator, sign in as the storekeeper, and let the learner see a shorter menu. That single experience prevents most of the 'everyone is an administrator' outcomes that make implementations hard to audit. Role profiles save time later when the client hires a fifth accounts person.",
-			"paths": ["Users → User", "Users → Role Profile"]
+			"notes": "Operators lose more time to navigation than to data entry, and the search box is the single biggest win you can hand them in five minutes. But say the honest caveat out loud: shortcuts and exact wording differ between Frappe versions, so teach the habit of searching rather than a specific keystroke, and point people at the Help menu for their own version."
 		},
 		{
-			"kicker": "Lesson 8 · Expected outcome",
-			"title": "Menus that match job descriptions",
+			"kicker": "Lesson 2 · The list view",
+			"title": "Lists are the real interface, not the forms",
 			"bullets": [
-				"The storekeeper can see Stock and Buying but has no Accounts menu",
-				"The accounts manager can create and cancel invoices; the accounts user cannot cancel",
-				"The consultant sees everything, which is why you never demo as the consultant",
-				"Each user profile shows the correct role list and timezone",
-				"Switching users is a one-click test, so run it before every training session"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Storekeeper menu", "Stock and Buying only", "Login as farid@"],
-					["Accounts User cancel", "Blocked", "Open a submitted invoice"],
-					["Accounts Manager cancel", "Allowed", "Login as anis@"],
-					["Role profile", "Finance Team", "Users → Role Profile"],
-					["Timezone", "Asia/Kuala_Lumpur", "User profile"]
-				]
-			},
-			"notes": "The cancel test is the one that matters commercially: an accounts user who can cancel submitted invoices can silently corrupt the sales ledger. Explain the difference between a role and a role profile, then show how a permission shows up as a greyed-out button rather than an error, which is friendlier for training.",
-			"callout": {
-				"tone": "warn",
-				"title": "Never train as Administrator",
-				"text": "Administrator bypasses every permission. Demo and train with a real user account, otherwise you will promise buttons that staff cannot see."
-			}
-		},
-		{
-			"kicker": "Lesson 9 · Permissions and numbering",
-			"title": "Row-level restrictions and document numbers",
-			"bullets": [
-				"Role permissions control what a role may do to a DocType: read, write, submit, cancel, delete",
-				"User permissions restrict which rows a user sees, for example only their own warehouse",
-				"Permlevel fields are hidden from lower levels, which is how credit limits stay with finance",
-				"Naming series decide what the client's customers see as an invoice number, so agree the format first",
-				"A meaningful series such as SI-2026-00001 is easier to quote on the phone than a random hash"
+				"Every DocType has a list view that filters, sorts, selects and exports without opening a single document",
+				"Filters combine with Add Filter, and each one narrows without destroying the previous state",
+				"Sorting by modified date answers the question 'what changed yesterday' faster than any report",
+				"The row count at the bottom is your arithmetic check before you trust a total",
+				"Most client questions — what is outstanding, what is late, what changed — are list questions, not form questions"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Users → Role Permission Manager",
-						"Sales User → Sales Invoice → Read, Write, Create",
-						"Three ticks set"
+						"Open Sales Invoice from the search bar",
+						"Sales Invoice",
+						"List view with the default columns"
 					],
 					[
 						"2",
-						"Users → User Permission → New",
-						"User farid@, Allow Warehouse: Main Warehouse",
-						"Row-level restriction saved"
+						"Add Filter: Status, equals, Overdue",
+						"(filter)",
+						"Only overdue invoices remain, count updates"
 					],
-					["3", "Accounts → Naming Series", "Sales Invoice: SI-.YYYY.-", "Series updated"],
-					["4", "Naming Series", "Purchase Order: PO-.YYYY.-", "Second series updated"],
-					["5", "Create a Sales Invoice", "(save)", "Number reads SI-2026-00001"],
-					["6", "Login as farid@", "Open Stock Balance", "Only Main Warehouse rows appear"]
+					[
+						"3",
+						"Add Filter: Company, equals, Seri Murni",
+						"(filter)",
+						"The set narrows again, both filters shown"
+					],
+					["4", "Sort by Outstanding Amount, descending", "(sort)", "Largest exposure at the top"],
+					["5", "Remove one filter", "(remove)", "The list widens back without losing the other"],
+					[
+						"6",
+						"Read the count at the bottom",
+						"e.g. 14 records",
+						"Number you can reconcile against a report"
+					]
 				]
 			},
-			"notes": "Two different ideas are often confused here: role permissions decide verbs, user permissions decide rows. The warehouse restriction is the most valuable example for a distributor, because it stops a storekeeper from posting into another outlet's stock. Naming series is where consultants earn goodwill, because invoice numbers are visible to customers and cannot be changed retroactively.",
-			"paths": [
-				"Users → Role Permission Manager",
-				"Users → User Permission",
-				"Accounts → Naming Series"
-			]
+			"notes": "The list view is where the client will live, yet training usually skips it in favour of forms. Spend the time here: filters that stack, sorting by modified, and the record count at the bottom. When someone says a report is wrong, the first thing you do together is reproduce their question as a filtered list, because the list shows its working and the report does not."
 		},
 		{
-			"kicker": "Lesson 9 · Expected outcome",
-			"title": "Restricted users see less, not errors",
+			"kicker": "Lesson 3 · Saved filters",
+			"title": "A saved filter is a tool the whole team uses",
 			"bullets": [
-				"The storekeeper's stock report lists one warehouse and the totals are that warehouse only",
-				"The storekeeper can create a Stock Entry but cannot cancel a submitted Sales Invoice",
-				"New invoices follow the agreed series and never skip a number within a period",
-				"The sales user sees the invoice form but not the credit limit field at permlevel 1",
-				"Administrator still sees everything, which is the control case for every permission test"
+				"Any working filter combination can be saved with a name and reappears in the sidebar for everyone",
+				"Name it for the job, not the query: Dispatch – today reads better than status equals not billed",
+				"Saved filters respect permissions, so a storekeeper sees the filter but only their own warehouses",
+				"Marking one as the default for a role turns the list view into a purpose-built work queue",
+				"This is standard configuration, so it survives upgrades and needs no customisation"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Storekeeper stock report", "1 warehouse", "Stock Balance as farid@"],
-					["Cancel attempt", "Button hidden or blocked", "Submitted Sales Invoice"],
-					["Invoice number", "SI-2026-00001", "New Sales Invoice"],
-					["Credit limit field", "Hidden", "Customer form as sales user"],
-					["Administrator", "Sees all warehouses", "Same report"]
+					[
+						"Filter saved with a name",
+						"Dispatch – today in the sidebar",
+						"Sales Invoice list, left panel"
+					],
+					["Visible to a second user", "Same filter name, their data", "Sign in as another user"],
+					[
+						"Respects user permissions",
+						"Only their permitted warehouses",
+						"Compare row counts between users"
+					],
+					[
+						"Set as default for the role",
+						"Opens on that filter automatically",
+						"Saved filter menu, Set as default"
+					],
+					["Survives an upgrade", "Still present after update", "After any version change"]
 				]
 			},
-			"notes": "Always run the permission test twice: once as the restricted user and once as Administrator. If both look the same, no permission was applied. This habit catches the most common implementation defect, which is a system that appears secure in the demo because the demo was done with the wrong account.",
-			"callout": {
-				"tone": "tip",
-				"title": "Numbering is a contract",
-				"text": "Agree the series with the client's auditor before the first real invoice. Renumbering afterwards means cancelled documents and an uncomfortable conversation."
-			}
+			"notes": "This is the cheapest piece of value in the whole project and almost nobody does it. A saved filter named for the shift, with a default, means the dispatch clerk opens the system and is already looking at their work. Say clearly that it is configuration, not customisation: no code, no upgrade risk, and it can be renamed or removed when the job changes."
 		},
 		{
-			"kicker": "Lesson 10 · Settings",
-			"title": "The stock and selling settings that decide behaviour",
+			"kicker": "Lesson 4 · Columns and bulk actions",
+			"title": "Show the four columns that matter and act on many rows",
 			"bullets": [
-				"Valuation method is chosen once per company: FIFO or moving average, and changed later only through reposting",
-				"Allow Negative Stock off is the single most valuable setting for stock accuracy",
-				"Check Credit Limit on turns customer limits into a submit-time control instead of a report",
-				"Default price list and default warehouse remove two fields from every clerk's daily typing",
-				"Enable the settings deliberately and record why, because a future consultant will otherwise guess"
+				"Columns can be added, removed and reordered per list, and the choice is remembered per user",
+				"Selection checkboxes unlock bulk actions: submit, cancel, assign, or delete for drafts only",
+				"Export to Excel or CSV respects the current filters, which is how you hand data to an accountant",
+				"Bulk submit is legitimate for batches of invoices; bulk cancel is not a substitute for thinking",
+				"The column set is part of the saved filter, so a saved view carries both the rows and the fields"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Columns customised",
+						"Customer, Outstanding, Due Date added",
+						"List view, column settings"
+					],
+					["Choice remembered", "Same columns after reload", "Reopen the list"],
+					["Bulk select works", "Ten rows selected, count shown", "Header checkbox"],
+					["Export honours filters", "Only filtered rows in the file", "Menu → Export"],
+					[
+						"Bulk delete restricted",
+						"Drafts only, submitted refused",
+						"Select a submitted row, try delete"
+					]
+				]
+			},
+			"notes": "Show the export to the accountant in the room and you will win that person over immediately: a filtered list that leaves as a spreadsheet is how most Malaysian finance teams still work between systems. Pair it with the warning that the export is a snapshot, not a report, so nobody starts reconciling last month against an old download."
+		},
+		{
+			"kicker": "Lesson 5 · Report Builder",
+			"title": "A defensible report in one minute",
+			"bullets": [
+				"Report Builder takes one DocType, a few columns, filters and a group-by, and saves as a report anyone can run",
+				"It is the right answer for turnover by customer, spend by supplier and stock value by warehouse",
+				"Group-by with a sum column gives a total that ties back to the list view count and the ledger",
+				"Save it with a name the business would use, then add it to the workspace so people can find it",
+				"If the question needs joins across DocTypes or scripted logic, it stops being a Report Builder job"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Stock → Stock Settings", "Valuation Method: FIFO", "Method saved for the company"],
-					["2", "Stock Settings", "Allow Negative Stock: off", "Checkbox clear"],
-					["3", "Stock Settings", "Default Warehouse: Main Warehouse - SM", "Field set"],
-					["4", "Selling → Selling Settings", "Check Credit Limit: on", "Credit control active"],
-					["5", "Selling Settings", "Default Price List: Retail - SM", "Pre-filled on quotations"],
 					[
-						"6",
-						"Stock Settings",
-						"Item Naming By: Item Code",
-						"Item codes typed by the client are kept"
+						"1",
+						"Search for Report Builder",
+						"Report Builder",
+						"Builder form with DocType, columns, filters"
 					],
-					["7", "Save", "(no voucher)", "Settings persist and apply to new documents"]
+					["2", "Set Ref DocType", "Sales Invoice", "Fields from that doctype become available"],
+					["3", "Add columns Customer, Grand Total", "(add)", "Two columns listed"],
+					["4", "Add filter docstatus = 1", "(filter)", "Only submitted invoices counted"],
+					[
+						"5",
+						"Group by Customer, Sum on Grand Total",
+						"(group)",
+						"One row per customer with a total"
+					],
+					["6", "Save as Turnover by Customer", "(save)", "Report is runnable from the search bar"]
 				]
 			},
-			"notes": "Explain the consequence of each switch, not the label. Negative stock allowed means valuation can go negative and margins become fictional; credit limit off means the sales team finds out about a bad payer at month end. Item naming by Item Code is a small choice with big consequences: if the client later wants a different code, renaming an item is a database job.",
-			"paths": ["Stock → Stock Settings", "Selling → Selling Settings"]
+			"notes": "The point of this lesson is not the builder, it is the discipline of proving a number: group-by sum, then compare the grand total against the same filter in the list view. When the two agree, the client can defend the report in a meeting. When they disagree, you have found a filter mistake before the client has, which is the whole job."
 		},
 		{
-			"kicker": "Volume 0 · Handover check",
-			"title": "Ten checks before you let anyone transact",
+			"kicker": "Lesson 6 · Which report tool",
+			"title": "Report Builder, Query Report or Script Report",
 			"bullets": [
-				"Company, abbreviation, currency and fiscal year confirmed against the client's registration documents",
-				"Chart of accounts reviewed with finance, with tax accounts typed correctly",
-				"Cost centres built and the P&L columns reconcile to the company total",
-				"Units and conversions tested with a draft receipt of one box",
-				"Warehouses created with the default set and a transfer tested",
-				"Users created with role profiles, restricted users verified by logging in as them",
-				"Naming series agreed with the auditor, then tested on a draft document",
-				"Stock settings recorded: valuation method, negative stock, default warehouse",
-				"Selling settings recorded: credit limit, default price list, defaults",
-				"Every choice captured on the configuration worksheet with a date and a name"
+				"Report Builder is client-maintainable: columns, filters, group-by, no code, survives upgrades",
+				"Query Report is a saved SQL statement for a developer, quick to write and quick to break",
+				"Script Report is the supported path for logic, permissions and formatting that SQL cannot express",
+				"The functional consultant's job is to specify the question and accept the cheapest tool that answers it",
+				"Anything a client can maintain themselves should never become a customisation you own"
 			],
 			"table": {
-				"headers": ["Area", "Evidence you keep", "Signed by"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Company and accounts", "Screenshot of tree and company tab", "Finance lead"],
-					["Tax", "Test invoice showing 1,320.00 total", "Finance lead"],
-					["Cost centres", "Cost Center-wise P&L", "Management accountant"],
-					["Users and permissions", "Login screenshots per role", "Operations manager"],
-					["Settings", "Completed configuration worksheet", "Consultant plus client"]
+					["Turnover by customer", "Report Builder", "Configure once, client maintains"],
+					["Aging by bucket with custom logic", "Script Report", "Needs Python-level control"],
+					["One-off data extraction", "List view export", "No artefact to maintain"],
+					[
+						"Cross-doctype join nobody owns",
+						"Review before building",
+						"Ask whether the question is real"
+					],
+					[
+						"Anything that must survive upgrades",
+						"Standard, not custom",
+						"Check maintainability first"
+					]
 				]
 			},
-			"notes": "This slide is the deliverable of Volume 0 and the reason it exists: a signed sheet that says the foundation was built deliberately. Consultants who skip it spend month one arguing about who chose what. Keep the evidence in the client's own drive, not yours, so it survives your engagement.",
-			"callout": {
-				"tone": "tip",
-				"title": "Handover is a meeting",
-				"text": "Walk the client through the ten checks and collect signatures. A document nobody read is not evidence; a meeting is."
-			}
+			"notes": "Say the governance point plainly: every custom report is a thing you will be supporting for years, and every Report Builder artefact is a thing the client can change on a Tuesday. Push questions towards the cheaper tool, and only accept a Script Report when the logic genuinely cannot be expressed otherwise. Then make sure the requirement is written down in the UAT script."
+		},
+		{
+			"kicker": "Lesson 7 · Operator habits",
+			"title": "Three habits that beat any menu map",
+			"bullets": [
+				"Search instead of navigating: the awesome bar reaches every screen the menu tree buries three levels deep",
+				"Save the view you use daily, as a named filter with a default, so the first screen is already the work",
+				"Keep the browser at one hundred percent zoom so columns do not collapse and totals stay aligned",
+				"Learn one shortcut per week from the Help menu rather than a printed list nobody keeps",
+				"Refresh before you report a bug: a stale tab is the most common false alarm in a go-live week"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Search beats menus",
+						"Two letters plus Enter reaches the list",
+						"Any list in the system"
+					],
+					["Daily view bookmarked", "Opens filtered, not empty", "Role default filter"],
+					[
+						"Zoom at 100 percent",
+						"All columns visible, no horizontal scroll",
+						"Browser zoom control"
+					],
+					[
+						"Shortcuts discoverable",
+						"Help menu lists them for this version",
+						"Help → Keyboard Shortcuts"
+					],
+					["Refresh before reporting", "Reproduced only after reload", "Hard refresh first"]
+				]
+			},
+			"notes": "Resist handing out a printed sheet of shortcuts; it is out of date by the next upgrade and nobody keeps it. Give the habit instead: search for what you need, save the view you use every day, keep the zoom sane, and check one new shortcut a week in the Help menu. Then model it in every demo you run, because operators copy what they see."
+		},
+		{
+			"kicker": "Lesson 8 · Finding a half-remembered document",
+			"title": "You know the amount and the customer, not the number",
+			"bullets": [
+				"Search by customer name in the list filter, then sort by date to narrow to the week you remember",
+				"Amount filters accept ranges, so between 1,300 and 1,400 finds an invoice you only half recall",
+				"The global search also matches document names, so a partial number such as 0007 is enough",
+				"Once found, the Connections tab shows what was made from it, which is usually the next question",
+				"Teach this instead of letting people scroll a year of invoices looking for a familiar figure"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open Sales Invoice list", "(open)", "Default columns and filters"],
+					["2", "Filter customer equals Aeon Big", "(filter)", "Only that customer's invoices"],
+					[
+						"3",
+						"Filter Grand Total between 1300 and 1400",
+						"(filter)",
+						"A short list of candidates"
+					],
+					["4", "Sort by posting date descending", "(sort)", "The most recent match first"],
+					["5", "Open the likely document", "(open)", "Invoice form with its links"],
+					["6", "Check the Connections tab", "(read)", "Delivery note and payment references"]
+				]
+			},
+			"notes": "This is the everyday question a client will ask you in month two, standing at your desk with a number in their head and no document reference. Show them that the answer is a filter, not a trawl. The Connections tab then answers the follow-up, which is always what happened to it afterwards."
+		},
+		{
+			"kicker": "Lesson 9 · Handing over a view",
+			"title": "Saved views and permissions, together",
+			"bullets": [
+				"A saved filter is shared, so a view built for dispatch is visible to anyone allowed to see that doctype",
+				"User permissions narrow the rows inside the view, so the same filter shows different data per person",
+				"Test the view as a restricted user before you call it done, otherwise the first demo surprises you",
+				"Name views after the role that owns them, and delete the ones nobody uses at each review",
+				"This is the cheapest handover artefact you can leave behind: named, permission-aware work queues"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Shared view visible", "Same name for both users", "Second user's sidebar"],
+					["Rows narrowed by permission", "Fewer rows for the restricted user", "Compare counts"],
+					["Default applies per role", "Opens filtered for that role", "Sign in, open the list"],
+					["Unused views pruned", "List of live views agreed", "Saved filter menu"],
+					["Documented in handover", "Named in the handover pack", "Handover checklist"]
+				]
+			},
+			"notes": "The trap is building a beautiful view as the administrator and never testing it as the person who will use it. User permissions change the rows, not the filter, so a view that looks perfect for you can be empty for dispatch. Always sign in as the restricted user before you show it, and write the view name into the handover pack."
+		},
+		{
+			"kicker": "Lesson 10 · The operator induction",
+			"title": "Fifteen minutes that make a new starter productive",
+			"bullets": [
+				"Search, filter, save, export: four skills that cover ninety percent of everyday Desk work",
+				"Show the search box, one filtered list, one saved view and one export, then have them repeat it back",
+				"Give them their own saved view on day one, named for their job, so the system starts useful",
+				"Point at the Help menu for shortcuts and at you for anything that looks wrong after a refresh",
+				"Write the induction into the handover pack so the client can run it without you"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Sit with the new operator",
+						"(session)",
+						"Fifteen minutes blocked in the calendar"
+					],
+					["2", "Search to a list, then filter it", "(demonstrate)", "They repeat it unaided"],
+					["3", "Save a filter named for their job", "(save)", "Named view in their sidebar"],
+					["4", "Export the filtered rows", "(export)", "Spreadsheet opens with the same rows"],
+					["5", "Ask them to find one document by amount", "(they drive)", "Found without a menu"],
+					[
+						"6",
+						"Note the session in the handover pack",
+						"(write)",
+						"Induction recorded for the client"
+					]
+				]
+			},
+			"notes": "This is where navigation training pays for itself: fifteen minutes per starter, delivered by the client, with no consultant in the room. The induction belongs in the handover pack precisely because it is repeatable. If you leave the client able to teach search, filter, save and export, you have removed the most common reason people quietly go back to spreadsheets."
 		}
 	],
 	"lab": {
-		"title": "Lab · Finish Volume 0 and sign the handover sheet",
+		"title": "Lab · Turn the Desk into three purpose-built work queues",
 		"minutes": 55,
 		"steps": [
-			"Create the Box, Set and Kilogram units, then the 1 Box = 12 Nos conversion",
-			"Create Main Warehouse, Retail Counter, Assembly Floor and Returns Quarantine",
-			"Test a draft Purchase Receipt for 1 Box and confirm the stock balance reads 12 Nos",
-			"Create three users with the roles from the lesson, setting timezone Asia/Kuala_Lumpur",
-			"Create a Finance Team role profile containing Accounts User and Accounts Manager",
-			"Add a user permission restricting farid@ to Main Warehouse and prove it in the stock report",
-			"Set Sales Invoice and Purchase Order naming series, then confirm the next invoice number",
-			"Set valuation FIFO, negative stock off, credit limit check on and the default price list",
-			"Complete the ten-point handover check and collect a name and date against every row"
+			"From the awesome bar, open the Sales Invoice list in three keystrokes and note the default columns",
+			"Filter to overdue invoices for Seri Murni, add Outstanding Amount and Due Date, and sort by amount",
+			"Save that view as Collections – overdue, set it as the default and note where it appears in the sidebar",
+			"Build a Report Builder report grouping submitted invoices by customer with a sum of grand total",
+			"Run the report and reconcile its grand total against the same filter applied in the list view",
+			"Export the filtered list to CSV and confirm the file contains only the filtered rows",
+			"Create a restricted user limited to Main Warehouse and confirm the saved view shows fewer, not different, rows",
+			"Repeat the exercise for Purchase Order as Procurement – this week, then write both view names into the handover pack"
 		],
-		"done": "Every one of the ten checks passes with evidence attached, the conversion test posted 12 Nos for one box, and the handover sheet is signed by someone other than you."
+		"done": "Three named views exist, one is a role default, the Report Builder total reconciles with the filtered list count, the export matches the filter, and the restricted user sees a narrowed version of the same view."
 	},
 	"quiz": [
 		{
-			"question": "A client buys in boxes of twelve and sells single pieces. What must exist before the first receipt?",
+			"question": "What is the fastest reliable way to open an unfamiliar DocType's list in the Desk?",
 			"options": [
-				"Two separate items, one per unit",
-				"A Nos stock unit plus a Box purchase unit with a conversion factor of 12",
-				"Two companies",
-				"Nothing: ERPNext converts automatically"
+				"Navigate the module sidebar until the doctype appears",
+				"Type two letters of the doctype into the awesome bar and press Enter",
+				"Open the Setup workspace and search the DocType list",
+				"Use the browser's back button until the list appears"
 			],
 			"answer": 1,
-			"why": "Stock is valued in the stock UOM. A conversion factor of 12 lets the same item be bought in boxes and sold as pieces without inventing a second product."
+			"why": "The awesome bar searches DocTypes, documents, reports and commands from one field. It is also version-stable in behaviour, unlike memorised menu paths, which move between releases."
 		},
 		{
-			"question": "What is the difference between a role permission and a user permission?",
+			"question": "A dispatch clerk needs to open the system and immediately see their own work. What do you build?",
 			"options": [
-				"They are the same thing",
-				"A role permission decides which actions a role may perform; a user permission restricts which rows a user sees",
-				"A user permission grants administrator rights",
-				"Role permissions only affect reports"
+				"A Script Report restricted to their role",
+				"A saved filter named for the job, set as their default view",
+				"A new workspace with only their doctypes",
+				"A user permission that hides all other doctypes"
 			],
 			"answer": 1,
-			"why": "Roles govern verbs such as create, submit and cancel. User permissions filter records, for example limiting a storekeeper to one warehouse."
+			"why": "A named saved filter with a default turns the list view into a work queue, is pure configuration, survives upgrades, and respects user permissions so each person sees their own rows."
 		},
 		{
-			"question": "Why is 'Allow Negative Stock' normally turned off?",
+			"question": "When does a requirement stop being a Report Builder job?",
 			"options": [
-				"It slows the system down",
-				"It lets stock and valuation go negative, which makes margins and stock reports fictional",
-				"It blocks backdated entries",
-				"It prevents returns"
+				"When more than five columns are needed",
+				"When the question needs joins across DocTypes or logic SQL cannot express",
+				"When more than a hundred rows are returned",
+				"When the client wants to export the result"
 			],
 			"answer": 1,
-			"why": "Negative stock hides a missing receipt and produces meaningless valuation. Keeping it off forces the team to record the real movement first."
+			"why": "Report Builder handles one doctype, its columns, filters and a group-by. Cross-doctype joins and computed logic need a Query or Script Report, which is a development artefact you will maintain."
 		},
 		{
-			"question": "A transfer of 5 units from Main to Retail should do what to the company's stock total?",
+			"question": "You saved a view as administrator and it looks right. Why must you test it as a restricted user?",
 			"options": [
-				"Increase it by 5",
-				"Leave it unchanged, with −5 in Main and +5 in Retail",
-				"Reduce it by 5",
-				"Create a purchase invoice"
+				"Saved filters are not saved until another user opens them",
+				"User permissions narrow the rows inside the view, so it may be empty for them",
+				"Restricted users cannot see saved filters at all",
+				"The default filter only applies to the user who created it"
 			],
 			"answer": 1,
-			"why": "A transfer moves quantity between locations. The total stays the same and the stock ledger shows two offsetting rows."
+			"why": "Saved filters are shared, but user permissions filter which records a person may see. The same view can look complete to you and nearly empty to the storekeeper restricted to one warehouse."
 		},
 		{
-			"question": "Why agree the invoice naming series before the first real invoice?",
+			"question": "A client reports that a total is wrong. What is the first thing you do together?",
 			"options": [
-				"It affects the tax rate",
-				"The number appears on customer-facing documents and cannot be changed retroactively without cancelled records",
-				"It controls the fiscal year",
-				"It determines the chart of accounts"
+				"Rebuild the report as a Script Report",
+				"Reproduce the question as a filtered list view and compare the record count",
+				"Reconcile against the General Ledger",
+				"Ask them to send a screenshot of the report"
 			],
 			"answer": 1,
-			"why": "Invoice numbers are a client and auditor contract. Changing the format later leaves a mixed series and questions about the gap."
+			"why": "A list view shows its filters and its row count, so it shows its working. Reproducing the question there finds a filter mistake in a minute, before you start questioning the ledger or the report."
 		}
 	],
 	"memory": {
-		"spine": "Master data comes before permissions, because a wrong UOM or warehouse produces a balance that looks right and is not.",
+		"spine": "Search, filter, save, share: the Desk is navigated by one search box and made useful by saved views.",
 		"device": {
-			"kind": "rule",
-			"label": "Master data before permissions",
+			"kind": "path",
+			"label": "Search, filter, save, share",
 			"expansion": [
-				"UOM and warehouses are masters: a typo becomes a plausible wrong balance",
-				"A user is a login, a role is a bundle of DocType permissions, a role profile bundles roles",
-				"Role permissions say what you may do, user permissions say which rows you may see",
-				"Naming series and valuation method are chosen once and changed only by reposting"
+				"Search: two letters in the awesome bar beats any menu path you can memorise",
+				"Filter: stack conditions in a list view until the question is answered",
+				"Save: name the view for the job and make it the default for that role",
+				"Share: permissions narrow the rows, so test the view as the restricted user",
+				"Export last: a filtered export is a snapshot, never a report to reconcile against"
 			]
 		},
 		"cards": [
 			{
-				"q": "One box equals twelve pieces. What does a receipt of 1 Box post?",
-				"a": "A stock balance of 12 Nos, because every stock row and valuation runs in the stock UOM.",
-				"hint": "Convert before you count"
+				"q": "Which control reaches every DocType, document and report from one field?",
+				"a": "The awesome bar at the top of the Desk. Two letters and Enter open a doctype list; a document name jumps straight to the record.",
+				"hint": "One box to rule them"
 			},
 			{
-				"q": "What must every warehouse point at?",
-				"a": "A stock account through the company defaults, so valuation has somewhere to post.",
-				"hint": "A location with a ledger"
+				"q": "What makes a saved filter more useful than a custom report?",
+				"a": "It is configuration, so it survives upgrades, respects user permissions and can be changed by the client without a developer.",
+				"hint": "No code to maintain"
 			},
 			{
-				"q": "Role permission or user permission, which one wins?",
-				"a": "The narrower of the two: the role grants the action, the user permission filters the rows.",
-				"hint": "Do versus see"
+				"q": "Why will the same saved view show different rows to two users?",
+				"a": "Saved filters are shared, but user permissions restrict which records each person may see, so the row count differs by role.",
+				"hint": "Permissions narrow rows"
 			},
 			{
-				"q": "The valuation method was wrong since go live. What is the honest fix?",
-				"a": "Repost Item Valuation, not an edit. The method itself is set per company and is not a per document choice.",
-				"hint": "Repost, do not retype"
+				"q": "When is Report Builder the wrong tool?",
+				"a": "When the question needs joins across DocTypes or logic that SQL cannot express. That is a Query or Script Report, and you will maintain it.",
+				"hint": "One doctype only"
 			},
 			{
-				"q": "Which three things are verified before anyone is allowed to transact?",
-				"a": "Company and abbreviation against registration documents, currency and fiscal year, then the chart of accounts.",
-				"hint": "Paper first"
+				"q": "What is the fastest way to prove a report total is right?",
+				"a": "Reproduce the same filter in the list view and compare the record count and the total. The list shows its filters; the report hides them.",
+				"hint": "Count the rows"
 			}
 		],
 		"trap": {
-			"what": "The storekeeper is given the Stock Manager role just to be safe.",
-			"why": "That role also opens Accounts and Buying, and the user permissions then look broken when the real problem was the grant nobody needed."
+			"what": "You build a perfect default view as administrator, demo it, and the dispatch clerk says it is empty on their login.",
+			"why": "User permissions filter the rows inside a saved view. Always sign in as the restricted user, or create one, before declaring the view finished."
 		}
 	},
-	"narration": "Volume zero, second half: making the system usable. Start with units. A unit is master data, and a conversion factor is the contract between buying and selling. If the client buys boxes of twelve and sells pieces, you need both units and the factor of twelve before the first receipt, because stock is valued in the stock unit and history cannot be rewritten afterwards. Test it: one box must post twelve pieces, and half a box must be refused. Next, warehouses. Each location points at a stock account, so main stock, retail counter, assembly floor and returns quarantine are four warehouses with one default. Transfer five units and the company total must not move. Then users. A user is a login, a role is a bundle of permissions, and a role profile is a reusable bundle of roles. Create named users, because shared logins destroy the audit trail, and always demonstrate the restricted login rather than the administrator, who bypasses everything. Permissions have two layers: roles decide verbs such as create, submit and cancel, while user permissions decide rows, for example a storekeeper seeing only the main warehouse. Naming series are a contract with the auditor, so agree the format, then test it on a draft. Finally settings: FIFO valuation, negative stock off, credit limit on, default warehouse and price list. Volume zero ends with a ten point handover sheet signed by the client, because a foundation nobody approved is an argument waiting to happen."
+	"narration": "Operators lose more time finding things than typing them, so Volume zero continues with the interface itself. One search box at the top of the Desk reaches every DocType, every document, every report and a set of commands, which is faster and more durable than memorising a menu tree that moves between versions. The list view is the real interface: filters that stack, columns you choose, sorting by modified date, a record count at the bottom, and selection checkboxes that unlock bulk actions and exports. Take a filter combination that answers a real question, name it for the job, set it as the default for a role, and you have built a work queue that costs nothing to maintain and survives every upgrade. Remember that saved filters are shared while user permissions narrow the rows, so always test a view as the person who will use it. For anything needing joins or logic, Report Builder stops and a Script Report begins, and that is a decision to write down, because it becomes something you support."
 }

@@ -74,18 +74,19 @@ await app.boot({ fetch: fetchFromDisk });
 
 const chapterOne = app.state.chapters[0];
 
-check("boot loads all twenty-four chapters", () => {
-	assert.equal(app.state.chapters.length, 24);
-	assert.equal(app.state.chapters[23].id, "ch24");
+check("boot loads all twenty-seven chapters", () => {
+	assert.equal(app.state.chapters.length, 27);
+	assert.equal(app.state.chapters[26].id, "ch27");
 	assert.match(app.state.manifest.title, /Consultant/);
 });
 
 check("sidebar lists every chapter with its number", () => {
 	const items = $$(".chapter-item");
-	assert.equal(items.length, 24);
+	assert.equal(items.length, 27);
 	assert.match(items[0].textContent, /01/);
-	assert.match(items[7].textContent, /Reality|Volume 2/);
-	assert.match(items[23].textContent, /UAT|Go-Live/);
+	assert.match(items[7].textContent, /Parties and Pricing|Volume 1/);
+	assert.match(items[23].textContent, /e-Invoice|Volume 9/);
+	assert.match(items[26].textContent, /Continuity|Volume 10/);
 });
 
 check("the first slide is the chapter intro", () => {
@@ -124,9 +125,9 @@ check("the counter knows the chapter length", () => {
 });
 
 check("navigating to another chapter renders it and updates the hash", () => {
-	app.goTo(6, 0);
-	assert.match($("#crumbs").textContent, /Chapter 7/);
-	assert.equal(dom.window.location.hash, "#ch07/0");
+	app.goTo(8, 0);
+	assert.match($("#crumbs").textContent, /Chapter 9/);
+	assert.equal(dom.window.location.hash, "#ch09/0");
 	assert.match($("#slide h1").textContent, /Quote to Cash/);
 });
 
@@ -170,7 +171,7 @@ check("marking a card known persists and counts up", () => {
 	assert.equal(app.state.recall[chapter.id].known.length, 1);
 	assert.ok($$("#slide .recall-card")[1].classList.contains("is-known"));
 	assert.match($("#slide .memory-bar").textContent, /1 of 5/);
-	assert.equal(app.recallProgress().total, 120);
+	assert.equal(app.recallProgress().total, 135);
 	const stored = JSON.parse(dom.window.localStorage.getItem("erpnext-consultant/v1"));
 	assert.equal(stored.recall[chapter.id].known.length, 1);
 });
@@ -185,7 +186,7 @@ check("the recall sheet lists the ten laws and every device", () => {
 	app.openOverlay("cheatsheet");
 	assert.match($("#overlay-title").textContent, /Recall sheet/);
 	assert.equal($$("#overlay .law").length, 10);
-	assert.equal($$("#overlay .device-row").length, 24);
+	assert.equal($$("#overlay .device-row").length, 27);
 	assert.match($("#overlay-body").textContent, /Nothing exists until it is submitted/);
 	assert.match(
 		$$("#overlay .device-row")[0].textContent,
@@ -304,7 +305,7 @@ check("the print view contains every chapter, lab and quiz answer", () => {
 	app.buildPrintView();
 	const view = $("#print-view");
 	// one page of laws plus one page per chapter
-	assert.equal(view.querySelectorAll(".print-chapter").length, 25);
+	assert.equal(view.querySelectorAll(".print-chapter").length, 28);
 	assert.match(view.textContent, /Quiz with answers/);
 	assert.match(view.textContent, /Answer:/);
 	assert.match(view.textContent, /The ten laws of ERPNext/);

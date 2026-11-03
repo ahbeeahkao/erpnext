@@ -1,354 +1,400 @@
 {
 	"id": "ch20",
 	"number": 20,
-	"title": "Volume 8 · Permissions, Workflows and Automation",
-	"subtitle": "Lessons 5–8: roles that match the org chart, restrictions that hold, a discount workflow, and automation that does not run away",
+	"title": "Volume 7 · Assets, Quality and CRM",
+	"subtitle": "Lessons 5–8: capitalise and depreciate a van, inspect what arrives, and convert a lead into a priced quotation",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Build roles and permissions that match who does what",
-		"Restrict a user to their own warehouse or branch without custom code",
-		"Add an approval workflow for discounts and prove it blocks what it should",
-		"Automate recurring documents safely and know what to leave manual"
+		"Capitalise a purchase as an asset and post depreciation every month",
+		"Use quality inspection to reject goods before they reach stock",
+		"Move a lead through opportunity to a priced quotation without losing the trail",
+		"Decide which of these three modules a distributor should switch on first"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Roles",
-			"title": "Roles that match the org chart, not the software",
+			"kicker": "Lesson 5 · Fixed assets",
+			"title": "Capitalise the van instead of expensing it",
 			"bullets": [
-				"A role is a job function, so name it after the job and not after a person",
-				"Permission levels control what can be created, read, amended or deleted",
-				"Start restrictive and add, because removing access later is a political fight",
-				"Every role needs an owner who reviews membership quarterly"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Users and Permissions → Role → New", "Sales Executive, desk user", "Role created"],
-					["2", "Open Role Permissions Manager", "Sales Order for that role", "Permission matrix"],
-					[
-						"3",
-						"Set levels",
-						"Read, Write, Create, Submit; no Delete or Cancel",
-						"Four ticks, two blanks"
-					],
-					["4", "Set user permissions", "Customer and territory restrictions", "Restriction rows"],
-					["5", "Assign to a user", "Aina as Sales Executive", "One role on the user"],
-					[
-						"6",
-						"Log in as the user",
-						"Open a sales order",
-						"Create and submit buttons present, delete absent"
-					]
-				]
-			},
-			"notes": "The instinct is to grant everything because the demo is easier, and the consequence arrives six months later when a salesperson deletes a submitted order. Start with read, write, create and submit; add cancel only for supervisors, and delete for nobody in a transaction doctype. A functional consultant who can explain that sentence has already delivered value."
-		},
-		{
-			"kicker": "Lesson 6 · User permissions",
-			"title": "Restrict a user to their own warehouse",
-			"bullets": [
-				"User permissions filter the data a role can see, and they outweigh role permissions",
-				"A warehouse restriction is the standard way to keep branches apart without separate companies",
-				"Test as the restricted user, because administrators bypass these filters",
-				"Restrictions apply to reports too, which is what makes them trustworthy"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Open the user", "Warehouse supervisor", "User form"],
-					[
-						"2",
-						"Add user permission",
-						"Allow Warehouse: Retail Counter - SM",
-						"Restriction row added"
-					],
-					["3", "Set apply to all doctypes", "Yes, for stock doctypes", "Scope defined"],
-					["4", "Log in as that user", "Open Stock Balance", "Only Retail Counter shown"],
-					["5", "Try a transfer to Main", "Create a stock entry", "Main not selectable"],
-					["6", "Log back in as administrator", "Same report", "All warehouses visible"]
-				]
-			},
-			"notes": "This is the single most requested control in multi-branch distribution, and it is pure configuration. Show the client the same report from two logins, because seeing the difference is what sells the control. Remind them that administrators bypass it, so the discipline depends on limiting administrator accounts to two named people."
-		},
-		{
-			"kicker": "Lesson 7 · Workflow",
-			"title": "Put an approval on discounts above ten per cent",
-			"bullets": [
-				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
-				"Conditions belong in transition rules, which keeps the workflow honest",
-				"Approvers need a role, not a person, so absence does not block the business",
-				"Every workflow needs an escape path, or urgent orders stall at month end"
+				"An asset purchase is a purchase invoice with an asset item, which creates the asset record",
+				"Useful life and depreciation method are accounting policy, so get them signed off",
+				"Six figures of van on the balance sheet is very different from six figures of expense",
+				"Every asset needs a location and a custodian, or the register is fiction"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Settings → Workflow → New",
-						"Document Sales Order, state Draft",
-						"Workflow editor"
+						"Create the asset item",
+						"SM-VAN, is fixed asset, asset category Vehicles",
+						"Item flagged for capitalisation"
 					],
-					["2", "Add states", "Pending Approval, Approved, Rejected", "Three states defined"],
+					[
+						"2",
+						"Purchase invoice",
+						"Van 60,000.00 from the dealer, no stock effect",
+						"Asset created automatically"
+					],
 					[
 						"3",
-						"Add a transition",
-						"Draft to Approved when discount is zero",
-						"Auto-approval path"
+						"Open the asset",
+						"Location Main, custodian warehouse supervisor",
+						"Asset ACC-0001"
 					],
 					[
 						"4",
-						"Add a second transition",
-						"Draft to Pending Approval when discount above 10",
-						"Approval path"
+						"Check the category",
+						"5 years straight line, 0 salvage",
+						"Monthly depreciation 1,000.00"
 					],
-					["5", "Assign approver role", "Sales Manager", "Role attached to the state"],
-					[
-						"6",
-						"Test both paths",
-						"One order at 5 per cent, one at 15 per cent",
-						"First submits, second waits"
-					]
+					["5", "Submit the invoice", "Confirm", "Asset status Submitted, value 60,000.00"],
+					["6", "Read the balance sheet", "31-01-2026", "Fixed assets 60,000.00"]
 				]
 			},
-			"notes": "The workflow is only useful if the client's approver role is filled by more than one person, so ask that question before building it. A fifteen per cent discount order that sits unapproved for three days costs more than the discount saved. Build the escape path deliberately and document who may use it."
+			"notes": "Sixty thousand over five years is twelve thousand a year, or one thousand a month, and that is the number the client's accountant will check first. Capitalising also keeps the profit and loss statement readable, because a van is not a January cost. Get the category approved in writing before the first invoice, since changing depreciation method later means a restatement."
 		},
 		{
-			"kicker": "Lesson 8 · Automation",
-			"title": "Automate recurring documents, carefully",
+			"kicker": "Lesson 6 · Depreciation",
+			"title": "Post depreciation monthly, not annually in a panic",
 			"bullets": [
-				"Auto repeat creates a copy of a document on a schedule, which suits subscriptions and retainers",
-				"Test one cycle before enabling, because a wrong template repeats the error monthly",
-				"Automation never replaces the control, so someone still reviews the output",
-				"Start with one low-risk document and add others only after a clean month"
+				"Depreciation is a journal the system generates from the schedule",
+				"Straight line on sixty thousand over five years is one thousand a month",
+				"Accumulated depreciation is a separate account, so the asset keeps its cost",
+				"Year-end catch-up postings are a symptom of a missing monthly routine"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open the source document",
-						"Sales Invoice for the monthly retainer",
-						"Submitted invoice"
+						"Assets → Depreciation → Process Depreciation",
+						"Company SM, 31-01-2026",
+						"Assets due for depreciation"
 					],
-					["2", "Create auto repeat", "Monthly on the first, 12 occurrences", "Schedule stored"],
-					["3", "Set the template", "Same items, customer and tax", "Template reviewed"],
-					["4", "Enable and wait", "First cycle on 01-03-2026", "New draft invoice created"],
-					["5", "Review the draft", "Amounts and dates correct", "Submit or amend"],
-					["6", "Check the log", "Auto Repeat list", "Next occurrence scheduled"]
+					["2", "Review the schedule", "Van, 1,000.00 for the month", "Single line preview"],
+					["3", "Submit", "Confirm", "Depreciation entry created"],
+					["4", "Read the asset", "ACC-0001", "Accumulated 1,000.00, net book value 59,000.00"],
+					["5", "Read the GL", "Depreciation expense account", "Debit 1,000.00"],
+					["6", "Repeat monthly", "Same routine on the last day", "Twelve entries per year"]
 				]
 			},
-			"notes": "Automation is where a small configuration error compounds twelve times a year, so the first cycle must be reviewed by a person. A retainer invoice that repeats the wrong tax template creates a filing problem every month. Enable one document, watch one cycle, then expand, and write that rule into the handover note."
+			"notes": "After twelve months the net book value is forty eight thousand, and the depreciation expense for the year is twelve thousand. Ask the learner to state both before opening the report, because those two figures are what the auditor tests. If the client only posts at year end, the monthly management accounts are wrong all year, which undermines every other number the consultant produced."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the restriction",
-			"title": "Same report, two logins",
+			"kicker": "Lesson 7 · Quality",
+			"title": "Inspect what arrives before it becomes stock",
 			"bullets": [
-				"The test is not what the administrator sees but what the restricted role sees",
-				"Reports, lists and link fields must all respect the filter, not only forms",
-				"A restriction that silently does not apply is worse than no restriction at all",
-				"Record the test result, because the client will ask for evidence"
+				"Quality inspection sits between the receipt and the warehouse when configured that way",
+				"Rejected quantity stays out of sellable stock, which is the entire point",
+				"Each inspection needs parameters with numeric ranges, or it is a tick box",
+				"Quality results feed the supplier conversation, so keep them per supplier"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Quality → Quality Inspection Template",
+						"Visual check, parameters Appearance and Function",
+						"Template saved"
+					],
+					[
+						"2",
+						"Attach to the item",
+						"SM-BL200 requires inspection on purchase",
+						"Inspection required flag"
+					],
+					[
+						"3",
+						"Receive 10 units",
+						"Purchase receipt against the order",
+						"Quality inspection generated"
+					],
+					[
+						"4",
+						"Record results",
+						"9 accepted, 1 rejected for a cracked housing",
+						"Rejected quantity 1"
+					],
+					["5", "Submit the inspection", "Confirm", "Receipt proceeds with 9 units"],
+					["6", "Check stock", "Bin at Main", "9 units received, not 10"]
+				]
+			},
+			"notes": "One rejected unit means nine accepted, and the supplier conversation now has a document behind it. Quality is often sold as a compliance feature, but its real value in distribution is the argument it wins with a supplier who disputes a return. If a client rejects inspection as bureaucracy, ask them what evidence they use today."
+		},
+		{
+			"kicker": "Lesson 8 · CRM",
+			"title": "From lead to opportunity to priced quotation",
+			"bullets": [
+				"A lead is an unqualified contact; an opportunity is a deal with a value and a date",
+				"Converting keeps the trail, which is what makes pipeline reporting possible",
+				"The quotation carries the price, and it is the first document a customer sees",
+				"Every opportunity needs a probability and a territory, or the pipeline report lies"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "CRM → Lead → New", "Aeon Big, contact and source Trade show", "Lead LD-0001"],
+					[
+						"2",
+						"Convert to opportunity",
+						"10 blenders, value 2,400.00, close date 20-02-2026",
+						"Opportunity OPP-0001"
+					],
+					["3", "Set probability", "60 per cent, territory Selangor", "Weighted value 1,440.00"],
+					[
+						"4",
+						"Create the quotation",
+						"10 SM-BL200 at 240.00 plus SST",
+						"Quotation 2,640.00 total"
+					],
+					["5", "Send and track", "Status Open, valid 30 days", "Quotation in the pipeline"],
+					[
+						"6",
+						"Review the pipeline",
+						"CRM → Opportunity pipeline",
+						"Weighted pipeline includes 1,440.00"
+					]
+				]
+			},
+			"notes": "Sixty per cent of twenty four hundred is fourteen hundred forty, and that weighted number is what a sales director actually manages. Without probability and territory, the pipeline report is a list of hopes. The quotation itself is ordinary work, but the trail from lead to opportunity to quotation to order is what lets the owner see conversion rates for the first time."
+		},
+		{
+			"kicker": "Lesson 6 · Verify depreciation",
+			"title": "Schedule, ledger and register agree",
+			"bullets": [
+				"The asset, the ledger and the register must show the same accumulated amount",
+				"Net book value falls by the monthly charge, and the expense sits in the right period",
+				"A missed month is visible immediately in the schedule, not at year end",
+				"Disposal later depends on this schedule being correct today"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					[
-						"Warehouses visible to the supervisor",
-						"Retail Counter only",
-						"Stock Balance as that user"
-					],
-					["Transfer target options", "Main not selectable", "New stock entry as that user"],
-					["Report totals", "retail-only quantity and value", "Stock Balance as that user"],
-					["Administrator view", "all four warehouses", "Same report as administrator"],
-					["Evidence", "screenshot or note in the handover file", "Project documentation"]
+					["Monthly depreciation", "1,000.00", "Asset → Depreciation Schedule"],
+					["Accumulated depreciation after January", "1,000.00", "Asset ACC-0001"],
+					["Net book value", "59,000.00", "Asset register"],
+					["Depreciation expense", "1,000.00", "Profit and Loss Statement, January"],
+					["Balance sheet fixed assets", "59,000.00", "Balance Sheet, 31-01-2026"]
 				]
 			},
-			"notes": "Two logins, one report, a visible difference: that is the demonstration clients remember. Write the result down, because when the first complaint arrives about missing data the answer is already documented. If both logins look identical, the user permission was saved against the wrong field."
+			"notes": "Three views of one number again: the schedule, the asset record and the balance sheet. When they agree, the client can file the month without adjustment. When they disagree, the cause is nearly always a depreciation entry posted in a closed period or an asset created after the run date, and both are one-minute fixes."
 		},
 		{
-			"kicker": "Lesson 7 · Verify the workflow",
-			"title": "States, roles and the escape path",
+			"kicker": "Lesson 8 · Verify the pipeline",
+			"title": "What the CRM numbers actually prove",
 			"bullets": [
-				"A workflow is correct when a low-discount order flows and a high-discount order waits",
-				"Approvers must see the document in their queue, not hunt for it by number",
-				"The escape path is documented and named, so emergencies do not become policy",
-				"Rejection is a state, not a deletion, so the history survives"
+				"Weighted pipeline equals value times probability, summed across open opportunities",
+				"A quotation without an opportunity is a document with no history",
+				"Conversion rate is the number a sales director will ask for first",
+				"Data quality in CRM is measured by how many fields are blank"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["5 per cent order", "submits without approval", "Sales Order list"],
-					["15 per cent order", "status Pending Approval", "Sales Order header"],
-					["Approver queue", "the pending order appears", "Workflow action list"],
+					["Opportunity value", "2,400.00", "Opportunity OPP-0001"],
+					["Probability", "60 per cent", "Opportunity form"],
+					["Weighted pipeline", "1,440.00", "CRM pipeline report"],
+					["Quotation", "2,640.00 including SST", "Quotation QT-SM-2026-0003"],
 					[
-						"Rejected order",
-						"status Rejected, retained in the list",
-						"Sales Order list filtered by state"
-					],
-					["Escape path", "named user documented", "Workflow notes in the handover file"]
+						"Conversion rate this month",
+						"leading indicator, not yet a rate",
+						"CRM → Lead and Opportunity analysis"
+					]
 				]
 			},
-			"notes": "The failure mode is a workflow with no queue, where the approver only learns about the order when the customer calls. Configure the queue view as part of the build, not afterwards, and teach the approver to work from it. A rejection that deletes the document would destroy the audit trail, which is why the state is retained."
+			"notes": "The weighted figure of fourteen hundred forty is the only CRM number a manager should act on weekly, because it changes with probability rather than with optimism. Quotation total of two thousand six hundred forty is where the tax enters and where sales and finance usually disagree. Show both on one page and the pipeline meeting becomes a forecast rather than a wish list."
 		},
 		{
-			"kicker": "Volume 8 · Reference",
-			"title": "Automation options ranked by risk",
+			"kicker": "Volume 7 · Reference",
+			"title": "What to switch on first for a distributor",
 			"bullets": [
-				"Permissions are the highest-value change and the lowest risk, so start there",
-				"Notifications are cheap and reversible; workflows change behaviour and need agreement",
-				"Auto repeat touches money documents, so it needs the tightest review",
-				"Every option here is configuration, and every one needs an owner"
+				"Assets are mandatory once a client owns vehicles or equipment above their capitalisation threshold",
+				"Quality is worth it when returns or supplier disputes are a recurring cost",
+				"CRM pays only if someone owns the pipeline weekly, otherwise it becomes a data graveyard",
+				"Each module adds a control the client must operate, so sequence them"
 			],
 			"table": {
-				"headers": ["Option", "Risk", "First control", "Owner"],
+				"headers": ["Module", "Switch on when", "First control", "Cost of skipping it"],
 				"rows": [
-					["Roles and permissions", "Low, reversible", "Quarterly access review", "HR or admin"],
-					["User permissions", "Low, reversible", "Test with a restricted login", "Admin"],
 					[
-						"Notifications",
-						"Low, noisy if overused",
-						"One message per exception",
-						"Department head"
+						"Fixed assets",
+						"Any capital purchase above the threshold",
+						"Monthly depreciation run",
+						"Expenses hit one month, audit finding"
 					],
 					[
-						"Workflow",
-						"Medium, blocks work",
-						"Named approver role and escape path",
-						"Operations manager"
+						"Quality",
+						"Recurring returns or supplier disputes",
+						"Reject before stock",
+						"Returns processed after the sale"
 					],
-					["Auto repeat", "High, repeats money", "Review the first cycle", "Finance manager"]
+					[
+						"CRM",
+						"A named person owns the pipeline",
+						"Weekly pipeline review",
+						"Quotations with no history"
+					],
+					[
+						"Projects",
+						"Billable service work",
+						"Timesheets approved weekly",
+						"Unbilled work at year end"
+					],
+					[
+						"Subcontracting",
+						"External processing steps",
+						"Subcontractor stock at zero",
+						"Material lost off site"
+					]
 				]
 			},
-			"notes": "Ranking by risk is what stops a client asking for everything at once. Permissions first, notifications second, workflow once the approver role exists, and auto repeat only for documents that are genuinely identical every period. Say the order out loud in the proposal and the delivery becomes predictable."
+			"notes": "Sequencing is the consultant's judgement call, and this table is the argument to have with the client before the proposal. A distributor with three vans needs assets in phase one; a trader who sells on quotation needs CRM before panels. Say what you would switch on first, and say what you would leave until year two."
 		},
 		{
-			"kicker": "Volume 8 · Reference",
-			"title": "The access review a consultant should leave behind",
+			"kicker": "Volume 7 · Reference",
+			"title": "The three reports that keep these modules honest",
 			"bullets": [
-				"Access reviews are a quarterly ritual, not a one-off configuration task",
-				"List every user, their roles and any user permissions, and get a signature",
-				"Remove leavers on the day they leave, which is the only control auditors test hard",
-				"Keep two administrators, named, and no shared logins"
+				"Asset register value must equal the fixed asset control account",
+				"Quality rejection rate by supplier is the number that changes behaviour",
+				"Pipeline weighted value must match the opportunities it sums, without duplicates",
+				"All three are monthly reads, not annual ones"
 			],
 			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
+				"headers": ["Report", "Expected figure", "Where to look", "Question it answers"],
 				"rows": [
-					["Active users", "matches the HR list", "User list"],
-					["Administrators", "exactly two named people", "Role list for System Manager"],
-					["Restricted users", "each has a user permission row", "User permissions"],
-					["Leavers", "disabled on their last day", "User list, enabled column"],
-					["Review evidence", "signed quarterly sheet", "Client's audit file"]
+					[
+						"Asset register",
+						"59,000.00 net book value after January",
+						"Assets → Asset register",
+						"What do we own and what is it worth"
+					],
+					[
+						"Fixed asset control",
+						"59,000.00 in the balance sheet",
+						"Balance Sheet",
+						"Does the ledger agree"
+					],
+					[
+						"Quality rejection rate",
+						"10 per cent for this receipt",
+						"Quality Inspection analysis",
+						"Which supplier costs us returns"
+					],
+					[
+						"Weighted pipeline",
+						"1,440.00 for this opportunity",
+						"CRM → Opportunity pipeline",
+						"What will we sell next month"
+					],
+					[
+						"Depreciation for the month",
+						"1,000.00",
+						"Profit and Loss Statement",
+						"Is the cost in the right period"
+					]
 				]
 			},
-			"notes": "This sheet takes twenty minutes a quarter and prevents the finding that audits always produce: a leaver with live access. Hand it to the client as a template rather than a lecture, and put the first review date in the handover document. Consulting value often looks like a checklist somebody actually uses."
+			"notes": "Reconciling the asset register to the control account is the same discipline as debtors and creditors, and it takes two minutes a month. Quality rejection rate and weighted pipeline are softer, but each has a single number a manager can act on. Give the client these five rows as the monthly read, and the modules earn their place."
 		}
 	],
 	"lab": {
-		"title": "Lab · Roles, a warehouse restriction, a discount workflow and an auto repeat",
+		"title": "Lab · Capitalise a van, depreciate it, inspect a receipt and convert a lead",
 		"minutes": 45,
 		"steps": [
-			"Create the Sales Executive role with read, write, create and submit but no delete",
-			"Restrict a warehouse supervisor to Retail Counter with a user permission",
-			"Log in as that user and confirm only their warehouse appears in reports",
-			"Build a sales order workflow with an approval state above 10 per cent discount",
-			"Test a 5 per cent order and confirm it submits without approval",
-			"Test a 15 per cent order and confirm it waits in Pending Approval",
-			"Set an auto repeat for a monthly retainer invoice",
-			"Review the first generated draft and confirm amounts and tax"
+			"Create the asset item and purchase the van for 60,000.00 on a purchase invoice",
+			"Confirm the asset category produces 1,000.00 of monthly depreciation",
+			"Run depreciation for January and confirm net book value of 59,000.00",
+			"Confirm the depreciation expense of 1,000.00 in the profit and loss statement",
+			"Set up a quality inspection template and attach it to SM-BL200",
+			"Receive 10 units, reject 1 and confirm only 9 reach stock",
+			"Create a lead for Aeon Big and convert it to a 2,400.00 opportunity",
+			"Produce the quotation for 2,640.00 including SST and check the weighted pipeline"
 		],
-		"done": "Done when the restricted user sees one warehouse only, the 15 per cent order cannot submit without approval, and the auto repeat produced a correct draft for review."
+		"done": "Done when the van shows 59,000.00 net book value, nine units were received after inspection, and the opportunity carries a 1,440.00 weighted value with a live quotation."
 	},
 	"quiz": [
 		{
-			"question": "Which permission should a sales role normally lack on submitted documents?",
-			"options": ["Read", "Create", "Delete", "Submit"],
-			"answer": 2,
-			"why": "Delete on transaction doctypes destroys the audit trail. Sales roles normally read, create, write and submit, with cancel reserved for supervisors."
+			"question": "A 60,000.00 asset with a five year straight line life depreciates monthly by what?",
+			"options": ["500.00", "1,000.00", "5,000.00", "12,000.00"],
+			"answer": 1,
+			"why": "60,000 divided by five years is 12,000 a year, or 1,000.00 a month over twelve periods."
 		},
 		{
-			"question": "What does a user permission do?",
+			"question": "What does the asset register value reconcile to?",
 			"options": [
-				"Changes the role",
-				"Filters the records a user can see",
-				"Adds a new user",
-				"Disables the workflow"
+				"The bank balance",
+				"The fixed asset control account",
+				"The creditor ageing",
+				"Stock value"
 			],
 			"answer": 1,
-			"why": "User permissions restrict data, such as one warehouse or territory, and they apply to reports as well as forms."
+			"why": "The register is the detail behind the control account, so the two must agree, exactly as debtors and creditors do."
 		},
 		{
-			"question": "Why should an approver be a role rather than a named person?",
-			"options": [
-				"Roles are cheaper",
-				"So the process continues when someone is away",
-				"Roles bypass permissions",
-				"It simplifies printing"
-			],
+			"question": "After a quality inspection rejects one of ten units, what reaches stock?",
+			"options": ["10 units", "9 units", "11 units", "0 units"],
 			"answer": 1,
-			"why": "A role keeps the workflow moving during leave, whereas a named approver blocks the business whenever they are unavailable."
+			"why": "Rejected quantity stays out of sellable stock, so only the accepted nine units are received into the warehouse."
 		},
 		{
-			"question": "What is the main risk of auto repeat?",
-			"options": [
-				"It deletes documents",
-				"An error repeats every cycle",
-				"It changes permissions",
-				"It stops notifications"
-			],
+			"question": "A 2,400.00 opportunity at 60 per cent probability has what weighted value?",
+			"options": ["2,400.00", "1,440.00", "960.00", "600.00"],
 			"answer": 1,
-			"why": "Auto repeat copies a document on a schedule, so a wrong tax template or price repeats monthly until somebody reviews the draft."
+			"why": "Weighted value is value times probability, so 2,400 × 0.6 = 1,440.00, which is what the pipeline report should show."
 		},
 		{
-			"question": "Which automation should a consultant configure first?",
-			"options": ["Auto repeat", "Workflow", "Roles and permissions", "Notifications"],
-			"answer": 2,
-			"why": "Permissions deliver the highest control value with the lowest risk and are fully reversible, which is why they come first."
+			"question": "Which module should a distributor with three delivery vans switch on first?",
+			"options": ["CRM", "Fixed assets", "Quality", "Projects"],
+			"answer": 1,
+			"why": "Vehicles above the capitalisation threshold must be capitalised and depreciated, or the profit and loss statement carries a distorted one-off cost."
 		}
 	],
 	"memory": {
-		"spine": "A role says what a job may do, a user permission says which rows it may see, and the only test that counts is the restricted login.",
+		"spine": "Capitalise, depreciate, inspect and qualify: four modules, one habit of proving each of them against a register and a report.",
 		"device": {
-			"kind": "rule",
-			"label": "Roles do, permissions see",
+			"kind": "phrase",
+			"label": "Capitalise, depreciate, inspect, qualify",
 			"expansion": [
-				"Name roles after the job function, never after a person",
-				"User permissions filter rows and outweigh what the role would otherwise show",
-				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
-				"Auto repeat copies a document on a schedule, which suits subscriptions and retainers only",
-				"Test the restricted login, not the administrator"
+				"Capitalise: a purchase invoice with an asset item creates the Asset record",
+				"Depreciate: a journal generated from the schedule, monthly, not once in a December panic",
+				"Inspect: Quality Inspection sits between the receipt and the warehouse when configured",
+				"Qualify: lead, then opportunity, then a priced quotation",
+				"Asset register, ledger and schedule must show the same accumulated amount"
 			]
 		},
 		"cards": [
 			{
-				"q": "Role permission or user permission, what is the difference?",
-				"a": "A role grants actions on a DocType, a user permission filters the records, and the narrower wins.",
-				"hint": "Do versus see"
+				"q": "How is a van capitalised rather than expensed?",
+				"a": "With a purchase invoice whose item is marked as a fixed asset, which creates the Asset record.",
+				"hint": "Asset item, not expense"
 			},
 			{
-				"q": "How is a user kept to one warehouse?",
-				"a": "With a user permission on Warehouse for that user, not with a new role.",
-				"hint": "Row filter"
+				"q": "Where does accumulated depreciation have to agree?",
+				"a": "In three places: the asset register, the depreciation account in the ledger and the schedule.",
+				"hint": "Three views, one number"
 			},
 			{
-				"q": "What makes a discount workflow correct?",
-				"a": "A low discount flows straight to submitted while a high one waits at pending approval for the right role.",
-				"hint": "States and transitions"
+				"q": "Lead or opportunity?",
+				"a": "A lead is an unqualified contact, an opportunity is a deal with a value, a date and a probability.",
+				"hint": "Contact versus deal"
 			},
 			{
-				"q": "When is auto repeat safe?",
-				"a": "For genuinely recurring documents with a fixed shape, never for ones a human must judge.",
-				"hint": "Rhythm, not judgement"
+				"q": "How is weighted pipeline calculated?",
+				"a": "Sum of value times probability across all open opportunities.",
+				"hint": "Value times confidence"
 			},
 			{
-				"q": "What does an access review check?",
-				"a": "That every active login still matches a job, quarterly, including the ones nobody uses.",
-				"hint": "Quarterly ritual"
+				"q": "When does a quality inspection happen?",
+				"a": "On receipt, before the goods become available stock, when the item is configured that way.",
+				"hint": "Before it is stock"
 			}
 		],
 		"trap": {
-			"what": "A user permission is added to fix a report that looks wrong.",
-			"why": "The report was the symptom of an over broad role, so filtering rows hides the grant and the next report breaks differently."
+			"what": "Depreciation is posted once a year as a single large journal in December.",
+			"why": "Eleven months of the profit and loss are wrong and the register never matched the ledger in between, so nobody could catch it early."
 		}
 	},
-	"narration": "Permissions are the least glamorous part of a project and the part that determines whether it survives an audit. Roles follow the org chart, not the software, and the safe default is read, write, create and submit without delete. User permissions restrict a person to their warehouse or territory, and you prove it by logging in as them, because administrators bypass the filter. Then workflow: a discount above ten per cent waits for the sales manager, and the approver is a role so leave does not stop the business. Finally automation, where one wrong template repeats twelve times a year, so review the first cycle. Configure in that order and the client gets control before convenience, and finish with a quarterly access review that the client signs, because a leaver with live access is the finding every audit produces when nobody owns the list, and when nobody has written down who is allowed to do what."
+	"narration": "Three modules that clients ask for and rarely operate properly. Fixed assets first: sixty thousand of van becomes twelve thousand a year, one thousand a month, and the register must agree with the control account every month. Quality second: an inspection that rejects one of ten units is the difference between an argument with a supplier and a documented claim. CRM third, and only if somebody owns the pipeline: a lead becomes an opportunity with a value and a probability, twenty four hundred at sixty per cent is fourteen hundred forty, and the quotation is the first document the customer sees. Each module adds a control the client has to run, so sequence them and say plainly what you would leave until year two. Assets and quality carry a control that runs itself once configured; CRM only works when a person owns it, so name that person in the workshop before you switch it on, and put the weekly pipeline review in the same meeting as the sales forecast."
 }

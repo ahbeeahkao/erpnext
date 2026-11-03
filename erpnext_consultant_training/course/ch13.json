@@ -1,400 +1,431 @@
 {
 	"id": "ch13",
 	"number": 13,
-	"title": "Volume 5 · Journals, Accruals and the Bank",
-	"subtitle": "Lessons 1–4: the four journal situations a consultant meets every month, and a bank reconciliation that closes to zero",
+	"title": "Volume 4 · Warehouses, Transfers and Stock Counts",
+	"subtitle": "Lessons 1–4: a warehouse tree that matches how the business moves goods, transfers that keep stock whole, and counts that post the truth",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Post accruals and prepayments that reverse cleanly in the next period",
-		"Read any journal entry and say which reports it will move",
-		"Reconcile a bank statement to the ledger without a plug figure",
-		"Correct a misposting with a reversal or amendment rather than an edit"
+		"Lay out a warehouse tree that operations and finance both accept",
+		"Transfer stock between warehouses without changing total quantity or value",
+		"Run a stock count and post the difference to the right account",
+		"Configure reorder rules so shortages surface before a customer does"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Journal entry",
-			"title": "Post an accrual that survives the close",
+			"kicker": "Lesson 1 · Warehouse tree",
+			"title": "Design the warehouse tree before the first transfer",
 			"bullets": [
-				"An accrual records a cost in the month it was incurred, before the invoice arrives",
-				"The journal must name the same cost centre and cost type the invoice will later use",
-				"Use a dedicated accrued liabilities account, never the creditor control account",
-				"Every accrual needs a reversal date, or last month's cost is counted twice"
+				"A warehouse is a location with a ledger, not a shelf, so each one must earn its place",
+				"Every warehouse has default accounts, and a wrong default quietly corrupts valuation",
+				"Goods In Transit only earns its place when goods genuinely leave one site and arrive at another",
+				"Create the tree before any transaction, because moving stock later leaves a migration trail"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Accounts → Journal Entry → New",
-						"Entry type Journal Entry, date 31-01-2026",
-						"Empty double-entry grid"
+						"Stock → Warehouse → New",
+						"Main - SM, parent All Warehouses, company SM",
+						"Warehouse saved, is group unticked"
 					],
 					[
 						"2",
-						"First row",
-						"Electricity - SM, debit 800.00, cost centre Main - SM",
-						"Debit row accepted"
-					],
-					["3", "Second row", "Accrued Expenses - SM, credit 800.00", "Difference shows 0.00"],
-					["4", "Reference", "TNB January bill not yet received", "Remark stored for the auditor"],
-					["5", "Save and Submit", "Confirm", "Journal JE-SM-2026-0001 submitted"],
-					[
-						"6",
-						"Read the GL",
-						"Filter the journal voucher",
-						"Dr Electricity 800.00, Cr Accrued Expenses 800.00"
-					]
-				]
-			},
-			"notes": "The accrual is not the hard part; the reversal is. Teach the learner to write the reversal date in the remark before submitting, because the person who reverses it in February is usually someone else. A dedicated accrued liabilities account also keeps the creditor control account honest, which matters the moment the client runs an ageing report and finds a supplier they never bought from."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the journal",
-			"title": "Read a journal the way an auditor does",
-			"bullets": [
-				"A journal touches only the accounts you name, so nothing is hidden by a document type",
-				"Debits must equal credits before you look at any report",
-				"If a party is named, the entry moves the party ledger as well as the account",
-				"A journal that adjusts debtors directly is usually a workaround, not a correction"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Debit total equals credit total", "800.00 = 800.00", "Journal Entry footer"],
-					["Profit and loss effect", "expense up 800.00", "Profit and Loss Statement, January"],
-					["Balance sheet effect", "accrued liabilities up 800.00", "Balance Sheet, 31-01-2026"],
-					["Party ledger rows", "none, no party named", "Accounts → Party Ledger"],
-					["Cost centre split", "Main - SM 800.00", "Cost Center-wise P&L"]
-				]
-			},
-			"notes": "The fastest way to teach this is to ask which two reports move before the entry is submitted, then check. Expense up, liability up, profit down, cash untouched. A learner who can recite that for any journal is ready to sit in front of an accountant, because the accountant's first question is always which line changes."
-		},
-		{
-			"kicker": "Lesson 3 · Prepayment",
-			"title": "Release a prepayment month by month",
-			"bullets": [
-				"A prepayment is an asset until the cover it buys is consumed",
-				"One twelfth per month is the discipline that keeps the balance sheet believable",
-				"Post the release as a journal, not by editing the original payment",
-				"Keep a schedule with twelve dates, because a spreadsheet is the audit evidence"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Purchase invoice",
-						"Insurance Premium 1,200.00 paid for twelve months",
-						"Expense posted on payment"
-					],
-					[
-						"2",
-						"Reclassify",
-						"Journal: Dr Prepaid Insurance 1,200.00, Cr Insurance Expense 1,200.00",
-						"Balance moved to the asset"
+						"Add Warehouse",
+						"Retail Counter - SM, parent All Warehouses",
+						"Second leaf warehouse"
 					],
 					[
 						"3",
-						"Monthly release",
-						"Journal: Dr Insurance Expense 100.00, Cr Prepaid Insurance 100.00",
-						"One month consumed"
+						"Add Warehouse",
+						"Assembly Floor - SM, parent All Warehouses",
+						"Third leaf warehouse"
 					],
 					[
 						"4",
-						"Repeat",
-						"Same journal on the last day of each month",
-						"Eleven remaining, if starting in February"
+						"Add Warehouse",
+						"Returns Quarantine - SM, parent All Warehouses",
+						"Fourth leaf warehouse"
 					],
-					["5", "Check the balance", "Prepaid Insurance account", "1,100.00 after one release"],
 					[
-						"6",
-						"Attach the schedule",
-						"Twelve dated rows in the worksheet",
-						"Evidence for the auditor"
+						"5",
+						"Set accounts on each",
+						"Stock account Stock In Hand - SM",
+						"Same stock account, separate locations"
+					],
+					["6", "Open the tree view", "Stock → Warehouse", "Four leaves under one root, no orphans"]
+				]
+			},
+			"notes": "Clients often want a warehouse per van, per salesperson or per shelf, which turns every report into noise. The test is simple: if you would never ask for the stock ledger of that location alone, it is not a warehouse. Four leaves cover most Malaysian distributors, and adding a fifth later is easy, whereas collapsing seven into four is a weekend of transfers."
+		},
+		{
+			"kicker": "Lesson 2 · Reference",
+			"title": "What each warehouse is actually for",
+			"bullets": [
+				"Location names should describe physical truth, not reporting ambition",
+				"Quarantine keeps damaged or returned goods visible without counting them as sellable",
+				"Assembly floor stock is committed to production, so it belongs in a separate ledger",
+				"A retail counter needs its own ledger because its stock is priced and counted differently"
+			],
+			"table": {
+				"headers": ["Warehouse", "Holds", "Valuation effect", "Consultant rule"],
+				"rows": [
+					[
+						"Main - SM",
+						"Bulk stock for fulfilment",
+						"Primary FIFO layers",
+						"One default selling warehouse"
+					],
+					[
+						"Retail Counter - SM",
+						"Display and walk-in units",
+						"Same valuation, separate quantity",
+						"Counted weekly, not monthly"
+					],
+					[
+						"Assembly Floor - SM",
+						"Components issued to work orders",
+						"Moves to work in progress",
+						"Never sell from here"
+					],
+					[
+						"Returns Quarantine - SM",
+						"Returned or damaged goods",
+						"Still owned, still valued",
+						"Inspect before restocking"
+					],
+					[
+						"Goods In Transit - SM",
+						"Stock between sites",
+						"Moves with the transfer",
+						"Only for real shipments"
 					]
 				]
 			},
-			"notes": "Clients rarely object to the reclass, but they do object to eleven manual journals appearing every year. Show them the schedule first and agree who posts it, finance or the consultant, because an unposted release is the most common cause of a prepaid balance that never clears. If the amount is below the client's capitalisation threshold, say so and skip it."
+			"notes": "This table is worth pasting into the configuration worksheet, because it converts a vague conversation into four decisions the client signs off. The quarantine warehouse is the one clients resist and later thank you for, since it stops returned goods being sold twice. If a client insists on one warehouse for everything, write down who will reconcile the differences each month."
 		},
 		{
-			"kicker": "Lesson 4 · Verify the prepayment",
-			"title": "The prepaid schedule balances",
+			"kicker": "Lesson 3 · Material transfer",
+			"title": "Move stock without changing who owns it",
 			"bullets": [
-				"The prepaid balance must equal the unexpired months multiplied by the monthly amount",
-				"Expense recognised so far plus remaining prepayment equals the original invoice",
-				"A prepayment with no schedule is a suspense account in disguise",
-				"Check the cost centre, because prepaid insurance is often split across branches"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Original prepayment", "1,200.00", "Purchase Invoice for the premium"],
-					["Months released", "1 of 12", "Journal entries this period"],
-					["Prepaid Insurance balance", "1,100.00", "Balance Sheet, 31-01-2026"],
-					["Insurance expense this month", "100.00", "Profit and Loss Statement"],
-					["Expense plus prepaid", "100.00 plus 1,100.00 equals 1,200.00", "Your own arithmetic"]
-				]
-			},
-			"notes": "The identity here is the same shape as the stock identity, and that repetition is useful: whatever the topic, the proof is that the parts add to the whole. When a client's prepaid balance does not divide neatly into twelve, either the cover period is wrong or a month was posted twice, and both are five-minute fixes if caught in the same period."
-		},
-		{
-			"kicker": "Lesson 5 · Bank reconciliation",
-			"title": "Reconcile the statement to the ledger, not to a plug",
-			"bullets": [
-				"Reconciliation proves every line on the statement exists in the ledger, and vice versa",
-				"Unreconciled payments are usually timing, but two in a row means a real error",
-				"Use the bank reconciliation tool so the evidence is stored against each voucher",
-				"Agree the closing balance first, then work backwards through unmatched lines"
+				"A material transfer shifts quantity between warehouses and leaves the total untouched",
+				"FIFO valuation travels with the goods, so the destination inherits the oldest layer",
+				"Transfer the quantity that physically moved, not the quantity you wish had moved",
+				"Use the Stock Entry transfer type, never a purchase and sale pair inside one company"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Accounts → Bank Reconciliation",
-						"Bank - SM, 31-01-2026",
-						"Statement and ledger side by side"
+						"Stock → Stock Entry → New",
+						"Type Material Transfer, company SM",
+						"Source and target warehouse fields appear"
 					],
 					[
 						"2",
-						"Enter the statement closing balance",
-						"18,450.00",
-						"Difference against the ledger shown"
+						"Set warehouses",
+						"From Main - SM, to Retail Counter - SM",
+						"Same company on both sides"
 					],
+					["3", "Add the item", "SM-BL200, quantity 5", "Source availability 50 units shown"],
+					["4", "Save and Submit", "Confirm", "Stock Entry STE-SM-2026-0001 submitted"],
+					[
+						"5",
+						"Check the bins",
+						"Main and Retail Counter",
+						"Main 45, Retail Counter 5, total 50 unchanged"
+					],
+					[
+						"6",
+						"Read the stock ledger",
+						"Filter the stock entry",
+						"Two rows: -5 at Main, +5 at Retail, same rate"
+					]
+				]
+			},
+			"notes": "Two ledger rows, one quantity, one valuation: that is what a transfer should look like. If the source and destination rates differ without a landed cost, someone has allowed different valuation on the destination warehouse, and the difference lands in a stock adjustment account that nobody owns. Check both rows every time until the client's team does it by habit."
+		},
+		{
+			"kicker": "Lesson 3 · Verify the transfer",
+			"title": "Two rows, one quantity, one valuation",
+			"bullets": [
+				"A transfer should appear as one outgoing and one incoming row at the same rate",
+				"Total quantity and total value across the company must be identical before and after",
+				"A rate difference between the two rows means the destination warehouse has its own valuation",
+				"Stock in transit is only used when goods genuinely travel between sites"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Main quantity", "45 after transferring 5", "Stock → Bin, Main - SM"],
+					["Retail Counter quantity", "5", "Stock → Bin, Retail Counter - SM"],
+					["Total quantity", "50, unchanged", "Stock Balance across both warehouses"],
+					["Rate on both rows", "120.00", "Stock Ledger, filter the stock entry"],
+					["Stock in transit", "0, no transit warehouse used", "Stock Ledger, transit account"]
+				]
+			},
+			"notes": "Two rows at the same rate is what a clean transfer looks like, and anything else is a configuration problem rather than a stock problem. If the destination rate differs, the warehouse carries its own valuation method or its own stock account, and the difference will land in an adjustment account nobody owns. Check both rows before you move on to counting."
+		},
+		{
+			"kicker": "Lesson 4 · Stock count",
+			"title": "Count the shelf and post the difference",
+			"bullets": [
+				"Stock reconciliation is the only honest way to correct a quantity after a physical count",
+				"The difference posts to a stock adjustment account, which finance must recognise as a cost",
+				"Count before you post, and post once, because every reconciliation is a permanent ledger row",
+				"Reconciled units keep the current valuation rather than inventing a new one"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Stock → Stock Reconciliation → New",
+						"Company SM, posting date 31-01-2026",
+						"Empty reconciliation form"
+					],
+					["2", "Add the item", "SM-BL200 at Main, quantity 47", "Current quantity shown as 50"],
 					[
 						"3",
-						"Match the 1,320.00 receipt",
-						"Aeon Big payment PE-SM-2026-0002",
-						"Row ticked, difference falls"
+						"Set the difference account",
+						"Stock Adjustment - SM",
+						"Account required before submit"
 					],
-					[
-						"4",
-						"Match the 1,320.00 supplier payment",
-						"Sunrise Components payment",
-						"Second row ticked"
-					],
+					["4", "Save and Submit", "Confirm", "Reconciliation SR-SM-2026-0001 submitted"],
 					[
 						"5",
-						"Review unmatched lines",
-						"Bank charges 35.00 not in ledger",
-						"Create the charge entry"
+						"Read the stock ledger",
+						"Filter the reconciliation",
+						"One row: -3 units at 120.00, value 360.00"
 					],
-					["6", "Finish", "Difference 0.00", "Reconciliation dated and saved"]
+					[
+						"6",
+						"Check the general ledger",
+						"Stock Adjustment account",
+						"Debit 360.00 posted as a cost"
+					]
 				]
 			},
-			"notes": "Bank charges are the classic missing entry: the statement knows about them and the ledger does not, so the difference never clears by matching. Guide the learner to create the small entry rather than leaving a 35.00 variance, because a reconciliation with a plug figure teaches the client that the tool is decorative."
+			"notes": "Three units short is 360.00 of cost, and the client must decide whether that is shrinkage, a picking error or a missed delivery. The system will not make that call for them, and a consultant should not either. What you do insist on is a count sheet with a signature and a reason code, so the loss has an owner rather than appearing as an unexplained line in the profit and loss statement."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the reconciliation",
-			"title": "What a clean reconciliation actually proves",
+			"kicker": "Lesson 5 · Reorder rules",
+			"title": "Set reorder levels so shortages arrive early",
 			"bullets": [
-				"Every statement line matched means cash is fully explained for the period",
-				"The reconciled ledger balance equals the statement balance at the cut-off date",
-				"Unpresented cheques and deposits in transit remain as timing differences, and they must be listed",
-				"A zero difference with matched lines is evidence, whereas a zero difference typed by hand is not"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Statement closing balance", "18,450.00", "Bank statement"],
-					["Ledger balance at the same date", "18,450.00", "General Ledger, Bank - SM"],
-					["Matched lines", "all except listed timing items", "Bank Reconciliation screen"],
-					["Unpresented cheques", "listed with numbers and dates", "Reconciliation worksheet"],
-					["Difference", "0.00", "Reconciliation footer"]
-				]
-			},
-			"notes": "This is the one reconciliation a client will sign without argument, because the bank is the independent third party. Use it as the pattern for the others: start from the external document, prove every line, and list the timing differences rather than absorbing them. A consultant who can close a bank reconciliation in ten minutes is trusted with the rest of the close."
-		},
-		{
-			"kicker": "Lesson 7 · Corrections",
-			"title": "Correct a mistake with a reversal, not an edit",
-			"bullets": [
-				"Submitted entries are history, so the remedy is a reversal or an amendment with a trail",
-				"Cancelling a journal removes its ledger effect and leaves the document visible as cancelled",
-				"Amending keeps a link between versions, which is what an auditor reads",
-				"Never delete a document to fix a number, and never journal against a control account"
+				"Reorder level is the trigger, reorder quantity is the batch, and both belong in the item",
+				"The reorder report turns levels into a material request, which is the consultant-friendly path",
+				"Calculate lead time first: two units a day for seven days plus ten safety is twenty four",
+				"A reorder level set by feel produces either stockouts or dead stock within a quarter"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					[
-						"1",
-						"Open the wrong journal",
-						"JE-SM-2026-0001, posted to the wrong cost centre",
-						"Submitted document"
-					],
+					["1", "Open item SM-BL200", "Reorder section", "Warehouse-wise reorder table"],
 					[
 						"2",
-						"Choose the remedy",
-						"Amend, because the document is in an open period",
-						"New version marked amended"
+						"Add warehouse row",
+						"Main - SM, reorder level 24, reorder quantity 20",
+						"Row saved on the item"
 					],
-					["3", "Change the cost centre", "From Retail Counter to Main - SM", "Amounts unchanged"],
-					["4", "Save and Submit", "Confirm", "Amendment recorded with a version history"],
+					["3", "Enable the rule", "Tick the item as reorder enabled", "Rule becomes active"],
+					["4", "Drop stock", "Sell down to 22 units at Main", "Below the reorder level"],
 					[
 						"5",
-						"Alternative remedy",
-						"Cancel and create a reversing journal",
-						"Original shown as cancelled"
+						"Run the report",
+						"Stock → Item Reorder Level report",
+						"SM-BL200 listed as below level"
 					],
-					["6", "Check both accounts", "Cost centre-wise P&L", "Only Main carries the 800.00"]
+					[
+						"6",
+						"Create from the report",
+						"Material Request for 20 units",
+						"Draft request to buying"
+					]
 				]
 			},
-			"notes": "Give the learner both remedies and the rule that chooses between them: amend inside the open period, reverse once the period is closed or reported. What is never acceptable is deleting the document, because the gap it leaves is exactly what an auditor looks for. Say that sentence in the workshop and the client's finance team will repeat it."
+			"notes": "Twenty four is not a round number and that is the point: two units a day for seven days of lead time equals fourteen, plus ten of safety stock. When a client asks why not twenty, the arithmetic answers for you and they stop treating the number as taste. Pair the level with a reorder quantity that matches the supplier's carton, or every purchase order will carry an awkward remainder."
 		},
 		{
-			"kicker": "Volume 5 · Reference",
-			"title": "When a journal is the right document",
+			"kicker": "Lesson 6 · Verify the count and the rule",
+			"title": "What the reports should say afterwards",
 			"bullets": [
-				"Journals belong to adjustments, not to transactions that have their own document",
-				"If a purchase or sale happened, use the invoice; a journal hides the tax and the party",
-				"Accruals, prepayments, depreciation and corrections are the natural journal cases",
-				"Every journal needs a reason in the remark, because the next reader has no context"
+				"Bin quantity, stock ledger total and stock balance must all agree after any movement",
+				"Total stock value across warehouses must be unchanged by transfers and cut only by counts",
+				"The reorder report is a to-do list, so it must be short and actionable",
+				"Any stock adjustment account balance is a conversation, not a rounding difference"
 			],
 			"table": {
-				"headers": ["Situation", "Right document", "Why", "Never do this"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					[
-						"Goods bought on credit",
-						"Purchase Invoice",
-						"Creates creditor and input tax",
-						"Journal to stock and creditors"
-					],
-					[
-						"Cost incurred, invoice not received",
-						"Journal Entry",
-						"Accrual with a reversal date",
-						"Leave it unrecorded until the bill"
-					],
-					[
-						"Insurance paid for a year",
-						"Invoice plus journals",
-						"Reclassify, then release monthly",
-						"Expense it all in month one"
-					],
-					[
-						"Depreciation",
-						"Journal Entry",
-						"Asset and accumulated depreciation",
-						"Adjust the asset value directly"
-					],
-					["Wrong cost centre", "Amend or reverse", "Keeps the audit trail", "Delete and re-enter"]
+					["Main quantity", "47 after the transfer and count", "Stock → Bin, Main - SM"],
+					["Retail Counter quantity", "5", "Stock → Bin, Retail Counter - SM"],
+					["Total stock value", "5,640.00 at 120.00 per unit", "Stock Balance report"],
+					["Stock adjustment this period", "360.00", "General Ledger, Stock Adjustment - SM"],
+					["Items below reorder level", "SM-BL200 only", "Item Reorder Level report"]
 				]
 			},
-			"notes": "Consultants are tempted to solve awkward data with a journal because it is quick, and that is how control accounts end up with unexplained balances. This table gives the learner a defensible answer in the meeting: if the transaction happened, use its document; if only the timing happened, use a journal. The remark field is not optional either, since the next reader is usually the client's auditor."
+			"notes": "Ask the learner to prove total value before and after: fifty units at one hundred twenty is six thousand, transfers change nothing, and a three unit shortage leaves forty seven units worth five thousand six hundred forty. When those three numbers agree, the warehouse model is sound and the client can be shown the reports without a caveat."
+		},
+		{
+			"kicker": "Volume 4 · Reference",
+			"title": "Stock entry types and when to use them",
+			"bullets": [
+				"Each stock entry type answers a different question, and choosing wrong leaves a ledger scar",
+				"Receipts and issues belong to purchases and production, not to ad-hoc corrections",
+				"Manufacture is the only type that consumes components and produces a finished item together",
+				"Repack converts one item into another, which suits bundling but not repricing"
+			],
+			"table": {
+				"headers": ["Stock Entry type", "Use when", "Cost effect", "Trap to avoid"],
+				"rows": [
+					[
+						"Material Transfer",
+						"Stock moves between warehouses",
+						"No value change",
+						"Using it for a sale"
+					],
+					[
+						"Material Issue",
+						"Stock leaves without a sale",
+						"Expense at valuation",
+						"Issuing to hide shrinkage"
+					],
+					[
+						"Material Receipt",
+						"Stock appears without a purchase",
+						"Adds value at your rate",
+						"Receipting before paperwork exists"
+					],
+					[
+						"Manufacture",
+						"Components become a finished item",
+						"Absorbs materials and operations",
+						"Forgetting to consume components"
+					],
+					[
+						"Repack",
+						"One item becomes another",
+						"Carries the source value",
+						"Using it to change prices"
+					]
+				]
+			},
+			"notes": "Consultants are asked to fix stock with a stock entry roughly once a week, and the honest answer is usually no. Show the client this table and ask which row their situation belongs to. If the answer is none, the real fix is in the process or the master data, and a stock entry would only hide the problem in a ledger account that nobody reads."
 		}
 	],
 	"lab": {
-		"title": "Lab · Accrue, prepay, reconcile the bank and correct a posting",
+		"title": "Lab · Build the warehouse tree, transfer, count and reorder",
 		"minutes": 45,
 		"steps": [
-			"Post the 800.00 electricity accrual dated 31-01-2026 with a cost centre",
-			"Confirm profit falls by 800.00 and accrued liabilities rise by the same amount",
-			"Reclassify the 1,200.00 insurance premium to prepaid and release one month",
-			"Prove expense plus prepaid equals the original 1,200.00",
-			"Reconcile Bank - SM to a statement closing balance of 18,450.00",
-			"Create the 35.00 bank charge that the statement shows and the ledger does not",
-			"Take the reconciliation difference to 0.00 and save the evidence",
-			"Amend the misposted journal and confirm only the correct cost centre carries it"
+			"Create the four leaf warehouses under All Warehouses and set the stock account on each",
+			"Record the opening 50 units of SM-BL200 at Main at 120.00",
+			"Transfer 5 units from Main to Retail Counter and prove the total is unchanged",
+			"Read both stock ledger rows and confirm the rate carried across",
+			"Post a stock reconciliation to 47 units at Main with the stock adjustment account",
+			"Confirm the 360.00 posting and the new total value of 5,640.00",
+			"Set reorder level 24 and reorder quantity 20 on the item for Main warehouse",
+			"Sell down below 24 and confirm the item appears in the reorder report"
 		],
-		"done": "Done when the accrual and the prepayment both reconcile to their identities, the bank reconciliation shows 0.00 difference with every line matched or listed, and the corrected journal has a version trail."
+		"done": "Done when both bins agree with the stock ledger, total value is 5,640.00, the stock adjustment account shows 360.00, and the reorder report lists only SM-BL200."
 	},
 	"quiz": [
 		{
-			"question": "Why must an accrual carry a reversal date?",
+			"question": "What does a material transfer do to total stock value?",
 			"options": [
-				"So the tax can be claimed",
-				"So the cost is not counted twice when the invoice arrives",
-				"So the party ledger stays clean",
-				"So the bank reconciles"
+				"Increases it by the transfer rate",
+				"Leaves it unchanged",
+				"Decreases it by freight",
+				"Moves it to an expense"
 			],
 			"answer": 1,
-			"why": "The invoice will post the same cost when it arrives, so the accrual must reverse in the following period to avoid double counting."
+			"why": "A transfer moves quantity and value between warehouses within the same company, so the total quantity and total value are unchanged."
 		},
 		{
-			"question": "A 1,200.00 annual insurance premium is released monthly. What is the prepaid balance after one month?",
-			"options": ["1,200.00", "1,100.00", "100.00", "1,000.00"],
-			"answer": 1,
-			"why": "One month of 100.00 is released, leaving 1,100.00 unexpired and sitting as an asset on the balance sheet."
-		},
-		{
-			"question": "The bank reconciliation shows a 35.00 difference caused by a bank charge. What is correct?",
+			"question": "Which document corrects a quantity after a physical count?",
 			"options": [
-				"Ignore it as immaterial",
-				"Create the bank charge entry in the ledger",
-				"Adjust the statement balance",
-				"Post it to accrued liabilities"
+				"Stock Entry of type Material Issue",
+				"Stock Reconciliation",
+				"Journal Entry",
+				"Purchase Return"
 			],
 			"answer": 1,
-			"why": "The statement is the external evidence, so the missing bank charge belongs in the ledger. A plug figure destroys the value of the reconciliation."
+			"why": "Stock Reconciliation compares the counted quantity with the system quantity and posts the difference to a stock adjustment account."
 		},
 		{
-			"question": "A journal posted to the wrong cost centre in an open period. Best remedy?",
-			"options": [
-				"Delete the journal",
-				"Amend the document and resubmit",
-				"Post a second journal to the opposite cost centre",
-				"Cancel the fiscal year"
-			],
-			"answer": 1,
-			"why": "Amending inside an open period keeps a version trail. Deleting destroys history, and a second journal leaves two wrong rows instead of one."
-		},
-		{
-			"question": "Which situation genuinely needs a journal rather than a document?",
-			"options": [
-				"A credit sale",
-				"A stock purchase",
-				"Depreciation for the month",
-				"A customer payment"
-			],
+			"question": "With a reorder point of 2 units a day, 7 days of lead time and 10 units of safety stock, the level is what?",
+			"options": ["14", "17", "24", "20"],
 			"answer": 2,
-			"why": "Depreciation has no external document, so a journal is its natural form. Sales, purchases and payments all have dedicated documents that also handle tax and parties."
+			"why": "Demand during lead time is 2 × 7 = 14, plus 10 safety gives 24. Round numbers chosen by feel are how stockouts start."
+		},
+		{
+			"question": "Where does a stock reconciliation difference post?",
+			"options": [
+				"Cost of Goods Sold directly",
+				"The stock adjustment account you set",
+				"The creditor account",
+				"The tax account"
+			],
+			"answer": 1,
+			"why": "The difference posts to the stock adjustment account named on the document, which finance treats as an operating cost and reviews monthly."
+		},
+		{
+			"question": "Why keep a Returns Quarantine warehouse?",
+			"options": [
+				"To avoid paying tax on returns",
+				"To keep returned goods visible but unsellable",
+				"To store suppliers' goods",
+				"To hold fixed assets"
+			],
+			"answer": 1,
+			"why": "Returned goods remain owned and valued, and quarantine makes that visible so nobody sells them again before inspection."
 		}
 	],
 	"memory": {
-		"spine": "Four journal situations recur every month, and each one has a reversal date that decides whether the next period is clean.",
+		"spine": "A transfer is a receipt and an issue wearing one voucher, so the total never moves while the location does.",
 		"device": {
-			"kind": "rule",
-			"label": "Accrue, prepay, reconcile, reverse",
+			"kind": "phrase",
+			"label": "One voucher, two rows",
 			"expansion": [
-				"Accrual: the cost belongs to this month, the invoice arrives next month, and a reversal is set now",
-				"Prepayment: an asset until the cover it buys is consumed, released month by month",
-				"Reconciliation proves every statement line exists in the ledger and every ledger line on the statement",
-				"Corrections are reversals or amendments with a trail, never edits to a submitted entry"
+				"A warehouse is a location with its own ledger, so each one must earn its place",
+				"A transfer moves quantity between warehouses and leaves the total and ownership untouched",
+				"Two stock ledger rows, same rate, one voucher: one outgoing and one incoming",
+				"Stock Reconciliation is the only honest correction after a physical count",
+				"Reorder level is the trigger, reorder quantity is the batch it suggests"
 			]
 		},
 		"cards": [
 			{
-				"q": "When does an accrual reverse?",
-				"a": "On the reversal date set when it was posted, so the actual invoice lands cleanly in the next period.",
-				"hint": "Decide the date at posting time"
+				"q": "How many stock ledger rows does a transfer create?",
+				"a": "Two, an outgoing and an incoming row at the same rate, written by one voucher.",
+				"hint": "In and out, one document"
 			},
 			{
-				"q": "What is a prepayment before it is consumed?",
-				"a": "An asset: cover that has been paid for but not yet used.",
-				"hint": "Asset until used"
+				"q": "What corrects a count difference?",
+				"a": "A Stock Reconciliation with the counted quantity, including counts that are zero.",
+				"hint": "Truth on paper"
 			},
 			{
-				"q": "What does a clean bank reconciliation prove?",
-				"a": "That every statement line is matched to the ledger, so cash for the period is fully explained with no plug.",
-				"hint": "No suspense account"
+				"q": "Which three numbers must agree after any movement?",
+				"a": "Bin quantity, the stock ledger running total and the Stock Balance report.",
+				"hint": "Three views of one number"
 			},
 			{
-				"q": "How is a submitted journal corrected?",
-				"a": "Reverse it, or cancel and amend, because the trail is the whole point.",
-				"hint": "History is append only"
+				"q": "Reorder level or reorder quantity?",
+				"a": "The level triggers the alert, the quantity is how much the suggestion orders.",
+				"hint": "When versus how much"
 			},
 			{
-				"q": "Which four journal situations recur monthly?",
-				"a": "Accrual, prepayment release, depreciation and correction.",
-				"hint": "The monthly four"
+				"q": "Does reserving stock for a work order move the ledger?",
+				"a": "No. Reserved quantity is planning only, and only a Stock Entry moves stock.",
+				"hint": "Plan versus post"
 			}
 		],
 		"trap": {
-			"what": "A suspense account absorbs whatever the bank reconciliation cannot explain.",
-			"why": "Cash is then explained by an account nobody owns, and the balance grows every month until the close cannot be defended."
+			"what": "A transfer is posted to fix a count difference between two warehouses.",
+			"why": "The total is unchanged, so the system now agrees with itself and disagrees with the shelf, and the error only moves."
 		}
 	},
-	"narration": "Journals are where the accounting primer becomes a daily tool. An accrual records a cost before the invoice arrives, and it must reverse, or February carries January's electricity twice. A prepayment is an asset until the cover is used, so one thousand two hundred of insurance becomes one hundred a month, leaving one thousand one hundred on the balance sheet after the first release. Then the bank. Match every statement line, create the bank charge the ledger is missing, and drive the difference to zero with evidence rather than a plug. And when something was posted to the wrong place, amend it inside the open period or reverse it afterwards. Never delete, because the gap is exactly what an auditor looks for first. Practise the four situations until they are reflexes: accrual, prepayment, bank charge, wrong cost centre. Each one has a canonical remedy, and each remedy leaves a document behind, which is what turns a bookkeeping task into a consulting deliverable."
+	"narration": "Stock is the part of ERPNext where a small configuration mistake becomes a very large number. Start with the warehouse tree: four leaves, one root, each with the same stock account, because a wrong default account turns every transfer into a valuation difference. A material transfer moves five blenders from main to retail and leaves the total untouched, which is the check to make every single time. Then the stock count. Fifty units on the system, forty seven on the shelf, three units short at one hundred twenty is three hundred sixty of cost, and the reconciliation posts it to a stock adjustment account that finance must recognise. Finally the reorder rule: two units a day for seven days plus ten safety is twenty four, not a round twenty. Set those three things properly and the stock reports stop being arguments, and start being the evidence the client takes to their auditor at the first stock review."
 }

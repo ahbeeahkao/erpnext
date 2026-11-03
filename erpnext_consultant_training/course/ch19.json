@@ -1,346 +1,320 @@
 {
 	"id": "ch19",
 	"number": 19,
-	"title": "Volume 8 · Print Formats, Naming and Notifications",
-	"subtitle": "Lessons 1–4: documents the customer can read, series numbers that survive an audit, and notifications that arrive once",
+	"title": "Volume 7 · Projects, Timesheets and Billable Work",
+	"subtitle": "Lessons 1–4: a project that carries its own profit and loss, timesheets that become invoices, and a close that shows the margin",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Build a print format from the builder without writing code",
-		"Set naming series per document type and branch so numbering stays gapless",
-		"Configure a notification that fires on the right event and only once",
-		"Standardise letterheads and terms so every document looks like one company"
+		"Set up a project whose cost and revenue land on the same report",
+		"Record billable and non-billable time without inflating the client invoice",
+		"Turn approved timesheets into an invoice with the right tax treatment",
+		"Report project margin and close the project with evidence"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Print format",
-			"title": "Design a print format the customer will read",
+			"kicker": "Lesson 1 · Project",
+			"title": "Create a project that tracks its own profit",
 			"bullets": [
-				"The print format builder gives you sections, fields and totals without a line of code",
-				"Print only the fields the customer needs: prices, quantities, tax and terms",
-				"Test with a real document, because a short address or a long item name breaks layouts",
-				"Attach a letterhead, or every invoice leaves the building looking improvised"
+				"A project is a cost collector, and its value appears only if every entry names it",
+				"Set the expected start and end dates, because they drive the billing schedule",
+				"Assign a cost centre if the client reports by department as well as by project",
+				"Create the project before the first timesheet, not after the first invoice"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Projects → Project → New", "Aeon Big rollout, company SM", "Empty project form"],
+					["2", "Set the dates", "Start 02-02-2026, end 27-02-2026", "Schedule recorded"],
+					[
+						"3",
+						"Set billing",
+						"Project currency MYR, 150.00 per hour billing rate",
+						"Rate stored for billing"
+					],
+					["4", "Set cost centre", "Retail Counter - SM for delivery work", "Cost centre carried"],
+					["5", "Save", "Nothing else", "Project PROJ-0001, status Open"],
+					["6", "Check the dashboard", "Project overview", "Zero hours, zero cost, zero billed"]
+				]
+			},
+			"notes": "The billing rate on the project is what turns hours into money, so get it agreed in writing before the first timesheet. Twenty hours at one hundred fifty is three thousand of revenue, and the client will compare that against the fixed quote in the contract. A project without a rate produces timesheets that finance has to reprice by hand, which is exactly the work a consultant is hired to remove."
+		},
+		{
+			"kicker": "Lesson 2 · Verify the setup",
+			"title": "What the project must carry before work starts",
+			"bullets": [
+				"Rate, cost centre, dates and customer are the four fields that matter",
+				"A project with no customer cannot be invoiced without retyping everything",
+				"Cost centre makes the project visible in departmental reporting as well",
+				"The percentage complete figure is a management input, not an accounting one"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Customer", "Aeon Big Sdn Bhd", "Project form"],
+					["Billing rate", "150.00 per hour", "Project → Billing"],
+					["Cost centre", "Retail Counter - SM", "Project form"],
+					["Expected hours", "20", "Project → Costing"],
+					["Expected revenue", "3,000.00", "Your own arithmetic"]
+				]
+			},
+			"notes": "Twenty hours at one hundred fifty is three thousand, and the expected cost will come from timesheets at the internal rate. Writing both numbers down before work starts is what makes the margin conversation possible in week three, when the client asks why the invoice is higher than they remember."
+		},
+		{
+			"kicker": "Lesson 3 · Timesheet",
+			"title": "Record time so it can be billed and costed",
+			"bullets": [
+				"A timesheet records hours against a project and an activity, and it carries a cost",
+				"Mark billable time deliberately, because non-billable hours still cost money",
+				"Approve timesheets before invoicing, or the invoice will not be defensible",
+				"The internal cost rate is separate from the billing rate and is what finance needs"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Printing → Print Format → New",
-						"Document type Sales Invoice, standard format",
-						"Builder canvas with sections"
+						"Projects → Timesheet → New",
+						"Employee Aina, project Aeon Big rollout",
+						"Empty timesheet"
+					],
+					["2", "Add a line", "Activity Implementation, 8 hours on 05-02-2026", "Line accepted"],
+					[
+						"3",
+						"Mark billing",
+						"Billable, billing rate 150.00, cost rate 80.00",
+						"Amounts computed"
+					],
+					[
+						"4",
+						"Add a second line",
+						"Design review, 2 hours, non-billable",
+						"Billable total unchanged"
+					],
+					["5", "Save and Submit", "Confirm", "Timesheet TS-2026-0001, cost 800.00"],
+					["6", "Check the project", "Project cost", "800.00 against the project"]
+				]
+			},
+			"notes": "Eight billable hours at one hundred fifty and two non-billable at the same rate is a trap, because non-billable time must not reach the invoice. Marking it correctly keeps three thousand of revenue intact while still costing eight hundred, which is the honest picture. Teach the difference before the first timesheet, not after the first disputed invoice."
+		},
+		{
+			"kicker": "Lesson 4 · Bill the project",
+			"title": "Turn approved time into a defensible invoice",
+			"bullets": [
+				"Invoicing from a timesheet carries hours, rate and project onto the invoice automatically",
+				"Service tax treatment differs from goods, so check the template before submitting",
+				"An invoice without a project loses the margin link that made the project worth creating",
+				"Bill monthly, because a single invoice at the end hides cost overruns until it is too late"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open TS-2026-0001 → Create → Sales Invoice",
+						"Nothing",
+						"Customer and project pre-filled"
+					],
+					["2", "Check the line", "20 hours at 150.00", "Net 3,000.00"],
+					["3", "Apply service tax", "Service Tax 8 % template", "Tax 240.00, total 3,240.00"],
+					["4", "Save and Submit", "Confirm", "Invoice SINV-SM-2026-0010"],
+					["5", "Read the project", "Project cost and billed", "Cost 1,600.00, billed 3,000.00"],
+					["6", "Check the margin", "Project profitability", "1,400.00, about 46 per cent"]
+				]
+			},
+			"notes": "Twenty hours at one hundred fifty is three thousand of revenue, twenty hours at eighty is one thousand six hundred of cost, and the difference of one thousand four hundred is the margin the project exists to produce. Service tax of eight per cent adds two hundred forty, which is a liability and never revenue. When those three numbers are visible on one screen, the client stops treating projects as a reporting nicety."
+		},
+		{
+			"kicker": "Lesson 5 · Project close",
+			"title": "Close the project with the numbers attached",
+			"bullets": [
+				"Closing means no more time or cost can be posted against the project",
+				"Compare final cost with the estimate and write down the reason for the difference",
+				"Unbilled timesheets must be invoiced or written off before closing",
+				"A closed project is the reference for pricing the next one"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Check unbilled time",
+						"Filter timesheets by project and billing status",
+						"List empty or explained"
 					],
 					[
 						"2",
-						"Add header fields",
-						"Customer name, address, invoice number, date, due date",
-						"Header block defined"
+						"Check cost",
+						"Project cost against the 1,600.00 estimate",
+						"Variance within tolerance"
 					],
-					[
-						"3",
-						"Add the items table",
-						"Item, quantity, rate, amount, tax",
-						"Table with five columns"
-					],
-					["4", "Add totals", "Net total, tax, grand total", "Totals block"],
-					[
-						"5",
-						"Attach letterhead",
-						"Seri Murni Sdn Bhd with registration and SST number",
-						"Branded footer and header"
-					],
-					["6", "Preview", "Invoice SINV-SM-2026-0010", "One page, totals 3,240.00 with tax 240.00"]
-				]
-			},
-			"notes": "A print format is the only part of ERPNext most customers ever see, and it is judged in five seconds. Two rules cover most of it: put the tax number and the amount due at the bottom where people look, and never print internal fields such as cost or margin. Preview with the longest item name and the shortest address you can find."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the print",
-			"title": "What a Malaysian invoice must show",
-			"bullets": [
-				"Company name, registration and SST number are not optional on a tax invoice",
-				"Invoice number, date, customer details and item description must be legible",
-				"Tax must be shown as a separate amount, not folded into the rate",
-				"Terms and payment instructions reduce the number of calls to accounts"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Company registration and SST number", "both printed", "Print preview header"],
-					["Invoice number and date", "SINV-SM-2026-0010, 10-02-2026", "Print preview"],
-					["Net, tax and total", "3,000.00, 240.00, 3,240.00", "Totals block"],
-					["Payment terms", "Net 30, due 12-03-2026", "Footer"],
-					["Internal fields", "cost and margin absent", "Read the whole page"]
-				]
-			},
-			"notes": "The three totals on the page must match the document to the cent, because an invoice that disagrees with the ledger is the fastest way to lose an accountant's confidence. Print one invoice and reconcile it line by line against the form before you hand the client a template. It takes five minutes and prevents months of quiet distrust."
-		},
-		{
-			"kicker": "Lesson 3 · Naming series",
-			"title": "Series numbers that survive an audit",
-			"bullets": [
-				"Naming series control document numbers, and gaps are the first thing an auditor asks about",
-				"Use the prefix fields rather than renaming series mid-year",
-				"Each branch or company needs its own series when documents are filed separately",
-				"Cancelled documents keep their number, because a reused number is worse than a gap"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Open Sales Invoice", "Settings → Naming Series", "Series pattern editor"],
-					["2", "Set the pattern", "SINV-SM-2026-.#####", "Example SINV-SM-2026-00010"],
-					["3", "Set the current value", "10 to continue after the last invoice", "Next number 11"],
-					["4", "Save and create a document", "New sales invoice", "Number SINV-SM-2026-00011"],
-					["5", "Cancel a document", "Cancel the new invoice", "Number stays used, not reused"],
-					["6", "Check the next", "Create another invoice", "Number SINV-SM-2026-00012"]
-				]
-			},
-			"notes": "Gaps are acceptable when a document was cancelled; they are not acceptable when a series was renamed or restarted. Explain that distinction once, and the client's auditor will stop raising it as a finding. Align the prefix with the year and the company abbreviation, because the number is often the only identifier on a customer's remittance advice."
-		},
-		{
-			"kicker": "Lesson 4 · Notifications",
-			"title": "Send the right message once, at the right moment",
-			"bullets": [
-				"A notification watches one document event and applies a condition you write in plain fields",
-				"Send too many and people filter them, so target the exception rather than the routine",
-				"Use the document's own fields in the subject so the message is useful without opening it",
-				"Test with a real document and check the recipient list, not just your own inbox"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Settings → Notification → New",
-						"Document type Sales Order, event Submit",
-						"Condition builder"
-					],
-					["2", "Set the condition", "grand_total greater than 5000", "Condition saved"],
-					["3", "Set recipients", "Role Sales Manager and the owner", "Two recipients defined"],
+					["3", "Set completion", "100 per cent complete, status Completed", "Project closes"],
 					[
 						"4",
-						"Compose the message",
-						"Subject with order number, customer and total",
-						"Template stored"
+						"Attach evidence",
+						"Signed timesheet and invoice in the file",
+						"Audit trail complete"
 					],
-					["5", "Submit a 6,000.00 order", "Sales order for Aeon Big", "One email sent"],
-					["6", "Submit a 1,200.00 order", "Below the threshold", "No email sent"]
+					["5", "Record the lesson", "Variance note in the project sheet", "Reason written down"],
+					["6", "Confirm no postings", "Attempt a new timesheet", "Project no longer accepts time"]
 				]
 			},
-			"notes": "Notifications are cheap to create and expensive to overuse, so the rule is one message per exception. A six thousand order triggering a note to the sales manager is a control; every order triggering a note is noise. Test with a document above and a document below the threshold, and check that the message arrives once rather than once per recipient plus the queue."
+			"notes": "The value of closing properly is the next quotation. A project that ended at one thousand six hundred of cost against an estimate of one thousand two hundred teaches the client to reprice, provided somebody writes it down. Make the variance note part of the close, or the same underestimate will repeat on every engagement and the consultant will be blamed for the system's silence."
 		},
 		{
-			"kicker": "Lesson 4 · Verify notifications",
-			"title": "One message, one recipient list, one test",
+			"kicker": "Volume 7 · Reference",
+			"title": "Project documents and the controls they carry",
 			"bullets": [
-				"A notification that fires twice trains people to ignore it, which defeats the control",
-				"Recipients should be roles or owners, not a typed list that rots after a resignation",
-				"The message must be useful without opening the document: number, customer, amount",
-				"Test above and below the condition, and check the queue for duplicates"
+				"Each document adds one dimension: time, cost, revenue or status",
+				"The project record is the join between all four, which is why it must be named everywhere",
+				"Approval is the control that makes timesheets billable and defensible",
+				"Every control has an owner in the client's team, not in the consultant's head"
+			],
+			"table": {
+				"headers": ["Document", "Adds", "Control", "Who owns it"],
+				"rows": [
+					[
+						"Project",
+						"Cost centre, rate, customer",
+						"Rate agreed before work",
+						"Engagement manager"
+					],
+					["Timesheet", "Hours and internal cost", "Approval before billing", "Team lead"],
+					["Sales Invoice", "Revenue and tax", "Matches approved hours", "Finance"],
+					["Project profitability", "Margin by project", "Reviewed monthly", "Finance manager"],
+					["Completion note", "Variance and lessons", "Signed at close", "Engagement manager"]
+				]
+			},
+			"notes": "Projects fail in ERPNext for a boring reason: somebody forgets to name the project on a timesheet, and the cost disappears into a departmental expense. The fix is a control, not a report, so agree who checks that every timesheet carries a project and put it in the weekly meeting. When that control is in place, the margin report is trustworthy by default."
+		},
+		{
+			"kicker": "Volume 7 · Reference",
+			"title": "Reading the project profit and loss",
+			"bullets": [
+				"Revenue comes from invoices that name the project, not from quotations",
+				"Cost comes from timesheets and purchase documents that name the project",
+				"Unbilled work in progress is a real asset, and it belongs in the month-end pack",
+				"A margin of 46 per cent on services is healthy for Malaysian implementation work"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Email for a 6,000.00 order", "exactly one", "Recipient inbox and Email Queue"],
-					["Email for a 1,200.00 order", "none", "Recipient inbox"],
-					["Recipients", "Sales Manager role plus document owner", "Notification definition"],
-					["Subject line", "order number, customer and total present", "The received email"],
-					["Document link", "opens the submitted order", "Click the link in the email"]
+					["Project revenue", "3,000.00 net of tax", "Project profitability report"],
+					["Project cost", "1,600.00 at 80.00 per hour", "Project profitability report"],
+					["Gross margin", "1,400.00, about 46 per cent", "Your own arithmetic"],
+					["Unbilled time", "0.00 after the invoice", "Timesheet billing status"],
+					["Service tax", "240.00 payable, not revenue", "General Ledger, Service Tax account"]
 				]
 			},
-			"notes": "A notification is a control only if it is reliable, so test the failure case as carefully as the success case. Duplicate emails usually come from two notifications watching the same event, which is worth checking in the list before blaming the system. Keep one notification per exception and delete the rest."
-		},
-		{
-			"kicker": "Lesson 5 · Letterhead and terms",
-			"title": "Make every document look like one company",
-			"bullets": [
-				"A letterhead holds the logo, address and registration details used across all documents",
-				"Terms and conditions templates attach to quotations, orders and invoices without retyping",
-				"Both are configuration, so the client's team can maintain them after handover",
-				"Set a default so nobody has to remember to pick the right template"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Settings → Letterhead → New",
-						"Company name, address, registration, SST number",
-						"Letterhead saved"
-					],
-					["2", "Attach the image", "Logo at 200 pixels wide", "Logo renders on preview"],
-					[
-						"3",
-						"Create terms",
-						"Terms and Conditions template Payment Terms",
-						"Template body stored"
-					],
-					[
-						"4",
-						"Set defaults",
-						"Company → default letterhead and terms",
-						"Applied to new documents"
-					],
-					["5", "Print a quotation", "QT-SM-2026-0003", "Header, terms and footer all present"],
-					["6", "Hand over", "Show the client how to edit both", "They maintain it themselves"]
-				]
-			},
-			"notes": "These two settings are what make a system look finished, and they are also the easiest handover win. Show the client's administrator how to change an address or a term without a consultant, and they stop calling you for the small things. That is a commercial decision as much as a technical one."
-		},
-		{
-			"kicker": "Volume 8 · Reference",
-			"title": "What a consultant configures without code",
-			"bullets": [
-				"Everything in this volume is standard configuration, so it survives an upgrade",
-				"Print, series, notifications, letterhead and terms are all client-maintainable",
-				"Custom code is out of scope for a functional consultant, and usually unnecessary",
-				"Each item below has a named owner after handover"
-			],
-			"table": {
-				"headers": ["Configuration", "Where", "Owner after go-live", "Risk if ignored"],
-				"rows": [
-					["Print format", "Printing → Print Format", "Admin", "Documents look unbranded"],
-					[
-						"Naming series",
-						"Document settings",
-						"Finance manager",
-						"Duplicate or gapless-invalid numbers"
-					],
-					[
-						"Notification",
-						"Settings → Notification",
-						"Sales manager",
-						"Exceptions discovered late"
-					],
-					["Letterhead", "Settings → Letterhead", "Admin", "Inconsistent customer documents"],
-					["Terms template", "Settings → Terms", "Finance manager", "Terms retyped and mistyped"]
-				]
-			},
-			"notes": "This page is the answer when a client asks for a custom print script: everything they actually want is here, in configuration, and it will still work after the next upgrade. Say that with confidence, because a functional consultant who reaches for code has left their own discipline."
-		},
-		{
-			"kicker": "Volume 8 · Reference",
-			"title": "Testing print and notification changes",
-			"bullets": [
-				"Test with a real document in a real state, never with a blank form",
-				"Check the edge cases: long names, many lines, zero tax, foreign currency",
-				"Keep a before and after copy of each template, so a change can be reversed",
-				"Re-test after every upgrade, because print and notifications are the first casualties"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Invoice prints on one page", "yes, including terms", "Print preview"],
-					["Totals match the document", "3,240.00 with 240.00 tax", "Compare form and print"],
-					["Series continues", "next number sequential", "New document"],
-					["Notification fires once", "one email for a 6,000.00 order", "Recipient inbox"],
-					["Notification silent below threshold", "no email for 1,200.00", "Recipient inbox"]
-				]
-			},
-			"notes": "Testing is where most consultants lose an afternoon, so make it a checklist rather than an experiment. Five checks, five minutes, and the client sees a document they are happy to send. When an upgrade arrives, run the same five and you know within ten minutes whether anything broke."
+			"notes": "Show this page to the client's finance manager and to the engagement manager in the same meeting, because they will each read a different line. Finance wants unbilled time at zero; the engagement manager wants margin above forty per cent. When both are on one page, the project review takes ten minutes instead of an hour."
 		}
 	],
 	"lab": {
-		"title": "Lab · Brand the invoice, set the series and trigger one notification",
+		"title": "Lab · Run a 20-hour project from setup to margin",
 		"minutes": 45,
 		"steps": [
-			"Create a letterhead with the company registration and SST number",
-			"Build a sales invoice print format with header, items and totals",
-			"Preview an invoice and confirm net 3,000.00, tax 240.00 and total 3,240.00",
-			"Set the naming series to SINV-SM-2026-.##### and continue from the last number",
-			"Create and cancel a document to confirm the number is not reused",
-			"Create a notification for sales orders above 5,000.00 on submit",
-			"Submit a 6,000.00 order and confirm exactly one email",
-			"Submit a 1,200.00 order and confirm no email"
+			"Create the Aeon Big rollout project with a 150.00 billing rate and a cost centre",
+			"Confirm the expected revenue of 3,000.00 before any work is recorded",
+			"Record 20 billable hours and 2 non-billable hours on a timesheet",
+			"Submit the timesheet and confirm the project cost of 1,600.00",
+			"Create the sales invoice from the timesheet with 8 per cent service tax",
+			"Confirm net revenue 3,000.00, tax 240.00 and total 3,240.00",
+			"Read project profitability and confirm the 1,400.00 margin",
+			"Close the project and confirm new timesheets are refused"
 		],
-		"done": "Done when a printed invoice carries the registration and SST number with totals matching the ledger, the series is sequential without reuse, and the notification fires only above the threshold."
+		"done": "Done when the project shows 3,000.00 revenue, 1,600.00 cost and 1,400.00 margin, no unbilled time remains, and the project no longer accepts postings."
 	},
 	"quiz": [
 		{
-			"question": "Where do you build a print format without code?",
-			"options": ["Custom script", "Print Format Builder", "Server script", "Jinja file"],
+			"question": "20 billable hours at 150.00 with 8 per cent service tax give aninvoice total of what?",
+			"options": ["3,000.00", "3,240.00", "3,120.00", "2,760.00"],
 			"answer": 1,
-			"why": "The Print Format Builder assembles sections, fields and totals through configuration, which survives upgrades and needs no development."
+			"why": "Net is 3,000.00 and service tax of 8 per cent adds 240.00, giving 3,240.00, of which the tax is a liability not income."
 		},
 		{
-			"question": "Why must cancelled documents keep their numbers?",
+			"question": "Where does project cost come from?",
 			"options": [
-				"To save space",
-				"Because reusing a number breaks the audit trail",
-				"So tax can be claimed",
-				"To speed printing"
+				"The quotation",
+				"Timesheets and purchase documents naming the project",
+				"The customer record",
+				"The stock ledger"
 			],
 			"answer": 1,
-			"why": "A cancelled document is still a document, and reusing its number creates two documents with one identity, which auditors treat as a control failure."
+			"why": "Only documents that name the project feed its cost, which is why naming the project on a timesheet is the control that matters."
 		},
 		{
-			"question": "A notification condition of grand_total greater than 5000 will fire for which order?",
-			"options": ["1,200.00", "3,240.00", "6,000.00", "4,999.00"],
-			"answer": 2,
-			"why": "Only the 6,000.00 order exceeds the threshold. Testing both sides of the condition is part of configuring it."
+			"question": "What is the project margin with 20 hours billed at 150.00 and costed at 80.00 per hour?",
+			"options": ["1,400.00", "1,600.00", "3,000.00", "2,240.00"],
+			"answer": 0,
+			"why": "Revenue is 3,000.00 and cost is 1,600.00, leaving 1,400.00, which is about 46 per cent of revenue."
 		},
 		{
-			"question": "Which detail should be absent from a customer-facing print format?",
-			"options": ["Tax amount", "Payment terms", "Item cost and margin", "Company registration"],
-			"answer": 2,
-			"why": "Cost and margin are internal. Printing them exposes commercial information to the customer and is a common builder mistake."
-		},
-		{
-			"question": "Who should own the letterhead after handover?",
+			"question": "What happens to non-billable time on a timesheet?",
 			"options": [
-				"The consultant permanently",
-				"The client's administrator",
-				"The developer",
-				"Nobody"
+				"It is invoiced",
+				"It costs the project but is not billed",
+				"It is deleted",
+				"It moves to the customer"
 			],
 			"answer": 1,
-			"why": "Letterheads and terms are configuration, so handing ownership to the client's administrator removes a recurring support cost and speeds small changes."
+			"why": "Non-billable time still carries internal cost, so it reduces margin without appearing on the invoice."
+		},
+		{
+			"question": "Why close a project in the system?",
+			"options": [
+				"To delete timesheets",
+				"To prevent further postings and capture the variance",
+				"To close the fiscal year",
+				"To archive the invoice"
+			],
+			"answer": 1,
+			"why": "Closing stops new time and cost, and the variance note becomes the reference for pricing the next engagement."
 		}
 	],
 	"memory": {
-		"spine": "Documents customers can read, numbers an auditor can follow and messages that arrive once: three controls, all configuration, no code.",
+		"spine": "A project is a collector, and it only collects what names it, so every hour and every invoice must carry the project field.",
 		"device": {
-			"kind": "phrase",
-			"label": "Readable, numbered, said once",
+			"kind": "rule",
+			"label": "Every entry names the project",
 			"expansion": [
-				"Print format: sections, fields and totals from the builder, with no code to maintain",
-				"A Malaysian tax invoice needs the company name, registration number and SST number",
-				"Naming series control the numbers, and gaps are the auditor's first question",
-				"A notification watches one event with one condition and one recipient list",
-				"Test print and notification changes on a real document in a real state"
+				"A project is a cost collector whose profit and loss exists only if postings name it",
+				"Four fields before work starts: rate, cost centre, dates and customer",
+				"A timesheet records hours against project and activity and carries both a billing and a costing rate",
+				"Invoice from the timesheet so hours, rate and project travel together",
+				"Closing stops time and cost, and does not reverse revenue already billed"
 			]
 		},
 		"cards": [
 			{
-				"q": "What must a Malaysian tax invoice show?",
-				"a": "Company name, registration number and SST number, plus the tax breakdown per line.",
-				"hint": "Not optional"
+				"q": "Why is a project profit and loss empty?",
+				"a": "Something was posted without the project field, because the collector only sees postings that name it.",
+				"hint": "Name it or lose it"
 			},
 			{
-				"q": "What do auditors ask about numbering first?",
-				"a": "Whether there are gaps or duplicates in the series, and who can edit the prefix.",
-				"hint": "Series integrity"
+				"q": "Where does project revenue come from?",
+				"a": "Sales invoices that name the project, not quotations and not orders.",
+				"hint": "Invoices, not promises"
 			},
 			{
-				"q": "Why does a notification fire twice?",
-				"a": "It is attached to more than one event, or its condition matches both a draft and a submit.",
-				"hint": "One event, one send"
+				"q": "What does a timesheet carry besides hours?",
+				"a": "A billing rate and a costing rate, so one hour is both revenue and cost.",
+				"hint": "Two rates, one hour"
 			},
 			{
-				"q": "What should never be customised with code in this volume?",
-				"a": "Anything the print format builder or notification fields already do, because code does not survive an upgrade.",
-				"hint": "Configuration survives"
+				"q": "Why invoice from the timesheet?",
+				"a": "Hours, rate and project land on the invoice without retyping, so the margin stays traceable.",
+				"hint": "No retyping"
 			},
 			{
-				"q": "How is a print format tested?",
-				"a": "With a real submitted document carrying real tax and a real address, never with a blank form.",
-				"hint": "Real document, real state"
+				"q": "What does closing a project do?",
+				"a": "It stops further time and cost postings, and it does not reverse revenue already billed.",
+				"hint": "Stop, do not undo"
 			}
 		],
 		"trap": {
-			"what": "A notification is configured to fire on save as well as on submit.",
-			"why": "Every draft edit emails the customer, people stop reading the messages, and the control that catches late invoices is gone."
+			"what": "Hours are captured on the timesheet but the invoice is raised by hand at a different rate.",
+			"why": "Revenue and cost no longer share a rate, so project margin is fiction and the timesheet becomes paperwork nobody trusts."
 		}
 	},
-	"narration": "Volume eight is where a functional consultant stops looking like an implementer. Print formats built in the builder give the customer a document worth reading, with the registration and tax number where they belong and totals matching the ledger to the cent. Naming series keep numbering sequential, and a cancelled document keeps its number because reusing one breaks the audit trail. Notifications watch a condition: an order above five thousand emails the sales manager, an order of twelve hundred stays quiet. Letterheads and terms templates make every document look like one company, and they are the easiest handover win because the client can maintain them alone. No code, all configuration, and it all survives the next upgrade. Test five things before handover: one page, matching totals, sequential numbering, one notification above the threshold and silence below it, and a letterhead the client can edit without calling you."
+	"narration": "Services work is deceptively simple, and the margin is where consultants get caught. A project is a cost collector: name it on a timesheet, name it on an invoice, and it carries both sides. Twenty hours at one hundred fifty is three thousand of revenue; twenty hours at eighty is one thousand six hundred of cost; the difference is one thousand four hundred, about forty six per cent. Service tax of eight per cent adds two hundred forty and stays a liability. Record non-billable time anyway, because it costs money even though it cannot be invoiced. Then close the project with a variance note, which is the only way the next quote gets better. A project that is never closed teaches nobody anything and quietly repeats its mistakes. Twenty hours, one rate, one invoice, one margin: when a client can state those four numbers from memory, the services practice is under control, and the next quotation is priced on evidence rather than optimism."
 }

@@ -1,400 +1,343 @@
 {
 	"id": "ch18",
 	"number": 18,
-	"title": "Volume 7 · Assets, Quality and CRM",
-	"subtitle": "Lessons 5–8: capitalise and depreciate a van, inspect what arrives, and convert a lead into a priced quotation",
+	"title": "Volume 6 · Production Costing, Scrap and Subcontracting",
+	"subtitle": "Lessons 5–8: what a finished unit really cost, how scrap changes the answer, and where subcontracting sits in the ledger",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Capitalise a purchase as an asset and post depreciation every month",
-		"Use quality inspection to reject goods before they reach stock",
-		"Move a lead through opportunity to a priced quotation without losing the trail",
-		"Decide which of these three modules a distributor should switch on first"
+		"Read a production cost and reconcile it to the BOM",
+		"Handle scrap so the good units carry the loss",
+		"Subcontract an operation and keep material control",
+		"Explain variance between planned and actual cost to a production manager"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Fixed assets",
-			"title": "Capitalise the van instead of expensing it",
+			"kicker": "Lesson 5 · Production cost",
+			"title": "Read the finished cost before you defend it",
 			"bullets": [
-				"An asset purchase is a purchase invoice with an asset item, which creates the asset record",
-				"Useful life and depreciation method are accounting policy, so get them signed off",
-				"Six figures of van on the balance sheet is very different from six figures of expense",
-				"Every asset needs a location and a custodian, or the register is fiction"
+				"Finished cost is materials consumed plus operations recorded, divided by good units",
+				"The stock ledger row is the proof, not the report total",
+				"A cost that differs from the BOM has exactly three usual causes",
+				"Cost reviewed weekly stops being an argument at month end"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					[
-						"1",
-						"Create the asset item",
-						"SM-VAN, is fixed asset, asset category Vehicles",
-						"Item flagged for capitalisation"
-					],
-					[
-						"2",
-						"Purchase invoice",
-						"Van 60,000.00 from the dealer, no stock effect",
-						"Asset created automatically"
-					],
-					[
-						"3",
-						"Open the asset",
-						"Location Main, custodian warehouse supervisor",
-						"Asset ACC-0001"
-					],
-					[
-						"4",
-						"Check the category",
-						"5 years straight line, 0 salvage",
-						"Monthly depreciation 1,000.00"
-					],
-					["5", "Submit the invoice", "Confirm", "Asset status Submitted, value 60,000.00"],
-					["6", "Read the balance sheet", "31-01-2026", "Fixed assets 60,000.00"]
-				]
-			},
-			"notes": "Sixty thousand over five years is twelve thousand a year, or one thousand a month, and that is the number the client's accountant will check first. Capitalising also keeps the profit and loss statement readable, because a van is not a January cost. Get the category approved in writing before the first invoice, since changing depreciation method later means a restatement."
-		},
-		{
-			"kicker": "Lesson 6 · Depreciation",
-			"title": "Post depreciation monthly, not annually in a panic",
-			"bullets": [
-				"Depreciation is a journal the system generates from the schedule",
-				"Straight line on sixty thousand over five years is one thousand a month",
-				"Accumulated depreciation is a separate account, so the asset keeps its cost",
-				"Year-end catch-up postings are a symptom of a missing monthly routine"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Assets → Depreciation → Process Depreciation",
-						"Company SM, 31-01-2026",
-						"Assets due for depreciation"
-					],
-					["2", "Review the schedule", "Van, 1,000.00 for the month", "Single line preview"],
-					["3", "Submit", "Confirm", "Depreciation entry created"],
-					["4", "Read the asset", "ACC-0001", "Accumulated 1,000.00, net book value 59,000.00"],
-					["5", "Read the GL", "Depreciation expense account", "Debit 1,000.00"],
-					["6", "Repeat monthly", "Same routine on the last day", "Twelve entries per year"]
-				]
-			},
-			"notes": "After twelve months the net book value is forty eight thousand, and the depreciation expense for the year is twelve thousand. Ask the learner to state both before opening the report, because those two figures are what the auditor tests. If the client only posts at year end, the monthly management accounts are wrong all year, which undermines every other number the consultant produced."
-		},
-		{
-			"kicker": "Lesson 7 · Quality",
-			"title": "Inspect what arrives before it becomes stock",
-			"bullets": [
-				"Quality inspection sits between the receipt and the warehouse when configured that way",
-				"Rejected quantity stays out of sellable stock, which is the entire point",
-				"Each inspection needs parameters with numeric ranges, or it is a tick box",
-				"Quality results feed the supplier conversation, so keep them per supplier"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Quality → Quality Inspection Template",
-						"Visual check, parameters Appearance and Function",
-						"Template saved"
-					],
-					[
-						"2",
-						"Attach to the item",
-						"SM-BL200 requires inspection on purchase",
-						"Inspection required flag"
-					],
-					[
-						"3",
-						"Receive 10 units",
-						"Purchase receipt against the order",
-						"Quality inspection generated"
-					],
-					[
-						"4",
-						"Record results",
-						"9 accepted, 1 rejected for a cracked housing",
-						"Rejected quantity 1"
-					],
-					["5", "Submit the inspection", "Confirm", "Receipt proceeds with 9 units"],
-					["6", "Check stock", "Bin at Main", "9 units received, not 10"]
-				]
-			},
-			"notes": "One rejected unit means nine accepted, and the supplier conversation now has a document behind it. Quality is often sold as a compliance feature, but its real value in distribution is the argument it wins with a supplier who disputes a return. If a client rejects inspection as bureaucracy, ask them what evidence they use today."
-		},
-		{
-			"kicker": "Lesson 8 · CRM",
-			"title": "From lead to opportunity to priced quotation",
-			"bullets": [
-				"A lead is an unqualified contact; an opportunity is a deal with a value and a date",
-				"Converting keeps the trail, which is what makes pipeline reporting possible",
-				"The quotation carries the price, and it is the first document a customer sees",
-				"Every opportunity needs a probability and a territory, or the pipeline report lies"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "CRM → Lead → New", "Aeon Big, contact and source Trade show", "Lead LD-0001"],
-					[
-						"2",
-						"Convert to opportunity",
-						"10 blenders, value 2,400.00, close date 20-02-2026",
-						"Opportunity OPP-0001"
-					],
-					["3", "Set probability", "60 per cent, territory Selangor", "Weighted value 1,440.00"],
-					[
-						"4",
-						"Create the quotation",
-						"10 SM-BL200 at 240.00 plus SST",
-						"Quotation 2,640.00 total"
-					],
-					["5", "Send and track", "Status Open, valid 30 days", "Quotation in the pipeline"],
+					["1", "Open the manufacture entry", "STE-SM-2026-0011", "Consumed and produced rows"],
+					["2", "Add up materials", "20 × 80.00 plus 10 × 40.00", "2,000.00"],
+					["3", "Add operating cost", "5 hours at 60.00 per hour", "300.00"],
+					["4", "Divide by good units", "2,300.00 across 10 assemblies", "230.00 per unit"],
+					["5", "Compare with the BOM", "BOM total 230.00", "No variance"],
 					[
 						"6",
-						"Review the pipeline",
-						"CRM → Opportunity pipeline",
-						"Weighted pipeline includes 1,440.00"
+						"Record the check",
+						"One line in the production worksheet",
+						"Signed by production and finance"
 					]
 				]
 			},
-			"notes": "Sixty per cent of twenty four hundred is fourteen hundred forty, and that weighted number is what a sales director actually manages. Without probability and territory, the pipeline report is a list of hopes. The quotation itself is ordinary work, but the trail from lead to opportunity to quotation to order is what lets the owner see conversion rates for the first time."
+			"notes": "The arithmetic here is deliberately identical to the BOM, because the first production run should show no variance. Once a client sees that the system agrees with the recipe, they trust it when the numbers later diverge. Introduce variance only after the clean case is understood, or the learner will assume every difference is a system error."
 		},
 		{
-			"kicker": "Lesson 6 · Verify depreciation",
-			"title": "Schedule, ledger and register agree",
+			"kicker": "Lesson 6 · Verify the cost",
+			"title": "Cost per unit, proved three ways",
 			"bullets": [
-				"The asset, the ledger and the register must show the same accumulated amount",
-				"Net book value falls by the monthly charge, and the expense sits in the right period",
-				"A missed month is visible immediately in the schedule, not at year end",
-				"Disposal later depends on this schedule being correct today"
+				"Materials, operations and total must agree from the entry, the stock ledger and the BOM",
+				"Valuation per unit appears in the stock ledger row and the stock balance report",
+				"A rounding difference of a cent is normal, a difference of ten per cent is not",
+				"Any difference must be explained in the worksheet before the period closes"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Monthly depreciation", "1,000.00", "Asset → Depreciation Schedule"],
-					["Accumulated depreciation after January", "1,000.00", "Asset ACC-0001"],
-					["Net book value", "59,000.00", "Asset register"],
-					["Depreciation expense", "1,000.00", "Profit and Loss Statement, January"],
-					["Balance sheet fixed assets", "59,000.00", "Balance Sheet, 31-01-2026"]
+					["Material cost", "2,000.00", "Manufacture entry consumed rows"],
+					["Operating cost", "300.00", "Manufacture entry operating cost"],
+					["Total cost", "2,300.00", "Manufacture entry total"],
+					["Valuation per unit", "230.00", "Stock Ledger, SM-ASM incoming row"],
+					["Stock value", "2,300.00 for 10 units", "Stock Balance report"]
 				]
 			},
-			"notes": "Three views of one number again: the schedule, the asset record and the balance sheet. When they agree, the client can file the month without adjustment. When they disagree, the cause is nearly always a depreciation entry posted in a closed period or an asset created after the run date, and both are one-minute fixes."
+			"notes": "Three ways of seeing the same number is the fastest way to build confidence in a new system. Ask the learner to read the figure off the entry, off the ledger and off the balance sheet item, then to explain why all three agree. When they can do that unprompted, they can survive any costing meeting."
 		},
 		{
-			"kicker": "Lesson 8 · Verify the pipeline",
-			"title": "What the CRM numbers actually prove",
+			"kicker": "Lesson 7 · Scrap",
+			"title": "Scrap one unit and let the good units carry it",
 			"bullets": [
-				"Weighted pipeline equals value times probability, summed across open opportunities",
-				"A quotation without an opportunity is a document with no history",
-				"Conversion rate is the number a sales director will ask for first",
-				"Data quality in CRM is measured by how many fields are blank"
+				"Scrap is a quantity decision, not a cost adjustment typed into a journal",
+				"The total production cost stays the same while the good quantity falls",
+				"Cost per good unit therefore rises, and the finished stock carries that higher value",
+				"Scrap needs a reason code, because the causes are process, material or machine"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the work order",
+						"WO-SM-2026-0001, completed 10 units",
+						"Existing completion"
+					],
+					[
+						"2",
+						"Create the scrap entry",
+						"Stock Entry type Material Issue from Main, quantity 1",
+						"One assembly removed"
+					],
+					[
+						"3",
+						"Set the reason",
+						"Scrap - assembly defect, cost centre Assembly",
+						"Reason stored on the entry"
+					],
+					["4", "Save and Submit", "Confirm", "Stock falls to 9 assemblies"],
+					["5", "Read the cost", "Stock Balance for SM-ASM", "9 units still worth 2,300.00"],
+					["6", "Recompute per unit", "2,300.00 across 9 units", "255.56 per unit"]
+				]
+			},
+			"notes": "Two thousand three hundred across nine units is two hundred fifty five point five six, and that is the number the owner needs to see, because the loss is now visible in the value of the remaining stock. If the scrap were journalled away, the nine good units would look cheaper than they are and the next quotation would be priced on a lie."
+		},
+		{
+			"kicker": "Lesson 8 · Subcontracting",
+			"title": "Subcontract an operation and keep control of the material",
+			"bullets": [
+				"Subcontracting sends material out and buys a service back, and both must be recorded",
+				"The subcontractor warehouse is where your material sits while someone else holds it",
+				"The purchase receipt of the service adds that cost to the finished valuation",
+				"Sending material without a transfer is how stock disappears in a subcontracting business"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create the subcontracting BOM",
+						"SM-ASM with operation Powder Coating marked subcontract",
+						"BOM ready for outsourcing"
+					],
+					[
+						"2",
+						"Raise the purchase order",
+						"Service item Powder Coating, 10 units at 12.00",
+						"Total 120.00"
+					],
+					[
+						"3",
+						"Transfer material",
+						"SM-ASM 10 units to Subcontractor - SM",
+						"Material leaves main"
+					],
+					[
+						"4",
+						"Receive the service",
+						"Purchase receipt against the order",
+						"Units return to main"
+					],
+					["5", "Check valuation", "Stock Balance for SM-ASM", "242.00 per unit including 12.00"],
+					["6", "Reconcile material", "Subcontractor warehouse balance", "Zero, all units returned"]
+				]
+			},
+			"notes": "Twelve ringgit of coating on a two hundred thirty assembly gives two hundred forty two, and the subcontractor warehouse must end at zero. That zero is the control: if material is still sitting with the subcontractor after the service receipt, someone is holding your stock without a document, which is a finding worth raising the same day."
+		},
+		{
+			"kicker": "Lesson 7 · Verify scrap",
+			"title": "What scrap does to the remaining value",
+			"bullets": [
+				"Total production cost is unchanged by scrap, and the good units carry it",
+				"The stock value stays at 2,300.00 with nine units, so the report shows the loss",
+				"A scrap account only appears if you configured the entry to expense it directly",
+				"Recalculate the selling price implication before the next quotation goes out"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Opportunity value", "2,400.00", "Opportunity OPP-0001"],
-					["Probability", "60 per cent", "Opportunity form"],
-					["Weighted pipeline", "1,440.00", "CRM pipeline report"],
-					["Quotation", "2,640.00 including SST", "Quotation QT-SM-2026-0003"],
+					["Assemblies in stock", "9", "Stock → Bin, Main - SM"],
+					["Stock value", "2,300.00 unchanged", "Stock Balance for SM-ASM"],
+					["Valuation per unit", "255.56", "Stock Ledger, latest row"],
 					[
-						"Conversion rate this month",
-						"leading indicator, not yet a rate",
-						"CRM → Lead and Opportunity analysis"
-					]
+						"Scrap entry",
+						"1 unit issued with a reason and cost centre",
+						"Stock Entry STE-SM-2026-0012"
+					],
+					["Margin at 350.00 selling price", "94.44, about 27 per cent", "Your own arithmetic"]
 				]
 			},
-			"notes": "The weighted figure of fourteen hundred forty is the only CRM number a manager should act on weekly, because it changes with probability rather than with optimism. Quotation total of two thousand six hundred forty is where the tax enters and where sales and finance usually disagree. Show both on one page and the pipeline meeting becomes a forecast rather than a wish list."
+			"notes": "Two hundred fifty five fifty six against a three hundred fifty selling price leaves ninety four forty four, roughly twenty seven per cent, down from thirty four. That fall is the real cost of the defect, and it belongs in the next pricing conversation rather than the scrap bin. Show the learner the margin before and after, and the quality discussion starts by itself."
 		},
 		{
-			"kicker": "Volume 7 · Reference",
-			"title": "What to switch on first for a distributor",
+			"kicker": "Lesson 8 · Verify subcontracting",
+			"title": "Proof the service and the material both landed",
 			"bullets": [
-				"Assets are mandatory once a client owns vehicles or equipment above their capitalisation threshold",
-				"Quality is worth it when returns or supplier disputes are a recurring cost",
-				"CRM pays only if someone owns the pipeline weekly, otherwise it becomes a data graveyard",
-				"Each module adds a control the client must operate, so sequence them"
+				"Material out, service in, material back: three movements and one valuation",
+				"The service cost is only in stock if the receipt was against the subcontracting order",
+				"The subcontractor warehouse must return to zero, or material is unaccounted for",
+				"Subcontract purchase invoices still carry tax, and it is input tax like any purchase"
 			],
 			"table": {
-				"headers": ["Module", "Switch on when", "First control", "Cost of skipping it"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					[
-						"Fixed assets",
-						"Any capital purchase above the threshold",
-						"Monthly depreciation run",
-						"Expenses hit one month, audit finding"
-					],
-					[
-						"Quality",
-						"Recurring returns or supplier disputes",
-						"Reject before stock",
-						"Returns processed after the sale"
-					],
-					[
-						"CRM",
-						"A named person owns the pipeline",
-						"Weekly pipeline review",
-						"Quotations with no history"
-					],
-					[
-						"Projects",
-						"Billable service work",
-						"Timesheets approved weekly",
-						"Unbilled work at year end"
-					],
-					[
-						"Subcontracting",
-						"External processing steps",
-						"Subcontractor stock at zero",
-						"Material lost off site"
-					]
+					["Subcontractor warehouse balance", "0 units", "Stock → Bin, Subcontractor - SM"],
+					["Assemblies back in main", "10 units", "Stock → Bin, Main - SM"],
+					["Valuation per unit", "242.00", "Stock Ledger, latest incoming row"],
+					["Service cost in stock", "120.00 across ten units", "Landed value in the receipt"],
+					["Purchase invoice", "120.00 plus input tax", "Accounts → Purchase Invoice"]
 				]
 			},
-			"notes": "Sequencing is the consultant's judgement call, and this table is the argument to have with the client before the proposal. A distributor with three vans needs assets in phase one; a trader who sells on quotation needs CRM before panels. Say what you would switch on first, and say what you would leave until year two."
+			"notes": "The two numbers that matter are zero and two hundred forty two: nothing left with the supplier, and every returned unit carrying the service cost. If either is wrong, the receipt was raised against the wrong order or the transfer never happened, and both are visible in the same screen. Checking this weekly prevents the year-end scramble that subcontracting projects always produce."
 		},
 		{
-			"kicker": "Volume 7 · Reference",
-			"title": "The three reports that keep these modules honest",
+			"kicker": "Volume 6 · Reference",
+			"title": "Cost components and where they land",
 			"bullets": [
-				"Asset register value must equal the fixed asset control account",
-				"Quality rejection rate by supplier is the number that changes behaviour",
-				"Pipeline weighted value must match the opportunities it sums, without duplicates",
-				"All three are monthly reads, not annual ones"
+				"Every ringgit of production cost must land in inventory, not in an expense account",
+				"Capacity cost is labour and machine time, and it needs a rate the client can defend",
+				"Scrap and rework are cost of quality, and they belong in the same work order",
+				"Subcontracting adds an external service cost, which is still inventory until sale"
 			],
 			"table": {
-				"headers": ["Report", "Expected figure", "Where to look", "Question it answers"],
+				"headers": ["Component", "Source", "Lands in", "Check"],
 				"rows": [
 					[
-						"Asset register",
-						"59,000.00 net book value after January",
-						"Assets → Asset register",
-						"What do we own and what is it worth"
+						"Raw material",
+						"Stock issue at valuation",
+						"Work in progress, then finished goods",
+						"Quantity matches the BOM"
 					],
 					[
-						"Fixed asset control",
-						"59,000.00 in the balance sheet",
-						"Balance Sheet",
-						"Does the ledger agree"
+						"Direct labour",
+						"Operation time at workstation rate",
+						"Finished goods valuation",
+						"Hours recorded on the entry"
 					],
 					[
-						"Quality rejection rate",
-						"10 per cent for this receipt",
-						"Quality Inspection analysis",
-						"Which supplier costs us returns"
+						"Machine cost",
+						"Workstation rate including overhead",
+						"Finished goods valuation",
+						"Rate agreed with finance"
 					],
 					[
-						"Weighted pipeline",
-						"1,440.00 for this opportunity",
-						"CRM → Opportunity pipeline",
-						"What will we sell next month"
+						"Subcontract service",
+						"Purchase invoice for the service",
+						"Finished goods valuation",
+						"Material returned to zero"
 					],
 					[
-						"Depreciation for the month",
-						"1,000.00",
-						"Profit and Loss Statement",
-						"Is the cost in the right period"
+						"Scrap",
+						"Material issue with a reason",
+						"Cost of the remaining good units",
+						"Reason code and approver"
 					]
 				]
 			},
-			"notes": "Reconciling the asset register to the control account is the same discipline as debtors and creditors, and it takes two minutes a month. Quality rejection rate and weighted pipeline are softer, but each has a single number a manager can act on. Give the client these five rows as the monthly read, and the modules earn their place."
+			"notes": "This is the table to leave with a manufacturing client, because their accountant will ask where each element sits and their production manager will ask who controls it. Answering both columns in one page is what turns a system implementation into a costing conversation the client trusts."
 		}
 	],
 	"lab": {
-		"title": "Lab · Capitalise a van, depreciate it, inspect a receipt and convert a lead",
+		"title": "Lab · Cost a build, scrap a unit and subcontract an operation",
 		"minutes": 45,
 		"steps": [
-			"Create the asset item and purchase the van for 60,000.00 on a purchase invoice",
-			"Confirm the asset category produces 1,000.00 of monthly depreciation",
-			"Run depreciation for January and confirm net book value of 59,000.00",
-			"Confirm the depreciation expense of 1,000.00 in the profit and loss statement",
-			"Set up a quality inspection template and attach it to SM-BL200",
-			"Receive 10 units, reject 1 and confirm only 9 reach stock",
-			"Create a lead for Aeon Big and convert it to a 2,400.00 opportunity",
-			"Produce the quotation for 2,640.00 including SST and check the weighted pipeline"
+			"Read the completed manufacture entry and confirm 2,300.00 total cost",
+			"Prove 230.00 per unit from the entry, the stock ledger and the stock balance",
+			"Issue one assembly as scrap with a reason and a cost centre",
+			"Confirm nine units now carry the full 2,300.00 and recompute the unit cost",
+			"Create a subcontracting operation on the BOM for powder coating at 12.00",
+			"Raise the purchase order and transfer ten assemblies to the subcontractor warehouse",
+			"Receive the service and confirm the new valuation of 242.00 per unit",
+			"Prove the subcontractor warehouse balance is zero after receipt"
 		],
-		"done": "Done when the van shows 59,000.00 net book value, nine units were received after inspection, and the opportunity carries a 1,440.00 weighted value with a live quotation."
+		"done": "Done when scrap leaves nine units at 255.56 each, the subcontracted units carry 242.00, and no material remains in the subcontractor warehouse."
 	},
 	"quiz": [
 		{
-			"question": "A 60,000.00 asset with a five year straight line life depreciates monthly by what?",
-			"options": ["500.00", "1,000.00", "5,000.00", "12,000.00"],
+			"question": "A build costs 2,300.00 and one of ten units is scrapped. Cost per good unit becomes what?",
+			"options": ["230.00", "255.56", "207.00", "2,300.00"],
 			"answer": 1,
-			"why": "60,000 divided by five years is 12,000 a year, or 1,000.00 a month over twelve periods."
+			"why": "Total cost stays at 2,300.00 while the good quantity falls to nine, so each unit carries 255.56."
 		},
 		{
-			"question": "What does the asset register value reconcile to?",
+			"question": "How should scrap be recorded?",
 			"options": [
-				"The bank balance",
-				"The fixed asset control account",
-				"The creditor ageing",
-				"Stock value"
+				"A journal reducing stock",
+				"A stock entry with a reason code",
+				"Editing the work order",
+				"A credit note"
 			],
 			"answer": 1,
-			"why": "The register is the detail behind the control account, so the two must agree, exactly as debtors and creditors do."
+			"why": "Scrap is a quantity event, so it needs a stock entry with a reason, which also keeps the cost with the good units."
 		},
 		{
-			"question": "After a quality inspection rejects one of ten units, what reaches stock?",
-			"options": ["10 units", "9 units", "11 units", "0 units"],
+			"question": "In subcontracting, where does your material sit while the supplier works on it?",
+			"options": [
+				"Main warehouse",
+				"The subcontractor warehouse",
+				"Goods in transit",
+				"Work in progress"
+			],
 			"answer": 1,
-			"why": "Rejected quantity stays out of sellable stock, so only the accepted nine units are received into the warehouse."
+			"why": "ERPNext holds subcontracted material in a subcontractor warehouse so the balance proves what is with the supplier."
 		},
 		{
-			"question": "A 2,400.00 opportunity at 60 per cent probability has what weighted value?",
-			"options": ["2,400.00", "1,440.00", "960.00", "600.00"],
+			"question": "What should the subcontractor warehouse balance be after the service is received?",
+			"options": ["Equal to the order quantity", "Zero", "Negative", "Equal to the service cost"],
 			"answer": 1,
-			"why": "Weighted value is value times probability, so 2,400 × 0.6 = 1,440.00, which is what the pipeline report should show."
+			"why": "All transferred material should return, so a non-zero balance means material is unaccounted for and needs immediate investigation."
 		},
 		{
-			"question": "Which module should a distributor with three delivery vans switch on first?",
-			"options": ["CRM", "Fixed assets", "Quality", "Projects"],
+			"question": "Which production cost lands in finished goods valuation?",
+			"options": [
+				"Only raw material",
+				"Material, operations and subcontract services",
+				"Only labour",
+				"Selling and admin costs"
+			],
 			"answer": 1,
-			"why": "Vehicles above the capitalisation threshold must be capitalised and depreciated, or the profit and loss statement carries a distorted one-off cost."
+			"why": "Production cost includes material, operations and bought-in services used in the build, all of which stay in inventory until sale."
 		}
 	],
 	"memory": {
-		"spine": "Capitalise, depreciate, inspect and qualify: four modules, one habit of proving each of them against a register and a report.",
+		"spine": "Total production cost is fixed; the only question is how many good units must carry it, and scrap never answers that with a journal.",
 		"device": {
-			"kind": "phrase",
-			"label": "Capitalise, depreciate, inspect, qualify",
+			"kind": "rule",
+			"label": "Good units carry the bad ones",
 			"expansion": [
-				"Capitalise: a purchase invoice with an asset item creates the Asset record",
-				"Depreciate: a journal generated from the schedule, monthly, not once in a December panic",
-				"Inspect: Quality Inspection sits between the receipt and the warehouse when configured",
-				"Qualify: lead, then opportunity, then a priced quotation",
-				"Asset register, ledger and schedule must show the same accumulated amount"
+				"Finished cost is materials consumed plus operations recorded, divided by good units",
+				"Scrap is a quantity decision on the document, never a cost typed into a journal",
+				"Total production cost is unchanged by scrap, so the good units absorb it",
+				"Subcontracting is material out, service in and material back: three movements, one valuation",
+				"Every ringgit of production cost lands in inventory, not in an expense account"
 			]
 		},
 		"cards": [
 			{
-				"q": "How is a van capitalised rather than expensed?",
-				"a": "With a purchase invoice whose item is marked as a fixed asset, which creates the Asset record.",
-				"hint": "Asset item, not expense"
+				"q": "How is cost per finished unit calculated?",
+				"a": "Materials plus operations, divided by good units, with scrap in the numerator and never quietly subtracted.",
+				"hint": "Divide by good units"
 			},
 			{
-				"q": "Where does accumulated depreciation have to agree?",
-				"a": "In three places: the asset register, the depreciation account in the ledger and the schedule.",
-				"hint": "Three views, one number"
+				"q": "One of ten units is scrapped. What happens to total cost?",
+				"a": "It stays the same and the nine good units carry it, so unit cost rises.",
+				"hint": "Spread, not lost"
 			},
 			{
-				"q": "Lead or opportunity?",
-				"a": "A lead is an unqualified contact, an opportunity is a deal with a value, a date and a probability.",
-				"hint": "Contact versus deal"
+				"q": "How is scrap recorded?",
+				"a": "As a quantity on the manufacture entry or a separate scrap entry, not as a journal.",
+				"hint": "Quantity, not money"
 			},
 			{
-				"q": "How is weighted pipeline calculated?",
-				"a": "Sum of value times probability across all open opportunities.",
-				"hint": "Value times confidence"
+				"q": "How many movements does subcontracting create?",
+				"a": "Three: material out to the subcontractor, the service received, and the finished material back.",
+				"hint": "Out, service, back"
 			},
 			{
-				"q": "When does a quality inspection happen?",
-				"a": "On receipt, before the goods become available stock, when the item is configured that way.",
-				"hint": "Before it is stock"
+				"q": "Where must production cost land?",
+				"a": "In inventory value. An expense account here means the stock was under costed.",
+				"hint": "Balance sheet first"
 			}
 		],
 		"trap": {
-			"what": "Depreciation is posted once a year as a single large journal in December.",
-			"why": "Eleven months of the profit and loss are wrong and the register never matched the ledger in between, so nobody could catch it early."
+			"what": "Scrap is written off to an expense account at the end of the month instead of on the document.",
+			"why": "Finished units then carry a cost that excludes the loss, the true unit cost is understated, and the expense appears where nobody looks."
 		}
 	},
-	"narration": "Three modules that clients ask for and rarely operate properly. Fixed assets first: sixty thousand of van becomes twelve thousand a year, one thousand a month, and the register must agree with the control account every month. Quality second: an inspection that rejects one of ten units is the difference between an argument with a supplier and a documented claim. CRM third, and only if somebody owns the pipeline: a lead becomes an opportunity with a value and a probability, twenty four hundred at sixty per cent is fourteen hundred forty, and the quotation is the first document the customer sees. Each module adds a control the client has to run, so sequence them and say plainly what you would leave until year two. Assets and quality carry a control that runs itself once configured; CRM only works when a person owns it, so name that person in the workshop before you switch it on, and put the weekly pipeline review in the same meeting as the sales forecast."
+	"narration": "Once a client has built something, the next question is what it cost, and the answer has to survive an argument. A completed build of ten assemblies carries two thousand of material and three hundred of labour, so two hundred thirty each, and the entry, the stock ledger and the stock balance must all say the same thing. Scrap is where costing gets real: one unit fails, the total cost does not move, and the nine good units now carry two hundred fifty five fifty six each. Subcontracting adds a bought-in service, twelve ringgit of coating, and a warehouse that must return to zero. Materials, labour, scrap, service: four components, one valuation, and a worksheet that lets the production manager and the accountant argue with numbers instead of opinions. Teach the four components in order, and insist on the worksheet, because a costing conversation without evidence becomes a personality contest, and the consultant is always the outsider in that room."
 }
