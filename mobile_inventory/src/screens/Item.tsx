@@ -3,20 +3,20 @@ import { BackIcon, SwapIcon, WifiOffIcon } from "../components/icons";
 import { Pill, Row, Rows, Spinner } from "../components/ui";
 import { ApiError } from "../lib/errors";
 import { formatQty, shortWarehouse } from "../lib/format";
-import type { InventoryClient, ItemInfo, MoveKind, StockRow } from "../lib/types";
+import type { InventoryClient, ItemInfo, StockRow } from "../lib/types";
 import type { Notify } from "../hooks/useToasts";
 
 export function ItemScreen({
 	client,
 	item,
 	onBack,
-	onMove,
+	onTransfer,
 	notify,
 }: {
 	client: InventoryClient;
 	item: ItemInfo;
 	onBack: () => void;
-	onMove: (kind: MoveKind) => void;
+	onTransfer: () => void;
 	notify: Notify;
 }) {
 	const [stock, setStock] = useState<StockRow[] | null>(null);
@@ -105,14 +105,14 @@ export function ItemScreen({
 			<section className="section">
 				<h2 className="section__title">Move this item</h2>
 				<div className="action-grid">
-					<button className="action action--move" onClick={() => onMove("transfer")}>
+					<button className="action action--move" onClick={onTransfer}>
 						<SwapIcon width={24} height={24} />
 						<span>Transfer</span>
 					</button>
 				</div>
 				<p className="note">
 					Receiving, counting and issuing are jobs on the home screen — they start from the delivery,
-					the shelf or the work order, not from an item. Transfer stays here for a move that has no
+					the shelf or the warehouse, not from an item. Transfer stays here for a move that has no
 					document behind it.
 				</p>
 			</section>

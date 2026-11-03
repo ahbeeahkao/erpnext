@@ -153,8 +153,20 @@ try {
 		"the item sheet no longer repeats the Desk's forms",
 		text().includes("Move this item") && !text().includes("What do you want to do?")
 	);
-	clickBack();
-	await wait(400);
+	click(/^Transfer$/);
+	await wait(500);
+	check(
+		"the transfer screen asks for a move and nothing else",
+		text().includes("Transfer stock") && !text().includes("Unit cost")
+	);
+	type(window.document.getElementById("qty"), "2");
+	type(window.document.querySelector('input[placeholder="e.g. BATCH-2026-001"]'), "BATCH-SMOKE-1");
+	await wait(150);
+	click(/^Transfer now$/);
+	await wait(1500);
+
+	check("the transfer posts as a Material Transfer", /Material Transfer posted as STE-DEMO-/.test(text()));
+	check("home after the transfer", text().includes("Scan one item"));
 
 	// --- issue for consumption -> queue -> sync -------------------------------
 	click(/Issue for consumption/);
