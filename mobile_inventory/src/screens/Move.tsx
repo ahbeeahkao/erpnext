@@ -1,3 +1,9 @@
+// Single-item transfer, reached from an item sheet.
+//
+// This screen predates the jobs: it used to offer receipt and issue as well, which is exactly the
+// doctype-first shape the rework removed. Receiving, counting and issuing are now jobs on the home
+// screen; only the transfer path is reachable, and the receipt/issue branches below are dead code
+// kept until the file is next rewritten.
 import { useEffect, useMemo, useState } from "react";
 import { AlertIcon, BackIcon, CloudIcon, InIcon, OutIcon, SwapIcon } from "../components/icons";
 import { Button, Field, Pill, Select, TextInput } from "../components/ui";

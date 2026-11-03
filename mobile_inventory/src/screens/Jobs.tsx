@@ -364,6 +364,102 @@ export function PutAwayScreen(props: CommonProps) {
 	);
 }
 
+// ------------------------------------------------------- issue for consumption
+
+/**
+ * Stock leaving for good: scrap, samples, breakage, consumption. Nothing arrives anywhere, which is
+ * why this is not a transfer — it is the one job the older ad-hoc forms did better than a job screen,
+ * so it is now a job screen with a scanner.
+ */
+export function IssueScreen(props: CommonProps) {
+	const { client, session, warehouses, defaultWarehouse, online, onBack, onQueued, onPosted, notify } = props;
+	const [fromWarehouse, setFrom] = useState(defaultWarehouse ?? warehouses[0]?.name ?? "");
+	const [task, setTask] = useState<FlowTask | null>(null);
+
+	function start() {
+		if (!fromWarehouse) {
+			notify("Choose the warehouse the stock is coming from", "error");
+			return;
+		}
+		setTask(
+			createFlowTask(newId(), "issue", {
+				title: `Issue from ${fromWarehouse}`,
+				subtitle: "Issue for consumption",
+				reference: fromWarehouse,
+				company: session.company ?? "",
+				...stamp(),
+				fromWarehouse,
+			})
+		);
+	}
+
+	const resolveScan = useCallback(
+		async (code: string): Promise<FlowLine | null> => {
+			const hit = await resolveItem(client, code);
+			if (!hit?.item_code) return null;
+			const info = await client.itemInfo(hit.item_code);
+			const bins = await client.stockFor(info.item_code).catch(() => []);
+			const bin = bins.find((row) => row.warehouse === fromWarehouse);
+			return {
+				key: info.item_code,
+				itemCode: info.item_code,
+				itemName: info.item_name,
+				uom: info.stock_uom ?? "Nos",
+				conversionFactor: 1,
+				qty: 1,
+				systemQty: bin?.actual_qty ?? 0,
+				fromWarehouse,
+				hasBatchNo: Boolean(info.has_batch_no),
+				hasSerialNo: Boolean(info.has_serial_no),
+			};
+		},
+		[client, fromWarehouse]
+	);
+
+	if (task) {
+		return (
+			<TaskFlowScreen
+				client={client}
+				session={session}
+				task={task}
+				onTask={setTask}
+				online={online}
+				warehouses={warehouses}
+				onBack={() => setTask(null)}
+				onQueued={onQueued}
+				onPosted={onPosted}
+				notify={notify}
+				resolveScan={resolveScan}
+			/>
+		);
+	}
+
+	return (
+		<div className="screen">
+			<TaskHeader eyebrow="Issue for consumption" title="Where is it coming from?" onBack={onBack} />
+			<div className="panel">
+				<Field label="Issue from" hint="Stock leaves this warehouse and arrives nowhere">
+					<Select value={fromWarehouse} onChange={(event) => setFrom(event.target.value)}>
+						{warehouses.map((row) => (
+							<option key={row.name} value={row.name}>
+								{row.warehouse_name ?? row.name}
+							</option>
+						))}
+					</Select>
+				</Field>
+				<Button block onClick={start}>
+					Start issuing
+				</Button>
+			</div>
+			<p className="footnote">
+				For scrap, samples, breakage and internal use. Scan what leaves, then post one Material
+				Issue — the on-hand figure is shown as you go, so taking the last of something is a
+				decision, not a surprise.
+			</p>
+		</div>
+	);
+}
+
 // ------------------------------------------------------------- pick for work order
 
 export function PickWorkOrderScreen(props: CommonProps) {

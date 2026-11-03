@@ -5,7 +5,7 @@ rows, set warehouses, save, submit. That is the right shape for the person who o
 is the wrong shape for the person holding a carton at the receiving door, because they first have to
 translate "what I am doing" into "which doctype, which purpose, which fields".
 
-This app starts from the other end. There are five things a warehouse does in a day, and each one is a
+This app starts from the other end. There are six things a warehouse does in a day, and each one is a
 screen:
 
 | The job | What it posts |
@@ -13,8 +13,13 @@ screen:
 | Receive a delivery | `Purchase Receipt` (submitted) — against a purchase order, with rejects |
 | Count a rack | one `Stock Reconciliation` for the whole shelf, zero counts included |
 | Put away | `Stock Entry` · Material Transfer, from the door to a shelf |
+| Issue for consumption | `Stock Entry` · Material Issue — source only, no target |
 | Pick for a work order | `Stock Entry` · Material Transfer for Manufacture |
 | Pick for delivery | **draft** `Delivery Note`, for dispatch to check and submit |
+
+The item sheet is a lookup, not a form: search or scan, see the balances, and one action — transfer.
+The old ad-hoc *Receive / Issue / Count* buttons that lived there are gone, because each of them was
+a Desk form with the fields renamed.
 
 Nothing about the ERPNext side changes: same doctypes, same fields, same Stock Ledger Entries, same
 permissions, same reports. The app is a different door into the same room.
@@ -78,7 +83,16 @@ When an Inventory Dimension exists for locations (`Location|Shelf|Rack|Bin|Aisle
 written on every row, and a put-away without a shelf is refused rather than silently landing in the
 warehouse's default bin.
 
-### 4. Pick for a work order — `Stock Entry` · Material Transfer for Manufacture
+### 4. Issue for consumption — `Stock Entry` · Material Issue
+
+**In the Desk today:** Stock Entry → New → purpose *Material Issue*, add a row per item, set the
+source warehouse on each one, save, submit. Which is fine until you are standing at the scrap bin.
+
+**In the app:** *Issue for consumption* → warehouse → scan what is leaving. One Material Issue for
+everything scanned, with the on-hand figure beside each line so taking the last of something is a
+visible decision. No target warehouse, because nothing arrives anywhere.
+
+### 5. Pick for a work order — `Stock Entry` · Material Transfer for Manufacture
 
 **In the Desk today:** Manufacturing → Work Order → open it → *Create → Material Transfer* (or the
 *Material Transfer* button), which builds a Stock Entry with the materials and required quantities;
@@ -93,7 +107,7 @@ told. Batch-tracked lines offer the batches the server says are on that shelf, o
 with quantity and expiry — and the quantity on hand is shown while you pick, with a warning (never a
 refusal) if you go past it.
 
-### 5. Pick for delivery — draft `Delivery Note`
+### 6. Pick for delivery — draft `Delivery Note`
 
 **In the Desk today:** Selling → Delivery Note → New → *Get Items From → Sales Order*, set the
 warehouse, handle batches, save, submit, print. Dispatch usually wants to check the pallet before the
@@ -137,6 +151,6 @@ That boundary is the point. A warehouse app that tries to be the ERP is a second
 ## Notes on the numbers
 
 - "Clicks" in the tables above are approximate and describe the shape of the work, not a benchmark.
-- Everything the app posts was verified against the demo adapter and the built bundle (92 unit tests,
-  41 smoke checks). A first run against a real site should start with *Check this site*, then one
+- Everything the app posts was verified against the demo adapter and the built bundle (97 unit tests,
+  49 smoke checks). A first run against a real site should start with *Check this site*, then one
   document of each type, checked in the Desk before the pilot widens.

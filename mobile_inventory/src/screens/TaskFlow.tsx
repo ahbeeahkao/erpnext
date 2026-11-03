@@ -488,9 +488,11 @@ export function TaskFlowScreen({
 										) : null}
 
 										<p className="muted">
-											{line.fromWarehouse ?? task.fromWarehouse
-												? `${line.fromWarehouse ?? task.fromWarehouse} → ${line.toWarehouse ?? task.toWarehouse ?? "—"}`
-												: `Into ${line.toWarehouse ?? task.reference}`}
+											{task.kind === "issue"
+												? `Out of ${line.fromWarehouse ?? task.fromWarehouse ?? "—"}`
+												: line.fromWarehouse ?? task.fromWarehouse
+													? `${line.fromWarehouse ?? task.fromWarehouse} → ${line.toWarehouse ?? task.toWarehouse ?? "—"}`
+													: `Into ${line.toWarehouse ?? task.reference}`}
 										</p>
 
 										{resolveScan ? (
@@ -546,7 +548,7 @@ export function TaskFlowScreen({
 						Queue for later
 					</Button>
 				) : null}
-				{task.kind !== "count-rack" && progress.linesTouched ? (
+				{task.kind !== "count-rack" && task.kind !== "issue" && progress.linesTouched ? (
 					<Button block variant="secondary" onClick={() => setLabelsOpen(true)}>
 						Print labels
 					</Button>
@@ -581,7 +583,9 @@ export function TaskFlowScreen({
 						} Only scanned items are counted — nothing else in the warehouse is touched.`
 					: task.kind === "pick-dn"
 						? "The delivery note is created as a draft: dispatch checks it against the gate pass and submits."
-						: "One document for everything you scanned; the source and target stay on every row."}
+						: task.kind === "issue"
+							? "One Material Issue for everything you scanned. Stock leaves the warehouse and does not arrive anywhere — for scrap, samples or consumption."
+							: "One document for everything you scanned; the source and target stay on every row."}
 			</p>
 
 			{labelsOpen ? (

@@ -70,7 +70,7 @@ export interface ScanMatch {
 }
 
 export type MoveKind = "receipt" | "issue" | "transfer";
-export type TaskKind = "count-rack" | "putaway" | "pick-wo" | "pick-dn";
+export type TaskKind = "count-rack" | "putaway" | "issue" | "pick-wo" | "pick-dn";
 
 /** Every job the home screen can start. */
 export type JobKey = "receive" | TaskKind;

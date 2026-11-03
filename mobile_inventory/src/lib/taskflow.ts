@@ -44,6 +44,7 @@ export function parseSerials(raw?: string): string[] {
 const LABEL: Record<TaskKind, string> = {
 	"count-rack": "Rack count",
 	putaway: "Put away",
+	issue: "Issue for consumption",
 	"pick-wo": "Pick for work order",
 	"pick-dn": "Pick for delivery",
 };
@@ -54,7 +55,7 @@ export function taskLabel(kind: TaskKind): string {
 
 /** Scanned flows start empty and grow as stock is scanned; document flows start with their lines. */
 export function scansAddItems(kind: TaskKind): boolean {
-	return kind === "count-rack" || kind === "putaway";
+	return kind === "count-rack" || kind === "putaway" || kind === "issue";
 }
 
 export interface FlowHeader {
@@ -251,6 +252,11 @@ export function flowWarnings(task: FlowTask): string[] {
 		);
 }
 
+/** Kinds that end in another warehouse. An issue and a delivery note simply leave. */
+export function needsTarget(kind: TaskKind): boolean {
+	return kind === "putaway" || kind === "pick-wo";
+}
+
 /** Everything the server would refuse, refused here first. */
 export function validateFlow(task: FlowTask): string[] {
 	const errors: string[] = [];
@@ -272,6 +278,10 @@ export function validateFlow(task: FlowTask): string[] {
 		return ["Nothing captured yet — scan or enter at least one line"];
 	}
 
+	if (task.kind === "issue" && !task.fromWarehouse) {
+		errors.push("Choose the warehouse the stock is coming from");
+	}
+
 	if (task.kind === "putaway") {
 		if (task.dimensionField && !task.location) {
 			for (const line of task.lines.filter((row) => row.qty > 0)) {
@@ -289,8 +299,8 @@ export function validateFlow(task: FlowTask): string[] {
 		const from = line.fromWarehouse ?? task.fromWarehouse;
 		const to = line.toWarehouse ?? task.toWarehouse;
 		if (!from) errors.push(`${line.itemCode}: no warehouse to pick from`);
-		// A delivery note takes stock out of one warehouse; there is no "to" to check.
-		if (task.kind !== "pick-dn") {
+		// A delivery note and an issue take stock out of one warehouse; there is no "to" to check.
+		if (needsTarget(task.kind)) {
 			if (!to) errors.push(`${line.itemCode}: no target warehouse`);
 			if (from && to && from === to) errors.push(`${line.itemCode}: source and target are the same`);
 		}
@@ -399,13 +409,25 @@ export function buildFlowDoc(task: FlowTask): Record<string, unknown> {
 		};
 	}
 
+	const entryType =
+		task.kind === "pick-wo"
+			? "Material Transfer for Manufacture"
+			: task.kind === "issue"
+				? "Material Issue"
+				: "Material Transfer";
+
 	return {
 		doctype: "Stock Entry",
 		...posting,
-		stock_entry_type: task.kind === "pick-wo" ? "Material Transfer for Manufacture" : "Material Transfer",
+		stock_entry_type: entryType,
 		...(task.kind === "pick-wo" ? { work_order: task.reference } : {}),
 		items: rows.map((line) =>
-			stockRow(task, line, line.fromWarehouse ?? task.fromWarehouse, line.toWarehouse ?? task.toWarehouse)
+			stockRow(
+				task,
+				line,
+				line.fromWarehouse ?? task.fromWarehouse,
+				needsTarget(task.kind) ? line.toWarehouse ?? task.toWarehouse : undefined
+			)
 		),
 	};
 }
@@ -417,7 +439,9 @@ export function flowSummary(task: FlowTask): OpSummary {
 			? task.toWarehouse ?? task.reference
 			: task.kind === "putaway"
 				? `${task.fromWarehouse ?? "—"} → ${task.toWarehouse ?? "—"}`
-				: task.reference;
+				: task.kind === "issue"
+					? `from ${task.fromWarehouse ?? "—"}`
+					: task.reference;
 	return {
 		kind: task.kind,
 		itemCode: task.reference,

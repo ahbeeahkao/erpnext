@@ -69,3 +69,22 @@ describe("the label sheet", () => {
 		assert.deepEqual(labelsForTask(task), [], "a count moves no stock, so there is no carton");
 	});
 });
+
+describe("an issue", () => {
+	it("prints no labels — the stock is leaving, not arriving", () => {
+		const task = {
+			...createFlowTask("l9", "issue", {
+				title: "Issue from Stores",
+				reference: "Stores",
+				company: "Demo Co",
+				postingDate: "2026-11-03",
+				postingTime: "09:00:00",
+				fromWarehouse: "Stores",
+			}),
+			lines: [
+				{ key: "A", itemCode: "A", itemName: "A", uom: "Nos", conversionFactor: 1, qty: 2, fromWarehouse: "Stores" },
+			],
+		};
+		assert.deepEqual(labelsForTask(task), []);
+	});
+});

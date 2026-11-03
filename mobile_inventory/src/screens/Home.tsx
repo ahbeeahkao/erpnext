@@ -62,6 +62,13 @@ const TASKS: Array<{
 		icon: SwapIcon,
 	},
 	{
+		key: "issue",
+		title: "Issue for consumption",
+		hint: "Scrap, samples and internal use",
+		tone: "out",
+		icon: OutIcon,
+	},
+	{
 		key: "pick-wo",
 		title: "Pick for a work order",
 		hint: "Issue material to production",

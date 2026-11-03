@@ -29,8 +29,8 @@ export function labelCount(qty: number): number {
 }
 
 export function labelsForTask(task: FlowTask, max = MAX_LABELS): LabelData[] {
-	// Counting does not create stock; there is nothing to label.
-	if (task.kind === "count-rack") return [];
+	// Counting does not create stock and an issue takes it away; there is nothing to label.
+	if (task.kind === "count-rack" || task.kind === "issue") return [];
 
 	const labels: LabelData[] = [];
 	for (const line of task.lines) {
