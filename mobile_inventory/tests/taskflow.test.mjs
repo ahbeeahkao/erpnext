@@ -488,3 +488,49 @@ describe("the variance a count produces", () => {
 		assert.deepEqual(flowVariance(task), { lines: 0, net: 0, larger: 0, smaller: 0 });
 	});
 });
+
+describe("issuing stock for consumption", () => {
+	const issueHeader = {
+		title: "Issue from Stores - DEMO",
+		subtitle: "Issue for consumption",
+		reference: "Stores - DEMO",
+		company: "Demo Co",
+		postingDate: "2026-11-03",
+		postingTime: "09:10:00",
+		fromWarehouse: "Stores - DEMO",
+	};
+
+	it("posts one Material Issue with a source and no target", () => {
+		const task = createFlowTask("t20", "issue", issueHeader, [
+			line({ qty: 2, fromWarehouse: "Stores - DEMO", toWarehouse: undefined }),
+		]);
+		const doc = buildFlowDoc(task);
+		assert.equal(doc.doctype, "Stock Entry");
+		assert.equal(doc.stock_entry_type, "Material Issue");
+		assert.equal(doc.items.length, 1);
+		assert.equal(doc.items[0].s_warehouse, "Stores - DEMO");
+		assert.equal("t_warehouse" in doc.items[0], false, "an issue does not arrive anywhere");
+		assert.match(String(doc.remarks), /Issue for consumption/);
+	});
+
+	it("submits on post — nothing waits for a desk", () => {
+		const task = createFlowTask("t21", "issue", issueHeader, [line({ qty: 1, fromWarehouse: "Stores - DEMO" })]);
+		assert.equal(flowQueueOp(task).submit, true);
+	});
+
+	it("refuses to post without knowing where the stock comes from", () => {
+		const task = createFlowTask("t22", "issue", { ...issueHeader, fromWarehouse: undefined }, [
+			line({ qty: 1, fromWarehouse: undefined, toWarehouse: undefined }),
+		]);
+		const errors = validateFlow(task);
+		assert.ok(errors.includes("Choose the warehouse the stock is coming from"));
+		assert.ok(errors.some((error) => /no warehouse to pick from/.test(error)));
+	});
+
+	it("warns when more is taken than the shelf holds", () => {
+		const task = createFlowTask("t23", "issue", issueHeader, [
+			line({ qty: 5, systemQty: 2, fromWarehouse: "Stores - DEMO" }),
+		]);
+		assert.equal(flowWarnings(task).length, 1);
+	});
+});

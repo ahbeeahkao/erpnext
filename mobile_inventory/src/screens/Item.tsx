@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BackIcon, CountIcon, InIcon, OutIcon, SwapIcon, WifiOffIcon } from "../components/icons";
+import { BackIcon, SwapIcon, WifiOffIcon } from "../components/icons";
 import { Pill, Row, Rows, Spinner } from "../components/ui";
 import { ApiError } from "../lib/errors";
 import { formatQty, shortWarehouse } from "../lib/format";
@@ -11,14 +11,12 @@ export function ItemScreen({
 	item,
 	onBack,
 	onMove,
-	onCount,
 	notify,
 }: {
 	client: InventoryClient;
 	item: ItemInfo;
 	onBack: () => void;
 	onMove: (kind: MoveKind) => void;
-	onCount: () => void;
 	notify: Notify;
 }) {
 	const [stock, setStock] = useState<StockRow[] | null>(null);
@@ -105,25 +103,18 @@ export function ItemScreen({
 			</section>
 
 			<section className="section">
-				<h2 className="section__title">What do you want to do?</h2>
+				<h2 className="section__title">Move this item</h2>
 				<div className="action-grid">
-					<button className="action action--in" onClick={() => onMove("receipt")}>
-						<InIcon width={24} height={24} />
-						<span>Receive</span>
-					</button>
-					<button className="action action--out" onClick={() => onMove("issue")}>
-						<OutIcon width={24} height={24} />
-						<span>Issue</span>
-					</button>
 					<button className="action action--move" onClick={() => onMove("transfer")}>
 						<SwapIcon width={24} height={24} />
 						<span>Transfer</span>
 					</button>
-					<button className="action action--count" onClick={onCount}>
-						<CountIcon width={24} height={24} />
-						<span>Count</span>
-					</button>
 				</div>
+				<p className="note">
+					Receiving, counting and issuing are jobs on the home screen — they start from the delivery,
+					the shelf or the work order, not from an item. Transfer stays here for a move that has no
+					document behind it.
+				</p>
 			</section>
 		</div>
 	);

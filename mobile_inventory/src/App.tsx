@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertIcon, BackIcon, CheckIcon, QueueIcon, ScanIcon, SettingsIcon } from "./components/icons";
 import { Connect } from "./screens/Connect";
-import { CountScreen } from "./screens/Count";
 import { Home } from "./screens/Home";
 import { ItemScreen } from "./screens/Item";
 import { MoveScreen } from "./screens/Move";
 import { QueueScreen } from "./screens/Queue";
 import {
+	IssueScreen,
 	PickDeliveryScreen,
 	PickWorkOrderScreen,
 	PutAwayScreen,
@@ -32,7 +32,6 @@ type Screen =
 	| { name: "settings" }
 	| { name: "item"; itemCode: string }
 	| { name: "move"; itemCode: string; kind: MoveKind }
-	| { name: "count"; itemCode: string }
 	| { name: JobKey };
 
 type Tab = "home" | "queue" | "settings";
@@ -189,6 +188,7 @@ export default function App() {
 				);
 			case "count-rack":
 			case "putaway":
+			case "issue":
 			case "pick-wo":
 			case "pick-dn": {
 				// Same props for every job: they differ in their data, not their wiring.
@@ -197,6 +197,8 @@ export default function App() {
 						? RackCountScreen
 						: screen.name === "putaway"
 							? PutAwayScreen
+							: screen.name === "issue"
+								? IssueScreen
 							: screen.name === "pick-wo"
 								? PickWorkOrderScreen
 								: PickDeliveryScreen;
@@ -271,7 +273,6 @@ export default function App() {
 						notify={notify}
 						onBack={() => setScreen({ name: "home" })}
 						onMove={(kind) => setScreen({ name: "move", itemCode: currentItem.item_code, kind })}
-						onCount={() => setScreen({ name: "count", itemCode: currentItem.item_code })}
 					/>
 				);
 			case "move":
@@ -284,25 +285,6 @@ export default function App() {
 						session={session}
 						item={currentItem}
 						kind={screen.kind}
-						warehouses={warehouses}
-						online={online}
-						defaultWarehouse={session.defaultWarehouse}
-						notify={notify}
-						onBack={() => setScreen({ name: "item", itemCode: currentItem.item_code })}
-						onQueued={enqueue}
-						onPosted={() => setScreen({ name: "home" })}
-					/>
-				);
-			case "count":
-				if (!currentItem) {
-					setScreen({ name: "home" });
-					return null;
-				}
-				return (
-					<CountScreen
-						client={client!}
-						session={session}
-						item={currentItem}
 						warehouses={warehouses}
 						online={online}
 						defaultWarehouse={session.defaultWarehouse}

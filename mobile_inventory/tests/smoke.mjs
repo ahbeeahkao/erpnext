@@ -129,6 +129,11 @@ try {
 	click(/Open the demo/i);
 	await wait(800);
 	check("demo mode reaches the home screen", text().includes("Scan one item"));
+	check("the home screen lists six jobs", window.document.querySelectorAll(".task").length === 6);
+	check(
+		"issuing is a job, not a button on an item",
+		text().includes("Issue for consumption")
+	);
 	check("connection status is shown", text().includes("Online"));
 	check(
 		"bottom tabs are present",
@@ -144,39 +149,30 @@ try {
 	await wait(700);
 	check("item sheet shows stock", text().includes("Total on hand"));
 	check("warehouse balances are listed", text().includes("Stores"));
-
-	click(/^Receive$/);
+	check(
+		"the item sheet no longer repeats the Desk's forms",
+		text().includes("Move this item") && !text().includes("What do you want to do?")
+	);
+	clickBack();
 	await wait(400);
-	check("receive form opens", text().includes("Receive stock"));
 
-	type(window.document.getElementById("qty"), "3");
-	type(window.document.querySelector('input[placeholder="e.g. BATCH-2026-001"]'), "BATCH-SMOKE-1");
+	// --- issue for consumption -> queue -> sync -------------------------------
+	click(/Issue for consumption/);
+	await wait(500);
+	check("the issue job starts at the warehouse", text().includes("Where is it coming from?"));
+	click(/Start issuing/);
+	await wait(500);
+	const issueInput = window.document.querySelector('input[aria-label="Scan item onto this task"]');
+	type(issueInput, "FG-1002");
 	await wait(120);
+	issueInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+	await wait(1000);
+	check("an issued item becomes a line", text().includes("1/1 lines"));
+	check("the issue is described as one Material Issue", text().includes("One Material Issue"));
 
-	click(/^Receive now$/);
-	await wait(300);
-	check("missing unit cost is refused", /Enter a unit cost/i.test(text()));
-	check("still on the form after refusal", text().includes("Receive stock"));
-
-	type(window.document.querySelector('input[placeholder="0.00"]'), "12.5");
-	await wait(120);
-	click(/^Receive now$/);
-	await wait(1400);
-	check("receipt is posted", /posted as STE-DEMO-/.test(text()));
-	check("returns home after posting", text().includes("Scan one item"));
-
-	// --- issue -> queue -> sync ----------------------------------------------
-	type(window.document.querySelector('input[aria-label="Search items"]'), "FG-1002");
-	await wait(900);
-	click(/Cold Brew Bottle/);
-	await wait(700);
-	click(/^Issue$/);
-	await wait(400);
-	type(window.document.getElementById("qty"), "2");
-	await wait(100);
 	click(/Queue for later/i);
-	await wait(800);
-	check("transaction is queued", /Queued on this device/.test(text()));
+	await wait(900);
+	check("transaction is queued", /Saved on the device/.test(text()));
 
 	click(/Queue/);
 	await wait(1600);
@@ -184,9 +180,9 @@ try {
 	check("server document name is shown", /STE-DEMO-\d+/.test(text()));
 
 	click(/What was posted\?/);
-	await wait(400);
+	await wait(500);
 	check("the posted document can be inspected", text().includes("Document") && text().includes("Stock Entry"));
-	check("the lines that were posted are listed", text().includes("Cold Brew Bottle") || text().includes("FG-1002"));
+	check("the issue posted as a Material Issue", text().includes("Material Issue"));
 	click(/Hide what was posted/);
 	await wait(200);
 

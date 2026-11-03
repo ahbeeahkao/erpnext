@@ -107,11 +107,20 @@ The app is built around the jobs a storekeeper actually has, not around the docu
 produce. Nothing here duplicates the Desk: item masters, prices, taxes, UOM conversions, reports
 and permissions stay in ERPNext, and the phone captures what happened on the floor.
 
-| Job                    | What the operator does                                   | What gets posted                                             |
-| ---------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
+Six jobs, each one a document:
+
+| Job | What the operator does | What gets posted |
+| --- | --- | --- |
 | **Receive a delivery** | Pick the order that arrived, scan each carton, post once | One `Purchase Receipt`, rows linked to `purchase_order_item` |
-| Move one item          | Scan an item, choose in / out / transfer                 | `Stock Entry` (Material Receipt, Issue or Transfer)          |
-| Count one item         | Scan an item, type the counted quantity                  | `Stock Reconciliation`                                       |
+| **Count a rack** | Warehouse + shelf, then scan whatever is actually there | One `Stock Reconciliation` for the shelf, zero counts included |
+| **Put away** | Delivery at the door → the shelf it belongs on | `Stock Entry` · Material Transfer, shelf on every row |
+| **Issue for consumption** | Scan what is leaving for scrap, samples or internal use | `Stock Entry` · Material Issue — source only, no target |
+| **Pick for a work order** | The work order's materials, scanned up to what is needed | `Stock Entry` · Material Transfer for Manufacture |
+| **Pick for delivery** | The sales order due, picked and handed to dispatch | **Draft** `Delivery Note` |
+
+The item sheet is a lookup, not a form: searching or scanning an item shows its balances and one
+action — transfer it. Receiving, counting and issuing all start from the delivery, the shelf or the
+warehouse, because that is where the person doing the work actually starts.
 
 Receiving is the flagship flow, and it is deliberately not a form:
 
@@ -221,7 +230,7 @@ hidden and nothing breaks. Per-line overrides exist because a mixed pallet is no
 
 ## The other jobs share one engine
 
-Counting a rack, putting away and picking are the same interaction — a set of lines you work
+Counting a rack, putting away, issuing and picking are the same interaction — a set of lines you work
 through with a scanner — so they are one screen (`screens/TaskFlow.tsx`) over one pure module
 (`lib/taskflow.ts`). The task carries the differences: where its lines come from, and which
 document it becomes.
@@ -229,6 +238,9 @@ document it becomes.
 - **Count a rack** starts empty and blind, and *grows* as you scan; there is no ceiling, because
   finding more than the system knows is the answer you were looking for. Every scanned line goes on
   the reconciliation, **including a zero count** — zero is a real answer.
+- **Issue for consumption** starts empty with a source warehouse and no target: scrap, samples and
+  internal use leave the building rather than moving inside it. On-hand is shown per line and taking
+  more than the shelf holds raises a warning.
 - **Put away** starts empty with a source and a target warehouse; each line can be sent somewhere
   else from its detail panel.
 - **Pick for a work order** starts from the work order's material lines, minus what is already
@@ -284,7 +296,7 @@ src/
   lib/sync.ts         drain loop with idempotency + failure policy
   lib/storage.ts      IndexedDB wrapper (kv + queue stores)
   hooks/              camera scanning, online state, queue, toasts
-  screens/            Connect, Home, Receive, TaskFlow, Jobs, Item, Move, Count, Queue, Settings
+  screens/            Connect, Home, Receive, TaskFlow, Jobs, Item, Move, Queue, Settings
   components/         UI kit, icons, scanner overlay, printable label sheet
 public/
   sw.js               offline shell (never caches /api/*)

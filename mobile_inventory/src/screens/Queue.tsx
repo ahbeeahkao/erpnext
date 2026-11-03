@@ -161,6 +161,12 @@ function OpDetail({ op }: { op: QueueOp }) {
 			<div className="kv">
 				<span>Document</span>
 				<span>{value("doctype")}</span>
+				{doc.stock_entry_type ? (
+					<>
+						<span>Type</span>
+						<span>{String(doc.stock_entry_type)}</span>
+					</>
+				) : null}
 				<span>Posting date</span>
 				<span>
 					{value("posting_date")} {doc.posting_time ? String(doc.posting_time) : ""}
