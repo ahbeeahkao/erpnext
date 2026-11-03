@@ -62,7 +62,7 @@ export interface ScanMatch {
 }
 
 export type MoveKind = "receipt" | "issue" | "transfer";
-export type OpKind = MoveKind | "count";
+export type OpKind = MoveKind | "count" | "po-receipt";
 
 export interface MoveInput {
 	id: string;
@@ -92,6 +92,8 @@ export interface CountInput {
 
 export interface OpSummary {
 	kind: OpKind;
+	/** Shown in the queue instead of the item/qty line when a task produced several lines. */
+	label?: string;
 	itemCode: string;
 	itemName?: string;
 	qty: number;
@@ -119,6 +121,66 @@ export interface QueueOp {
 	demo?: boolean;
 }
 
+export interface ExistingDoc {
+	name: string;
+	/** 0 draft, 1 submitted, 2 cancelled. A draft is NOT a posted document. */
+	docstatus: number;
+}
+
+export interface PurchaseOrder {
+	name: string;
+	supplier?: string;
+	company?: string;
+	transaction_date?: string;
+	per_received?: number;
+	status?: string;
+}
+
+export interface PurchaseOrderLine {
+	/** Child row name — becomes `purchase_order_item` on the receipt. */
+	name: string;
+	item_code: string;
+	item_name?: string;
+	qty: number;
+	received_qty?: number;
+	uom?: string;
+	stock_uom?: string;
+	conversion_factor?: number;
+	warehouse?: string;
+	rate?: number;
+}
+
+export interface ReceiptLine {
+	key: string;
+	itemCode: string;
+	itemName?: string;
+	uom: string;
+	stockUom?: string;
+	conversionFactor: number;
+	warehouse: string;
+	orderedQty: number;
+	alreadyReceived: number;
+	/** Counted on this device, in `uom`. */
+	receivedNow: number;
+	rate?: number;
+	batchNo?: string;
+	serialNo?: string;
+	hasBatchNo?: boolean;
+	hasSerialNo?: boolean;
+}
+
+export interface ReceiptTask {
+	/** Device-side task id; also the idempotency marker on the document. */
+	id: string;
+	order: string;
+	supplier?: string;
+	company: string;
+	postingDate: string;
+	postingTime: string;
+	blind: boolean;
+	lines: ReceiptLine[];
+}
+
 export interface Connection {
 	user: string;
 	company?: string;
@@ -136,5 +198,9 @@ export interface InventoryClient {
 	stockFor(itemCode: string): Promise<StockRow[]>;
 	createDoc(doc: Record<string, unknown>): Promise<{ name: string }>;
 	submitDoc(doc: Record<string, unknown>): Promise<{ name: string }>;
-	findByReference(reference: string): Promise<string | null>;
+	/** Finds a previously posted document by its device marker, with its docstatus. */
+	findDocument(doctype: string, reference: string): Promise<ExistingDoc | null>;
+	/** Purchase orders with quantity still to receive, oldest first. */
+	openPurchaseOrders(): Promise<PurchaseOrder[]>;
+	purchaseOrderLines(order: string): Promise<PurchaseOrderLine[]>;
 }

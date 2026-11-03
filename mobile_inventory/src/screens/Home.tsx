@@ -3,7 +3,9 @@ import { Scanner } from "../components/Scanner";
 import {
 	AlertIcon,
 	BoxIcon,
+	ChevronIcon,
 	CloudIcon,
+	InIcon,
 	QueueIcon,
 	ScanIcon,
 	SearchIcon,
@@ -24,10 +26,21 @@ interface HomeProps {
 	syncing: boolean;
 	onSync: () => void;
 	onOpenItem: (itemCode: string) => void;
+	onReceive: () => void;
 	notify: Notify;
 }
 
-export function Home({ client, session, online, pending, syncing, onSync, onOpenItem, notify }: HomeProps) {
+export function Home({
+	client,
+	session,
+	online,
+	pending,
+	syncing,
+	onSync,
+	onOpenItem,
+	onReceive,
+	notify,
+}: HomeProps) {
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState<ItemInfo[]>([]);
 	const [searching, setSearching] = useState(false);
@@ -154,13 +167,29 @@ export function Home({ client, session, online, pending, syncing, onSync, onOpen
 				</button>
 			) : null}
 
+			<section className="section">
+				<h2 className="section__title">Today\'s tasks</h2>
+				<div className="tasks">
+					<button className="task" onClick={onReceive}>
+						<span className="task__icon task__icon--in">
+							<InIcon width={22} height={22} />
+						</span>
+						<span className="task__body">
+							<strong>Receive a delivery</strong>
+							<small>Scan what arrived against its purchase order</small>
+						</span>
+						<ChevronIcon width={18} height={18} />
+					</button>
+				</div>
+			</section>
+
 			<button className="scan-card" onClick={() => setScanning(true)} disabled={resolving}>
 				<span className="scan-card__icon">
 					<ScanIcon width={30} height={30} />
 				</span>
 				<span>
-					<strong>{resolving ? "Looking up…" : "Scan a barcode"}</strong>
-					<small>Receive, issue, transfer or count in seconds</small>
+					<strong>{resolving ? "Looking up…" : "Scan one item"}</strong>
+					<small>Move, count or check the stock of a single item</small>
 				</span>
 			</button>
 

@@ -6,6 +6,7 @@ import { Home } from "./screens/Home";
 import { ItemScreen } from "./screens/Item";
 import { MoveScreen } from "./screens/Move";
 import { QueueScreen } from "./screens/Queue";
+import { ReceiveScreen } from "./screens/Receive";
 import { SettingsScreen } from "./screens/Settings";
 import { useOnline } from "./hooks/useOnline";
 import { useQueue } from "./hooks/useQueue";
@@ -24,7 +25,8 @@ type Screen =
 	| { name: "settings" }
 	| { name: "item"; itemCode: string }
 	| { name: "move"; itemCode: string; kind: MoveKind }
-	| { name: "count"; itemCode: string };
+	| { name: "count"; itemCode: string }
+	| { name: "receive" };
 
 type Tab = "home" | "queue" | "settings";
 
@@ -163,7 +165,22 @@ export default function App() {
 						syncing={queue.syncing}
 						onSync={() => void queue.syncNow()}
 						onOpenItem={(code) => void openItem(code)}
+						onReceive={() => setScreen({ name: "receive" })}
 						notify={notify}
+					/>
+				);
+			case "receive":
+				return (
+					<ReceiveScreen
+						client={client!}
+						session={session}
+						warehouses={warehouses}
+						defaultWarehouse={session.defaultWarehouse}
+						online={online}
+						notify={notify}
+						onBack={() => setScreen({ name: "home" })}
+						onQueued={enqueue}
+						onPosted={() => setScreen({ name: "home" })}
 					/>
 				);
 			case "queue":

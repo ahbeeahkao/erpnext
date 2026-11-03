@@ -109,7 +109,7 @@ try {
 
 	click(/Open the demo/i);
 	await wait(800);
-	check("demo mode reaches the home screen", text().includes("Scan a barcode"));
+	check("demo mode reaches the home screen", text().includes("Scan one item"));
 	check("connection status is shown", text().includes("Online"));
 	check(
 		"bottom tabs are present",
@@ -144,7 +144,7 @@ try {
 	click(/^Receive now$/);
 	await wait(1400);
 	check("receipt is posted", /posted as STE-DEMO-/.test(text()));
-	check("returns home after posting", text().includes("Scan a barcode"));
+	check("returns home after posting", text().includes("Scan one item"));
 
 	// --- issue -> queue -> sync ----------------------------------------------
 	type(window.document.querySelector('input[aria-label="Search items"]'), "FG-1002");
@@ -163,6 +163,27 @@ try {
 	await wait(1600);
 	check("queued transaction posts on sync", /Posted/.test(text()));
 	check("server document name is shown", /STE-DEMO-\d+/.test(text()));
+
+	// --- receive against a purchase order ------------------------------------
+	click(/^Scan$/);
+	await wait(600);
+	click(/Receive a delivery/i);
+	await wait(800);
+	check("receiving lists the deliveries due", text().includes("PO-DEMO-0001"));
+	check("the supplier names the job, not the doctype", text().includes("Kedai Kopi Supplies"));
+
+	click(/PO-DEMO-0001/);
+	await wait(900);
+	check("the order opens as a counting task", text().includes("Blind receiving"));
+	check("order lines are listed", text().includes("Arabica Beans 1kg"));
+
+	const scanInput = window.document.querySelector('input[aria-label="Scan item into this receipt"]');
+	type(scanInput, "FG-1001");
+	await wait(120);
+	scanInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+	await wait(400);
+	check("one scan adds one unit", text().includes("Post receipt · 1 unit"));
+	check("the line shows the scanned quantity", text().includes("1/2 lines"));
 } catch (error) {
 	console.error(`smoke test crashed: ${error instanceof Error ? error.message : error}`);
 	errors.push(String(error));

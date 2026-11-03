@@ -44,31 +44,34 @@ The browser session cookie is used, so there are no long-lived credentials on th
    `<bench>/apps/erpnext/erpnext/public/inventory/` if you are shipping it inside the ERPNext app).
 3. Make the page inject the CSRF token — a tiny `www` page is enough:
 
-   ```python
-   # <app>/<app>/www/inventory.py
-   import frappe
+    ```python
+    # <app>/<app>/www/inventory.py
+    import frappe
 
-   def get_context(context):
-       if frappe.session.user == "Guest":
-           frappe.throw("Please sign in", frappe.PermissionError)
-       context.no_cache = 1
-   ```
+    def get_context(context):
+        if frappe.session.user == "Guest":
+            frappe.throw("Please sign in", frappe.PermissionError)
+        context.no_cache = 1
+    ```
 
-   ```html
-   <!-- <app>/<app>/www/inventory.html -->
-   <script>window.csrf_token = "{{ frappe.session.csrf_token }}";</script>
-   <div id="root"></div>
-   <script type="module" src="/assets/<app>/inventory/assets/index-<hash>.js"></script>
-   ```
+    ```html
+    <!-- <app>/<app>/www/inventory.html -->
+    <script>
+    	window.csrf_token = "{{ frappe.session.csrf_token }}";
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/assets/<app>/inventory/assets/index-<hash>.js"></script>
+    ```
 
-   Serving it as a www page also means the 40x redirect to `/login` handles re-authentication.
+    Serving it as a www page also means the 40x redirect to `/login` handles re-authentication.
+
 4. In the app choose **This site** and connect.
 
 ### Option B — host it anywhere, authenticate with API keys
 
 1. In ERPNext: **User → API Access → Generate Keys**. Use a dedicated integration user with a
-   role that can create/submit Stock Entry and Stock Reconciliation (e.g. *Stock Manager*,
-   *Item Manager*).
+   role that can create/submit Stock Entry and Stock Reconciliation (e.g. _Stock Manager_,
+   _Item Manager_).
 2. Serve `dist/` from any static host (or `npm run serve`).
 3. Open the app, choose **API key**, and enter the site URL, key and secret.
 
@@ -78,22 +81,55 @@ The browser session cookie is used, so there are no long-lived credentials on th
 
 ## What the app calls
 
-| Action | Endpoint |
-| --- | --- |
-| Verify session | `GET /api/method/frappe.auth.get_logged_user` |
-| Warehouses | `GET /api/resource/Warehouse` |
-| Scan lookup | `GET /api/method/erpnext.stock.utils.scan_barcode?search_value=…` |
-| Item details | `GET /api/resource/Item/<code>` |
-| Item search | `GET /api/resource/Item` (`or_filters` on code/name) |
-| Stock by warehouse | `GET /api/resource/Bin` |
-| Post a movement | `POST /api/resource/Stock Entry` then `POST /api/method/frappe.client.submit` |
-| Post a count | `POST /api/resource/Stock Reconciliation` then `POST /api/method/frappe.client.submit` |
-| Duplicate check | `GET /api/resource/Stock Entry` filtered on `remarks` |
+| Action             | Endpoint                                                                               |
+| ------------------ | -------------------------------------------------------------------------------------- |
+| Verify session     | `GET /api/method/frappe.auth.get_logged_user`                                          |
+| Warehouses         | `GET /api/resource/Warehouse`                                                          |
+| Scan lookup        | `GET /api/method/erpnext.stock.utils.scan_barcode?search_value=…`                      |
+| Item details       | `GET /api/resource/Item/<code>`                                                        |
+| Item search        | `GET /api/resource/Item` (`or_filters` on code/name)                                   |
+| Stock by warehouse | `GET /api/resource/Bin`                                                                |
+| Post a movement    | `POST /api/resource/Stock Entry` then `POST /api/method/frappe.client.submit`          |
+| Post a count       | `POST /api/resource/Stock Reconciliation` then `POST /api/method/frappe.client.submit` |
+| Deliveries due     | `GET /api/resource/Purchase Order` (`docstatus = 1`, `per_received < 100`)             |
+| Order lines        | `GET /api/resource/Purchase Order Item` filtered on `parent`                           |
+| Post a delivery    | `POST /api/resource/Purchase Receipt` then `POST /api/method/frappe.client.submit`     |
+| Duplicate check    | `GET /api/resource/<doctype>` filtered on `remarks`, returning `name` + `docstatus`    |
 
 Reads use `GET` on purpose: whitelisted methods accept query parameters, so reads work even in
 cookie mode where a CSRF token may not be available yet. Writes always send
 `X-Frappe-CSRF-Token` when the page provides one (`window.csrf_token`), and rely on token auth
 otherwise.
+
+## Jobs, not doctypes
+
+The app is built around the jobs a storekeeper actually has, not around the documents those jobs
+produce. Nothing here duplicates the Desk: item masters, prices, taxes, UOM conversions, reports
+and permissions stay in ERPNext, and the phone captures what happened on the floor.
+
+| Job                    | What the operator does                                   | What gets posted                                             |
+| ---------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
+| **Receive a delivery** | Pick the order that arrived, scan each carton, post once | One `Purchase Receipt`, rows linked to `purchase_order_item` |
+| Move one item          | Scan an item, choose in / out / transfer                 | `Stock Entry` (Material Receipt, Issue or Transfer)          |
+| Count one item         | Scan an item, type the counted quantity                  | `Stock Reconciliation`                                       |
+
+Receiving is the flagship flow, and it is deliberately not a form:
+
+- **Continuous scan.** The scan box keeps focus; a scan is just keystrokes and `Enter`. Scanning the
+  same carton twice is how you count, so the second scan is the second unit.
+- **Nothing is typed twice.** The order line already knows the item, UOM, conversion factor and
+  warehouse, and the receipt carries `purchase_order` + `purchase_order_item`, so the order's
+  `per_received`, the three-way match and any return against it keep working.
+- **Blind by default on request.** "Blind receiving" hides the expected quantity while counting, so
+  the count is what is on the pallet rather than what the paperwork promised. The toggle only
+  hides a number; it never changes the document.
+- **Refusals happen on the device.** Over-receipt, a missing batch number, or too few serial
+  numbers are caught before the document leaves the phone, not hours later in the queue.
+- **One receipt per delivery.** Only the lines you touched are posted, so a 40-line order produces
+  a receipt for what actually arrived.
+
+Batch and serial flags come from the `Item` when a line is first scanned, because the purchase
+order row does not carry them; the batch field then appears for that line only.
 
 ## Offline queue and idempotency
 
@@ -104,8 +140,10 @@ IndexedDB before it is sent. Each document's `remarks` ends with a marker:
 Mobile Inventory · Material Receipt · [MOBILE-INV:8f14e45f-…] · GRN 8821
 ```
 
-Before posting, the sync engine searches `Stock Entry` for that marker. A retry after a lost
-response therefore finds the already-posted document instead of posting the move twice. The
+Before posting, the sync engine searches the same doctype for that marker and reads back
+`docstatus`. A **submitted** document means the retry is a no-op. A **draft** — what a failed
+submit leaves behind — is submitted rather than recreated, which used to look "posted" on the phone
+while the stock never moved. The
 queue posts oldest-first, stops on authentication or connectivity failures, and leaves
 validation errors visible for a human to fix. Documents keep the date they were captured, so the
 audit trail matches when the work actually happened.
@@ -121,14 +159,15 @@ Limits worth knowing:
 
 ```
 src/
-  lib/payloads.ts     document builders + validation (pure, unit tested)
+  lib/payloads.ts     stock entry + count builders and validation (pure, unit tested)
+  lib/receiving.ts    purchase-order receiving task: scan counting, validation, receipt builder
   lib/api.ts          ERPNext REST client (site-session or API-key auth)
   lib/demo.ts         in-memory adapter used by demo mode
   lib/queue.ts        queue persistence, ordering, back-off
   lib/sync.ts         drain loop with idempotency + failure policy
   lib/storage.ts      IndexedDB wrapper (kv + queue stores)
   hooks/              camera scanning, online state, queue, toasts
-  screens/            Connect, Home, Item, Move, Count, Queue, Settings
+  screens/            Connect, Home, Receive, Item, Move, Count, Queue, Settings
   components/         UI kit, icons, scanner overlay
 public/
   sw.js               offline shell (never caches /api/*)
@@ -137,7 +176,11 @@ public/
 
 ## Roadmap
 
-- Batch picker that lists existing batches with expiry, and creates new ones explicitly.
-- Purchase-receipt style receipt against a PO.
-- Multiple-item cart per transaction.
-- Label printing (CUPS/Bluetooth) and putaway suggestions.
+The next jobs, in the order a warehouse asks for them:
+
+- **Count a rack**: one task per shelf, blind, scan-to-count, one reconciliation for the whole rack.
+- **Put away**: scan a received carton, pick the location, done — location from an Inventory
+  Dimension rather than dozens of nested warehouses.
+- **Pick for a work order / delivery note**: scan to pick, with short-pick reasons.
+- **Batch picker** that lists existing batches with expiry, and creates new ones explicitly.
+- Label printing (CUPS/Bluetooth).

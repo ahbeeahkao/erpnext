@@ -107,6 +107,8 @@ export function validateMove(
 export interface DocContext {
 	company: string;
 	postingDate: string;
+	/** Captured with the date; without it ERPNext overwrites both with server-now on submit. */
+	postingTime?: string;
 }
 
 export function buildStockEntryDoc(input: MoveInput, ctx: DocContext): Record<string, unknown> {
@@ -138,7 +140,9 @@ export function buildStockEntryDoc(input: MoveInput, ctx: DocContext): Record<st
 		doctype: "Stock Entry",
 		stock_entry_type: STOCK_ENTRY_TYPE[input.kind],
 		company: ctx.company,
+		set_posting_time: 1,
 		posting_date: ctx.postingDate,
+		...(ctx.postingTime ? { posting_time: ctx.postingTime } : {}),
 		remarks: remarksFor(input.id, STOCK_ENTRY_TYPE[input.kind], input.note),
 		items: [row],
 	};
@@ -178,7 +182,9 @@ export function buildReconciliationDoc(input: CountInput, ctx: DocContext): Reco
 		doctype: "Stock Reconciliation",
 		purpose: "Stock Reconciliation",
 		company: ctx.company,
+		set_posting_time: 1,
 		posting_date: ctx.postingDate,
+		...(ctx.postingTime ? { posting_time: ctx.postingTime } : {}),
 		remarks: remarksFor(input.id, "Stock Reconciliation", input.note),
 		items: [row],
 	};
@@ -231,8 +237,9 @@ export function parseScanResponse(raw: unknown, scanned?: string): ScanMatch {
 /** Newest-first, then pending-first, so the queue list reads naturally. */
 export function describeOp(op: {
 	kind: string;
-	summary: { itemCode: string; qty: number; uom: string };
+	summary: { itemCode: string; qty: number; uom: string; label?: string };
 }): string {
+	if (op.summary.label) return op.summary.label;
 	const label = op.kind === "count" ? "Count" : MOVE_LABEL[op.kind as MoveKind] ?? op.kind;
 	return `${label} · ${op.summary.itemCode} · ${op.summary.qty} ${op.summary.uom}`;
 }

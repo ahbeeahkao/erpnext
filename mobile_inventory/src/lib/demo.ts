@@ -6,7 +6,17 @@
 // and the idempotency marker in `remarks` finds an already-posted document.
 import { ApiError } from "./errors";
 import { parseScanResponse } from "./payloads";
-import type { Connection, InventoryClient, ItemInfo, ScanMatch, StockRow, Warehouse } from "./types";
+import type {
+	Connection,
+	ExistingDoc,
+	InventoryClient,
+	ItemInfo,
+	PurchaseOrder,
+	PurchaseOrderLine,
+	ScanMatch,
+	StockRow,
+	Warehouse,
+} from "./types";
 
 interface DemoItem extends ItemInfo {
 	barcode: string;
@@ -143,9 +153,85 @@ function adjust(itemCode: string, warehouse: string, delta: number, context: str
 	stock.set(stockKey(itemCode, warehouse), next);
 }
 
+/** Two open purchase orders, so the receiving task has something real to receive. */
+const PURCHASE_ORDERS: Array<PurchaseOrder & { lines: PurchaseOrderLine[] }> = [
+	{
+		name: "PO-DEMO-0001",
+		supplier: "Kedai Kopi Supplies",
+		company: "Demo Company",
+		transaction_date: "2026-10-28",
+		per_received: 0,
+		status: "To Receive and Bill",
+		lines: [
+			{
+				name: "po1-row1",
+				item_code: "FG-1001",
+				item_name: "Arabica Beans 1kg",
+				qty: 40,
+				received_qty: 0,
+				uom: "Kg",
+				stock_uom: "Kg",
+				conversion_factor: 1,
+				warehouse: "Stores - DEMO",
+				rate: 32,
+			},
+			{
+				name: "po1-row2",
+				item_code: "FG-1002",
+				item_name: "Cold Brew Bottle 330ml",
+				qty: 120,
+				received_qty: 0,
+				uom: "Nos",
+				stock_uom: "Nos",
+				conversion_factor: 1,
+				warehouse: "Cold Room - DEMO",
+				rate: 3.2,
+			},
+		],
+	},
+	{
+		name: "PO-DEMO-0002",
+		supplier: "Sin Heng Hardware",
+		company: "Demo Company",
+		transaction_date: "2026-10-30",
+		per_received: 0,
+		status: "To Receive and Bill",
+		lines: [
+			{
+				name: "po2-row1",
+				item_code: "ACC-3001",
+				item_name: "Paper Cup 8oz (sleeve)",
+				qty: 24,
+				received_qty: 0,
+				uom: "Nos",
+				stock_uom: "Nos",
+				conversion_factor: 1,
+				warehouse: "Stores - DEMO",
+				rate: 4.5,
+			},
+		],
+	},
+];
+
+/** How much of each order line has already been received on this device's demo site. */
+const poReceived = new Map<string, number>();
+
 function applyDocument(doc: Record<string, unknown>): void {
 	const rows = Array.isArray(doc.items) ? (doc.items as Record<string, any>[]) : [];
 	if (!rows.length) throw new ApiError("The document has no items", "validation", 417);
+
+	if (doc.doctype === "Purchase Receipt") {
+		for (const row of rows) {
+			const item = itemFor(String(row.item_code));
+			const qty = Number(row.stock_qty ?? row.qty) || 0;
+			if (qty <= 0)
+				throw new ApiError("Received quantity must be greater than zero", "validation", 417);
+			adjust(item.item_code, String(row.warehouse), qty, "this receipt");
+			const lineKey = `${row.purchase_order}:${row.purchase_order_item}`;
+			poReceived.set(lineKey, (poReceived.get(lineKey) ?? 0) + qty);
+		}
+		return;
+	}
 
 	if (doc.doctype === "Stock Reconciliation") {
 		for (const row of rows) {
@@ -270,11 +356,36 @@ export class DemoClient implements InventoryClient {
 		return this.delay({ name }, 200);
 	}
 
-	async findByReference(reference: string): Promise<string | null> {
+	async findDocument(doctype: string, reference: string): Promise<ExistingDoc | null> {
+		let match: ExistingDoc | null = null;
 		for (const [name, doc] of documents) {
+			if (String(doc.doctype ?? "") !== doctype) continue;
 			const remarks = typeof doc.remarks === "string" ? doc.remarks : "";
-			if (remarks.includes(reference)) return this.delay(name, 60);
+			if (!remarks.includes(reference)) continue;
+			const docstatus = Number(doc.docstatus) || 0;
+			// A submitted document wins over a draft left behind by an earlier failure.
+			if (!match || docstatus > match.docstatus) match = { name, docstatus };
 		}
-		return this.delay(null, 60);
+		return this.delay(match, 60);
+	}
+
+	async openPurchaseOrders(): Promise<PurchaseOrder[]> {
+		const open = PURCHASE_ORDERS.filter((order) => {
+			const received = order.lines.every(
+				(line) => (poReceived.get(`${order.name}:${line.name}`) ?? 0) >= line.qty
+			);
+			return !received;
+		}).map(({ lines: _lines, ...header }) => header);
+		return this.delay(open, 120);
+	}
+
+	async purchaseOrderLines(order: string): Promise<PurchaseOrderLine[]> {
+		const found = PURCHASE_ORDERS.find((row) => row.name === order);
+		if (!found) throw new ApiError(`Purchase order ${order} was not found`, "validation", 404);
+		const lines = found.lines.map((line) => ({
+			...line,
+			received_qty: poReceived.get(`${found.name}:${line.name}`) ?? 0,
+		}));
+		return this.delay(lines, 120);
 	}
 }

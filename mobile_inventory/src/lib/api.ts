@@ -12,7 +12,18 @@
 // without a CSRF token; writes always POST.
 import { ApiError, toApiError } from "./errors";
 import { parseScanResponse } from "./payloads";
-import type { Connection, InventoryClient, ItemInfo, ScanMatch, Session, StockRow, Warehouse } from "./types";
+import type {
+	Connection,
+	ExistingDoc,
+	InventoryClient,
+	ItemInfo,
+	PurchaseOrder,
+	PurchaseOrderLine,
+	ScanMatch,
+	Session,
+	StockRow,
+	Warehouse,
+} from "./types";
 
 const TIMEOUT_MS = 20_000;
 
@@ -62,7 +73,7 @@ export class FrappeClient implements InventoryClient {
 	// ---------------------------------------------------------------- transport
 
 	private buildUrl(path: string, query?: Query): string {
-		const base = this.mode === "token" ? this.session.baseUrl ?? "" : "";
+		const base = this.mode === "token" ? (this.session.baseUrl ?? "") : "";
 		const raw = `${base}${path}`;
 		const url = /^https?:\/\//i.test(raw) ? new URL(raw) : new URL(raw, window.location.origin);
 		for (const [key, value] of Object.entries(query ?? {})) {
@@ -280,17 +291,73 @@ export class FrappeClient implements InventoryClient {
 		return { name };
 	}
 
-	async findByReference(reference: string): Promise<string | null> {
-		const rows = unwrap<{ name: string }[]>(
-			await this.request("/api/resource/Stock Entry", {
+	async findDocument(doctype: string, reference: string): Promise<ExistingDoc | null> {
+		const rows = unwrap<Array<{ name: string; docstatus: number }>>(
+			await this.request(`/api/resource/${encodeURIComponent(doctype)}`, {
 				query: {
-					fields: JSON.stringify(["name"]),
+					fields: JSON.stringify(["name", "docstatus"]),
 					filters: JSON.stringify([["remarks", "like", `%${reference}%`]]),
+					order_by: "docstatus desc",
 					limit_page_length: 1,
 				},
 			}),
 			"data"
 		);
-		return rows?.[0]?.name ?? null;
+		const row = rows?.[0];
+		return row ? { name: row.name, docstatus: Number(row.docstatus) || 0 } : null;
+	}
+
+	// ------------------------------------------------------------------ buying
+
+	async openPurchaseOrders(): Promise<PurchaseOrder[]> {
+		const rows = unwrap<PurchaseOrder[]>(
+			await this.request("/api/resource/Purchase Order", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"supplier",
+						"company",
+						"transaction_date",
+						"per_received",
+						"status",
+					]),
+					filters: JSON.stringify([
+						["docstatus", "=", 1],
+						["per_received", "<", 100],
+						["status", "not in", ["Closed", "Cancelled"]],
+					]),
+					order_by: "transaction_date asc",
+					limit_page_length: 20,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	async purchaseOrderLines(order: string): Promise<PurchaseOrderLine[]> {
+		const rows = unwrap<PurchaseOrderLine[]>(
+			await this.request("/api/resource/Purchase Order Item", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"item_code",
+						"item_name",
+						"qty",
+						"received_qty",
+						"uom",
+						"stock_uom",
+						"conversion_factor",
+						"warehouse",
+						"rate",
+					]),
+					filters: JSON.stringify([["parent", "=", order]]),
+					order_by: "idx asc",
+					limit_page_length: 500,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
 	}
 }

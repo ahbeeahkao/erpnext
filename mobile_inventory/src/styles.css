@@ -17,7 +17,14 @@
 	--radius: 16px;
 	--radius-lg: 22px;
 	--shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-	font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	font-family:
+		"Inter",
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		"Segoe UI",
+		Roboto,
+		sans-serif;
 	color-scheme: dark;
 }
 
@@ -237,7 +244,10 @@ button {
 	font-size: 0.95rem;
 	font-weight: 600;
 	cursor: pointer;
-	transition: transform 0.12s ease, filter 0.12s ease, background 0.12s ease;
+	transition:
+		transform 0.12s ease,
+		filter 0.12s ease,
+		background 0.12s ease;
 	min-height: 48px;
 }
 
@@ -327,7 +337,9 @@ button {
 	padding: 13px 14px;
 	font-size: 0.95rem;
 	outline: none;
-	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+	transition:
+		border-color 0.15s ease,
+		box-shadow 0.15s ease;
 	min-height: 48px;
 }
 
@@ -350,10 +362,15 @@ button {
 
 .select {
 	appearance: none;
-	background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+	background-image:
+		linear-gradient(45deg, transparent 50%, var(--muted) 50%),
 		linear-gradient(135deg, var(--muted) 50%, transparent 50%);
-	background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
-	background-size: 6px 6px, 6px 6px;
+	background-position:
+		calc(100% - 20px) 50%,
+		calc(100% - 14px) 50%;
+	background-size:
+		6px 6px,
+		6px 6px;
 	background-repeat: no-repeat;
 	padding-right: 40px;
 }
@@ -1245,4 +1262,139 @@ button {
 		animation-duration: 0.001ms !important;
 		transition-duration: 0.001ms !important;
 	}
+}
+
+/* ------------------------------------------------------------------ tasks */
+/* The job first, the item form second: a floor user starts from what they have to do. */
+.tasks {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.task {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	min-height: 68px;
+	padding: 12px 14px;
+	border-radius: var(--radius);
+	border: 1px solid var(--line-strong);
+	background: var(--surface-2);
+	color: var(--text);
+	text-align: left;
+}
+
+.task:active {
+	background: var(--surface-3);
+}
+
+.task__icon {
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 12px;
+	background: rgba(56, 189, 248, 0.14);
+	color: var(--info);
+	flex: none;
+}
+
+.task__icon--in {
+	background: rgba(52, 211, 153, 0.14);
+	color: var(--accent);
+}
+
+.task__body {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	flex: 1;
+	min-width: 0;
+}
+
+.task__body strong {
+	font-size: 0.98rem;
+}
+
+.task__body small {
+	color: var(--muted);
+	font-size: 0.8rem;
+	line-height: 1.35;
+}
+
+/* --------------------------------------------------- receive / scan task */
+.progress {
+	height: 6px;
+	border-radius: 999px;
+	background: var(--surface-3);
+	overflow: hidden;
+}
+
+.progress__bar {
+	display: block;
+	height: 100%;
+	background: var(--accent);
+	transition: width 0.25s ease;
+}
+
+.scan-field {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 4px 12px;
+	border-radius: var(--radius);
+	border: 1px solid var(--line-strong);
+	background: var(--surface-2);
+	color: var(--accent);
+}
+
+.scan-field .input {
+	flex: 1;
+	min-height: 48px;
+	border: 0;
+	background: transparent;
+	color: var(--text);
+	font-size: 1rem;
+}
+
+.scan-field .input:focus {
+	outline: none;
+}
+
+.panel {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 14px;
+	border-radius: var(--radius);
+	background: var(--surface-2);
+	border: 1px solid var(--line);
+}
+
+.stepper {
+	display: flex;
+	gap: 6px;
+}
+
+.stepper__btn {
+	width: 48px;
+	height: 48px;
+	border-radius: 12px;
+	border: 1px solid var(--line-strong);
+	background: var(--surface-3);
+	color: var(--text);
+	font-size: 1.3rem;
+	line-height: 1;
+	font-weight: 600;
+}
+
+.stepper__btn:disabled {
+	opacity: 0.35;
+}
+
+.avatar--done {
+	background: rgba(52, 211, 153, 0.18);
+	color: var(--accent);
 }
