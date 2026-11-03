@@ -158,11 +158,13 @@ export function flowProgress(task: FlowTask): {
 	units: number;
 	expected: number;
 } {
-	const touched = task.lines.filter((line) => line.qty > 0);
+	// A count line only exists because someone scanned it — and a count of zero is a captured line,
+	// which is exactly the case where the shelf was empty.
+	const touched = task.kind === "count-rack" ? task.lines : task.lines.filter((line) => line.qty > 0);
 	return {
 		linesTouched: touched.length,
 		linesTotal: task.lines.length,
-		units: round3(touched.reduce((sum, line) => sum + line.qty, 0)),
+		units: round3(task.lines.reduce((sum, line) => sum + line.qty, 0)),
 		expected: round3(task.lines.reduce((sum, line) => sum + requiredOnLine(line), 0)),
 	};
 }

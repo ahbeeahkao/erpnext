@@ -79,6 +79,16 @@ describe("counting a rack", () => {
 		assert.equal(doc.items[1].warehouse, "Stores - DEMO");
 	});
 
+	it("can post a shelf that turned out to be empty", () => {
+		let task = createFlowTask("t1", "count-rack", header);
+		task = addFlowLine(task, line({ qty: 0, systemQty: 5 }));
+		const progress = flowProgress(task);
+		assert.equal(progress.linesTouched, 1, "a scanned line is a captured line, even at zero");
+		assert.equal(progress.units, 0);
+		assert.deepEqual(validateFlow(task), [], "counting zero against a system five is the answer");
+		assert.equal(buildFlowDoc(task).items[0].qty, 0);
+	});
+
 	it("still refuses a batch item without a batch number", () => {
 		let task = createFlowTask("t1", "count-rack", header);
 		task = addFlowLine(task, line({ qty: 4, hasBatchNo: true }));
