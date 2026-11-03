@@ -157,11 +157,21 @@ export function ReceiveScreen({
 		}
 	}
 
-	function handleScan(raw: string) {
+	async function handleScan(raw: string) {
 		const value = raw.trim();
 		if (!value || !task) return;
-		const result = applyScan(task, value);
 		setScan("");
+
+		let result = applyScan(task, value);
+		if (result.outcome === "unknown-item") {
+			// The label carries a barcode, the order carries an item code: resolve it once.
+			try {
+				const match = await client.scan(value);
+				if (match.kind === "item" && match.item_code) result = applyScan(task, match.item_code);
+			} catch {
+				// Offline, or scan_barcode is restricted: the refusal below still stands.
+			}
+		}
 
 		if (result.outcome === "unknown-item") {
 			notify(`${value} is not on ${task.order}`, "error");
@@ -312,7 +322,7 @@ export function ReceiveScreen({
 					onKeyDown={(event) => {
 						if (event.key === "Enter") {
 							event.preventDefault();
-							handleScan(scan);
+							void handleScan(scan);
 						}
 					}}
 					placeholder="Scan or type the item code, then Enter"
@@ -559,7 +569,7 @@ export function ReceiveScreen({
 				<Scanner
 					title="Scan into this receipt"
 					onResult={(value) => {
-						handleScan(value);
+						void handleScan(value);
 						setCamera(false);
 					}}
 					onClose={() => setCamera(false)}

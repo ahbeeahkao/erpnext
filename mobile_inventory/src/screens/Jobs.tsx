@@ -47,12 +47,40 @@ function stamp() {
 
 /** Resolves a scanned value to an item, whether it is a barcode or a code. */
 async function resolveItem(client: InventoryClient, value: string) {
-	const match = await client.scan(value);
-	if (match.kind === "item" && match.item_code) return match;
-	if (match.kind === "candidates" && match.candidates?.length === 1) {
-		return { ...match, kind: "item" as const, item_code: match.candidates[0].item_code };
+	try {
+		const match = await client.scan(value);
+		if (match.kind === "item" && match.item_code) return match;
+		if (match.kind === "candidates" && match.candidates?.length === 1) {
+			return { ...match, kind: "item" as const, item_code: match.candidates[0].item_code };
+		}
+		if (match.kind !== "none") return null;
+	} catch {
+		// A site with scan_barcode restricted: fall back to treating the value as an item code.
 	}
-	return null;
+	try {
+		const info = await client.itemInfo(value);
+		return { kind: "item" as const, item_code: info.item_code };
+	} catch {
+		return null;
+	}
+}
+
+/** Document flows do not carry batch/serial flags, so learn them from the items themselves. */
+async function withItemFlags(client: InventoryClient, lines: FlowLine[]): Promise<FlowLine[]> {
+	const codes = [...new Set(lines.map((line) => line.itemCode))];
+	const results = await Promise.allSettled(codes.map((code) => client.itemInfo(code)));
+	const flags = new Map<string, { hasBatchNo: boolean; hasSerialNo: boolean }>();
+	results.forEach((result, index) => {
+		if (result.status !== "fulfilled") return;
+		flags.set(codes[index], {
+			hasBatchNo: Boolean(result.value.has_batch_no),
+			hasSerialNo: Boolean(result.value.has_serial_no),
+		});
+	});
+	return lines.map((line) => {
+		const flag = flags.get(line.itemCode);
+		return flag ? { ...line, ...flag } : line;
+	});
 }
 
 // ---------------------------------------------------------------- count a rack
@@ -281,7 +309,7 @@ export function PickWorkOrderScreen(props: CommonProps) {
 		setOpening(order.name);
 		try {
 			const rows = await client.workOrderLines(order.name);
-			const lines = pickLinesFromWorkOrder(order, rows);
+			const lines = await withItemFlags(client, pickLinesFromWorkOrder(order, rows));
 			if (!lines.length) {
 				notify("Every material on this work order is already issued", "info");
 				return;
@@ -400,7 +428,7 @@ export function PickDeliveryScreen(props: CommonProps) {
 		setOpening(order.name);
 		try {
 			const rows = await client.salesOrderLines(order.name);
-			const lines = pickLinesFromSalesOrder(rows);
+			const lines = await withItemFlags(client, pickLinesFromSalesOrder(rows));
 			if (!lines.length) {
 				notify("This order is already fully delivered", "info");
 				return;

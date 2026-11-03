@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Scanner } from "../components/Scanner";
-import { AlertIcon, BackIcon, CheckIcon, CloudIcon, ScanIcon } from "../components/icons";
+import { AlertIcon, BackIcon, CloudIcon, ScanIcon } from "../components/icons";
 import { Button, Field, Pill, Row, Rows, Select, TextInput } from "../components/ui";
 import type { Notify } from "../hooks/useToasts";
 import { ApiError } from "../lib/errors";
@@ -8,7 +8,6 @@ import { formatQty } from "../lib/format";
 import {
 	addFlowLine,
 	applyFlowScan,
-	buildFlowDoc,
 	clearFlow,
 	flowProgress,
 	flowQueueOp,
@@ -394,7 +393,7 @@ export function TaskFlowScreen({
 					{session.mode === "demo" ? "Demo data" : online ? "Posts to ERPNext" : "Stored locally"}
 				</Pill>{" "}
 				{task.kind === "count-rack"
-					? `One Stock Reconciliation for the whole rack: ${buildFlowDoc(task).doctype === "Stock Reconciliation" ? task.lines.length : 0} line${
+					? `One Stock Reconciliation for the whole rack: ${task.lines.length} line${
 							task.lines.length === 1 ? "" : "s"
 						}. Only scanned items are counted — nothing else in the warehouse is touched.`
 					: task.kind === "pick-dn"
@@ -442,6 +441,3 @@ export function TaskHeader({
 	);
 }
 
-export function EmptyTaskIcon() {
-	return <CheckIcon width={28} height={28} />;
-}
