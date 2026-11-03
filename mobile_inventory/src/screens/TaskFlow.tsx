@@ -1,17 +1,23 @@
 import { useEffect, useRef, useState } from "react";
+import { LabelSheet } from "../components/Labels";
 import { Scanner } from "../components/Scanner";
 import { AlertIcon, BackIcon, CloudIcon, ScanIcon } from "../components/icons";
 import { Button, Field, Pill, Row, Rows, Select, TextInput } from "../components/ui";
 import type { Notify } from "../hooks/useToasts";
 import { ApiError } from "../lib/errors";
 import { formatQty } from "../lib/format";
+import { labelsForTask } from "../lib/labels";
 import {
 	addFlowLine,
 	applyFlowScan,
 	clearFlow,
+	describeBatch,
 	flowProgress,
 	flowQueueOp,
+	isShort,
+	requiredOnLine,
 	lineLocation,
+	SHORT_REASONS,
 	patchFlowLine,
 	removeFlowLine,
 	setFlowQty,
@@ -19,7 +25,15 @@ import {
 	toggleFlowBlind,
 	validateFlow,
 } from "../lib/taskflow";
-import type { FlowLine, FlowTask, InventoryClient, QueueOp, Session, Warehouse } from "../lib/types";
+import type {
+	BatchOption,
+	FlowLine,
+	FlowTask,
+	InventoryClient,
+	QueueOp,
+	Session,
+	Warehouse,
+} from "../lib/types";
 
 function messageOf(error: unknown): string {
 	if (error instanceof ApiError) return error.message;
@@ -59,9 +73,29 @@ export function TaskFlowScreen({
 	const [scan, setScan] = useState("");
 	const [expanded, setExpanded] = useState<string | null>(null);
 	const [camera, setCamera] = useState(false);
+	const [labelsOpen, setLabelsOpen] = useState(false);
 	const [errors, setErrors] = useState<string[]>([]);
 	const [busy, setBusy] = useState(false);
+	/** Batches the server says are actually on the shelf, oldest expiry first. */
+	const [batches, setBatches] = useState<Record<string, BatchOption[]>>({});
+	const [loadingBatches, setLoadingBatches] = useState<string | null>(null);
 	const scanRef = useRef<HTMLInputElement | null>(null);
+
+	async function suggestBatches(line: FlowLine) {
+		const warehouse =
+			line.fromWarehouse ?? task.fromWarehouse ?? line.toWarehouse ?? task.toWarehouse ?? "";
+		if (!warehouse || batches[line.key]) return;
+		setLoadingBatches(line.key);
+		try {
+			const rows = await client.availableBatches(line.itemCode, warehouse);
+			setBatches((current) => ({ ...current, [line.key]: rows }));
+		} catch {
+			// No batch list on this site: the operator types the number, as before.
+			setBatches((current) => ({ ...current, [line.key]: [] }));
+		} finally {
+			setLoadingBatches(null);
+		}
+	}
 
 	useEffect(() => {
 		scanRef.current?.focus();
@@ -243,6 +277,7 @@ export function TaskFlowScreen({
 													: line.requiredQty !== undefined
 														? ` · expected ${formatQty(line.requiredQty, line.uom)}`
 														: ""}
+											{isShort(task, line) ? " · short" : ""}
 											{lineLocation(task, line) ? ` · ${lineLocation(task, line)}` : ""}
 											{line.batchNo ? ` · batch ${line.batchNo}` : ""}
 										</>
@@ -268,7 +303,10 @@ export function TaskFlowScreen({
 											</button>
 										</span>
 									}
-									onClick={() => setExpanded(isOpen ? null : line.key)}
+									onClick={() => {
+										setExpanded(isOpen ? null : line.key);
+										if (!isOpen && line.hasBatchNo) void suggestBatches(line);
+									}}
 								/>
 								{isOpen ? (
 									<div className="panel">
@@ -299,7 +337,14 @@ export function TaskFlowScreen({
 										</Field>
 
 										{line.hasBatchNo ? (
-											<Field label="Batch number" hint="Printed on the carton">
+											<Field
+												label="Batch number"
+												hint={
+													loadingBatches === line.key
+														? "Looking up the batches on the shelf…"
+														: "Oldest expiry first — tap one, or type the number"
+												}
+											>
 												<TextInput
 													value={line.batchNo ?? ""}
 													onChange={(event) =>
@@ -309,6 +354,24 @@ export function TaskFlowScreen({
 													autoComplete="off"
 												/>
 											</Field>
+										) : null}
+
+										{line.hasBatchNo && batches[line.key]?.length ? (
+											<div className="chips">
+												{batches[line.key].map((batch) => (
+													<button
+														key={batch.batch_no}
+														type="button"
+														className={`chip${line.batchNo === batch.batch_no ? " is-active" : ""}`}
+														onClick={() =>
+															onTask(patchFlowLine(task, line.key, { batchNo: batch.batch_no }))
+														}
+														
+													>
+														{describeBatch(batch, line.uom)}
+													</button>
+												))}
+											</div>
 										) : null}
 
 										{line.hasSerialNo ? (
@@ -323,6 +386,30 @@ export function TaskFlowScreen({
 													rows={3}
 													spellCheck={false}
 												/>
+											</Field>
+										) : null}
+
+										{isShort(task, line) ? (
+											<Field
+												label="Why is it short?"
+												hint={`${formatQty(
+													requiredOnLine(line) - line.qty,
+													line.uom
+												)} could not be picked — the reason goes on the document`}
+											>
+												<Select
+													value={line.shortReason ?? ""}
+													onChange={(event) =>
+														onTask(patchFlowLine(task, line.key, { shortReason: event.target.value }))
+													}
+												>
+													<option value="">Choose a reason</option>
+													{SHORT_REASONS.map((reason) => (
+														<option key={reason} value={reason}>
+															{reason}
+														</option>
+													))}
+												</Select>
 											</Field>
 										) : null}
 
@@ -408,6 +495,11 @@ export function TaskFlowScreen({
 						Queue for later
 					</Button>
 				) : null}
+				{task.kind !== "count-rack" && progress.linesTouched ? (
+					<Button block variant="secondary" onClick={() => setLabelsOpen(true)}>
+						Print labels
+					</Button>
+				) : null}
 				<Button
 					block
 					variant="ghost"
@@ -434,6 +526,14 @@ export function TaskFlowScreen({
 						? "The delivery note is created as a draft: dispatch checks it against the gate pass and submits."
 						: "One document for everything you scanned; the source and target stay on every row."}
 			</p>
+
+			{labelsOpen ? (
+				<LabelSheet
+					labels={labelsForTask(task)}
+					onClose={() => setLabelsOpen(false)}
+					onError={(message) => notify(message, "error")}
+				/>
+			) : null}
 
 			{camera ? (
 				<Scanner

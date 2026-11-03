@@ -8,6 +8,7 @@
 // Pure functions only: no DOM, no network. `taskflow.test` drives everything below.
 
 import type {
+	BatchOption,
 	FlowLine,
 	FlowTask,
 	OpSummary,
@@ -90,6 +91,29 @@ export function createFlowTask(id: string, kind: TaskKind, header: FlowHeader, l
 		location: header.location,
 		lines,
 	};
+}
+
+/** How a batch reads on a chip: number, quantity, and when it expires. */
+export function describeBatch(batch: BatchOption, uom?: string): string {
+	const qty = round3(batch.qty);
+	return `${batch.batch_no} · ${qty}${uom ? ` ${uom}` : ""} · ${
+		batch.expiry_date ? `exp ${batch.expiry_date}` : "no expiry"
+	}`;
+}
+
+/** Reasons a picker actually gives. Kept short on purpose: a picker will not type an essay. */
+export const SHORT_REASONS = [
+	"Not on the shelf",
+	"Damaged",
+	"Reserved for another order",
+	"Quality hold",
+] as const;
+
+/** A pick line that captured less than the document still needs. */
+export function isShort(task: FlowTask, line: FlowLine): boolean {
+	if (task.kind !== "pick-wo" && task.kind !== "pick-dn") return false;
+	if (line.requiredQty === undefined || line.qty <= 0) return false;
+	return line.qty < requiredOnLine(line);
 }
 
 export function requiredOnLine(line: FlowLine): number {
@@ -222,6 +246,9 @@ export function validateFlow(task: FlowTask): string[] {
 			errors.push(`${line.itemCode}: only ${requiredOnLine(line)} ${line.uom} still open on this task`);
 		}
 		if (line.hasBatchNo && !line.batchNo?.trim()) errors.push(`${line.itemCode}: enter the batch number`);
+		if (isShort(task, line) && !line.shortReason) {
+			errors.push(`${line.itemCode}: say why it is short`);
+		}
 		const serials = parseSerials(line.serialNo);
 		if (serials.length && serials.length !== line.qty) {
 			errors.push(`${line.itemCode}: ${serials.length} serial numbers for ${line.qty} units`);
@@ -266,12 +293,19 @@ function stockRow(task: FlowTask, line: FlowLine, from?: string, to?: string): R
 }
 
 export function buildFlowDoc(task: FlowTask): Record<string, unknown> {
+	const shorts = task.lines
+		.filter((line) => isShort(task, line))
+		.map(
+			(line) =>
+				`${line.itemCode} ${line.qty}/${requiredOnLine(line)} (${line.shortReason ?? "no reason given"})`
+		);
+	const notes = shorts.length ? ` · Short pick: ${shorts.join("; ")}` : "";
 	const posting = {
 		company: task.company,
 		set_posting_time: 1,
 		posting_date: task.postingDate,
 		posting_time: task.postingTime,
-		remarks: `Mobile Inventory · ${LABEL[task.kind]} ${task.reference} · ${mobileRef(task.id)}`,
+		remarks: `Mobile Inventory · ${LABEL[task.kind]} ${task.reference} · ${mobileRef(task.id)}${notes}`,
 	};
 
 	if (task.kind === "count-rack") {

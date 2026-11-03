@@ -7,6 +7,8 @@ import {
 	addFlowLine,
 	applyFlowScan,
 	buildFlowDoc,
+	describeBatch,
+	isShort,
 	lineLocation,
 	clearFlow,
 	createFlowTask,
@@ -261,7 +263,7 @@ describe("picking for a work order", () => {
 		assert.match(validateFlow(over)[0], /only 2 Bag still open/);
 	});
 
-	it("allows a short pick: what you could not find is still information", () => {
+	it("allows a short pick once it is explained", () => {
 		const task = createFlowTask(
 			"t3",
 			"pick-wo",
@@ -271,8 +273,10 @@ describe("picking for a work order", () => {
 			])
 		);
 		const short = setFlowQty(task, "r1", 4);
-		assert.deepEqual(validateFlow(short), []);
-		assert.equal(buildFlowDoc(short).items[0].qty, 4);
+		assert.match(validateFlow(short).join(" "), /say why it is short/);
+		const explained = { ...short, lines: [{ ...short.lines[0], shortReason: "Damaged" }] };
+		assert.deepEqual(validateFlow(explained), []);
+		assert.equal(buildFlowDoc(explained).items[0].qty, 4);
 	});
 
 	it("posts a Material Transfer for Manufacture linked to the work order", () => {
@@ -328,7 +332,9 @@ describe("picking for a delivery", () => {
 			{ ...header, reference: "SO-0001", customer: "Kedai Kopi" },
 			pickLinesFromSalesOrder(rows)
 		);
-		assert.deepEqual(validateFlow(setFlowQty(task, "so1", 3)), []);
+		const short = setFlowQty(task, "so1", 3);
+		const explained = { ...short, lines: [{ ...short.lines[0], shortReason: "Damaged" }] };
+		assert.deepEqual(validateFlow(explained), []);
 	});
 
 	it("queues as a draft: dispatch submits, not the picker", () => {
@@ -346,5 +352,68 @@ describe("picking for a delivery", () => {
 
 		const wo = createFlowTask("t5", "putaway", { ...header, fromWarehouse: "A", toWarehouse: "B" }, [line({ qty: 1 })]);
 		assert.equal(flowQueueOp(wo).submit, true, "everything else posts immediately");
+	});
+});
+
+describe("batches a picker should take", () => {
+	it("reads a batch the way the chip shows it", () => {
+		assert.equal(
+			describeBatch({ batch_no: "LOT-A", qty: 12, expiry_date: "2027-01-31" }, "Kg"),
+			"LOT-A · 12 Kg · exp 2027-01-31"
+		);
+		assert.equal(
+			describeBatch({ batch_no: "MP-1", qty: 3.5, expiry_date: null }, "Bag"),
+			"MP-1 · 3.5 Bag · no expiry"
+		);
+	});
+});
+
+describe("short picks", () => {
+	const pick = (qty, overrides = {}) =>
+		createFlowTask(
+			"t9",
+			"pick-wo",
+			{
+				...header,
+				reference: "WO-0001",
+				fromWarehouse: "Stores - DEMO",
+				toWarehouse: "WIP - DEMO",
+			},
+			[
+				line({
+					key: "r1",
+					itemCode: "RM-2001",
+					uom: "Bag",
+					qty,
+					requiredQty: 3,
+					fromWarehouse: "Stores - DEMO",
+					toWarehouse: "WIP - DEMO",
+					...overrides,
+				}),
+			]
+		);
+
+	it("knows a short line from a complete one", () => {
+		assert.equal(isShort(pick(1), pick(1).lines[0]), true);
+		assert.equal(isShort(pick(3), pick(3).lines[0]), false);
+		assert.equal(isShort(pick(0), pick(0).lines[0]), false, "nothing picked is not a short pick");
+	});
+
+	it("refuses a short pick with no reason, and accepts one with a reason", () => {
+		assert.match(validateFlow(pick(1)).join(" "), /say why it is short/);
+		const explained = pick(1);
+		explained.lines[0] = { ...explained.lines[0], shortReason: "Damaged" };
+		assert.deepEqual(validateFlow(explained), []);
+	});
+
+	it("writes the reason onto the document, where dispatch will read it", () => {
+		const task = pick(1);
+		task.lines[0] = { ...task.lines[0], shortReason: "Not on the shelf" };
+		const doc = buildFlowDoc(task);
+		assert.match(doc.remarks, /Short pick: RM-2001 1\/3 \(Not on the shelf\)/);
+		assert.match(doc.remarks, /\[MOBILE-INV:t9\]/, "the idempotency marker is still there");
+
+		const complete = buildFlowDoc(pick(3));
+		assert.doesNotMatch(complete.remarks, /Short pick/);
 	});
 });

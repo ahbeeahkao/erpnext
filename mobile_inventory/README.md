@@ -134,6 +134,29 @@ order row does not carry them; the batch field then appears for that line only.
 Rejects are captured on the same screen: a rejected quantity with a quarantine warehouse goes onto
 the receipt row as `rejected_qty` / `rejected_warehouse`, so the accepted stock never includes it.
 
+## Batches, short picks and labels
+
+**Batches come from the shelf, not from memory.** When a batch-tracked line is opened, the app asks
+the server for the batches that actually have stock in that warehouse — the same FEFO list the Desk
+uses (`get_batches_by_oldest`) — and offers them as chips showing quantity and expiry. Tapping one
+sets the batch; typing a number still works for a batch that arrived with a delivery.
+
+**A short pick has to say why.** When a picked quantity is less than the document needs, the line
+asks for a reason (*Not on the shelf · Damaged · Reserved for another order · Quality hold*) and the
+document refuses to post without one. The reasons are written into the document's remarks:
+
+```
+Mobile Inventory · Pick for work order WO-0001 · [MOBILE-INV:…]
+  · Short pick: RM-2001 1/3 (Damaged)
+```
+
+Dispatch reads the document, so the reason belongs in the document rather than in a chat message.
+
+**Labels print from the browser.** Any movement task can produce a label sheet: one label per whole
+unit (a weighed line gets one label stating the quantity), each with a CODE128 barcode of the item
+code, the batch, the warehouse and the shelf. `@media print` lays them out at 50 × 25 mm on plain
+sheets — a phone cannot drive a Zebra printer directly, but a browser or a print server can.
+
 ## Locations without a warehouse for every shelf
 
 A warehouse per shelf is how stock systems rot: hundreds of warehouses, and reports nobody can read.
@@ -202,6 +225,7 @@ src/
   lib/payloads.ts     stock entry + count builders and validation (pure, unit tested)
   lib/receiving.ts    purchase-order receiving task: scan counting, validation, receipt builder
   lib/taskflow.ts     shared engine for count / put away / pick tasks (pure, unit tested)
+  lib/labels.ts       what a label sheet contains (pure, unit tested)
   lib/api.ts          ERPNext REST client (site-session or API-key auth)
   lib/demo.ts         in-memory adapter used by demo mode
   lib/queue.ts        queue persistence, ordering, back-off
@@ -209,7 +233,7 @@ src/
   lib/storage.ts      IndexedDB wrapper (kv + queue stores)
   hooks/              camera scanning, online state, queue, toasts
   screens/            Connect, Home, Receive, TaskFlow, Jobs, Item, Move, Count, Queue, Settings
-  components/         UI kit, icons, scanner overlay
+  components/         UI kit, icons, scanner overlay, printable label sheet
 public/
   sw.js               offline shell (never caches /api/*)
   manifest.webmanifest
@@ -217,6 +241,8 @@ public/
 
 ## Roadmap
 
-- **Batch picker** that lists existing batches with expiry, and creates new ones explicitly.
-- **Short-pick reasons** on the pick screen, so a short pick can be explained, not just recorded.
-- Label printing (CUPS/Bluetooth).
+- **Offline catalogue**: item lookup, scan resolution and batch lists still need a connection on
+  first use. Caching the items a site actually moves would make the whole app workable in a dead
+  zone, which is the last real gap in the offline story.
+- **Label templates**: the sheet is fixed at 50 × 25 mm; sites have their own label stock.
+- Direct printer support (CUPS/Bluetooth) needs a helper process, not a browser.

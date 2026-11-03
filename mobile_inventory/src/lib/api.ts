@@ -13,6 +13,7 @@
 import { ApiError, toApiError } from "./errors";
 import { parseScanResponse } from "./payloads";
 import type {
+	BatchOption,
 	Connection,
 	ExistingDoc,
 	InventoryClient,
@@ -326,6 +327,23 @@ export class FrappeClient implements InventoryClient {
 			// A site that does not expose it (or a role that cannot read it) simply has no locations.
 			return [];
 		}
+	}
+
+	async availableBatches(itemCode: string, warehouse: string): Promise<BatchOption[]> {
+		// The server's own FEFO ordering: oldest expiry first, batches with no expiry last.
+		const rows = unwrap<Array<[Record<string, unknown>, string | null]>>(
+			await this.request("/api/method/erpnext.stock.doctype.batch.batch.get_batches_by_oldest", {
+				query: { item_code: itemCode, warehouse },
+			}),
+			"message"
+		);
+		return (rows ?? [])
+			.map(([batch, expiry]) => ({
+				batch_no: String(batch?.name ?? ""),
+				qty: Number(batch?.batch_qty ?? 0),
+				expiry_date: expiry ?? null,
+			}))
+			.filter((row) => row.batch_no);
 	}
 
 	// ------------------------------------------------------------ work + sales

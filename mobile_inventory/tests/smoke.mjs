@@ -100,6 +100,19 @@ function type(input, value) {
 	input.dispatchEvent(new window.Event("input", { bubbles: true }));
 }
 
+function pick(select, value) {
+	if (!select) throw new Error(`Select not found while choosing ${value}`);
+	const setter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, "value").set;
+	setter.call(select, value);
+	select.dispatchEvent(new window.Event("change", { bubbles: true }));
+}
+
+function clickIcon(aria) {
+	const target = window.document.querySelector(`button[aria-label="${aria}"]`);
+	if (!target) throw new Error(`No button labelled ${aria}. Screen text: ${text().slice(0, 160)}`);
+	target.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+}
+
 function check(label, condition) {
 	console.log(`${condition ? "ok  " : "FAIL"} ${label}`);
 	if (!condition) {
@@ -250,12 +263,38 @@ try {
 	await wait(500);
 	check("a pick line counts up", text().includes("1/2 lines"));
 	check("the pick name is the work order", text().includes("WO-DEMO-0001"));
-	clickBack();
-	await wait(300);
-	clickBack();
+
+	// the batches actually on the shelf, oldest expiry first
+	click(/Milk Powder 25kg/);
+	await wait(700);
+	check("available batches are offered with expiry", text().includes("MP-2411") && text().includes("exp 2027-05-30"));
+	click(/MP-2411/);
+	await wait(250);
+	check("choosing a batch sets it on the line", text().includes("batch MP-2411"));
+
+	// labels for what was picked
+	click(/Print labels/);
 	await wait(500);
+	check("a label sheet is built for the pick", /\d+ labels?/.test(text()) && text().includes("Milk Powder"));
+	clickIcon("Close labels");
+	await wait(250);
+
+	// a short pick has to say why
+	click(/Post · 1 unit/);
+	await wait(500);
+	check("a short pick without a reason is refused", text().includes("say why it is short"));
+
+	const reason = [...window.document.querySelectorAll("select")].find((select) =>
+		[...select.options].some((option) => option.value === "Damaged")
+	);
+	pick(reason, "Damaged");
+	await wait(250);
+	click(/Post · 1 unit/);
+	await wait(1400);
+	check("the pick posts once the reason is given", /posted/.test(text()));
 
 	// --- pick for delivery -> draft -----------------------------------------
+	await wait(600);
 	click(/Pick for delivery/);
 	await wait(900);
 	check("sales orders due are listed", text().includes("Kedai Kopi Jalan Ampang"));
@@ -268,6 +307,14 @@ try {
 	pickDnInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
 	await wait(500);
 	check("a delivery pick counts up", text().includes("1/2 lines"));
+
+	click(/Paper Cup 12oz/);
+	await wait(400);
+	const deliveryReason = [...window.document.querySelectorAll("select")].find((select) =>
+		[...select.options].some((option) => option.value === "Not on the shelf")
+	);
+	pick(deliveryReason, "Not on the shelf");
+	await wait(200);
 
 	click(/Create draft/);
 	await wait(900);

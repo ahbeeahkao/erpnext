@@ -200,6 +200,12 @@ export interface InventoryDimension {
 	doctype?: string;
 }
 
+export interface BatchOption {
+	batch_no: string;
+	qty: number;
+	expiry_date?: string | null;
+}
+
 export interface FlowLine {
 	/** Stable key: item code for scanned flows, source row name for document flows. */
 	key: string;
@@ -224,6 +230,8 @@ export interface FlowLine {
 	sourceRow?: string;
 	/** Value of the configured dimension, e.g. the shelf. Falls back to the task default. */
 	location?: string;
+	/** Why a pick came up short. Goes into the document remarks, where dispatch can read it. */
+	shortReason?: string;
 }
 
 export interface FlowTask {
@@ -321,6 +329,9 @@ export interface InventoryClient {
 
 	/** Inventory Dimensions configured on the site (empty when none, or when not permitted). */
 	inventoryDimensions(): Promise<InventoryDimension[]>;
+
+	/** Batches with stock, oldest expiry first (FEFO) — what a picker should take. */
+	availableBatches(itemCode: string, warehouse: string): Promise<BatchOption[]>;
 
 	/** Sales orders with quantity still to deliver. */
 	openSalesOrders(): Promise<SalesOrder[]>;

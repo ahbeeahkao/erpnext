@@ -9,6 +9,7 @@ import { parseScanResponse } from "./payloads";
 import type {
 	Connection,
 	ExistingDoc,
+	BatchOption,
 	InventoryClient,
 	InventoryDimension,
 	ItemInfo,
@@ -467,6 +468,21 @@ export class DemoClient implements InventoryClient {
 			return !received;
 		}).map(({ lines: _lines, ...header }) => header);
 		return this.delay(open, 120);
+	}
+
+	async availableBatches(itemCode: string, warehouse: string): Promise<BatchOption[]> {
+		// Two batches per batch-tracked demo item, oldest expiry first — the order a picker should use.
+		const catalogue: Record<string, BatchOption[]> = {
+			"FG-1001": [
+				{ batch_no: "LOT-2601-A", qty: Math.min(18, qtyOf("FG-1001", warehouse) || 18), expiry_date: "2026-12-31" },
+				{ batch_no: "LOT-2603-B", qty: 24, expiry_date: "2027-03-31" },
+			],
+			"RM-2001": [
+				{ batch_no: "MP-2411", qty: 6, expiry_date: "2027-05-30" },
+				{ batch_no: "MP-2502", qty: 9, expiry_date: "2027-11-30" },
+			],
+		};
+		return this.delay(catalogue[itemCode] ?? [], 90);
 	}
 
 	async inventoryDimensions(): Promise<InventoryDimension[]> {
