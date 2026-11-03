@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BackIcon, CountIcon, InIcon, OutIcon, SwapIcon } from "../components/icons";
+import { BackIcon, CountIcon, InIcon, OutIcon, SwapIcon, WifiOffIcon } from "../components/icons";
 import { Pill, Row, Rows, Spinner } from "../components/ui";
 import { ApiError } from "../lib/errors";
 import { formatQty, shortWarehouse } from "../lib/format";
@@ -64,6 +64,13 @@ export function ItemScreen({
 				{item.has_serial_no ? <Pill tone="warn">Serialised</Pill> : null}
 				{item.item_group ? <Pill>{item.item_group}</Pill> : null}
 			</div>
+
+			{(stock ?? []).some((row) => row.stale) ? (
+				<div className="banner banner--warn">
+					<WifiOffIcon width={18} height={18} />
+					<span>Offline — these balances are the last values this device saw, not current stock.</span>
+				</div>
+			) : null}
 
 			<div className="total-card">
 				<span className="muted">Total on hand</span>

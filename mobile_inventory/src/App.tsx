@@ -17,6 +17,7 @@ import { SettingsScreen } from "./screens/Settings";
 import { useOnline } from "./hooks/useOnline";
 import { useQueue } from "./hooks/useQueue";
 import { useToasts } from "./hooks/useToasts";
+import { clearCatalogue } from "./lib/catalogue";
 import { createClient } from "./lib/client";
 import { ApiError } from "./lib/errors";
 import { clearQueue } from "./lib/queue";
@@ -129,6 +130,7 @@ export default function App() {
 	const clearLocal = useCallback(async () => {
 		await clearQueue();
 		await clearRecent();
+		await clearCatalogue();
 		await clearStore("kv");
 		await queue.refresh();
 		notify("Local data cleared", "success");

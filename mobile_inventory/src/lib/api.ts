@@ -10,6 +10,16 @@
 //
 // Reads use GET (whitelisted methods accept GET and query params) so they work in both modes
 // without a CSRF token; writes always POST.
+import {
+	cachedItem,
+	cachedScan,
+	cachedStock,
+	rememberItem,
+	rememberItems,
+	rememberScan,
+	rememberStock,
+	searchCachedItems,
+} from "./catalogue";
 import { ApiError, toApiError } from "./errors";
 import { parseScanResponse } from "./payloads";
 import type {
@@ -207,21 +217,32 @@ export class FrappeClient implements InventoryClient {
 	}
 
 	async itemInfo(itemCode: string): Promise<ItemInfo> {
-		const data = unwrap<ItemInfo>(
-			await this.request(`/api/resource/Item/${encodeURIComponent(itemCode)}`, {
-				query: { fields: JSON.stringify(ITEM_FIELDS) },
-			}),
-			"data"
-		);
-		if (!data?.item_code) throw new ApiError(`Item ${itemCode} was not found`, "validation", 404);
-		return data;
+		try {
+			const data = unwrap<ItemInfo>(
+				await this.request(`/api/resource/Item/${encodeURIComponent(itemCode)}`, {
+					query: { fields: JSON.stringify(ITEM_FIELDS) },
+				}),
+				"data"
+			);
+			if (!data?.item_code) throw new ApiError(`Item ${itemCode} was not found`, "validation", 404);
+			void rememberItem(data);
+			return data;
+		} catch (error) {
+			// No signal: an item seen on this device before is still an item.
+			if (isOffline(error)) {
+				const cached = await cachedItem(itemCode);
+				if (cached) return cached;
+			}
+			throw error;
+		}
 	}
 
 	async searchItems(query: string): Promise<ItemInfo[]> {
 		const term = query.trim();
 		if (term.length < 2) return [];
 		const like = `%${term}%`;
-		const rows = unwrap<ItemInfo[]>(
+		try {
+			const rows = unwrap<ItemInfo[]>(
 			await this.request("/api/resource/Item", {
 				query: {
 					fields: JSON.stringify(ITEM_FIELDS),
@@ -237,36 +258,68 @@ export class FrappeClient implements InventoryClient {
 					limit_page_length: 25,
 				},
 			}),
-			"data"
-		);
-		return rows ?? [];
+				"data"
+			);
+			void rememberItems(rows ?? []);
+			return rows ?? [];
+		} catch (error) {
+			if (isOffline(error)) return searchCachedItems(term);
+			throw error;
+		}
 	}
 
 	async scan(value: string): Promise<ScanMatch> {
 		const trimmed = value.trim();
 		if (!trimmed) throw new ApiError("Nothing to look up", "validation");
-		const message = unwrap<unknown>(
-			await this.request("/api/method/erpnext.stock.utils.scan_barcode", {
-				query: { search_value: trimmed },
-			}),
-			"message"
-		);
-		return parseScanResponse(message, trimmed);
+		try {
+			const message = unwrap<unknown>(
+				await this.request("/api/method/erpnext.stock.utils.scan_barcode", {
+					query: { search_value: trimmed },
+				}),
+				"message"
+			);
+			const match = parseScanResponse(message, trimmed);
+			// Remember the label: the next scan of this barcode works with no signal.
+			if (match.kind === "item" && match.item_code) void rememberItemScan(trimmed, match.item_code);
+			return match;
+		} catch (error) {
+			if (isOffline(error)) {
+				const item = await cachedScan(trimmed);
+				if (item) {
+					return {
+						kind: "item",
+						item_code: item.item_code,
+						uom: item.stock_uom,
+						has_batch_no: item.has_batch_no,
+						has_serial_no: item.has_serial_no,
+						raw: trimmed,
+					};
+				}
+			}
+			throw error;
+		}
 	}
 
 	async stockFor(itemCode: string): Promise<StockRow[]> {
-		const rows = unwrap<StockRow[]>(
-			await this.request("/api/resource/Bin", {
-				query: {
-					fields: JSON.stringify(["warehouse", "actual_qty", "stock_uom", "valuation_rate"]),
-					filters: JSON.stringify([["item_code", "=", itemCode]]),
-					order_by: "actual_qty desc",
-					limit_page_length: 200,
-				},
-			}),
-			"data"
-		);
-		return rows ?? [];
+		try {
+			const rows = unwrap<StockRow[]>(
+				await this.request("/api/resource/Bin", {
+					query: {
+						fields: JSON.stringify(["warehouse", "actual_qty", "stock_uom", "valuation_rate"]),
+						filters: JSON.stringify([["item_code", "=", itemCode]]),
+						order_by: "actual_qty desc",
+						limit_page_length: 200,
+					},
+				}),
+				"data"
+			);
+			void rememberStock(itemCode, rows ?? []);
+			return rows ?? [];
+		} catch (error) {
+			// Balances served offline are flagged stale by the catalogue; no screen can mistake them.
+			if (isOffline(error)) return cachedStock(itemCode);
+			throw error;
+		}
 	}
 
 	async createDoc(doc: Record<string, unknown>): Promise<{ name: string }> {
@@ -504,4 +557,13 @@ export class FrappeClient implements InventoryClient {
 		);
 		return rows ?? [];
 	}
+}
+
+/** A network failure is the only reason to read from the device's own catalogue. */
+function isOffline(error: unknown): boolean {
+	return error instanceof ApiError && error.kind === "network";
+}
+
+async function rememberItemScan(value: string, itemCode: string): Promise<void> {
+	await rememberScan(value, itemCode);
 }

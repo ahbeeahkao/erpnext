@@ -33,6 +33,8 @@ export interface ItemInfo {
 }
 
 export interface StockRow {
+	/** Served from the device: last known, not current. */
+	stale?: boolean;
 	warehouse: string;
 	actual_qty: number;
 	stock_uom?: string;

@@ -134,6 +134,22 @@ order row does not carry them; the batch field then appears for that line only.
 Rejects are captured on the same screen: a rejected quantity with a quarantine warehouse goes onto
 the receipt row as `rejected_qty` / `rejected_warehouse`, so the accepted stock never includes it.
 
+## Working without a signal
+
+The queue keeps documents safe offline; the catalogue keeps the *lookup* working, which is the part
+that used to stop a picker dead in a dead zone.
+
+- Every successful item read, search and barcode resolution writes through to the device (up to
+  2,000 items, least-recently-seen dropped first).
+- With no connection, `itemInfo`, `searchItems` and `scan` fall back to that catalogue, so a barcode
+  the device has seen before still opens the item and a move can still be queued.
+- Stock balances are cached too, but **marked stale** and shown with a warning banner: a last-known
+  quantity must never look like a current one.
+- Only network errors fall back. A permission error or a validation refusal is still an error, so
+  the app never quietly answers a question the server refused to answer.
+
+The first lookup of a brand-new item still needs a signal; nothing can invent master data.
+
 ## Batches, short picks and labels
 
 **Batches come from the shelf, not from memory.** When a batch-tracked line is opened, the app asks
@@ -226,6 +242,7 @@ src/
   lib/receiving.ts    purchase-order receiving task: scan counting, validation, receipt builder
   lib/taskflow.ts     shared engine for count / put away / pick tasks (pure, unit tested)
   lib/labels.ts       what a label sheet contains (pure, unit tested)
+  lib/catalogue.ts    offline item/barcode/stock cache (pure, unit tested)
   lib/api.ts          ERPNext REST client (site-session or API-key auth)
   lib/demo.ts         in-memory adapter used by demo mode
   lib/queue.ts        queue persistence, ordering, back-off
@@ -241,8 +258,7 @@ public/
 
 ## Roadmap
 
-- **Offline catalogue**: item lookup, scan resolution and batch lists still need a connection on
-  first use. Caching the items a site actually moves would make the whole app workable in a dead
-  zone, which is the last real gap in the offline story.
+- **Batch creation on receipt**: a batch-tracked item still needs its batch typed. ERPNext can
+  generate one from the item's numbering series, which the phone could do for the operator.
 - **Label templates**: the sheet is fixed at 50 × 25 mm; sites have their own label stock.
 - Direct printer support (CUPS/Bluetooth) needs a helper process, not a browser.
