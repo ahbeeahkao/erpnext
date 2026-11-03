@@ -11,6 +11,7 @@ import {
 	clearFlow,
 	flowProgress,
 	flowQueueOp,
+	lineLocation,
 	patchFlowLine,
 	removeFlowLine,
 	setFlowQty,
@@ -199,6 +200,21 @@ export function TaskFlowScreen({
 				</span>
 			</label>
 
+			{task.dimensionField ? (
+				<Field
+					label={task.dimensionName ?? "Location"}
+					hint="Applies to every line — override it per line in the line's detail"
+				>
+					<TextInput
+						value={task.location ?? ""}
+						onChange={(event) => onTask({ ...task, location: event.target.value })}
+						placeholder="Scan or type the shelf, e.g. A1-03"
+						aria-label={`${task.dimensionName ?? "Location"} for the whole task`}
+						autoComplete="off"
+					/>
+				</Field>
+			) : null}
+
 			{!task.lines.length ? (
 				<div className="empty">
 					<div className="empty__icon">
@@ -227,6 +243,7 @@ export function TaskFlowScreen({
 													: line.requiredQty !== undefined
 														? ` · expected ${formatQty(line.requiredQty, line.uom)}`
 														: ""}
+											{lineLocation(task, line) ? ` · ${lineLocation(task, line)}` : ""}
 											{line.batchNo ? ` · batch ${line.batchNo}` : ""}
 										</>
 									}
@@ -305,6 +322,23 @@ export function TaskFlowScreen({
 													placeholder={"SN-0001\nSN-0002"}
 													rows={3}
 													spellCheck={false}
+												/>
+											</Field>
+										) : null}
+
+										{task.dimensionField ? (
+											<Field
+												label={task.dimensionName ?? "Location"}
+												hint="Only needed when this line goes somewhere else"
+											>
+												<TextInput
+													value={line.location ?? ""}
+													onChange={(event) =>
+														onTask(patchFlowLine(task, line.key, { location: event.target.value }))
+													}
+													placeholder={task.location || "Same as the task"}
+													aria-label={`Location for ${line.itemCode}`}
+													autoComplete="off"
 												/>
 											</Field>
 										) : null}

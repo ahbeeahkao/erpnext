@@ -214,15 +214,23 @@ try {
 
 	// --- put away ------------------------------------------------------------
 	click(/Put away/);
-	await wait(400);
+	await wait(500);
+	check("the site's location dimension is offered", text().includes("Location"));
+	type(window.document.querySelector('input[aria-label="Location to put away to"]'), "A1-03");
+	await wait(150);
 	click(/Start putting away/);
 	await wait(500);
+	check(
+		"the shelf is carried onto the task",
+		window.document.querySelector('input[aria-label="Location for the whole task"]')?.value === "A1-03"
+	);
 	const putAwayInput = window.document.querySelector('input[aria-label="Scan item onto this task"]');
 	type(putAwayInput, "FG-1002");
 	await wait(120);
 	putAwayInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
 	await wait(1000);
 	check("put away counts the carton", text().includes("1/1 lines"));
+	check("the line shows the shelf it is going to", text().includes("A1-03"));
 	clickBack();
 	await wait(300);
 	clickBack();

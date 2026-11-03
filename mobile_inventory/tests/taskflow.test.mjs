@@ -7,6 +7,7 @@ import {
 	addFlowLine,
 	applyFlowScan,
 	buildFlowDoc,
+	lineLocation,
 	clearFlow,
 	createFlowTask,
 	flowProgress,
@@ -149,6 +150,76 @@ describe("putting a delivery away", () => {
 		assert.equal(task.lines[0].qty, 1);
 		assert.equal(flowProgress(task).units, 1);
 		assert.equal(clearFlow(task).lines[0].qty, 0);
+	});
+});
+
+describe("locations from an Inventory Dimension", () => {
+	const withDimension = (overrides = {}) =>
+		createFlowTask(
+			"t6",
+			"putaway",
+			{
+				...header,
+				title: "Receiving - DEMO → Stores - DEMO",
+				reference: "Receiving - DEMO",
+				fromWarehouse: "Receiving - DEMO",
+				toWarehouse: "Stores - DEMO",
+				dimensionField: "location",
+				dimensionName: "Location",
+				location: "A1-03",
+				...overrides,
+			},
+			[line({ qty: 4, fromWarehouse: "Receiving - DEMO", toWarehouse: "Stores - DEMO" })]
+		);
+
+	it("puts the shelf on every row, not just on the task", () => {
+		const doc = buildFlowDoc(withDimension());
+		assert.equal(doc.items[0].location, "A1-03");
+		assert.equal(doc.doctype, "Stock Entry");
+	});
+
+	it("lets a line go somewhere else", () => {
+		const task = withDimension();
+		const moved = { ...task, lines: [{ ...task.lines[0], location: "B2-11" }] };
+		assert.deepEqual(validateFlow(moved), []);
+		assert.equal(buildFlowDoc(moved).items[0].location, "B2-11");
+		assert.equal(lineLocation(moved, moved.lines[0]), "B2-11");
+	});
+
+	it("refuses a put away that does not say where", () => {
+		const task = { ...withDimension({ location: undefined }), location: undefined };
+		assert.match(validateFlow(task).join(" "), /scan or type the Location/);
+	});
+
+	it("counts a shelf, not just a warehouse", () => {
+		const task = createFlowTask(
+			"t7",
+			"count-rack",
+			{
+				...header,
+				title: "Stores - DEMO",
+				reference: "Stores - DEMO",
+				dimensionField: "location",
+				dimensionName: "Location",
+				location: "A1-03",
+			},
+			[line({ qty: 3 })]
+		);
+		const doc = buildFlowDoc(task);
+		assert.equal(doc.doctype, "Stock Reconciliation");
+		assert.equal(doc.items[0].location, "A1-03");
+	});
+
+	it("changes nothing on a site with no dimension configured", () => {
+		const task = createFlowTask(
+			"t8",
+			"putaway",
+			{ ...header, reference: "A", fromWarehouse: "A", toWarehouse: "B" },
+			[line({ qty: 1, fromWarehouse: "A", toWarehouse: "B" })]
+		);
+		const doc = buildFlowDoc(task);
+		assert.equal("location" in doc.items[0], false);
+		assert.deepEqual(validateFlow(task), [], "no dimension, no location to demand");
 	});
 });
 

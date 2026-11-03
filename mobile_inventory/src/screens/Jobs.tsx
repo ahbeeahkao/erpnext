@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { AlertIcon, BoxIcon, OutIcon } from "../components/icons";
-import { Button, EmptyState, Field, Pill, Row, Rows, Select, Spinner } from "../components/ui";
+import { Button, EmptyState, Field, Pill, Row, Rows, Select, Spinner, TextInput } from "../components/ui";
 import type { Notify } from "../hooks/useToasts";
 import { ApiError } from "../lib/errors";
 import { formatQty, nowTime } from "../lib/format";
@@ -14,6 +14,7 @@ import type {
 	FlowLine,
 	FlowTask,
 	InventoryClient,
+	InventoryDimension,
 	QueueOp,
 	SalesOrder,
 	Session,
@@ -43,6 +44,30 @@ interface CommonProps {
 
 function stamp() {
 	return { postingDate: todayIso(), postingTime: nowTime() };
+}
+
+/** The dimension a warehouse calls a shelf: Location, Shelf, Rack, Bin. */
+function pickLocationDimension(rows: InventoryDimension[]): InventoryDimension | null {
+	if (!rows.length) return null;
+	const named = rows.find((row) => /location|shelf|rack|bin|aisle|slot/i.test(row.dimension_name));
+	return named ?? rows[0];
+}
+
+function useLocationDimension(client: InventoryClient) {
+	const [dimension, setDimension] = useState<InventoryDimension | null>(null);
+	useEffect(() => {
+		let live = true;
+		void client
+			.inventoryDimensions()
+			.then((rows) => {
+				if (live) setDimension(pickLocationDimension(rows));
+			})
+			.catch(() => undefined);
+		return () => {
+			live = false;
+		};
+	}, [client]);
+	return dimension;
 }
 
 /** Resolves a scanned value to an item, whether it is a barcode or a code. */
@@ -88,7 +113,9 @@ async function withItemFlags(client: InventoryClient, lines: FlowLine[]): Promis
 export function RackCountScreen(props: CommonProps) {
 	const { client, session, warehouses, defaultWarehouse, online, onBack, onQueued, onPosted, notify } = props;
 	const [warehouse, setWarehouse] = useState(defaultWarehouse ?? warehouses[0]?.name ?? "");
+	const [location, setLocation] = useState("");
 	const [task, setTask] = useState<FlowTask | null>(null);
+	const dimension = useLocationDimension(client);
 
 	function start() {
 		if (!warehouse) {
@@ -103,6 +130,9 @@ export function RackCountScreen(props: CommonProps) {
 				company: session.company ?? "",
 				...stamp(),
 				toWarehouse: warehouse,
+				dimensionField: dimension?.fieldname,
+				dimensionName: dimension?.dimension_name,
+				location: location.trim() || undefined,
 			})
 		);
 	}
@@ -162,6 +192,20 @@ export function RackCountScreen(props: CommonProps) {
 						))}
 					</Select>
 				</Field>
+				{dimension ? (
+					<Field
+						label={dimension.dimension_name}
+						hint="Optional — leave empty to count the whole warehouse"
+					>
+						<TextInput
+							value={location}
+							onChange={(event) => setLocation(event.target.value)}
+							placeholder="Scan or type the shelf, e.g. A1-03"
+							aria-label={`${dimension.dimension_name} being counted`}
+							autoComplete="off"
+						/>
+					</Field>
+				) : null}
 				<Button block onClick={start}>
 					Start counting
 				</Button>
@@ -182,7 +226,9 @@ export function PutAwayScreen(props: CommonProps) {
 	const [toWarehouse, setTo] = useState(
 		warehouses.find((row) => row.name !== (defaultWarehouse ?? warehouses[0]?.name))?.name ?? ""
 	);
+	const [location, setLocation] = useState("");
 	const [task, setTask] = useState<FlowTask | null>(null);
+	const dimension = useLocationDimension(client);
 
 	function start() {
 		if (!fromWarehouse || !toWarehouse) {
@@ -202,6 +248,9 @@ export function PutAwayScreen(props: CommonProps) {
 				...stamp(),
 				fromWarehouse,
 				toWarehouse,
+				dimensionField: dimension?.fieldname,
+				dimensionName: dimension?.dimension_name,
+				location: location.trim() || undefined,
 			})
 		);
 	}
@@ -267,6 +316,20 @@ export function PutAwayScreen(props: CommonProps) {
 						))}
 					</Select>
 				</Field>
+				{dimension ? (
+					<Field
+						label={dimension.dimension_name}
+						hint="Where the cartons go — every line uses it unless you override that line"
+					>
+						<TextInput
+							value={location}
+							onChange={(event) => setLocation(event.target.value)}
+							placeholder="Scan or type the shelf, e.g. A1-03"
+							aria-label={`${dimension.dimension_name} to put away to`}
+							autoComplete="off"
+						/>
+					</Field>
+				) : null}
 				<Button block onClick={start}>
 					Start putting away
 				</Button>

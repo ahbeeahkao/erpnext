@@ -134,6 +134,21 @@ order row does not carry them; the batch field then appears for that line only.
 Rejects are captured on the same screen: a rejected quantity with a quarantine warehouse goes onto
 the receipt row as `rejected_qty` / `rejected_warehouse`, so the accepted stock never includes it.
 
+## Locations without a warehouse for every shelf
+
+A warehouse per shelf is how stock systems rot: hundreds of warehouses, and reports nobody can read.
+ERPNext already has the right tool — an **Inventory Dimension** — so the app uses it and adds
+nothing of its own:
+
+1. In the Desk, create an Inventory Dimension called `Location` (or `Shelf`, `Rack`, `Bin` — the app
+   recognises those names) with `Stock Entry Detail` as the document type.
+2. The app asks the site for its dimensions when a put-away or a count starts.
+3. The value the operator types or scans (e.g. `A1-03`) goes onto each document row as the
+   dimension's own field name, so the stock ledger carries the shelf.
+
+With no dimension configured, put-away and counting fall back to the warehouse alone: nothing is
+hidden and nothing breaks. Per-line overrides exist because a mixed pallet is normal.
+
 ## The other jobs share one engine
 
 Counting a rack, putting away and picking are the same interaction — a set of lines you work
@@ -202,8 +217,6 @@ public/
 
 ## Roadmap
 
-- **Locations inside a warehouse** via an Inventory Dimension, so put-away can name a shelf instead
-  of a separate warehouse. The document already carries the plant; this is the missing granularity.
 - **Batch picker** that lists existing batches with expiry, and creates new ones explicitly.
 - **Short-pick reasons** on the pick screen, so a short pick can be explained, not just recorded.
 - Label printing (CUPS/Bluetooth).

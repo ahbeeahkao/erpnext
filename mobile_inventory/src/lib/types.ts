@@ -191,6 +191,15 @@ export interface ReceiptTask {
 	lines: ReceiptLine[];
 }
 
+/** A configured Inventory Dimension, e.g. Location / Shelf, applied to stock documents. */
+export interface InventoryDimension {
+	dimension_name: string;
+	/** Field name on the transaction row, e.g. `location`. */
+	fieldname: string;
+	/** What the value points at, usually a DocType such as Location. */
+	doctype?: string;
+}
+
 export interface FlowLine {
 	/** Stable key: item code for scanned flows, source row name for document flows. */
 	key: string;
@@ -213,6 +222,8 @@ export interface FlowLine {
 	hasSerialNo?: boolean;
 	/** Child row on the source document (SO row / WO row). */
 	sourceRow?: string;
+	/** Value of the configured dimension, e.g. the shelf. Falls back to the task default. */
+	location?: string;
 }
 
 export interface FlowTask {
@@ -229,6 +240,11 @@ export interface FlowTask {
 	blind: boolean;
 	fromWarehouse?: string;
 	toWarehouse?: string;
+	/** Set when the site has an Inventory Dimension the task can record, e.g. `location`. */
+	dimensionField?: string;
+	dimensionName?: string;
+	/** Default dimension value for every line. */
+	location?: string;
 	lines: FlowLine[];
 }
 
@@ -302,6 +318,9 @@ export interface InventoryClient {
 	/** Work orders with material still to pick. */
 	openWorkOrders(): Promise<WorkOrder[]>;
 	workOrderLines(workOrder: string): Promise<WorkOrderLine[]>;
+
+	/** Inventory Dimensions configured on the site (empty when none, or when not permitted). */
+	inventoryDimensions(): Promise<InventoryDimension[]>;
 
 	/** Sales orders with quantity still to deliver. */
 	openSalesOrders(): Promise<SalesOrder[]>;

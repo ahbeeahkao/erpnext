@@ -65,6 +65,9 @@ export interface FlowHeader {
 	postingTime: string;
 	fromWarehouse?: string;
 	toWarehouse?: string;
+	dimensionField?: string;
+	dimensionName?: string;
+	location?: string;
 }
 
 export function createFlowTask(id: string, kind: TaskKind, header: FlowHeader, lines: FlowLine[] = []): FlowTask {
@@ -82,6 +85,9 @@ export function createFlowTask(id: string, kind: TaskKind, header: FlowHeader, l
 		blind: kind === "count-rack",
 		fromWarehouse: header.fromWarehouse,
 		toWarehouse: header.toWarehouse,
+		dimensionField: header.dimensionField,
+		dimensionName: header.dimensionName,
+		location: header.location,
 		lines,
 	};
 }
@@ -191,6 +197,11 @@ export function validateFlow(task: FlowTask): string[] {
 	}
 
 	if (task.kind === "putaway") {
+		if (task.dimensionField && !task.location) {
+			for (const line of task.lines.filter((row) => row.qty > 0)) {
+				if (!lineLocation(task, line)) errors.push(`${line.itemCode}: scan or type the ${task.dimensionName ?? "location"}`);
+			}
+		}
 		if (!task.fromWarehouse) errors.push("Choose the warehouse the stock is in now");
 		if (!task.toWarehouse) errors.push("Choose the warehouse it is going to");
 		if (task.fromWarehouse && task.fromWarehouse === task.toWarehouse) {
@@ -220,7 +231,18 @@ export function validateFlow(task: FlowTask): string[] {
 	return errors;
 }
 
-function stockRow(line: FlowLine, from?: string, to?: string): Record<string, unknown> {
+/** Where the line went, according to the site's dimension (a shelf), if one is configured. */
+export function lineLocation(task: FlowTask, line: FlowLine): string {
+	return (line.location ?? task.location ?? "").trim();
+}
+
+function dimensionValue(task: FlowTask, line: FlowLine): Record<string, unknown> {
+	if (!task.dimensionField) return {};
+	const value = lineLocation(task, line);
+	return value ? { [task.dimensionField]: value } : {};
+}
+
+function stockRow(task: FlowTask, line: FlowLine, from?: string, to?: string): Record<string, unknown> {
 	const row: Record<string, unknown> = {
 		item_code: line.itemCode,
 		qty: line.qty,
@@ -230,6 +252,7 @@ function stockRow(line: FlowLine, from?: string, to?: string): Record<string, un
 		...(from ? { s_warehouse: from } : {}),
 		...(to ? { t_warehouse: to } : {}),
 	};
+	Object.assign(row, dimensionValue(task, line));
 	if (line.batchNo?.trim()) {
 		row.batch_no = line.batchNo.trim();
 		row.use_serial_batch_fields = 1;
@@ -260,6 +283,7 @@ export function buildFlowDoc(task: FlowTask): Record<string, unknown> {
 				item_code: line.itemCode,
 				warehouse: line.toWarehouse ?? task.reference,
 				qty: line.qty,
+				...dimensionValue(task, line),
 				...(line.valuationRate ? { valuation_rate: line.valuationRate } : {}),
 				...(line.batchNo?.trim() ? { batch_no: line.batchNo.trim() } : {}),
 			})),
@@ -295,7 +319,7 @@ export function buildFlowDoc(task: FlowTask): Record<string, unknown> {
 		stock_entry_type: task.kind === "pick-wo" ? "Material Transfer for Manufacture" : "Material Transfer",
 		...(task.kind === "pick-wo" ? { work_order: task.reference } : {}),
 		items: rows.map((line) =>
-			stockRow(line, line.fromWarehouse ?? task.fromWarehouse, line.toWarehouse ?? task.toWarehouse)
+			stockRow(task, line, line.fromWarehouse ?? task.fromWarehouse, line.toWarehouse ?? task.toWarehouse)
 		),
 	};
 }

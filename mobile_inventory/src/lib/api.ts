@@ -16,6 +16,7 @@ import type {
 	Connection,
 	ExistingDoc,
 	InventoryClient,
+	InventoryDimension,
 	ItemInfo,
 	PurchaseOrder,
 	PurchaseOrderLine,
@@ -309,6 +310,22 @@ export class FrappeClient implements InventoryClient {
 		);
 		const row = rows?.[0];
 		return row ? { name: row.name, docstatus: Number(row.docstatus) || 0 } : null;
+	}
+
+	async inventoryDimensions(): Promise<InventoryDimension[]> {
+		// Whitelisted and request-cached on the server, so this is cheap to ask on every task start.
+		try {
+			const rows = unwrap<InventoryDimension[]>(
+				await this.request(
+					"/api/method/erpnext.stock.doctype.inventory_dimension.inventory_dimension.get_inventory_dimensions"
+				),
+				"message"
+			);
+			return (rows ?? []).filter((row) => Boolean(row?.fieldname));
+		} catch {
+			// A site that does not expose it (or a role that cannot read it) simply has no locations.
+			return [];
+		}
 	}
 
 	// ------------------------------------------------------------ work + sales

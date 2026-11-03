@@ -10,6 +10,7 @@ import type {
 	Connection,
 	ExistingDoc,
 	InventoryClient,
+	InventoryDimension,
 	ItemInfo,
 	PurchaseOrder,
 	PurchaseOrderLine,
@@ -466,6 +467,13 @@ export class DemoClient implements InventoryClient {
 			return !received;
 		}).map(({ lines: _lines, ...header }) => header);
 		return this.delay(open, 120);
+	}
+
+	async inventoryDimensions(): Promise<InventoryDimension[]> {
+		return this.delay(
+			[{ dimension_name: "Location", fieldname: "location", doctype: "Warehouse" }],
+			80
+		);
 	}
 
 	async openWorkOrders(): Promise<WorkOrder[]> {
