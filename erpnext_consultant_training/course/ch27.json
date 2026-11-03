@@ -1,0 +1,485 @@
+{
+	"id": "ch27",
+	"number": 27,
+	"title": "Volume 10 · Continuity: Backups, Staging and Upgrades",
+	"subtitle": "Lessons 1–10: the restore drill you can evidence, a staging site that earns its keep, and an upgrade calendar with a rollback",
+	"level": "Advanced",
+	"minutes": 70,
+	"outcomes": [
+		"Specify and witness a restore drill instead of trusting that backups exist",
+		"Define staging that mirrors production closely enough to test an upgrade on",
+		"Run a twenty-minute post-upgrade verification that covers print formats, workflows and e-Invoice",
+		"Write a version register and an upgrade calendar the client can own without you",
+		"Leave a continuity section in the handover pack that survives the next staff change"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Whose job is it",
+			"title": "Continuity is a deliverable, not an afterthought",
+			"bullets": [
+				"A functional consultant does not administer servers, but does specify what continuity must look like",
+				"The test is simple: how long until the business is trading again, and who is allowed to decide",
+				"An untested backup is a rumour; a restore drill you watched is evidence you can sign",
+				"Write the requirement into the handover pack with a name and a frequency against each item",
+				"Client staff change; a written continuity section is what survives the change"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Recovery expectation agreed",
+						"Hours, not days, stated in writing",
+						"Handover pack, continuity section"
+					],
+					["Backup frequency documented", "Nightly database and files", "Managed hosting console"],
+					["Restore drill scheduled", "Quarterly, with a named owner", "Operations calendar"],
+					["Upgrade approval named", "One person, not a committee", "RACI or support agreement"],
+					[
+						"Evidence retained",
+						"Dated drill report in the project folder",
+						"Handover pack appendix"
+					]
+				]
+			},
+			"notes": "Say the quiet part early: nobody in the room wants to talk about backups until the day they need one, and by then it is too late to discover the drill was never run. Your job is to turn continuity from a promise into a dated exercise with a name against it. Two sentences in the handover pack, agreed in the last week of the project, prevent the worst conversation of the following year."
+		},
+		{
+			"kicker": "Lesson 2 · What a backup contains",
+			"title": "Database, files and the configuration that is not in either",
+			"bullets": [
+				"A complete backup is the database plus the site's files, which include uploaded documents and private attachments",
+				"The database alone restores a site where every invoice printout has a missing attachment",
+				"Configuration such as custom fields and print formats lives in the database, but custom apps live in code",
+				"The site config carries the database password and encryption key, and it is not in the backup",
+				"A backup you cannot restore is worthless, and a restored site without its encryption key is damaged"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the hosting console for the site",
+						"(console)",
+						"Site list with the Seri Murni instance"
+					],
+					["2", "Inspect the backup schedule", "(read)", "Nightly job, with-files enabled"],
+					[
+						"3",
+						"Download the latest backup set",
+						"(download)",
+						"Database archive plus files archive"
+					],
+					[
+						"4",
+						"Check the set is current",
+						"dated last night",
+						"Archive timestamps match the schedule"
+					],
+					[
+						"5",
+						"Locate the site config separately",
+						"site_config.json",
+						"Contains db password and encryption key"
+					],
+					[
+						"6",
+						"Store the key outside the backup",
+						"(vault)",
+						"Key retrievable by someone other than the DBA"
+					]
+				]
+			},
+			"notes": "This is where a functional consultant earns their place in a technical conversation: you are not taking the backup, you are checking that the set is complete and current, and that the encryption key is stored somewhere other than the machine it protects. Ask the hosting provider for the schedule in writing and attach it to the handover pack."
+		},
+		{
+			"kicker": "Lesson 3 · The restore drill",
+			"title": "Restore into a scratch site and time it",
+			"bullets": [
+				"A restore drill runs into a scratch site, never over production, and it is timed with a stopwatch",
+				"The drill is done when someone can log in, open last night's invoice and see the attachment",
+				"Record the elapsed time, the person who did it and the date, because that record is the evidence",
+				"Run it quarterly and again after any infrastructure change the hosting provider makes",
+				"If the drill fails, the finding is not a technical problem, it is a go-live blocker"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create a scratch site on the same host",
+						"bench new-site drill.local",
+						"Empty site available"
+					],
+					[
+						"2",
+						"Restore the latest backup into it",
+						"bench --site drill.local restore /path/backup",
+						"Restore completes without error"
+					],
+					[
+						"3",
+						"Run migrations if the versions differ",
+						"bench --site drill.local migrate",
+						"Migrations finish"
+					],
+					["4", "Log in as a real user", "(browser)", "Desk opens with the client's data"],
+					[
+						"5",
+						"Open last night's invoice and its attachment",
+						"(open)",
+						"Document and file both present"
+					],
+					["6", "Record elapsed time and owner", "e.g. 48 minutes", "Dated entry in the drill log"]
+				]
+			},
+			"notes": "Time the drill out loud. The number is the deliverable, because it converts an abstract promise into a business fact the client can plan around: we can be back in under an hour, or we cannot. Attach the dated log to the handover pack, and if the drill has never been run, say so plainly and make it a pre-go-live action rather than a footnote."
+		},
+		{
+			"kicker": "Lesson 4 · Staging",
+			"title": "A site you are allowed to break",
+			"bullets": [
+				"Staging is a second site with production-like data where upgrades, patches and customisations are tested first",
+				"A staging site with no data proves nothing, because half the failures are in the data, not the code",
+				"Restore a production backup into staging before each upgrade so the test is honest",
+				"Anything tested on production is a change you are making while the business is trading",
+				"Staging is not a luxury line item; it is the cheapest insurance in the project"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Staging exists", "Separate site and URL", "Hosting console"],
+					["Data refreshed before a test", "Production backup restored", "Staging database"],
+					[
+						"Configuration matches",
+						"Same custom fields and print formats",
+						"Compare Setting lists"
+					],
+					["Credentials differ", "No production secrets in staging", "site_config.json"],
+					["Refresh scheduled", "Monthly or per upgrade", "Operations calendar"]
+				]
+			},
+			"notes": "The argument that wins this line item is arithmetic: one upgrade tested on production during a stock take costs more than a staging site for a year. Restore production data into staging before each upgrade, and keep production credentials out of it, because a staging site that can send live e-Invoices is a liability rather than a rehearsal."
+		},
+		{
+			"kicker": "Lesson 5 · Versions and the calendar",
+			"title": "Pin what you run and schedule when it changes",
+			"bullets": [
+				"Record the exact Frappe, ERPNext and custom app versions at go-live in a version register",
+				"Pin those versions so an unannounced update does not change behaviour during a busy week",
+				"Plan upgrades on a calendar with a business-quiet window, not on the day a patch appears",
+				"Review the changelog before upgrading for renamed fields and deprecated features",
+				"Every upgrade has a named approver and a rollback point, even when nothing goes wrong"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Versions recorded",
+						"Frappe, ERPNext, apps, with dates",
+						"Version register in the handover pack"
+					],
+					["Versions pinned", "No automatic update path", "Hosting or bench configuration"],
+					["Upgrade window agreed", "Quarterly, outside month end", "Operations calendar"],
+					["Changelog reviewed", "Notes attached to the upgrade request", "Upgrade ticket"],
+					["Rollback point exists", "Backup taken immediately before", "Backup log with timestamp"]
+				]
+			},
+			"notes": "The version register is the document you will be grateful for a year later when a client reports behaviour that no longer matches the course or the manual. Pin, schedule, read the changelog, approve by name, and take the backup immediately before the upgrade so the rollback point is minutes old rather than a night old."
+		},
+		{
+			"kicker": "Lesson 6 · What breaks",
+			"title": "The five things an upgrade disturbs",
+			"bullets": [
+				"Print formats are the most common casualty, especially custom HTML that references a renamed field",
+				"Custom apps and patches may need a migration step or a version bump of their own",
+				"Workflows change when states or actions are renamed, and documents can strand mid-flow",
+				"Reports built on specific field names fail quietly by returning nothing rather than an error",
+				"e-Invoice submission credentials and endpoints must be re-checked, particularly sandbox versus production"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Print format renders", "Invoice PDF with logo and terms", "Open any submitted invoice"],
+					["Custom app loads", "No error banner on the Desk", "Desk home after upgrade"],
+					[
+						"Workflow intact",
+						"Document moves draft to approved",
+						"Test a document through every state"
+					],
+					["Report returns rows", "Non-zero result, same as before", "Run the saved reports"],
+					["e-Invoice ready", "Endpoint and credentials correct", "Settings → Malaysia e-Invoice"]
+				]
+			},
+			"notes": "This list is the difference between an upgrade and an outage. Print formats break first and most visibly, because clients print invoices before they read reports. Workflows break quietly, stranding documents in a state nobody can move. Reports break silently, returning nothing. Test all five deliberately rather than waiting for the client to discover them one by one."
+		},
+		{
+			"kicker": "Lesson 7 · The twenty-minute check",
+			"title": "A post-upgrade verification you can hand to the client",
+			"bullets": [
+				"Twenty minutes, five checks, one sign-off: that is the whole ritual and it must be repeatable",
+				"Do it on staging first, then repeat on production immediately after the upgrade window",
+				"Write the result into the upgrade ticket so the next person can see what was verified and when",
+				"A check that cannot be repeated by client staff is not a check, it is your private habit",
+				"Attach the checklist to the handover pack with the name of whoever is qualified to run it"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Log in as a normal user, not administrator",
+						"(login)",
+						"Desk loads without an error banner"
+					],
+					[
+						"2",
+						"Create and submit a test invoice",
+						"1 x SM-BL200",
+						"Stock and ledger rows appear as usual"
+					],
+					["3", "Print that invoice", "(print)", "PDF renders with logo, terms and totals"],
+					[
+						"4",
+						"Run two saved reports",
+						"Collections – overdue",
+						"Rows returned, totals unchanged"
+					],
+					[
+						"5",
+						"Submit one e-Invoice in sandbox",
+						"(submit)",
+						"Accepted or validated, no credential error"
+					],
+					["6", "Sign the ticket with time and name", "(write)", "Dated verification entry"]
+				]
+			},
+			"notes": "Twenty minutes is the whole cost, and it converts an upgrade from an act of faith into a checked procedure. Insist that a normal user, not the administrator, performs the login step, because permission issues hide from administrator accounts. Then get the ticket signed, so the next upgrade starts from evidence rather than assumption."
+		},
+		{
+			"kicker": "Lesson 8 · The e-Invoice risk",
+			"title": "Where compliance meets continuity",
+			"bullets": [
+				"e-Invoice submission depends on credentials, endpoints and a working outbound connection, all outside the ledger",
+				"After any upgrade, submit one document in sandbox before allowing production submissions to resume",
+				"Keep a written fallback: manual submission through MyInvois portal within the statutory window",
+				"Never store production e-Invoice credentials in staging or in a backup taken for testing",
+				"A refused submission after an upgrade is a compliance event, so it belongs in the upgrade checklist"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Sandbox submission works",
+						"Accepted with a submission UID",
+						"Sandbox portal and app log"
+					],
+					[
+						"Production credentials intact",
+						"Token obtains successfully",
+						"Settings → Malaysia e-Invoice"
+					],
+					["Endpoint correct", "Preprod versus production URL", "Same settings screen"],
+					[
+						"Fallback documented",
+						"Manual portal path and owner",
+						"Handover pack, compliance section"
+					],
+					[
+						"Failure alerts reach a human",
+						"Email or queue visible in the Desk",
+						"Error log and notifications"
+					]
+				]
+			},
+			"notes": "The compliance dimension is what makes continuity more than housekeeping. A batch of refused e-Invoices after a quiet upgrade is a statutory problem with a deadline, not an inconvenience. Test one submission in sandbox, confirm the production endpoint has not been switched, and write the manual fallback down with a name against it."
+		},
+		{
+			"kicker": "Lesson 9 · Rollback",
+			"title": "The plan you hope never to use",
+			"bullets": [
+				"A rollback plan is a backup taken immediately before the change plus a written way to restore it",
+				"Decide in advance who may call a rollback and how long the decision may take",
+				"Restoring a backup discards transactions made after it, so the window must be planned, not improvised",
+				"Rehearse the decision, not just the command: the technical step is easy, the business call is not",
+				"If the rollback needs a person who is on leave, the plan is not finished"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Take a backup immediately before the upgrade",
+						"(backup)",
+						"Archive with a timestamp minutes old"
+					],
+					[
+						"2",
+						"Note the transactions made during the window",
+						"(record)",
+						"A short, known list of documents"
+					],
+					[
+						"3",
+						"Agree the decision maker and the cut-off time",
+						"(agree)",
+						"Name in the upgrade ticket"
+					],
+					[
+						"4",
+						"If triggered, restore the pre-upgrade backup",
+						"(restore)",
+						"Site returns to the recorded state"
+					],
+					[
+						"5",
+						"Re-enter the window transactions",
+						"(re-enter)",
+						"Documents restored from the recorded list"
+					],
+					["6", "Write a short incident note", "(write)", "Dated note in the handover pack"]
+				]
+			},
+			"notes": "Rollbacks fail for organisational reasons far more often than technical ones: nobody agreed who could call it, so an hour passes while people discuss. Fix that in the ticket — one name, one cut-off time — and make sure the pre-upgrade backup is taken minutes before the change, not the night before, so the transactions to replay are a short list rather than a day of trading."
+		},
+		{
+			"kicker": "Lesson 10 · The handover",
+			"title": "What goes in the continuity section",
+			"bullets": [
+				"Backup schedule, drill log with dates and elapsed times, and the owner of each",
+				"Version register with the pinned numbers and the date they were last confirmed",
+				"Upgrade calendar, approval name and the twenty-minute verification checklist",
+				"The e-Invoice fallback route, with the person who may execute it and the statutory window",
+				"A one-page index so the next consultant or the client's IT can find all of it in a minute"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Backup schedule attached", "Nightly, with-files, host named", "Handover pack"],
+					["Drill log present", "Dates, elapsed time, person", "Same section"],
+					["Version register current", "Exact versions and date confirmed", "Same section"],
+					["Upgrade checklist included", "Twenty-minute script, named owner", "Same section"],
+					["Fallback route written", "Portal path, owner, deadline", "Compliance annex"]
+				]
+			},
+			"notes": "Close the volume where you opened it: continuity is a document someone else can act on. If the client's IT can pick up this section and run a drill without calling you, the project is finished in the way that matters. Read the index out loud in the final session, hand it over on paper as well as in the repository, and name the person responsible for each line."
+		}
+	],
+	"lab": {
+		"title": "Lab · Evidence continuity for Seri Murni in one afternoon",
+		"minutes": 65,
+		"steps": [
+			"Inspect the hosting console and record the backup schedule, retention and whether files are included",
+			"Download the latest backup set and confirm the timestamps match last night's schedule",
+			"Create a scratch site, restore the set into it and time the restore with a stopwatch",
+			"Log in as a normal user, open last night's invoice and confirm the attachment opens",
+			"Write the drill entry: date, elapsed minutes, person, and what failed if anything did",
+			"Take a production backup into staging, run any available patch on staging, then execute the five checks",
+			"Switch the e-Invoice endpoint to sandbox and submit one document, then confirm production credentials are untouched",
+			"Complete the version register, the upgrade calendar with an approver, and the one-page index for the handover pack"
+		],
+		"done": "A dated drill log with an elapsed time, a staging site restored from production, a signed twenty-minute verification, and a continuity section the client's IT could follow without you."
+	},
+	"quiz": [
+		{
+			"question": "Why is a nightly backup that has never been restored not evidence of continuity?",
+			"options": [
+				"Because backups are only valid for thirty days",
+				"Because nobody knows whether it restores, how long it takes or whether files and the encryption key are usable",
+				"Because ERPNext backups exclude the database",
+				"Because hosting providers do not keep backups"
+			],
+			"answer": 1,
+			"why": "A backup is a hypothesis until a drill proves it. The drill produces the two facts that matter: the restore works, and the business can be trading again in a known number of minutes."
+		},
+		{
+			"question": "What must be stored separately from the backup itself?",
+			"options": [
+				"The chart of accounts",
+				"The site encryption key, without which a restored site cannot read encrypted data",
+				"The print formats",
+				"The list of saved filters"
+			],
+			"answer": 1,
+			"why": "The site configuration holds the database password and the encryption key, and it is not inside the backup. Losing the key leaves a restored site unable to decrypt data it still holds."
+		},
+		{
+			"question": "Why does staging need production-like data rather than an empty site?",
+			"options": [
+				"Because empty sites cannot be upgraded",
+				"Because many failures depend on the data and configuration, not the code",
+				"Because staging must be licensed separately",
+				"Because reports need rows to render"
+			],
+			"answer": 1,
+			"why": "Custom fields, print formats, workflow states and real document shapes are where upgrades break. An empty staging site tests the code path only, which is the smallest part of the risk."
+		},
+		{
+			"question": "Which artefact usually breaks first after an upgrade, and most visibly?",
+			"options": [
+				"The General Ledger report",
+				"Custom print formats, especially those referencing renamed fields",
+				"The chart of accounts",
+				"User permissions"
+			],
+			"answer": 1,
+			"why": "Print formats are HTML that names fields directly, so a renamed field turns an invoice PDF into an error or a blank. Clients print invoices before they read reports, which makes it the first visible failure."
+		},
+		{
+			"question": "What makes a rollback plan genuinely usable?",
+			"options": [
+				"A script that restores the last nightly backup",
+				"A backup taken minutes before the change, a named decision maker and a cut-off time",
+				"A support ticket with the hosting provider",
+				"A documented list of every change made since go-live"
+			],
+			"answer": 1,
+			"why": "Rollbacks fail organisationally more often than technically. A backup minutes old keeps the replay list short, and a named decision maker with a cut-off time stops an hour being lost to discussion."
+		}
+	],
+	"memory": {
+		"spine": "Pin the versions, prove the restore, test on staging, and let one named person approve the upgrade.",
+		"device": {
+			"kind": "rule",
+			"label": "Backup, prove, stage, pin",
+			"expansion": [
+				"Backup, and store the encryption key somewhere the backup cannot reach",
+				"Prove it with a timed restore drill into a scratch site, logged with a date",
+				"Stage the upgrade on a site holding production-like data, never on production itself",
+				"Pin the versions, schedule the window, and review the changelog before the change",
+				"One named approver, one cut-off time, and a twenty-minute verification afterwards"
+			]
+		},
+		"cards": [
+			{
+				"q": "What two facts does a restore drill give the client?",
+				"a": "That the backup actually restores, and how many minutes the business needs before it can trade again. Both belong in the handover pack.",
+				"hint": "Time it out loud"
+			},
+			{
+				"q": "Why does staging need a copy of production data?",
+				"a": "Upgrades break on custom fields, print formats and workflow states, which live in the data and configuration rather than in the code.",
+				"hint": "Empty sites prove little"
+			},
+			{
+				"q": "What belongs in the version register?",
+				"a": "The exact Frappe, ERPNext and custom app versions, pinned at go-live, with the date each was last confirmed and who confirmed it.",
+				"hint": "Numbers, dates, names"
+			},
+			{
+				"q": "Which five checks make up the post-upgrade verification?",
+				"a": "Log in as a normal user, submit a test invoice, print it, run two saved reports, and submit one e-Invoice in sandbox.",
+				"hint": "Twenty minutes, five checks"
+			},
+			{
+				"q": "What makes a rollback plan usable rather than aspirational?",
+				"a": "A backup taken minutes before the change, a named decision maker, a cut-off time, and a short recorded list of transactions to replay.",
+				"hint": "One name, one time"
+			}
+		],
+		"trap": {
+			"what": "The client says 'the hosting provider handles backups' and signs off go-live without a drill.",
+			"why": "Handled is not proven. Ask for the schedule in writing, run one timed restore into a scratch site, log the result, and make an unproven restore a go-live blocker rather than a footnote."
+		}
+	},
+	"narration": "Volume ten ends where most projects are weakest: what happens after go-live, on the day something breaks. Continuity is a consultant deliverable even though the commands belong to somebody else. Pin the versions you went live on and write them in a register. Check with the hosting provider that the nightly backup includes files, and store the site encryption key somewhere the backup cannot reach, because a restored site without its key cannot read what it holds. Then prove it: restore into a scratch site, time it with a stopwatch, log the elapsed minutes with a date and a person, and attach that log to the handover pack. Before every upgrade, restore production data into staging and test there, because print formats, workflows and saved reports break on data and configuration, not just code. Keep one named approver and a cut-off time so a rollback decision takes minutes rather than an argument. Afterwards, twenty minutes of verification: log in as a normal user, submit a test invoice, print it, run two saved reports, and submit one e-Invoice in sandbox. Then sign the ticket and hand the whole section over."
+}

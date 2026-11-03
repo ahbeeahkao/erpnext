@@ -1,395 +1,406 @@
 {
 	"id": "ch09",
 	"number": 9,
-	"title": "Volume 3 · Buying, Step by Step",
-	"subtitle": "Lessons 1–4: the purchase cycle from order to payment, with the three quantities and three amounts that must match",
-	"level": "Advanced",
-	"minutes": 55,
+	"title": "Volume 2 · Quote to Cash, Step by Step",
+	"subtitle": "Lessons 1–5: quotation, sales order, delivery note, sales invoice and payment, with the exact numbers each step must produce",
+	"level": "Core",
+	"minutes": 90,
 	"outcomes": [
-		"Raise a purchase order that purchasing and finance both accept",
-		"Receive goods so that stock and the stock-received account move together",
-		"Bill a supplier and explain the three-way match to an auditor",
-		"Pay the supplier and prove the creditor balance is back to zero"
+		"Walk a sale from quotation to cash without breaking the chain of references",
+		"Know exactly which document writes to the general ledger, the stock ledger and the payment ledger",
+		"Predict the tax, cost of goods sold and gross profit of a sample sale to the sen",
+		"Convert documents forward instead of retyping them, and explain why that matters",
+		"Reconcile the three ledgers after the cycle and prove the books agree"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Purchase order",
-			"title": "Raise a purchase order finance can pay",
+			"kicker": "Lesson 1 · Quotation",
+			"title": "The quotation writes nothing except an offer",
 			"bullets": [
-				"A purchase order is a promise to a supplier, so the rate typed here is the rate that will be billed",
-				"Set the delivery date deliberately, because it drives the late-supplier list and the shortage report",
-				"Enter tax as a row in Purchase Taxes and Charges, never as a rounded-up rate in the item line",
-				"Submit only when the buyer and the budget owner agree, since submit locks quantity and rate"
+				"A quotation is a promise, not a transaction: no ledger entries, no stock movement, no receivable",
+				"Selecting the customer brings the price list, currency and payment terms from the master",
+				"The valid-till date drives the expiry report the sales team works from",
+				"Items added here use the three-layer price resolution from Volume 1",
+				"Submitting locks the document; converting to a sales order copies it without retyping"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Selling → Quotation → New", "(open form)", "Empty quotation, today's date"],
+					["2", "Customer", "Aeon Big Sdn Bhd", "Price list Retail - SM, terms 30 days"],
+					["3", "Valid Till", "31-12-2026", "Date saved"],
+					["4", "Item row", "SM-BL200, qty 5, rate 240.00", "Amount 1,200.00"],
+					["5", "Check totals", "(no tax on quotation until template)", "Net 1,200.00, tax 0.00"],
+					["6", "Apply tax template", "SST Sales 10% - SM", "Tax 120.00, total 1,320.00"],
+					["7", "Save and Submit", "(submit)", "Status Open, no ledger entries"]
+				]
+			},
+			"notes": "Learners expect a quotation to reserve stock or create a receivable. It does neither, and saying so clearly prevents a month of confusion. The tax template can be applied at quotation level, and doing it here means the customer sees the inclusive total from the first conversation rather than discovering it on the invoice.",
+			"paths": ["Selling → Quotation → New"]
+		},
+		{
+			"kicker": "Lesson 1 · Expected outcome",
+			"title": "Prove a quotation changed nothing",
+			"bullets": [
+				"The document status reads Open and it appears in the Quotation list with a valid-till date",
+				"The general ledger has no entries referencing this quotation, because none exist",
+				"Stock Balance still shows zero for the blender, so nothing was reserved",
+				"The customer dashboard still shows zero credit exposure",
+				"The Make button offers Sales Order and, later in the flow, nothing else"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Status", "Open", "Quotation form"],
+					["Totals", "1,200.00 / 120.00 / 1,320.00", "Quotation totals"],
+					["General ledger", "No rows", "General Ledger, filter by voucher"],
+					["Stock balance", "0 units", "Stock → Stock Balance"],
+					["Credit exposure", "0.00", "Customer dashboard"]
+				]
+			},
+			"notes": "The empty general ledger is the teaching point, and it is best shown by filtering the report on the quotation number and getting nothing back. That single action builds trust in the whole document chain: learners stop assuming that saving a document posts something. Run it before and after each conversion in the rest of the volume.",
+			"callout": {
+				"tone": "tip",
+				"title": "Zero is a result",
+				"text": "An empty report is evidence. Show it deliberately, or the client will assume the system posted in the background."
+			}
+		},
+		{
+			"kicker": "Lesson 2 · Sales order",
+			"title": "A commitment, with dates and warehouses on every line",
+			"bullets": [
+				"The sales order is the commitment that planning, buying and delivery all read from",
+				"Delivery date and warehouse per line are what make the order schedulable",
+				"No stock moves and no ledger posts, but projected quantity drops by the ordered amount",
+				"Per-billed and per-delivered percentages control staged or partial fulfilment",
+				"Convert from the quotation so rates, terms and taxes carry across exactly"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Buying → Supplier → New",
-						"Sunrise Components, group Local Suppliers, currency MYR",
-						"Supplier saved as a draft"
+						"Open the quotation → Make → Sales Order",
+						"(convert)",
+						"Order pre-filled from the quotation"
 					],
+					["2", "Delivery Date", "15-11-2026 on the line", "Date set per line"],
+					["3", "Warehouse", "Main Warehouse - SM", "Fulfilling warehouse set"],
+					["4", "Check percentages", "Per Delivered 100, Per Billed 100", "Both at 100"],
+					["5", "Totals", "(inherited)", "1,200.00 / 120.00 / 1,320.00"],
+					["6", "Submit", "(submit)", "Status To Deliver and Bill"],
+					["7", "Open Item dashboard", "SM-BL200", "Projected quantity −5"]
+				]
+			},
+			"notes": "Explain the difference between actual and projected quantity: the order reserves nothing physical, but it tells the planner that five units are promised. That distinction is what makes the stock projection report useful and why an order can exist with zero stock on hand. Per-billed and per-delivered percentages are the consultant's tool for staged billing and partial supply.",
+			"paths": ["Selling → Sales Order → New", "Quotation → Make → Sales Order"]
+		},
+		{
+			"kicker": "Lesson 2 · Expected outcome",
+			"title": "Commitment visible, stock untouched",
+			"bullets": [
+				"The order shows To Deliver and Bill and links back to the quotation it came from",
+				"Projected quantity for the item falls by five while actual stock remains zero",
+				"The Stock Balance report still reads zero in every warehouse",
+				"The order appears in the Sales Order Analysis report under the correct territory",
+				"The Make button now offers Delivery Note and Sales Invoice"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Status", "To Deliver and Bill", "Sales Order form"],
+					["Projected qty", "−5", "Item → Dashboard"],
+					["Stock balance", "0", "Stock → Stock Balance"],
+					["Report", "Order listed", "Selling → Sales Order Analysis"],
+					["Upstream link", "Quotation number", "Connections tab"]
+				]
+			},
+			"notes": "The projected quantity is the first place a learner sees the difference between planning and movement. Use it to introduce the stock projection report, which is the single most useful screen for a sales manager. If projected quantity does not change, the order was saved as a draft rather than submitted.",
+			"callout": {
+				"tone": "warn",
+				"title": "Draft orders lie",
+				"text": "A draft sales order reserves nothing and appears in no commitment report. Train the team to submit, or reporting will understate demand."
+			}
+		},
+		{
+			"kicker": "Lesson 3 · Delivery note",
+			"title": "Where the stock ledger finally moves",
+			"bullets": [
+				"The delivery note is the physical event: stock leaves and cost of goods sold posts",
+				"Convert from the order so quantities cannot drift between promise and dispatch",
+				"With FIFO valuation, five units at 120.00 write a 600.00 cost of goods entry",
+				"The order's per-delivered percentage jumps to 100 and its status becomes To Bill",
+				"A delivery note is not an invoice: the customer has goods and no receivable yet"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open the order → Make → Delivery Note", "(convert)", "Five units pre-filled"],
+					["2", "Check warehouse", "Main Warehouse - SM", "Source warehouse set"],
+					["3", "Check quantity", "5", "No over-delivery"],
+					["4", "Submit", "(submit)", "Status Completed for this line"],
+					["5", "Stock Ledger", "Filter by item", "Outgoing 5 at 120.00"],
+					["6", "General Ledger", "Filter by voucher", "Dr COGS 600.00, Cr Stock 600.00"],
+					["7", "Open the order", "(refresh)", "Per Delivered 100, status To Bill"]
+				]
+			},
+			"notes": "This is the slide where accounting meets the warehouse. Show both ledgers side by side: stock quantity leaves, and a value moves from inventory to cost of goods sold. Learners who have only used invoicing software are surprised that a delivery note posts anything at all, and that surprise is exactly why this course exists.",
+			"paths": [
+				"Sales Order → Make → Delivery Note",
+				"Stock → Stock Ledger",
+				"Accounts → General Ledger"
+			]
+		},
+		{
+			"kicker": "Lesson 3 · Expected outcome",
+			"title": "Five units out, six hundred in cost",
+			"bullets": [
+				"Stock Balance shows zero in Main Warehouse with no negative quantity anywhere",
+				"The Stock Ledger shows a single outgoing row of 5 at valuation 120.00",
+				"The general ledger shows a 600.00 debit to cost of goods sold and a matching credit to stock",
+				"The sales order is fully delivered and waiting to be billed",
+				"No debtors balance exists yet, which is the difference between shipping and selling"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Stock balance", "0 units", "Stock Balance, Main Warehouse"],
+					["Stock ledger row", "−5 @ 120.00", "Stock Ledger"],
+					["COGS", "600.00 debit", "General Ledger"],
+					["Inventory credit", "600.00", "General Ledger"],
+					["Debtors", "0.00", "General Ledger, Debtors - SM"]
+				]
+			},
+			"notes": "Ask the learner where the profit is at this moment: nowhere, because revenue has not been recognised. That is the accounting lesson behind the document split, and it is why a month can have busy dispatch and no revenue. If stock goes negative, a receipt is missing and the fix is the receipt, never the report.",
+			"callout": {
+				"tone": "warn",
+				"title": "Negative stock after a delivery",
+				"text": "It means the goods were never received in the system. Post the purchase receipt with the correct date, then check the stock ledger again."
+			}
+		},
+		{
+			"kicker": "Lesson 4 · Sales invoice",
+			"title": "Revenue, receivable and tax in one posting",
+			"bullets": [
+				"Convert from the delivery note so billed quantity equals dispatched quantity",
+				"Submitting posts three things: revenue, a receivable and a tax liability",
+				"The payment ledger now shows 1,320.00 outstanding against this invoice",
+				"The sales order completes because per-billed reaches 100 per cent",
+				"Revenue 1,200.00 less cost 600.00 gives gross profit 600.00, a fifty per cent margin"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
 					[
-						"2",
-						"Buying → Purchase Order → New",
-						"Supplier Sunrise Components, company Seri Murni Sdn Bhd",
-						"Address and currency fill from the supplier"
+						"1",
+						"Open the delivery note → Make → Sales Invoice",
+						"(convert)",
+						"Five units, rate 240.00"
 					],
+					["2", "Check tax", "SST Sales 10% - SM applied", "Tax 120.00"],
+					["3", "Set posting date", "15-11-2026", "Date within the open period"],
+					["4", "Submit", "(submit)", "Invoice submitted, status Unpaid"],
+					["5", "General Ledger", "Filter by invoice", "Dr Debtors 1,320.00"],
+					["6", "Same report", "(scroll)", "Cr Sales 1,200.00, Cr SST Payable 120.00"],
+					["7", "Print preview", "(no save)", "Customer sees net, tax and total"]
+				]
+			},
+			"notes": "Ask for the three postings before pressing submit: who owes, what revenue, and what tax. This is the sentence a consultant says in every user training session, and getting a client's accounts team to recite it is worth more than any slide. Emphasise converting rather than retyping so the quantities match to the unit.",
+			"paths": ["Delivery Note → Make → Sales Invoice", "Accounts → General Ledger"]
+		},
+		{
+			"kicker": "Lesson 4 · Expected outcome",
+			"title": "The four numbers that must be exact",
+			"bullets": [
+				"Debtors increases by 1,320.00 and the invoice appears in aged receivables",
+				"Sales revenue is 1,200.00 and SST Payable is 120.00, both as credits",
+				"Cost of goods sold is 600.00 from the earlier delivery, so gross profit is 600.00",
+				"The payment ledger shows 1,320.00 outstanding, not the net amount",
+				"The sales order status becomes Completed and drops out of the to-bill queue"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Debtors", "1,320.00", "General Ledger"],
+					["Revenue", "1,200.00", "General Ledger / P&L"],
+					["SST payable", "120.00", "General Ledger"],
+					["Gross profit", "600.00", "Accounts → Gross Profit"],
+					["Payment ledger", "1,320.00 outstanding", "Accounts → Payment Ledger"]
+				]
+			},
+			"notes": "The payment ledger figure is where trainees go wrong: they expect the net 1,200.00, but the customer owes the tax-inclusive total. Show the payment ledger next to the invoice so the difference becomes obvious. Then run the Gross Profit report, which is the report a client will ask for in week one.",
+			"callout": {
+				"tone": "tip",
+				"title": "Bill what you shipped",
+				"text": "Converting from the delivery note guarantees the invoice matches the dispatch. Retyping invoices is how quantity mismatches ruin month-end."
+			}
+		},
+		{
+			"kicker": "Lesson 5 · Payment",
+			"title": "Cash in, allocated, and a customer who owes nothing",
+			"bullets": [
+				"A payment entry moves cash and clears the receivable, but only if it is allocated to the invoice",
+				"The bank side of the form sits under Accounts and Transaction Details, the section renamed from Accounts",
+				"Allocation lives in the Reference section, where the Payment References table is what settles the invoice",
+				"Bank charges are rows in Deductions or Loss on the payment, not a separate journal entry",
+				"An unallocated receipt leaves Unallocated Amount sitting in the Writeoff section with the invoice still open",
+				"The payment ledger returns to zero, which is the test that the cycle is complete"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Accounts → Payment Entry → New", "Payment type Receive", "Receipt form"],
+					["2", "Party", "Aeon Big Sdn Bhd", "Outstanding invoices listed"],
 					[
 						"3",
-						"Items table",
-						"SM-BL200, quantity 10, rate 120.00, required by 20-01-2026",
-						"Amount 1,200.00"
-					],
-					[
-						"4",
-						"Purchase Taxes and Charges",
-						"SST Purchase 10 %, account SST Input - SM",
-						"Total taxes 120.00, grand total 1,320.00"
-					],
-					["5", "Save", "Nothing else", "Draft PO-SM-2026-0001, status Draft"],
-					["6", "Submit", "Confirm", "Status becomes To Receive and Bill, 10 units pending"]
-				]
-			},
-			"notes": "The commonest consultant error here is typing a rate that already includes tax, which inflates the stock value by ten per cent for the life of the item. Keep the item rate net, let the tax row do the adding, and the purchase receipt will post the correct stock value. Confirm the tax template before submitting, because changing a submitted order means amending it and reprinting."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the order",
-			"title": "Read the purchase order before you submit it",
-			"bullets": [
-				"Three numbers decide whether the order is right: net total, tax and grand total",
-				"A zero tax row usually means the supplier has no tax category, not that the item is exempt",
-				"The order must show zero stock effect, because nothing has physically moved yet",
-				"Print the order once and read it as the supplier will, including terms and delivery window"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Net total", "1,200.00", "Purchase Order → Totals"],
-					["Total taxes and charges", "120.00", "Purchase Order → Taxes and Charges"],
-					["Grand total", "1,320.00", "Purchase Order → Totals"],
-					[
-						"Stock ledger rows",
-						"0 for this order",
-						"Stock → Stock Ledger, filter voucher type Purchase Order"
-					],
-					["Status", "To Receive and Bill", "Purchase Order header"]
-				]
-			},
-			"notes": "Ask the learner to compute the grand total before looking at the screen: ten units at 120 gives 1,200, ten per cent gives 120, and the total is 1,320. Being able to predict that figure is what separates a consultant from someone clicking through a demo. If the screen disagrees, the tax template or the supplier's tax category is wrong, and it is cheaper to find that now than at month end."
-		},
-		{
-			"kicker": "Lesson 3 · Purchase receipt",
-			"title": "Receive the goods and let stock move",
-			"bullets": [
-				"The purchase receipt is the document that moves stock and posts the interim stock account",
-				"Receive into the warehouse that will hold the goods, not a generic default",
-				"Partial receipts are normal, so record what arrived rather than what was ordered",
-				"Do not create a stock entry to mimic a receipt, because the bill will never match"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open PO-SM-2026-0001 → Create → Purchase Receipt",
-						"Nothing",
-						"Form pre-fills supplier, item and 10 units"
-					],
-					["2", "Accepted warehouse", "Main - SM", "Bin target is Main warehouse"],
-					["3", "Quantity", "10", "Pending quantity falls to 0 on the order"],
-					["4", "Save and Submit", "Confirm", "Status To Bill, receipt PR-SM-2026-0001"],
-					["5", "Check stock", "Item SM-BL200 at Main", "Bin shows 10 units, valuation 1,200.00"],
-					[
-						"6",
-						"Open Stock Ledger",
-						"Filter voucher PR-SM-2026-0001",
-						"One row: +10 units at 120.00, value 1,200.00"
-					]
-				]
-			},
-			"notes": "Receipts post to Stock Received But Not Billed rather than to a creditor, which is why the balance sheet looks unusual between receipt and bill. That interim account is not an error and must not be cleared by hand: it clears itself when the invoice is submitted. Explain that to a client's accountant early, or they will journal against it and create a permanent difference."
-		},
-		{
-			"kicker": "Lesson 4 · Verify the receipt",
-			"title": "Prove the receipt moved stock, not profit",
-			"bullets": [
-				"A receipt changes the balance sheet only: stock rises and an interim liability rises with it",
-				"The profit and loss account must be untouched at this point, because nothing has been sold",
-				"Valuation per unit is the purchase rate, adjusted later by any landed cost voucher",
-				"Serial and batch items need their numbers recorded at receipt, not after the bill"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Bin quantity at Main", "10", "Stock → Bin, item SM-BL200"],
-					["Stock value", "1,200.00", "Stock Balance report"],
-					["Stock ledger row", "+10 at 120.00, value 1,200.00", "Stock → Stock Ledger"],
-					[
-						"Stock Received But Not Billed",
-						"1,200.00 credit",
-						"Accounts → General Ledger, account Stock Received But Not Billed"
-					],
-					[
-						"Gross profit this month",
-						"unchanged by this receipt",
-						"Accounts → Profit and Loss Statement"
-					]
-				]
-			},
-			"notes": "If the profit and loss statement moves when you receive goods, an expense account has been configured as the default warehouse account, and every future valuation report will be wrong. Fix the default accounts in the Company record and the Warehouse record before going further. This is the single most common misconfiguration found during a first-week audit of a new ERPNext site."
-		},
-		{
-			"kicker": "Lesson 5 · Purchase invoice",
-			"title": "Bill the supplier and respect the three-way match",
-			"bullets": [
-				"The bill brings the creditor into existence and clears the interim stock account",
-				"ERPNext will not let you bill more than you received, which is the control auditors ask about",
-				"Check the rate against the order, because a supplier invoice is not automatically correct",
-				"Set the payment due date from the template rather than typing a number"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open PR-SM-2026-0001 → Create → Purchase Invoice",
-						"Nothing",
-						"Items and 10 units carried over"
-					],
-					[
-						"2",
-						"Supplier invoice number",
-						"SC-2026-0148, date 16-01-2026",
-						"Reference stored for the audit trail"
-					],
-					["3", "Payment terms", "Net 30 from the supplier template", "Due date 15-02-2026"],
-					["4", "Save and Submit", "Confirm", "Status Unpaid, invoice PINV-SM-2026-0001"],
-					[
-						"5",
-						"Read the GL",
-						"Filter voucher PINV-SM-2026-0001",
-						"Dr Stock Received Not Billed 1,200.00, Dr SST Input 120.00, Cr Creditors 1,320.00"
-					],
-					["6", "Try quantity 11 on a copy", "Save", "Error: cannot bill more than received"]
-				]
-			},
-			"notes": "The three-way match is the reason a purchase invoice cannot simply be typed from the supplier's paper. Order, receipt and bill must agree on quantity, and the rate is checked against the order. Show the learner the exact error message when they try to over-bill, because that message is the control working. Malaysian auditors frequently ask to see it demonstrated during system audits."
-		},
-		{
-			"kicker": "Lesson 6 · Verify the bill",
-			"title": "The three-way match in numbers",
-			"bullets": [
-				"Quantity, rate and total must agree across order, receipt and bill",
-				"Tax input sits as an asset account until the SST return is filed",
-				"The creditor balance is now a real liability with a due date and an ageing bucket",
-				"Nothing in the profit and loss moves until the goods are sold"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Order quantity = received = billed", "10 = 10 = 10", "PO, PR and PI side by side"],
-					["Rate", "120.00 on all three documents", "Item table of each document"],
-					["Invoice total", "1,320.00", "Purchase Invoice → Totals"],
-					["Creditors - SM", "1,320.00 credit", "Accounts → General Ledger"],
-					["Supplier ageing", "Not due, 0 days overdue", "Accounts → Accounts Payable report"]
-				]
-			},
-			"notes": "Get into the habit of opening the three documents side by side for the first purchase of any new client, because a mismatch there tells you whether their process will survive an audit. If the invoice was recorded without a receipt, the stock account will be overstated and the interim account will keep a credit balance that nobody can explain. Correct the process, not the ledger."
-		},
-		{
-			"kicker": "Lesson 7 · Payment",
-			"title": "Pay the supplier and close the loop",
-			"bullets": [
-				"A payment entry against the invoice settles the creditor, and allocation is what makes it stick",
-				"Account Paid From and Bank Account (From) sit in Accounts and Transaction Details, not on a separate tab",
-				"The bank reference goes in Cheque/Reference No, which is what makes the reconciliation match later",
-				"Partial payment is normal: allocate what was paid and leave the rest outstanding",
-				"The invoice status changes to Paid only when the allocated amount equals the total"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Accounts → Payment Entry → New",
-						"Payment type Pay, party Sunrise Components",
-						"Party account Creditors - SM"
-					],
-					[
-						"2",
 						"Accounts and Transaction Details",
-						"Account Paid From Bank - SM",
-						"Bank account set on the payment"
+						"Account Paid From Bank - SM, Bank Account (From) current account",
+						"Bank side of the form complete"
 					],
-					["3", "Cheque/Reference No", "TT-2026-0031", "Bank reference stored for reconciliation"],
 					[
 						"4",
 						"Reference → Get Outstanding Invoices",
-						"Select PINV-SM-2026-0001",
+						"Tick the invoice for 1,320.00",
 						"Payment References row of 1,320.00"
 					],
-					["5", "Save and Submit", "Confirm", "Payment PE-SM-2026-0001 submitted"],
-					["6", "Read the invoice", "PINV-SM-2026-0001", "Status Paid, outstanding 0.00"],
-					[
-						"7",
-						"Read the GL",
-						"Filter voucher PE-SM-2026-0001",
-						"Dr Creditors 1,320.00, Cr Bank 1,320.00"
-					]
+					["5", "Amount", "1,320.00", "Unallocated Amount 0.00 under Writeoff"],
+					["6", "Submit", "(submit)", "Invoice status Paid"],
+					["7", "General Ledger", "Filter by payment", "Dr Bank 1,320.00, Cr Debtors 1,320.00"]
 				]
 			},
-			"notes": "Allocation is the step learners skip. An unallocated payment leaves the invoice open, the ageing report wrong, and the client convinced the system is broken. Point out the two halves of the form as you teach it: Accounts and Transaction Details for the bank side, and the Reference table for the invoices being killed. Teach the rule as a sentence they can repeat: a payment is money in the bank, an allocation is the invoice it kills. If an invoice stays open after a payment, open Payment Reconciliation and allocate there."
+			"notes": "The allocation step is the whole lesson, and the form has moved the goalposts: the bank account now sits under Accounts and Transaction Details, and the invoices sit under Reference as the Payment References table. A receipt with no reference clears the bank, leaves Unallocated Amount in the Writeoff section and keeps the invoice open, which produces an aged receivables report nobody trusts. Demonstrate the wrong way first: post an unallocated payment, show the invoice still unpaid, then cancel it and do it properly.",
+			"paths": ["Accounts → Payment Entry → New", "Accounts → Payment Reconciliation"]
 		},
 		{
-			"kicker": "Volume 3 · Reference",
-			"title": "What each purchase document touches",
+			"kicker": "Lesson 5 · Expected outcome",
+			"title": "Three ledgers that agree at the end",
 			"bullets": [
-				"Each document has exactly one job, and skipping one leaves a permanent trace",
-				"Order and bill are commitments, while receipt is the only one that moves stock",
-				"The interim account is a bridge, not a place to park corrections",
-				"Print the chain once per client so their accountant sees the logic before go-live"
+				"The sales invoice is Paid and shows zero outstanding in the payment ledger",
+				"Debtors closes at zero for this customer, so aged receivables lists nothing",
+				"Bank increases by 1,320.00 with the payment as its reference",
+				"Gross profit remains 600.00, because receiving cash does not change profit",
+				"The full cycle left four documents linked by a continuous chain of conversions"
 			],
 			"table": {
-				"headers": ["Document", "Ledger effect", "Stock effect", "What breaks if you skip it"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					[
-						"Purchase Order",
-						"None",
-						"None, only ordered quantity",
-						"No control over rate or delivery date"
-					],
-					[
-						"Purchase Receipt",
-						"Dr Stock, Cr Stock Received But Not Billed",
-						"+10 at 120.00",
-						"Stock and valuation understated"
-					],
-					[
-						"Purchase Invoice",
-						"Dr Stock Received, Dr SST, Cr Creditors",
-						"None",
-						"Creditor missing, input tax lost"
-					],
-					["Payment Entry", "Dr Creditors, Cr Bank", "None", "Invoice stays open, ageing wrong"],
-					[
-						"Debit Note",
-						"Cr Creditors, Cr Stock or expense",
-						"Return removes units",
-						"Supplier balance overstated"
-					]
+					["Invoice status", "Paid", "Sales Invoice"],
+					["Payment ledger", "0.00 outstanding", "Payment Ledger report"],
+					["Debtors", "0.00", "General Ledger, Debtors - SM"],
+					["Bank", "1,320.00", "General Ledger, Bank - SM"],
+					["Gross profit", "600.00", "Gross Profit report"]
 				]
 			},
-			"notes": "This table is the one-page answer to the question every client accountant asks in week one. Print it, put it next to the purchase desk, and mark the receipt line, because that is the document operations forget. When a client claims the stock value is wrong, walk this chain in order and the error is always in one of the four rows."
+			"notes": "End the volume by running three reports in sequence: general ledger for the customer, payment ledger, and gross profit. If all three agree, the learner has understood the transaction chain rather than memorised screens. This is also the moment to introduce the idea that a reconciled month is built from many such small agreements.",
+			"callout": {
+				"tone": "tip",
+				"title": "Allocate, always",
+				"text": "Every receipt must reference an invoice. An unallocated payment is cash in the bank and a receivable still open, which is a reconciliation problem you create yourself."
+			}
 		}
 	],
 	"lab": {
-		"title": "Lab · Buy, receive, bill and pay ten blenders",
-		"minutes": 45,
+		"title": "Lab · Run the full quote-to-cash cycle with exact numbers",
+		"minutes": 70,
 		"steps": [
-			"Create supplier Sunrise Components with Net 30 terms and the SST purchase category",
-			"Raise purchase order for 10 SM-BL200 at 120.00 with SST 10 % and confirm the 1,320.00 total",
-			"Compute the expected tax before submitting, then compare with the screen",
-			"Create the purchase receipt into Main warehouse and confirm bin quantity 10",
-			"Read the stock ledger row and confirm value 1,200.00 at 120.00 per unit",
-			"Create the purchase invoice, set the supplier reference and due date 15-02-2026",
-			"Attempt to bill 11 units on a copy and record the exact error message",
-			"Pay the invoice in full from the bank and confirm the invoice status is Paid"
+			"Raise a quotation for Aeon Big: 5 × SM-BL200 at 240.00, SST 10 %, valid until 31-12-2026",
+			"Confirm the quotation shows 1,200.00 net, 120.00 tax, 1,320.00 total and no ledger entries",
+			"Convert to a Sales Order with delivery date 15-11-2026 and warehouse Main Warehouse",
+			"Confirm the order is To Deliver and Bill and that projected quantity is −5",
+			"Convert to a Delivery Note and confirm stock −5, COGS 600.00 and the order at 100 % delivered",
+			"Convert to a Sales Invoice posted 15-11-2026 and verify Dr Debtors 1,320.00, Cr Sales 1,200.00, Cr SST 120.00",
+			"Print the invoice and check the customer address, tax line and total appear correctly",
+			"Post a Payment Entry of 1,320.00 from Bank - SM allocated to the invoice",
+			"Run the aged receivables, payment ledger and gross profit reports and record all three results"
 		],
-		"done": "Done when the creditor balance for Sunrise Components is zero, the bin at Main shows 10 units worth 1,200.00, and the stock ledger holds exactly one receipt row for this order."
+		"done": "The invoice is Paid, the customer's receivable is zero, gross profit is 600.00, and you can name the ledger each of the four documents wrote to."
 	},
 	"quiz": [
 		{
-			"question": "Which document moves stock in the purchase cycle?",
-			"options": ["Purchase Order", "Purchase Receipt", "Purchase Invoice", "Payment Entry"],
-			"answer": 1,
-			"why": "Only the purchase receipt creates stock ledger entries. The order is a commitment, the invoice creates the creditor, and the payment settles it."
+			"question": "Which document first writes to the stock ledger in a normal sale?",
+			"options": ["Quotation", "Sales Order", "Delivery Note", "Sales Invoice"],
+			"answer": 2,
+			"why": "Only the delivery note moves stock and posts cost of goods sold. Quotations and orders are commitments; the invoice posts revenue and the receivable."
 		},
 		{
-			"question": "What does a purchase receipt post to the credit side?",
-			"options": ["Creditors", "Stock Received But Not Billed", "Cost of Goods Sold", "SST Input"],
+			"question": "A sale of 1,200.00 net with 10 % SST and a 120.00 unit cost for 5 units produces what gross profit?",
+			"options": ["1,200.00", "600.00", "720.00", "1,320.00"],
 			"answer": 1,
-			"why": "Receipts credit Stock Received But Not Billed, an interim liability that clears when the purchase invoice is submitted. Creditors appear only at invoice stage."
+			"why": "Revenue 1,200.00 less cost of goods 5 × 120.00 = 600.00 gives gross profit 600.00. Tax is a liability, not revenue."
 		},
 		{
-			"question": "A purchase invoice for 11 units against a receipt of 10 will do what?",
+			"question": "What does the payment ledger show immediately after submitting the sales invoice?",
+			"options": ["0.00", "1,200.00", "1,320.00", "120.00"],
+			"answer": 2,
+			"why": "The customer owes the tax-inclusive total, so the payment ledger shows 1,320.00 outstanding until an allocated payment clears it."
+		},
+		{
+			"question": "A receipt was posted without allocating it to an invoice. What is the symptom?",
 			"options": [
-				"Submit with a warning",
-				"Refuse with an over-billing error",
-				"Create a debit note",
-				"Reduce stock by one unit"
+				"The bank balance is wrong",
+				"The invoice remains unpaid and shows in aged receivables",
+				"The tax is recalculated",
+				"Stock goes negative"
 			],
 			"answer": 1,
-			"why": "ERPNext blocks billing more than received by default, which is the control auditors test. It is configured in Buying Settings as allow over-billing."
+			"why": "Cash reached the bank but the receivable was never cleared, so the ageing report shows an invoice that the customer has already paid."
 		},
 		{
-			"question": "An invoice stays open after a payment was submitted. What is the likely cause?",
+			"question": "Why convert documents instead of creating each one fresh?",
 			"options": [
-				"Wrong tax template",
-				"The payment was not allocated to the invoice",
-				"The invoice was cancelled",
-				"Stock was negative"
+				"It is faster to type",
+				"It carries quantities, rates and references forward so the chain cannot drift",
+				"It is required by ERPNext",
+				"Conversion applies a discount"
 			],
 			"answer": 1,
-			"why": "A payment reduces the creditor only when it is allocated against the invoice. Unallocated payments leave invoices open and ageing reports wrong."
-		},
-		{
-			"question": "Where do you confirm the valuation per unit after a receipt?",
-			"options": [
-				"Purchase Order totals",
-				"Stock Ledger row or Stock Balance report",
-				"Creditors ageing",
-				"Profit and Loss"
-			],
-			"answer": 1,
-			"why": "The stock ledger row carries quantity, rate and value. Landed cost vouchers later adjust that value, which is why it belongs with valuation, not with purchasing."
+			"why": "Conversion preserves the link and the values, which is what lets ERPNext track delivered and billed percentages and keeps invoice quantities equal to dispatched quantities."
 		}
 	],
 	"memory": {
-		"spine": "Buying is selling backwards, document for document, with one asymmetry that decides whether the interim stock account ever clears.",
+		"spine": "Four documents chase each other from offer to cash, and only the last two of them touch the ledger and the stock.",
 		"device": {
-			"kind": "rule",
-			"label": "Buying is selling backwards",
+			"kind": "story",
+			"label": "Four chases",
 			"expansion": [
-				"Purchase order mirrors the sales order: the commitment",
-				"Purchase receipt mirrors the delivery note: the goods move, profit does not",
-				"Purchase invoice mirrors the sales invoice: the creditor appears and interim stock clears",
-				"Payment entry mirrors payment entry: cash out, allocated",
-				"The asymmetry: the receipt may be skipped on paper, but then interim stock never clears"
+				"Quote chases Order: the offer becomes a commitment with dates and warehouses",
+				"Order chases Delivery: the physical event that moves stock and posts cost of goods sold",
+				"Delivery chases Invoice: revenue, receivable and tax in one posting",
+				"Invoice chases Payment: cash in, allocated, outstanding at zero",
+				"Quote and order are promises, delivery and invoice are facts"
 			]
 		},
 		"cards": [
 			{
-				"q": "Which purchase document moves stock?",
-				"a": "The Purchase Receipt. It debits stock and credits an interim stock account, so no profit appears yet.",
-				"hint": "Balance sheet only"
+				"q": "What does submitting a quotation change?",
+				"a": "Nothing in the ledger and nothing in stock. It is an offer with a validity date.",
+				"hint": "A promise writes nothing"
 			},
 			{
-				"q": "What does the three way match compare?",
-				"a": "Quantity, rate and total across order, receipt and bill, and a mismatch is what blocks or flags the bill.",
-				"hint": "Order, goods, bill"
+				"q": "Which document posts cost of goods sold?",
+				"a": "The Delivery Note, using the valuation the stock ledger already holds, not the invoice.",
+				"hint": "The physical event"
 			},
 			{
-				"q": "What goes wrong when you bill without receiving?",
-				"a": "The interim stock account never clears and no stock arrives, yet the liability exists for goods you do not hold.",
-				"hint": "The optional step is not free"
+				"q": "Five units leave Main Warehouse at 120.00. What is cost of goods sold?",
+				"a": "600.00, and Stock Balance then shows zero with no negative quantity anywhere.",
+				"hint": "Quantity times valuation rate"
 			},
 			{
-				"q": "Which three numbers are read before a purchase order is submitted?",
-				"a": "Net total, tax and grand total, each equal to the sum of the lines.",
-				"hint": "Read, then submit"
+				"q": "Why convert the invoice from the delivery note?",
+				"a": "So billed quantity equals dispatched quantity and the order does not stay open as to bill.",
+				"hint": "Match paper to goods"
 			},
 			{
-				"q": "What makes a supplier payment settle the bill?",
-				"a": "Allocation against the purchase invoice. The payment entry alone only moves cash.",
-				"hint": "Same rule as sales"
+				"q": "What makes a payment entry clear an invoice?",
+				"a": "Allocation. Cash without allocation leaves the invoice open and the customer looking like a debtor.",
+				"hint": "Allocate or it did not happen"
 			}
 		],
 		"trap": {
-			"what": "The purchase invoice is entered at a rate that differs from the order and the receipt.",
-			"why": "The mismatch surfaces late, after stock has been valued at the receipt rate, and the difference becomes a price variance nobody owns."
+			"what": "The invoice is raised before the goods leave and the delivery note is then forgotten.",
+			"why": "Revenue and receivable rise while stock and cost of goods sold never move, so the margin looks perfect and the warehouse is wrong."
 		}
 	},
-	"narration": "Buying is the mirror image of selling, and it is where most consultants lose credibility, because the client's accountant knows this cycle cold. Start with the purchase order: ten blenders at one hundred twenty, plus ten per cent tax, is one thousand three hundred twenty, and the order moves no stock. The receipt is the document that matters, adding ten units at one hundred twenty and crediting stock received but not billed, an interim account that looks strange and is not an error. The bill clears that account, brings in one hundred twenty of input tax, and creates a creditor of one thousand three hundred twenty with a due date. Then the payment, allocated to the invoice, closes it. Three documents, one quantity, one rate, one total. Teach the learner to predict the tax before looking, and to read the three documents side by side, because that habit is what survives an audit. When a client says the system is wrong, walk this chain in order and the answer appears in one of the four rows."
+	"narration": "Volume two is the transaction chain, and this is the heart of consultant training: five documents, three ledgers, and numbers you predict before you press submit. A quotation writes nothing but an offer. It carries the customer's price list, terms and tax, and when it is submitted the general ledger stays empty and stock does not move. A sales order is a commitment. It still posts nothing, but projected quantity falls by five, delivery dates and warehouses are set per line, and the order becomes the source for delivery and billing. The delivery note is where stock finally moves. Five units leave the main warehouse at a valuation of one hundred twenty each, so cost of goods sold is six hundred, and the order says fully delivered. Still no receivable. The sales invoice posts three things at once: debtors one thousand three hundred twenty, revenue one thousand two hundred, and SST payable one hundred twenty. Gross profit becomes six hundred, a fifty percent margin. Then the payment entry. Receive one thousand three hundred twenty into the bank, allocate it to the invoice, and the invoice turns paid and the payment ledger returns to zero. An unallocated receipt is the most common cause of a wrong aged receivables report, so always allocate. In the lab you run the whole cycle and then prove it with three reports: general ledger, payment ledger and gross profit."
 }

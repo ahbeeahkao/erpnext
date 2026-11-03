@@ -1,0 +1,350 @@
+{
+	"id": "ch26",
+	"number": 26,
+	"title": "Volume 10 · UAT, Cut-Over and Go-Live",
+	"subtitle": "Lessons 5–8: a UAT script the client signs, a cut-over weekend with a checklist, hypercare that measures itself, and a handover that outlives the consultant",
+	"level": "Capstone",
+	"minutes": 55,
+	"outcomes": [
+		"Write and run a UAT script whose pass criteria are numbers, not opinions",
+		"Plan a cut-over with a dependency order and a rollback position",
+		"Run go-live week with a daily hypercare rhythm",
+		"Hand over documentation, ownership and a support cadence"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 5 · UAT",
+			"title": "Write a UAT script the client will sign",
+			"bullets": [
+				"Every test case states the action, the expected number and the evidence",
+				"Test by role, because a salesperson and an accountant see different screens",
+				"Include the nasty cases: partial delivery, credit limit, return and discounted order",
+				"Sign-off per module, with a named business owner, not one signature for everything"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Write the script",
+						"Case 1: quote to invoice for 5 blenders",
+						"Steps with expected figures"
+					],
+					[
+						"2",
+						"Add the awkward cases",
+						"Partial delivery, discount, return, credit limit",
+						"Four extra cases"
+					],
+					[
+						"3",
+						"Assign testers",
+						"Sales executive, accountant, warehouse supervisor",
+						"One owner per case"
+					],
+					["4", "Run in a test company", "Real data, not the demo data", "Results recorded"],
+					["5", "Log defects", "Screen, expected, actual, severity", "Defect list with owners"],
+					["6", "Sign off", "Module signed by the business owner", "Signed UAT sheet"]
+				]
+			},
+			"notes": "A UAT case without a number is an opinion, and opinions do not survive a steering committee. Case one in our sample is five blenders at two hundred forty plus ten per cent tax, total one thousand three hundred twenty, cost six hundred, gross profit six hundred. When the tester sees those four figures, the case passes; when they do not, the defect is specific enough to fix."
+		},
+		{
+			"kicker": "Lesson 6 · Verify UAT",
+			"title": "Pass criteria that a steering committee accepts",
+			"bullets": [
+				"Every case passes on expected figures, not on the absence of an error message",
+				"Severity one and two defects must be closed, with three and four scheduled",
+				"Each module signs separately so one weak area does not block the rest",
+				"The signed sheet is the client's acceptance of the system, and your protection"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Cases executed", "all planned cases", "UAT tracker"],
+					["Passed on figures", "every case with numbers matching", "UAT evidence column"],
+					["Open severity one defects", "0", "Defect log"],
+					["Modules signed", "sales, purchase, stock, accounts", "Signature sheet"],
+					["Retest evidence", "defect fix confirmed by the tester", "Tracker with dates"]
+				]
+			},
+			"notes": "The figure that matters at the steering committee is zero open severity one defects, not ninety per cent of cases passed. Be explicit about what is deferred, with a date and an owner, because deferred items without owners become the first month's support tickets. A signed sheet with a short deferral list is a better outcome than a verbal yes."
+		},
+		{
+			"kicker": "Lesson 7 · Cut-over",
+			"title": "Plan the weekend in dependency order",
+			"bullets": [
+				"Cut-over is a sequence, and each step unblocks the next one",
+				"Freeze the old system before extracting balances, or the numbers will move",
+				"Have a rollback position: the old system stays readable for one month",
+				"One person owns the clock and one person owns the checklist, never the same person"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Freeze trading", "Old system locked at 18:00 Friday", "Signed freeze note"],
+					["2", "Extract balances", "Trial balance, ageing, stock count", "Three source documents"],
+					[
+						"3",
+						"Load opening",
+						"Journal plus stock reconciliation",
+						"Opening trial balance balanced"
+					],
+					["4", "Verify", "Five opening checks", "96,290.00 both sides"],
+					["5", "Smoke test", "One sale, one purchase, one payment", "Documents post correctly"],
+					["6", "Communicate", "Go-live notice to all users", "Users know where to log in"]
+				]
+			},
+			"notes": "The cut-over plan fits on one page and that is the test of it. If a step has no owner or no evidence, it will be skipped at two in the morning. Keep the old system readable for a month and say so in writing, because that rollback position is what allows the client to say yes on Friday rather than postpone a week."
+		},
+		{
+			"kicker": "Lesson 8 · Go-live",
+			"title": "Hypercare with numbers, then hand over",
+			"bullets": [
+				"Hypercare is a fortnight of daily rhythm: tickets, blockers, and a single decision channel",
+				"Measure the same five things daily so the trend is visible, not the anecdote",
+				"Hand over documentation, owners and a support cadence, or you become the support desk",
+				"The exit criterion is agreed before go-live, not negotiated at the end"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open the hypercare log", "Tickets with severity and owner", "Daily list"],
+					["2", "Run the daily stand-up", "15 minutes, blockers first", "Decisions recorded"],
+					[
+						"3",
+						"Track five metrics",
+						"invoices, stock errors, ticket count, close progress, user logins",
+						"Daily dashboard"
+					],
+					["4", "Close the fortnight", "Open severity one at zero", "Exit review"],
+					[
+						"5",
+						"Hand over documents",
+						"Runbook, config worksheet, UAT sheet, access review",
+						"Signed handover"
+					],
+					["6", "Agree the cadence", "Monthly review for three months", "Calendar invites sent"]
+				]
+			},
+			"notes": "Five metrics, fifteen minutes, every morning for a fortnight: that is hypercare, and it ends on a date the client agreed before go-live. The handover pack is the same documentation produced during the project, which is why it must be written as you go rather than reconstructed. A consultant who leaves a runbook and a calendar invite is the one who gets the phase two call."
+		},
+		{
+			"kicker": "Lesson 7 · Verify cut-over",
+			"title": "Evidence for each cut-over step",
+			"bullets": [
+				"Every step leaves a document, and the documents are what the auditor reads",
+				"The freeze note, the count sheet and the opening trial balance are the core three",
+				"A smoke test that posts correctly is the last gate before users are let in",
+				"Rollback stays available for a month, and saying so reduces go-live anxiety"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Freeze note", "signed at 18:00 Friday", "Project file"],
+					["Opening trial balance", "96,290.00 both sides", "Accounts at the opening date"],
+					["Stock count", "47 units at 120.00", "Signed count sheet"],
+					["Smoke test documents", "one sale, one purchase, one payment posted", "Document list"],
+					["Rollback position", "old system readable for 30 days", "Written support note"]
+				]
+			},
+			"notes": "Cut-over is judged on documents rather than on a feeling that it went well. Lay the five items on the table at the Sunday evening review, and either they exist or they do not. If the smoke test posted incorrectly, that is the moment to use the rollback position, not Monday morning when users are already entering data."
+		},
+		{
+			"kicker": "Lesson 8 · Verify hypercare",
+			"title": "The numbers that end the fortnight",
+			"bullets": [
+				"Ticket count, invoice count, stock errors, close progress and logins are the five daily measures",
+				"A falling ticket count with a rising invoice count means the client is taking over",
+				"Open severity one at zero for three consecutive days is the usual exit signal",
+				"The exit review is a meeting, not an opinion, and it produces a signed note"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Open severity one tickets", "0 for three consecutive days", "Hypercare log"],
+					["Invoices posted daily", "rising towards normal volume", "Sales invoice register"],
+					["Stock errors", "trending to zero", "Stock reconciliation list"],
+					["Users logging in", "all trained users active", "User login report"],
+					["Exit note", "signed with an agreed support cadence", "Project file"]
+				]
+			},
+			"notes": "Five numbers on one line each day, and the trend does the talking. When tickets fall while invoices rise, the client has absorbed the system, and the exit meeting is a formality rather than a risk. If stock errors are flat rather than falling, the warehouse process is still wrong, and staying another week is cheaper than a year of corrections."
+		},
+		{
+			"kicker": "Volume 10 · Reference",
+			"title": "Go or no-go, decided on evidence",
+			"bullets": [
+				"Each criterion has a number, so the meeting is short and the decision is defensible",
+				"Any single red row is a no-go unless the client formally accepts the risk",
+				"The acceptance must be written, dated and signed by the project sponsor",
+				"A delayed go-live is cheaper than an uncontrolled one, in cost and in reputation"
+			],
+			"table": {
+				"headers": ["Criterion", "Green means", "Evidence", "Owner"],
+				"rows": [
+					[
+						"Opening balances",
+						"trial balance balances to 0.00",
+						"Signed opening pack",
+						"Finance manager"
+					],
+					["UAT", "zero open severity one defects", "Signed UAT sheet", "Business owners"],
+					["Access", "roles tested, two administrators named", "Access review sheet", "Admin"],
+					["Training", "every user attended or was covered", "Attendance list", "Department heads"],
+					[
+						"Support",
+						"hypercare dates and channel agreed",
+						"Signed support note",
+						"Project sponsor"
+					]
+				]
+			},
+			"notes": "Put this table on the screen in the go/no-go meeting and work down it row by row; the decision takes fifteen minutes and nobody can claim afterwards that they were not consulted. Green everywhere is a go. One red row is a conversation about risk, documented in the minutes with a name against it."
+		},
+		{
+			"kicker": "Volume 10 · Reference",
+			"title": "The handover pack that ends the engagement",
+			"bullets": [
+				"The pack is the project's memory, and it must be usable without the consultant",
+				"Configuration worksheet, opening balances, UAT results and runbook are the core four",
+				"Named owners for each cadence, or the pack becomes shelfware",
+				"A short training session on the pack itself is what makes it live"
+			],
+			"table": {
+				"headers": ["Document", "Purpose", "Owner after handover", "Review cadence"],
+				"rows": [
+					["Configuration worksheet", "What was set and why", "Finance manager", "Half-yearly"],
+					[
+						"Opening balance pack",
+						"Evidence for the audit trail",
+						"Finance manager",
+						"At each audit"
+					],
+					[
+						"UAT results",
+						"Proof the business accepted the system",
+						"Project sponsor",
+						"On major change"
+					],
+					["Runbook", "Daily, weekly and monthly routines", "Operations manager", "Quarterly"],
+					["Access review sheet", "Who can do what", "Admin", "Quarterly"]
+				]
+			},
+			"notes": "A consultant's reputation is built in the last two weeks, and it is built on how little the client needs to call afterwards. Hand over five documents, name five owners, put five meetings in the calendar, and then step back. The work is finished when the client runs the rhythm without you, not when the invoices are issued."
+		}
+	],
+	"lab": {
+		"title": "Lab · Run UAT, cut over and open the hypercare log",
+		"minutes": 45,
+		"steps": [
+			"Write five UAT cases with exact expected figures for sales, purchase, stock and accounts",
+			"Assign each case to a named business owner and record the tester",
+			"Execute the cases in a test company and log any defect with severity",
+			"Confirm zero open severity one defects before sign-off",
+			"Produce the one-page cut-over plan with owners and evidence",
+			"Freeze, extract, load and prove the opening trial balance",
+			"Smoke test one sale, one purchase and one payment after go-live",
+			"Open the hypercare log and record the five daily metrics"
+		],
+		"done": "Done when all five UAT cases pass on their figures with a signature, the opening balances balance, the smoke tests post correctly, and the hypercare log has an owner and an exit date."
+	},
+	"quiz": [
+		{
+			"question": "What makes a UAT case pass?",
+			"options": [
+				"No error message appeared",
+				"The expected figures match exactly",
+				"The tester liked it",
+				"It ran quickly"
+			],
+			"answer": 1,
+			"why": "A case passes on numbers: 1,320.00 total, 600.00 cost, 600.00 gross profit. The absence of an error message proves nothing."
+		},
+		{
+			"question": "Which defect state blocks go-live?",
+			"options": ["Any open defect", "Open severity one defects", "Closed defects", "Cosmetic defects"],
+			"answer": 1,
+			"why": "Severity one blocks go-live; lower severities can be scheduled with an owner and a date, recorded at sign-off."
+		},
+		{
+			"question": "Why keep the old system readable after cut-over?",
+			"options": [
+				"To save money",
+				"As a rollback position and reference for the first month",
+				"To avoid training",
+				"To reuse licences"
+			],
+			"answer": 1,
+			"why": "A readable old system gives the client a rollback position and a reference while the new balances settle."
+		},
+		{
+			"question": "What is the exit criterion for hypercare?",
+			"options": [
+				"Thirty days elapsed",
+				"Open severity one at zero, agreed before go-live",
+				"The consultant is tired",
+				"The invoice is paid"
+			],
+			"answer": 1,
+			"why": "The exit is measured against a criterion agreed before go-live, so it is a decision rather than a negotiation at the end."
+		},
+		{
+			"question": "Which document proves the business accepted the system?",
+			"options": [
+				"The configuration worksheet",
+				"The signed UAT sheet",
+				"The runbook",
+				"The access review"
+			],
+			"answer": 1,
+			"why": "The signed UAT sheet is the formal acceptance, supported by defect closure and retest evidence."
+		}
+	],
+	"memory": {
+		"spine": "A script the client signs, a weekend in dependency order, a fortnight measured in numbers, and a pack that outlives the consultant.",
+		"device": {
+			"kind": "phrase",
+			"label": "Script, sequence, numbers, hand over",
+			"expansion": [
+				"A test case states the action, the expected number and the evidence, and the client signs it",
+				"Pass means the expected figure appears, not that no error message was shown",
+				"Cut over in dependency order, because each step unblocks the next one",
+				"Hypercare is a fortnight of daily numbers: tickets, invoices, stock errors, close progress and logins",
+				"The handover pack must be usable without the consultant in the room"
+			]
+		},
+		"cards": [
+			{
+				"q": "What makes a UAT case pass?",
+				"a": "The expected figure appears on screen, not merely that the screen did not produce an error.",
+				"hint": "Figures, not silence"
+			},
+			{
+				"q": "Why is cut over ordered rather than parallel?",
+				"a": "Each step produces the input for the next, so reordering it creates work that must be redone.",
+				"hint": "Dependency, not convenience"
+			},
+			{
+				"q": "Which five numbers are measured daily in hypercare?",
+				"a": "Tickets raised, invoices posted, stock errors, close progress and logins.",
+				"hint": "Five numbers a day"
+			},
+			{
+				"q": "What ends hypercare?",
+				"a": "A go or no go decision on evidence where every criterion carries a number and someone signs it.",
+				"hint": "Decision on evidence"
+			},
+			{
+				"q": "What goes into the handover pack?",
+				"a": "Configuration record, mapping workbook, UAT sign off, cut over log, open items and how to run the close.",
+				"hint": "The project's memory"
+			}
+		],
+		"trap": {
+			"what": "UAT is signed off because no errors were raised during the session.",
+			"why": "Nobody compared figures, so the first month end discovers the wrong tax template and the sign off protects the vendor, not the client."
+		}
+	},
+	"narration": "The last two weeks decide how the project is remembered. UAT is not a demo: every case states an action and an expected number, five blenders at two hundred forty plus tax is one thousand three hundred twenty, cost six hundred, gross profit six hundred, and the case passes only when those figures appear. Go or no-go is decided on five rows of evidence, with a written acceptance for anything red. Cut-over is a one-page sequence with owners, and the old system stays readable as a rollback position. Then hypercare: five metrics, fifteen minutes, every morning, ending on the date agreed before go-live. Hand over the runbook, the worksheet, the opening pack and the access review, and step back. The measure of a finished engagement is not the invoice, it is a client running their own close, their own UAT for the next change, and their own access review without calling you, because the rhythm lives in their calendar rather than in your notes."
+}

@@ -42,50 +42,53 @@ questions with explanations.
 
 ## The eleven volumes
 
-| Volume                                    | Chapters   | Lessons   | Time    |
-| ----------------------------------------- | ---------- | --------- | ------- |
-| **Primers · Concepts**                    | ch01, ch02 | 2 primers | 200 min |
-| **0 · Foundations**                       | ch03, ch04 | 10        | 270 min |
-| **1 · Masters and Pricing**               | ch05, ch06 | 8         | 250 min |
-| **2 · Quote to Cash**                     | ch07, ch08 | 10        | 310 min |
-| **3 · Procure to Pay**                    | ch09, ch10 | 8         | 200 min |
-| **4 · Stock Accuracy and Valuation**      | ch11, ch12 | 8         | 200 min |
-| **5 · Accounting and the Close**          | ch13, ch14 | 8         | 200 min |
-| **6 · Manufacturing**                     | ch15, ch16 | 8         | 200 min |
-| **7 · Projects, Assets, Quality and CRM** | ch17, ch18 | 8         | 200 min |
-| **8 · Automation, Print and Permissions** | ch19, ch20 | 8         | 200 min |
-| **9 · Malaysia Compliance**               | ch21, ch22 | 8         | 200 min |
-| **10 · Migration, UAT and Go-Live**       | ch23, ch24 | 8         | 200 min |
+| Volume                                    | Chapters               | Lessons   | Time    |
+| ----------------------------------------- | ---------------------- | --------- | ------- |
+| **Primers · Concepts**                    | ch01, ch02             | 2 primers | 200 min |
+| **0 · Foundations**                       | ch03, ch04, ch05, ch06 | 10        | 520 min |
+| **1 · Masters and Pricing**               | ch07, ch08             | 8         | 250 min |
+| **2 · Quote to Cash**                     | ch09, ch10             | 10        | 310 min |
+| **3 · Procure to Pay**                    | ch11, ch12             | 8         | 200 min |
+| **4 · Stock Accuracy and Valuation**      | ch13, ch14             | 8         | 200 min |
+| **5 · Accounting and the Close**          | ch15, ch16             | 8         | 200 min |
+| **6 · Manufacturing**                     | ch17, ch18             | 8         | 200 min |
+| **7 · Projects, Assets, Quality and CRM** | ch19, ch20             | 8         | 200 min |
+| **8 · Automation, Print and Permissions** | ch21, ch22             | 8         | 200 min |
+| **9 · Malaysia Compliance**               | ch23, ch24             | 8         | 200 min |
+| **10 · Migration, UAT and Go-Live**       | ch25, ch26, ch27       | 10        | 335 min |
 
 ### Chapters
 
 1. **Primer · Accounting Concepts in ERPNext** — double entry, account types, accrual, the three ledgers, control accounts, tracing a sale to the trial balance, when to use a journal, period close, and five questions before you trust a report.
 2. **Primer · Distribution Concepts in ERPNext** — the three flows, channels and price lists, the margin stack, reorder points and safety stock, the fulfilment sequence, exceptions, reverse logistics, KPIs, and what a distribution configuration must settle.
-3. **Volume 0 · Standing Up the Company** — Lessons 1–5: the company record, chart of accounts, company defaults, cost centres, Malaysian SST templates.
-4. **Volume 0 · Making the System Usable** — Lessons 6–10: units and conversions, warehouses, users and roles, permissions and naming series, stock and selling settings, the handover check.
-5. **Volume 1 · The Item Master** — Lessons 1–4: item groups, a complete stock item, serial and batch tracking, prices and reorder rules.
-6. **Volume 1 · Parties and Pricing** — Lessons 5–8: customers, addresses and contacts, suppliers, price lists and pricing rules.
-7. **Volume 2 · Quote to Cash, Step by Step** — Lessons 1–5: quotation → sales order → delivery note → sales invoice → payment, with the four numbers that must be exact.
-8. **Volume 2 · When Reality Intervenes** — Lessons 6–10: partial delivery, discounts, returns and credit notes, credit limits, closing the sales month.
-9. **Volume 3 · Buying, Step by Step** — the purchase order, receipt, three-way match, and the payment that closes the creditor, with the interim stock account explained.
-10. **Volume 3 · Supplier Reality: Returns, Advances and Landed Cost** — debit notes, advance payments, landed cost allocation that turns 120.00 into 126.00, and supplier ageing read properly.
-11. **Volume 4 · Warehouses, Transfers and Stock Counts** — the warehouse tree, material transfers that leave total value untouched, stock reconciliation, and reorder rules from arithmetic rather than feel.
-12. **Volume 4 · FIFO, Landed Cost and Valuation Reports** — FIFO layers producing 1,460.00 of cost of goods sold, repost item valuation, negative stock policy, and the three stock reports reconciled.
-13. **Volume 5 · Journals, Accruals and the Bank** — accruals that reverse, prepayments released monthly, a bank reconciliation to zero, and corrections that keep the audit trail.
-14. **Volume 5 · Month-End and Year-End Close** — five pre-close checks, the closing voucher transferring 4,680.00 of net profit, the five-page pack, and the year-end freeze.
-15. **Volume 6 · Bills of Materials and Work Orders** — a 230.00 bill of materials, work orders that reserve, material issues to the floor, and a completion that values at 230.00 per unit.
-16. **Volume 6 · Production Costing, Scrap and Subcontracting** — cost per good unit after scrap (255.56), subcontracting that returns the subcontractor warehouse to zero, and variance explained with evidence.
-17. **Volume 7 · Projects, Timesheets and Billable Work** — a project carrying 3,000.00 of revenue, 1,600.00 of cost and 1,400.00 of margin, with service tax treated separately.
-18. **Volume 7 · Assets, Quality and CRM** — a 60,000.00 van depreciating 1,000.00 a month, inspection that rejects before stock, and a 60 per cent opportunity worth 1,440.00 weighted.
-19. **Volume 8 · Print Formats, Naming and Notifications** — a branded invoice from the builder, gapless series that survive an audit, and one notification per exception.
-20. **Volume 8 · Permissions, Workflows and Automation** — roles without delete, a warehouse restriction proved by two logins, a discount workflow with an escape path, and auto repeat reviewed on its first cycle.
-21. **Volume 9 · Malaysian Tax and Statutory Setup** — SST templates with separate accounts, item tax categories, exemptions with certificates, and an SST-02 that ties to the ledger.
-22. **Volume 9 · e-Invoice (MyInvois) End to End** — master data that passes validation, accepted versus validated, the 72-hour cancellation window and its named errors, consolidation and self-billing.
-23. **Volume 10 · Migration: Mapping, Opening Balances and Import** — a signed mapping workbook, imports in dependency order, and an opening trial balance of 96,290.00 on both sides.
-24. **Volume 10 · UAT, Cut-Over and Go-Live** — a UAT script that passes on figures, a one-page cut-over, hypercare measured daily, and a handover pack with five owners.
+3. **Volume 0 · How ERPNext Thinks: The Document Lifecycle** — Lessons 1–10: draft, submitted and cancelled, the four records a submit writes, cancel as reversal rather than deletion, amend and `amended_from`, fields that only change on submit, Active Referencing Documents, the Version log, and why reports read submitted rows only.
+4. **Volume 0 · Driving the Desk Like an Operator** — Lessons 1–10: the awesome bar, list-view filters, saved filters and per-role defaults, columns and bulk actions, export, Report Builder versus Query Report, operator habits, and a fifteen-minute induction you can deliver to a new user.
+5. **Volume 0 · Standing Up the Company** — Lessons 1–5: the company record, chart of accounts, company defaults, cost centres, Malaysian SST templates.
+6. **Volume 0 · Making the System Usable** — Lessons 6–10: units and conversions, warehouses, users and roles, permissions and naming series, stock and selling settings, the handover check.
+7. **Volume 1 · The Item Master** — Lessons 1–4: item groups, a complete stock item, serial and batch tracking, prices and reorder rules.
+8. **Volume 1 · Parties and Pricing** — Lessons 5–8: customers, addresses and contacts, suppliers, price lists and pricing rules.
+9. **Volume 2 · Quote to Cash, Step by Step** — Lessons 1–5: quotation → sales order → delivery note → sales invoice → payment, with the four numbers that must be exact.
+10. **Volume 2 · When Reality Intervenes** — Lessons 6–10: partial delivery, discounts, returns and credit notes, credit limits, closing the sales month.
+11. **Volume 3 · Buying, Step by Step** — the purchase order, receipt, three-way match, and the payment that closes the creditor, with the interim stock account explained.
+12. **Volume 3 · Supplier Reality: Returns, Advances and Landed Cost** — debit notes, advance payments, landed cost allocation that turns 120.00 into 126.00, and supplier ageing read properly.
+13. **Volume 4 · Warehouses, Transfers and Stock Counts** — the warehouse tree, material transfers that leave total value untouched, stock reconciliation, and reorder rules from arithmetic rather than feel.
+14. **Volume 4 · FIFO, Landed Cost and Valuation Reports** — FIFO layers producing 1,460.00 of cost of goods sold, repost item valuation, negative stock policy, and the three stock reports reconciled.
+15. **Volume 5 · Journals, Accruals and the Bank** — accruals that reverse, prepayments released monthly, a bank reconciliation to zero, and corrections that keep the audit trail.
+16. **Volume 5 · Month-End and Year-End Close** — five pre-close checks, the closing voucher transferring 4,680.00 of net profit, the five-page pack, and the year-end freeze.
+17. **Volume 6 · Bills of Materials and Work Orders** — a 230.00 bill of materials, work orders that reserve, material issues to the floor, and a completion that values at 230.00 per unit.
+18. **Volume 6 · Production Costing, Scrap and Subcontracting** — cost per good unit after scrap (255.56), subcontracting that returns the subcontractor warehouse to zero, and variance explained with evidence.
+19. **Volume 7 · Projects, Timesheets and Billable Work** — a project carrying 3,000.00 of revenue, 1,600.00 of cost and 1,400.00 of margin, with service tax treated separately.
+20. **Volume 7 · Assets, Quality and CRM** — a 60,000.00 van depreciating 1,000.00 a month, inspection that rejects before stock, and a 60 per cent opportunity worth 1,440.00 weighted.
+21. **Volume 8 · Print Formats, Naming and Notifications** — a branded invoice from the builder, gapless series that survive an audit, and one notification per exception.
+22. **Volume 8 · Permissions, Workflows and Automation** — roles without delete, a warehouse restriction proved by two logins, a discount workflow with an escape path, and auto repeat reviewed on its first cycle.
+23. **Volume 9 · Malaysian Tax and Statutory Setup** — SST templates with separate accounts, item tax categories, exemptions with certificates, and an SST-02 that ties to the ledger.
+24. **Volume 9 · e-Invoice (MyInvois) End to End** — master data that passes validation, accepted versus validated, the 72-hour cancellation window and its named errors, consolidation and self-billing.
+25. **Volume 10 · Migration: Mapping, Opening Balances and Import** — a signed mapping workbook, imports in dependency order, and an opening trial balance of 96,290.00 on both sides.
+26. **Volume 10 · UAT, Cut-Over and Go-Live** — a UAT script that passes on figures, a one-page cut-over, hypercare measured daily, and a handover pack with five owners.
+27. **Volume 10 · Continuity: Backups, Staging and Upgrades** — a timed restore drill, staging restored from production, the version register, the upgrade calendar with a named approver and a rollback point, and a twenty-minute post-upgrade verification that includes e-Invoice.
 
-**Totals:** 24 chapters, 199 teaching slides, 295 slides including intros, labs, recall pages and quizzes, 199 lab
-steps, 120 quiz questions, 120 recall cards, 24 narrations, 2,630 minutes of syllabus (about 43 hours), and a
+**Totals:** 27 chapters, 229 teaching slides, 337 pages including intros, labs, recall pages and quizzes, 224 lab
+steps, 135 quiz questions, 135 recall cards, 27 narrations, 3,015 minutes of syllabus (about 50 hours), and a
 walkthrough table on every teaching slide.
 
 ---
@@ -120,28 +123,31 @@ chunking into three beats memorising ten.
 | --- | ------------------------------- | --------------------------------------------- | ------- |
 | 01  | Accounting primer               | **DEAD CLIC**                                 | acronym |
 | 02  | Distribution primer             | **TRIC**                                      | acronym |
-| 03  | Standing up the company         | **Broad to narrow, then prove it**            | phrase  |
-| 04  | Making the system usable        | **Master data before permissions**            | rule    |
-| 05  | The item master                 | **GUST**                                      | acronym |
-| 06  | Parties and pricing             | **Party, address, terms, price**              | path    |
-| 07  | Quote to cash                   | **Four chases**                               | story   |
-| 08  | When reality intervenes         | **One order, many documents**                 | rule    |
-| 09  | Buying, step by step            | **Buying is selling backwards**               | rule    |
-| 10  | Supplier reality                | **Reverse in the order you posted**           | rule    |
-| 11  | Warehouses and counts           | **One voucher, two rows**                     | phrase  |
-| 12  | FIFO and valuation              | **Value in equals value out plus value left** | rule    |
-| 13  | Journals, accruals and the bank | **Accrue, prepay, reconcile, reverse**        | rule    |
-| 14  | Month-end and year-end close    | **Move, judge, calculate, lock**              | phrase  |
-| 15  | BOMs and work orders            | **Recipe, promise, reserve, issue, complete** | phrase  |
-| 16  | Production costing              | **Good units carry the bad ones**             | rule    |
-| 17  | Projects and timesheets         | **Every entry names the project**             | rule    |
-| 18  | Assets, quality and CRM         | **Capitalise, depreciate, inspect, qualify**  | phrase  |
-| 19  | Print, naming, notifications    | **Readable, numbered, said once**             | phrase  |
-| 20  | Permissions and workflows       | **Roles do, permissions see**                 | rule    |
-| 21  | Malaysian tax                   | **One template per rate per direction**       | rule    |
-| 22  | e-Invoice end to end            | **Validate, submit, read, cancel inside 72**  | phrase  |
-| 23  | Migration and opening balances  | **Agree, then parents before children**       | phrase  |
-| 24  | UAT, cut-over and go-live       | **Script, sequence, numbers, hand over**      | phrase  |
+| 03  | Document lifecycle              | **Draft, commit, cancel, amend**              | phrase  |
+| 04  | Driving the Desk                | **Search, filter, save, share**               | path    |
+| 05  | Standing up the company         | **Broad to narrow, then prove it**            | phrase  |
+| 06  | Making the system usable        | **Master data before permissions**            | rule    |
+| 07  | The item master                 | **GUST**                                      | acronym |
+| 08  | Parties and pricing             | **Party, address, terms, price**              | path    |
+| 09  | Quote to cash                   | **Four chases**                               | story   |
+| 10  | When reality intervenes         | **One order, many documents**                 | rule    |
+| 11  | Buying, step by step            | **Buying is selling backwards**               | rule    |
+| 12  | Supplier reality                | **Reverse in the order you posted**           | rule    |
+| 13  | Warehouses and counts           | **One voucher, two rows**                     | phrase  |
+| 14  | FIFO and valuation              | **Value in equals value out plus value left** | rule    |
+| 15  | Journals, accruals and the bank | **Accrue, prepay, reconcile, reverse**        | rule    |
+| 16  | Month-end and year-end close    | **Move, judge, calculate, lock**              | phrase  |
+| 17  | BOMs and work orders            | **Recipe, promise, reserve, issue, complete** | phrase  |
+| 18  | Production costing              | **Good units carry the bad ones**             | rule    |
+| 19  | Projects and timesheets         | **Every entry names the project**             | rule    |
+| 20  | Assets, quality and CRM         | **Capitalise, depreciate, inspect, qualify**  | phrase  |
+| 21  | Print, naming, notifications    | **Readable, numbered, said once**             | phrase  |
+| 22  | Permissions and workflows       | **Roles do, permissions see**                 | rule    |
+| 23  | Malaysian tax                   | **One template per rate per direction**       | rule    |
+| 24  | e-Invoice end to end            | **Validate, submit, read, cancel inside 72**  | phrase  |
+| 25  | Migration and opening balances  | **Agree, then parents before children**       | phrase  |
+| 26  | UAT, cut-over and go-live       | **Script, sequence, numbers, hand over**      | phrase  |
+| 27  | Continuity and upgrades         | **Backup, prove, stage, pin**                 | rule    |
 
 A mnemonic is only used where the list is arbitrary (DEAD CLIC, TRIC, GUST). Where the list has logic, the
 chapter uses a rule, a story chain or a path instead, because an invented acronym for something with an internal
@@ -153,7 +159,7 @@ order is the weakest of the four.
     it, "Got it" marks it known, and progress is saved per browser. Press <kbd>R</kbd> anywhere for the recall sheet:
     the ten laws plus one row per chapter that jumps straight to its card set.
 -   **Off the deck:** `memory/cheatsheet.md` is a one-page printable for the wall, and `memory/cards.csv` imports
-    into Anki or Quizlet (`front,back,tag`, 120 cards, one tag per chapter) for spaced repetition.
+    into Anki or Quizlet (`front,back,tag`, 135 cards, one tag per chapter) for spaced repetition.
 -   **Teaching it:** run the recall page as a spoken drill. Read the device, ask one learner what it stands for, then
     let them flip all five cards before the quiz. The trap is the part clients remember, so never skip it.
 
@@ -207,7 +213,7 @@ erpnext_consultant_training/
 ├── index.html                 deck shell, no build step
 ├── styles.css                 deck and print styling
 ├── src/app.js                 router, renderer, quizzes, search, notes, print, audio
-├── course/                    manifest.json and ch01.json … ch24.json (source of truth)
+├── course/                    manifest.json and ch01.json … ch27.json (source of truth)
 ├── course/memory.json         the ten laws in three buckets, for the recall sheet
 ├── memory/                    cards.csv (Anki/Quizlet) and cheatsheet.md (printable)
 ├── audio/                     generated manifest and chapter narrations

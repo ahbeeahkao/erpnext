@@ -1,419 +1,364 @@
 {
 	"id": "ch14",
 	"number": 14,
-	"title": "Volume 5 · Month-End and Year-End Close",
-	"subtitle": "Lessons 5–8: the pre-close checks, the closing voucher, the month-end pack and the move from FY2026 into FY2027",
+	"title": "Volume 4 · FIFO, Landed Cost and Valuation Reports",
+	"subtitle": "Lessons 5–8: how FIFO layers produce cost of goods sold, how landed cost changes them, and the three reports a consultant is asked to defend",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Run five pre-close checks that catch ninety per cent of month-end problems",
-		"Close a period with the closing voucher and explain what it locks",
-		"Assemble a month-end pack a business owner can read in five minutes",
-		"Carry balances into a new fiscal year without losing an opening entry"
+		"Explain FIFO cost of goods sold from the layers rather than from the report",
+		"Use repost item valuation safely and know when it refuses to run",
+		"Read stock balance, stock ledger and stock ageing without confusing them",
+		"Decide whether negative stock should be blocked, and defend the answer"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Pre-close checks",
-			"title": "Five checks before anyone closes anything",
+			"kicker": "Lesson 5 · FIFO layers",
+			"title": "Watch FIFO build layers, then consume the oldest",
 			"bullets": [
-				"Closing a period with unposted documents is the single most common month-end failure",
-				"Control accounts must agree with their subledgers before the trial balance is printed",
-				"Stock value, bank reconciliation and SST liability each have one owner and one proof",
-				"Run the checks on the last working day, not after the close, or the fixes cost a week"
+				"Each receipt creates a valuation layer at its own rate, and sales consume the oldest first",
+				"Cost of goods sold is the sum of the layers consumed, not a single average rate",
+				"Serial and batch numbers decide which units leave, but FIFO still fixes the cost",
+				"Changing valuation method after go-live is a migration, not a setting"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Accounts → Trial Balance", "01-01-2026 to 31-01-2026", "Debits equal credits"],
-					[
-						"2",
-						"Check draft documents",
-						"Filter status Draft on sales and purchase documents",
-						"List is empty or explained"
-					],
-					[
-						"3",
-						"Party reconciliation",
-						"Debtors and Creditors against the control accounts",
-						"Difference 0.00 on both"
-					],
-					[
-						"4",
-						"Bank reconciliation",
-						"Bank - SM at 31-01-2026",
-						"Difference 0.00, timing items listed"
-					],
-					[
-						"5",
-						"Stock and SST",
-						"Stock Balance and SST liability account",
-						"5,640.00 stock, 1,200.00 payable"
-					],
-					[
-						"6",
-						"Record the sign-off",
-						"Worksheet with five ticks and a name",
-						"Evidence for the file"
-					]
+					["1", "Purchase receipt", "10 units of SM-BL200 at 120.00", "Layer one, value 1,200.00"],
+					["2", "Second receipt", "10 units at 130.00", "Layer two, value 1,300.00"],
+					["3", "Check the bin", "Main warehouse", "20 units, value 2,500.00"],
+					["4", "Sell 12 units", "Delivery note at 240.00 each", "COGS computed from layers"],
+					["5", "Read the stock ledger", "Filter SM-BL200", "Outgoing 12 units, value 1,460.00"],
+					["6", "Read the bin again", "Main warehouse", "8 units, value 1,040.00 at 130.00"]
 				]
 			},
-			"notes": "Write these five on a card and give it to the client's finance lead, because the consultant will not be there every month. The order matters: draft documents first, then control accounts, then bank, then stock and tax. Each check has a named owner in the worksheet, and the close does not start until all five are ticked."
+			"notes": "The number to make the learner predict is one thousand four hundred sixty: ten units from the one twenty layer and two from the one thirty layer. If they say one thousand five hundred, they are averaging, which is a different valuation method. Show the two ledger rows rather than the report total, because the rows are the evidence and the report is only the summary."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the checks",
-			"title": "What each pre-close check proves",
+			"kicker": "Lesson 6 · Verify the layers",
+			"title": "The cost arithmetic that must balance",
 			"bullets": [
-				"Each check answers one question, and a pass means the question is closed",
-				"A control account difference of even one cent blocks the close, because it compounds",
-				"Draft documents are not errors until they are explained, but unexplained they are",
-				"The SST liability must equal the output tax on submitted invoices, not on draft ones"
+				"Total value in equals total value out plus the value remaining, always",
+				"Averaging the two rates hides the layer structure and double-counts in mixed sales",
+				"Gross profit per line differs across the month even when the selling price does not",
+				"Reports that round to whole currency units must still reconcile to the stock ledger"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Trial balance", "debits 41,320.00 equal credits 41,320.00", "Trial Balance report"],
+					["Value received", "2,500.00 across two layers", "Stock Ledger, incoming rows"],
+					["Cost of goods sold for 12 units", "1,460.00", "Stock Ledger, outgoing row"],
+					["Remaining stock", "8 units, 1,040.00", "Stock Balance for SM-BL200"],
 					[
-						"Debtors control versus party ledger",
-						"13,200.00 both sides",
-						"Accounts Receivable and control account"
+						"Gross profit at 240.00 each",
+						"2,880.00 minus 1,460.00 equals 1,420.00",
+						"Gross Profit report"
 					],
 					[
-						"Creditors control versus party ledger",
-						"1,188.00 both sides",
-						"Accounts Payable and control account"
-					],
-					["Stock value", "5,640.00", "Stack Balance report"],
-					["SST payable", "1,200.00", "General Ledger, SST Output - SM"]
+						"Value in equals value out plus remaining",
+						"2,500.00 equals 1,460.00 plus 1,040.00",
+						"Your own arithmetic"
+					]
 				]
 			},
-			"notes": "Two figures here deserve rehearsal: debtors of thirteen thousand two hundred, which is twelve thousand of sales plus one thousand two hundred of tax, and the SST payable of exactly one thousand two hundred. If either is off, the mistake is almost always a document without tax or a tax row with the wrong account, and both show up in the tax summary long before an auditor finds them."
+			"notes": "Every valuation conversation ends with that identity: what came in equals what went out plus what is left. If it does not balance, a repost is pending, a landed cost arrived late, or someone posted a stock entry with a hand-typed rate. Make the learner write the identity on paper before opening any report, because it works for nine problems out of ten."
 		},
 		{
-			"kicker": "Lesson 7 · Period close",
-			"title": "Close the period with the closing voucher",
+			"kicker": "Lesson 7 · Repost valuation",
+			"title": "Correct a wrong valuation with a repost, not a journal",
 			"bullets": [
-				"The Period Closing Voucher is the document you create; it posts the closing entries and marks the period reported",
-				"Submitting it enqueues Process Period Closing Voucher jobs, one per chunk, and those do the actual posting",
-				"Watch GL Entry Processing Status move to Completed before you trust any figure in the pack",
-				"A failed chunk writes into Error Message, and Accounts Settings carries a legacy controller switch for that case",
-				"Close after the pack is produced and signed, never before, because closing restricts later changes"
+				"Repost item valuation recalculates layers from history and rewrites downstream cost",
+				"It is the correct remedy when a rate was wrong, a landed cost arrived late or a period was opened wrongly",
+				"It refuses to run across a closed accounting period, which protects submitted reports",
+				"Every repost leaves a background job and a ledger movement, so run it deliberately"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Accounts → Period Closing Voucher → New",
-						"Company SM, fiscal year FY2026",
-						"Empty closing form"
+						"Stock → Repost Item Valuation → New",
+						"Item SM-BL200, warehouse Main - SM",
+						"Form with posting date"
 					],
 					[
 						"2",
-						"Set the period",
-						"Period start 01-01-2026, period end 31-01-2026",
-						"Dates inside the open period"
+						"Set the basis",
+						"Repost from 01-01-2026, based on valuation rate",
+						"Date and basis recorded"
 					],
+					["3", "Save and Submit", "Confirm", "Status Queued for the background worker"],
+					["4", "Check the job", "Repost Item Valuation status", "Completed, entries updated"],
 					[
-						"3",
-						"Closing Account Head",
-						"Retained Earnings - SM",
-						"Account that receives the closing entries"
+						"5",
+						"Read the stock ledger",
+						"Filter the repost voucher",
+						"Adjustment rows for affected days"
 					],
-					["4", "Save and Submit", "Confirm", "ACC-PCV-2026-00001 submitted"],
-					["5", "Watch processing", "GL Entry Processing Status", "In Progress, then Completed"],
 					[
 						"6",
-						"Inspect the job rows",
-						"Process Period Closing Voucher list",
-						"Process-PCV-001 with closing balances"
-					],
-					[
-						"7",
-						"Check retained earnings",
-						"Balance Sheet, 31-01-2026",
-						"Net profit 4,680.00 carried"
-					],
-					[
-						"8",
-						"Attempt a backdated entry",
-						"Journal dated 15-01-2026",
-						"Refused for the closed period"
+						"Try a closed period",
+						"Posting date in the closed month",
+						"Validation error, repost refused"
 					]
 				]
 			},
-			"notes": "Net profit of four thousand six hundred eighty is sales of twelve thousand less cost of goods of six thousand, freight of sixty, accrual of eight hundred, insurance of one hundred and stock adjustment of three hundred sixty. Make the learner compute it before the close. Then teach the two documents properly: the Period Closing Voucher is yours to create, and the Process Period Closing Voucher rows are the background jobs that post it, so GL Entry Processing Status is the field you watch before anyone signs the pack."
+			"notes": "Reposts are the tool that keeps a migration honest, and they are also the tool that scares finance if used casually. Explain the trade: the recalculation is exact, but it changes cost of goods sold after the fact, so the month's profit moves. That is acceptable in the first two months of a go-live and unacceptable after the accounts are filed."
 		},
 		{
-			"kicker": "Lesson 7 · Verify the close",
-			"title": "What the close does, and what it refuses",
+			"kicker": "Lesson 8 · Negative stock",
+			"title": "Decide about negative stock before it decides for you",
 			"bullets": [
-				"The close zeroes income and expense accounts and leaves balance sheet accounts alone",
-				"It does not validate your arithmetic, so a wrong profit is simply transferred",
-				"It restricts later changes to the period, which is the point of closing at all",
-				"Stock value and party balances must be correct before the voucher, not after"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Income and expense balances", "0.00 after the close", "Trial Balance, 31-01-2026"],
-					["Retained earnings movement", "4,680.00", "Balance Sheet, equity section"],
-					["Stock value", "5,640.00 unchanged by the close", "Stock Balance report"],
-					[
-						"Backdated journal",
-						"refused with a period validation message",
-						"Journal entry dated 15-01-2026"
-					],
-					["Debtors balance", "13,200.00 carried forward", "Accounts Receivable report"]
-				]
-			},
-			"notes": "A learner who expects the close to catch their mistakes will close a wrong month and then argue with the auditor. Say it plainly: the close is a bookend, not a review. The review is the five checks that come before it, and the arithmetic of net profit of four thousand six hundred eighty is the test that the review worked."
-		},
-		{
-			"kicker": "Lesson 8 · Year end",
-			"title": "From FY2026 into FY2027 without losing a balance",
-			"bullets": [
-				"Year end closes the profit and loss, and every balance sheet account carries forward",
-				"The opening entry is generated by the close, not typed by hand",
-				"Lock the old year after the accounts are filed, and keep the audit trail intact",
-				"Confirm the opening balance sheet against the last reported one before you allow any entry"
+				"Allowing negative stock keeps operations moving but leaves valuation guessing",
+				"Blocking it forces the paperwork to catch up, which is usually what a controlled client wants",
+				"The setting lives in Stock Settings and applies to the whole company",
+				"Either way, the ageing report is the early warning that something is being issued twice"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Confirm the last period",
-						"December 2026 closed and reported",
-						"All twelve months closed"
+						"Stock → Stock Settings",
+						"Untick allow negative stock",
+						"Setting saved for the company"
 					],
 					[
 						"2",
-						"Create the fiscal year",
-						"FY2027, 01-01-2027 to 31-12-2027",
-						"New year available in dates"
+						"Attempt to sell 60 units",
+						"Delivery note with 47 available",
+						"Error: quantity exceeds stock"
 					],
-					[
-						"3",
-						"Run the year-end close",
-						"Closing voucher dated 31-12-2026",
-						"P and L accounts zeroed"
-					],
-					[
-						"4",
-						"Check opening balances",
-						"Balance Sheet, 01-01-2027",
-						"Assets and liabilities carried forward"
-					],
-					[
-						"5",
-						"Compare with the audited figures",
-						"Last reported balance sheet",
-						"Differences explained in writing"
-					],
-					["6", "Lock the year", "Set the accounts frozen date", "Backdated entries refused"]
+					["3", "Tick allow negative stock", "Save settings", "Setting now permissive"],
+					["4", "Submit the same delivery", "Confirm", "Negative bin, valuation flagged"],
+					["5", "Read the stock ledger", "Filter SM-BL200", "Outgoing row with a warning rate"],
+					["6", "Repair the cause", "Post the missing receipt", "Bin returns to a positive balance"]
 				]
 			},
-			"notes": "The year-end conversation is a governance conversation, so bring the freezing date and the audit trail rather than a checklist. The test is simple: can you produce the 31-12-2026 balance sheet a year later, unchanged? If a backdated entry can still post, the answer is no, and that is a finding the client's auditor will raise."
+			"notes": "Most Malaysian distributors start with negative stock blocked, because a warehouse that cannot issue unrecorded goods learns to record receipts quickly. If a client insists on allowing it, agree a weekly negative stock report with a named owner, or the balance sheet will carry an unexplained valuation within one quarter. Either answer is defensible; silence is not."
 		},
 		{
-			"kicker": "Volume 5 · Reference",
-			"title": "Month-end pack, one page per statement",
+			"kicker": "Lesson 8 · Verify the reports",
+			"title": "Balance, ledger and ageing in one pass",
 			"bullets": [
-				"The pack must be readable by an owner who will not open the system",
-				"Every figure on the page has a report behind it, named in the same row",
-				"Variances are explained in words, not left for the reader to guess",
-				"The pack is signed and dated, because it is the evidence of the close"
+				"Three reports must agree before you present a stock number to anyone",
+				"Balance gives the number, ledger proves it, ageing raises the risk conversation",
+				"A repost changes the ledger and therefore the balance, so re-read both afterwards",
+				"Write the three figures on one page and keep it with the month-end pack"
 			],
 			"table": {
-				"headers": ["Document", "Figures", "Source report", "What the owner asks"],
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Stock balance value", "1,040.00 for 8 units", "Stock Balance, SM-BL200 at Main"],
+					["Ledger closing value", "1,040.00", "Stock Ledger, last row for the item"],
+					[
+						"Ageing bucket for the 8 units",
+						"0 to 30 days since the 130.00 receipt",
+						"Stock Ageing report"
+					],
+					[
+						"Value after a completed repost",
+						"unchanged if the original rate was right",
+						"Stock Balance, re-run"
+					],
+					["Repost entries pending", "0", "Repost Item Valuation list"]
+				]
+			},
+			"notes": "The habit worth teaching is the one-page proof: three numbers, one source each, signed and dated. When a client questions stock value three weeks later, that page settles it without reopening the ledger. If the balance and the ledger disagree, a repost is still queued, and the answer is to wait rather than to explain."
+		},
+		{
+			"kicker": "Volume 4 · Reference",
+			"title": "The three stock reports, and what each answers",
+			"bullets": [
+				"Stock balance answers what is on hand and what it is worth today",
+				"Stock ledger answers why, one movement at a time, with the rate used",
+				"Stock ageing answers how long it has been sitting there and what it costs to keep",
+				"Reconciling the three to each other is a five minute monthly discipline"
+			],
+			"table": {
+				"headers": ["Report", "Question it answers", "What to check", "Common misreading"],
 				"rows": [
 					[
-						"Profit and Loss",
-						"sales 12,000.00, COGS 6,000.00, net 4,680.00",
-						"Profit and Loss Statement",
-						"Why did margin move"
+						"Stock Balance",
+						"What do we hold and what is it worth",
+						"Quantity and value per warehouse",
+						"Value includes items already sold but not delivered"
 					],
 					[
-						"Balance Sheet",
-						"stock 5,640.00, debtors 13,200.00",
-						"Balance Sheet",
-						"How much cash is tied up"
+						"Stock Ledger",
+						"Why did the quantity or value change",
+						"Rate, voucher and posting time",
+						"Rows are not in document order"
 					],
 					[
-						"SST summary",
-						"output 1,200.00, input 120.00",
-						"Tax summary by account",
-						"When is the return due"
+						"Stock Ageing",
+						"How old is the stock",
+						"Buckets against valuation",
+						"Ageing is by receipt, not by last movement"
 					],
 					[
-						"Ageing",
-						"debtors and creditors by bucket",
-						"Accounts Receivable and Payable",
-						"Who owes us and whom do we owe"
+						"Item Reorder Level",
+						"What must be bought",
+						"Items below the level",
+						"Ignores stock already on order"
 					],
 					[
-						"Stock movement",
-						"received, issued, adjusted",
-						"Stock Ledger summary",
-						"Why did stock fall"
+						"Gross Profit",
+						"Did the sale make money",
+						"Cost comes from valuation",
+						"Discounts change the selling side only"
 					]
 				]
 			},
-			"notes": "Five pages, five owners, one signature: that is a month-end pack a client will actually use. Anything longer is a data dump, and anything shorter invites the question the consultant cannot answer in the meeting. Build it once as a template, then let the client's finance lead own it by month three, with the consultant reviewing rather than producing."
+			"notes": "A consultant is asked about stock value more often than any other number, and the answer always starts with which report. Say stock balance for the number, stock ledger for the story, ageing for the risk. When the client's figure disagrees with the report, ask which of the three they are quoting, and the conversation halves in length."
 		},
 		{
-			"kicker": "Volume 5 · Reference",
-			"title": "Close calendar with owners and evidence",
+			"kicker": "Volume 4 · Reference",
+			"title": "Valuation methods and when each is defensible",
 			"bullets": [
-				"A close calendar is a contract, and every row needs a name and a proof",
-				"Working day three is the practical limit for a distributor of this size",
-				"The consultant's job is to build the calendar and then leave it behind",
-				"Every task produces one artefact, and the artefacts are the audit file"
+				"FIFO suits distribution where suppliers change rates between deliveries",
+				"Moving average suits steady buying where price swings are small and reporting simplicity matters",
+				"Standard cost only belongs where a costing team maintains the standard and variances are reviewed",
+				"The method must match the client's accounting policy, not the consultant's preference"
 			],
 			"table": {
-				"headers": ["Working day", "Task", "Owner", "Evidence"],
+				"headers": ["Method", "Behaviour", "Choose when", "Risk"],
 				"rows": [
 					[
-						"Day 1",
-						"Cut off sales, delivery notes and receipts",
-						"Operations lead",
-						"Last document number recorded"
+						"FIFO",
+						"Oldest layer leaves first",
+						"Rates move between receipts",
+						"Layer creep makes old stock look cheap"
 					],
 					[
-						"Day 1",
-						"Receive all supplier invoices into the system",
-						"Purchasing",
-						"Draft list empty"
+						"Moving Average",
+						"Cost blends on every receipt",
+						"Prices are stable",
+						"Hides a bad purchase inside the average"
 					],
 					[
-						"Day 2",
-						"Stock count and reconciliation",
-						"Warehouse",
-						"Signed count sheet and reconciliation"
+						"Standard Cost",
+						"Fixed rate until changed",
+						"Manufacturing with variance analysis",
+						"Variance account grows unattended"
 					],
 					[
-						"Day 2",
-						"Bank reconciliation",
-						"Finance executive",
-						"Reconciliation with 0.00 difference"
-					],
-					[
-						"Day 3",
-						"Close the period and produce the pack",
-						"Finance manager",
-						"Signed pack with five pages"
+						"LIFO",
+						"Not supported",
+						"Never, in ERPNext or IFRS",
+						"Reports would need a manual restatement"
 					]
 				]
 			},
-			"notes": "Give the client this calendar before go-live, not in the first month end, because it forces the ownership conversation while everyone is still enthusiastic. If a task has no owner, the close will slip, and the consultant will end up producing the pack from memory at eleven at night. That is the pattern to design out."
+			"notes": "Nine out of ten distribution clients should run FIFO, because their purchase rates genuinely move and their auditors expect the oldest stock to leave first. Say that plainly, but write it in the configuration worksheet with the client's signature, because the choice fixes how every margin report reads for the life of the system."
 		}
 	],
 	"lab": {
-		"title": "Lab · Run the checks, close January and produce the pack",
+		"title": "Lab · Build FIFO layers, compute cost of goods sold and repair a valuation",
 		"minutes": 45,
 		"steps": [
-			"Print the January trial balance and confirm debits equal credits",
-			"Reconcile debtors and creditors control accounts against their subledgers",
-			"Confirm the bank reconciliation difference is 0.00 and list timing items",
-			"Compute net profit for January from the five known adjustments",
-			"Close the period with a closing voucher dated 31-01-2026",
-			"Confirm retained earnings moves by 4,680.00 and the P and L resets",
-			"Attempt a backdated journal and record the validation message",
-			"Produce the five-page pack and name the source report for each figure"
+			"Receive 10 units of SM-BL200 at 120.00 and confirm layer one",
+			"Receive 10 more at 130.00 and confirm the bin value of 2,500.00",
+			"Sell 12 units and read the outgoing stock ledger row",
+			"Confirm cost of goods sold of 1,460.00 and remaining stock of 1,040.00",
+			"Prove the identity: value in equals value out plus value remaining",
+			"Post a repost item valuation for the item and read the resulting adjustment rows",
+			"Attempt a repost into a closed period and record the validation message",
+			"Block negative stock, attempt to oversell and record the error"
 		],
-		"done": "Done when January is closed, net profit of 4,680.00 sits in retained earnings, a backdated entry is refused, and every figure in the pack names the report it came from."
+		"done": "Done when cost of goods sold of 1,460.00 and remaining stock of 1,040.00 add to the 2,500.00 received, and both the repost and the negative-stock rules have been demonstrated."
 	},
 	"quiz": [
 		{
-			"question": "What should happen before a period is closed?",
+			"question": "Two receipts of 10 units at 120.00 and 10 at 130.00, then a sale of 12 units. FIFO cost of goods sold is what?",
+			"options": ["1,500.00", "1,460.00", "1,560.00", "1,400.00"],
+			"answer": 1,
+			"why": "FIFO consumes the oldest layer first: 10 × 120 = 1,200 plus 2 × 130 = 260, giving 1,460.00."
+		},
+		{
+			"question": "Which identity must always hold after any stock movement?",
 			"options": [
-				"Print the invoices",
-				"Run the five pre-close checks and sign them off",
-				"Delete draft documents",
-				"Lock the fiscal year"
+				"Value in equals value out minus remaining",
+				"Value in equals value out plus value remaining",
+				"Value out equals value in plus remaining",
+				"Remaining equals value in plus value out"
 			],
 			"answer": 1,
-			"why": "Draft documents, control accounts, bank, stock and tax must all be proved before closing, otherwise the reported figures are wrong from the start."
+			"why": "What was received must equal what was issued plus what remains. A break in that identity means a pending repost or a hand-typed rate."
 		},
 		{
-			"question": "January sales are 12,000.00 with 10 % SST. What is the SST payable?",
-			"options": ["120.00", "1,200.00", "13,200.00", "12,120.00"],
-			"answer": 1,
-			"why": "Output tax is 10 % of the taxable sales of 12,000.00, giving 1,200.00, which is a liability rather than income."
-		},
-		{
-			"question": "What does the closing voucher do?",
+			"question": "When is repost item valuation the right tool?",
 			"options": [
-				"Locks the fiscal year",
-				"Transfers profit and loss balances to retained earnings",
-				"Deletes draft documents",
-				"Revalues stock"
+				"To change the selling price",
+				"To recalculate cost after a wrong rate or late landed cost",
+				"To correct a customer balance",
+				"To close a period"
 			],
 			"answer": 1,
-			"why": "Closing transfers the period's income and expense balances to retained earnings and marks the period as reported."
+			"why": "Repost recalculates valuation layers from history, which is exactly what a wrong rate or a late landed cost voucher requires."
 		},
 		{
-			"question": "Sales 12,000.00 and costs of 6,000.00 plus 60.00 freight, 800.00 accrual, 100.00 insurance and 360.00 stock adjustment leave net profit of what?",
-			"options": ["6,000.00", "4,680.00", "5,040.00", "4,740.00"],
-			"answer": 1,
-			"why": "12,000 − 6,000 − 60 − 800 − 100 − 360 = 4,680.00."
-		},
-		{
-			"question": "Why set a frozen accounts date after filing?",
+			"question": "What happens when you try to post a repost into a closed accounting period?",
 			"options": [
-				"To speed up reports",
-				"To refuse backdated entries into a reported year",
-				"To delete old journals",
-				"To close the bank"
+				"It posts with a warning",
+				"It is refused by validation",
+				"It posts to the next open period",
+				"It cancels the closing voucher"
 			],
 			"answer": 1,
-			"why": "A frozen date prevents postings into a year whose statements are already reported and filed, preserving the audit trail."
+			"why": "ERPNext blocks valuation changes inside a closed period so that submitted financial statements cannot shift underneath the client."
+		},
+		{
+			"question": "Which report answers why a stock value changed?",
+			"options": ["Stock Balance", "Stock Ledger", "Stock Ageing", "Item Reorder Level"],
+			"answer": 1,
+			"why": "The stock ledger holds every movement with its rate and voucher, so it explains the change rather than just stating the balance."
 		}
 	],
 	"memory": {
-		"spine": "Close in one order: fix what moves, then judge, then calculate, and only then lock the period so nobody can edit it.",
+		"spine": "Value in equals value out plus value left, and under FIFO the cost of a sale belongs to the oldest layer, not to the item.",
 		"device": {
-			"kind": "phrase",
-			"label": "Move, judge, calculate, lock",
+			"kind": "rule",
+			"label": "Value in equals value out plus value left",
 			"expansion": [
-				"Cash: reconcile the bank statement to the ledger before anything else",
-				"Count: reconcile stock and clear negative quantities",
-				"Judge: accruals and prepayments for costs incurred but not yet billed",
-				"Calculate: depreciation and any valuation repost",
-				"Lock: the Period Closing Voucher posts the closing entries and marks the period reported"
+				"Every receipt creates a valuation layer at its own rate",
+				"Issues consume the oldest layer first, so cost follows the queue rather than the item",
+				"Repost Item Valuation recalculates layers from history and rewrites downstream cost",
+				"Negative stock keeps operations moving and leaves valuation guessing",
+				"Three reports must agree before any stock number is presented"
 			]
 		},
 		"cards": [
 			{
-				"q": "What is the most common month end failure?",
-				"a": "Closing with unposted documents: drafts, unallocated payments and negative stock.",
-				"hint": "Check before you close"
+				"q": "Which layer does a sale consume under FIFO?",
+				"a": "The oldest remaining layer, at that layer's own rate.",
+				"hint": "First in, first costed"
 			},
 			{
-				"q": "What does the Period Closing Voucher actually do?",
-				"a": "It zeroes income and expense accounts into the closing account and leaves balance sheet accounts alone.",
-				"hint": "Profit and loss to zero"
+				"q": "Receipts at 100 and 120, then one unit sold. What is the cost?",
+				"a": "100, because the oldest layer leaves first and 120 stays in stock.",
+				"hint": "Queue, not average"
 			},
 			{
-				"q": "Can a document be edited in a closed period?",
-				"a": "Not without reopening or correcting in the next period. The close is a lock, not a label.",
-				"hint": "Lock, do not argue"
+				"q": "How is a wrong valuation corrected?",
+				"a": "Repost Item Valuation. A journal would create a second version of the truth beside the ledger.",
+				"hint": "Recalculate history"
 			},
 			{
-				"q": "At year end, what carries forward?",
-				"a": "Every balance sheet balance, while the profit and loss closes into equity.",
-				"hint": "Balances yes, profit no"
+				"q": "What does negative stock do to valuation?",
+				"a": "It guesses a rate, usually the last known, so cost of goods sold and stock value both drift.",
+				"hint": "A guess dressed as a number"
 			},
 			{
-				"q": "Who signs a close off?",
-				"a": "Every row of the close calendar needs an owner and a proof, and the pack must read without the system.",
-				"hint": "Names and evidence"
+				"q": "Which three figures must agree?",
+				"a": "Stock Balance quantity, the stock ledger value and the stock account in the general ledger.",
+				"hint": "Quantity, history, value"
 			}
 		],
 		"trap": {
-			"what": "The period is closed to stop people posting, before anything is reconciled.",
-			"why": "The voucher locks in whatever was wrong and every later report inherits it, so the correction costs twice the work."
+			"what": "Landed cost is added after the stock it belongs to has already been sold.",
+			"why": "The sale consumed a layer without the freight, so cost of goods sold is understated and the revaluation creates profit from nothing."
 		}
 	},
-	"narration": "Month end is a process, not an event, and the consultant who builds the process is the one who gets invited back. Five checks come first: the trial balance, the draft documents, the debtors and creditors control accounts, the bank reconciliation, and stock with tax. When all five are signed, the close can start. January carries twelve thousand of sales, six thousand of cost, and four thousand six hundred eighty of net profit once freight, accrual, insurance and the stock adjustment are counted. The closing voucher moves that to retained earnings and marks the period as reported. At year end the same discipline carries balances into the new year, and the frozen date stops anyone rewriting a year that has already been filed. A close calendar with a name against every task is what makes the process repeatable, and the signed five-page pack is what makes it auditable. Build both once, hand the ownership to the client's finance lead, and the consultant's job becomes review rather than rescue."
+	"narration": "Valuation is where a consultant earns trust, because the owner will check the margin with a calculator. Under FIFO, each receipt creates a layer, and a sale consumes the oldest first. Ten blenders at one hundred twenty and ten at one hundred thirty gives twenty five hundred of stock. Sell twelve and cost of goods sold is one thousand four hundred sixty, leaving eight units worth one thousand forty. That identity, value in equals value out plus value remaining, is the test for every valuation problem. When a rate was wrong or freight arrived late, the answer is a repost item valuation, not a journal entry, and the system will refuse to run it inside a closed period. And negative stock is a decision, not an accident: block it and operations learns to paperwork faster. Decide it, write it down, and the reports stop arguing. Every valuation question ends the same way: show the identity, then show the rows that prove it."
 }

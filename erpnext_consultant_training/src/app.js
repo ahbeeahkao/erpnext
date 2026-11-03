@@ -813,7 +813,7 @@ export function openOverlay(kind = "search") {
 	}
 
 	if (kind === "cheatsheet") {
-		dom.overlayTitle.textContent = "Recall sheet · ten laws, twenty-four devices";
+		dom.overlayTitle.textContent = `Recall sheet · ten laws, one device per chapter (${state.chapters.length})`;
 		const laws = state.memory;
 		if (laws?.buckets?.length) {
 			dom.overlayBody.append(

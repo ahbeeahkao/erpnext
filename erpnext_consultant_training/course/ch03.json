@@ -1,474 +1,493 @@
 {
 	"id": "ch03",
 	"number": 3,
-	"title": "Volume 0 · Standing Up the Company",
-	"subtitle": "Lessons 1–5: create the company, shape the chart of accounts, set defaults, cost centres and Malaysian SST",
+	"title": "Volume 0 · How ERPNext Thinks: The Document Lifecycle",
+	"subtitle": "Lessons 1–10: draft, submit, cancel and amend, and the audit trail a wrong document leaves behind",
 	"level": "Foundation",
-	"minutes": 75,
+	"minutes": 70,
 	"outcomes": [
-		"Create a Malaysian company with the right currency, fiscal year and chart of accounts",
-		"Add and reclassify ledger accounts without breaking the report structure",
-		"Set the company defaults that silently drive every later document",
-		"Build a cost centre tree a client can actually report on",
-		"Configure SST sales and service tax so documents compute tax correctly"
+		"Explain docstatus 0, 1 and 2 to a client who believes they can edit a submitted invoice",
+		"Show exactly which records a submission creates in the stock ledger and the general ledger",
+		"Cancel or amend correctly, and say out loud what each one does to the audit trail",
+		"Read and demonstrate the system's own Version log when a number is questioned",
+		"Recognise the referencing-document error that blocks a cancel, before the client meets it"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Create the company",
-			"title": "Company, abbreviation, currency and fiscal year",
+			"kicker": "Lesson 1 · The three states",
+			"title": "One field, three worlds: draft, submitted, cancelled",
 			"bullets": [
-				"Everything in ERPNext hangs off the Company record, so this is the first screen a consultant opens",
-				"The abbreviation becomes the suffix on every account and warehouse, so choose two letters and keep them",
-				"Country selects the chart of accounts template; Malaysia brings the standard tree, not a tax setup",
-				"Currency is per company and effectively fixed once the first transaction exists",
-				"Financial year dates decide which period new documents post into by default"
+				"Every document carries a hidden integer called docstatus, and it decides what the document may do",
+				"Draft is docstatus 0: fully editable, saves freely, and has no effect on stock or on the books whatsoever",
+				"Submitted is docstatus 1: frozen, and submission is the moment stock moves and the ledger posts",
+				"Cancelled is docstatus 2: the record stays, its postings are reversed, and nothing is ever deleted",
+				"A consultant who teaches this first spends the rest of the project answering fewer angry messages"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Setup → Company → New",
+						"Stock → Delivery Note → New, add any item",
 						"(open form)",
-						"Empty company form with General, Accounts, Defaults tabs"
+						"Form shows Draft at the top right"
 					],
-					["2", "Company Name", "Seri Murni Sdn Bhd", "Name copied into the form header"],
-					["3", "Abbreviation", "SM", "Two-letter suffix used by accounts and warehouses"],
+					[
+						"2",
+						"Click Save",
+						"(save)",
+						"Name assigned, status still Draft, stock balance unchanged"
+					],
+					[
+						"3",
+						"Open Stock Balance for the item",
+						"SM-BL200",
+						"Quantity identical to before the draft existed"
+					],
 					[
 						"4",
-						"Country / Default Currency",
-						"Malaysia / MYR",
-						"Country set, currency set to Malaysian Ringgit"
+						"Return to the note and click Submit",
+						"(submit)",
+						"Status changes to Submitted and the document locks"
 					],
 					[
 						"5",
-						"Financial Year",
-						"01-01-2026 to 31-12-2026",
-						"Fiscal year saved on the Accounts tab"
+						"Open Stock Balance again",
+						"SM-BL200",
+						"Quantity has now dropped by the delivered amount"
 					],
-					["6", "Chart of Accounts", "Standard", "Save creates five account root groups"],
 					[
-						"7",
-						"Click Save",
-						"(submit)",
-						"Company saved; tree of accounts created in the background"
+						"6",
+						"Click Cancel, then confirm",
+						"(cancel)",
+						"Status becomes Cancelled and the quantity returns"
 					]
 				]
 			},
-			"notes": "Say the abbreviation out loud before saving: every account becomes '… - SM' and changing it later means renaming dozens of records. Same for the fiscal year, because a wrong year quietly posts opening entries into the wrong period. If the client keeps a non-calendar year, enter it here rather than trying to fix dates document by document.",
-			"paths": ["Setup → Company → New"]
+			"notes": "Run this in front of the client, do not describe it. The moment that lands is step three: the draft exists, it looks finished, and the stock has not moved. Say the sentence out loud that you want repeated in the office — a draft is a proposal, submitting is the commit. Every argument later in the project about 'the system got it wrong' starts with someone assuming a draft did something."
 		},
 		{
-			"kicker": "Lesson 1 · Expected outcome",
-			"title": "What a correctly created company looks like",
+			"kicker": "Lesson 2 · What submission posts",
+			"title": "Submission is the commit: one click, four records",
 			"bullets": [
-				"Five root groups appear: Application of Funds, Sources of Funds, Equity, Income and Expenses",
-				"Every ledger account ends with the suffix - SM, which proves the abbreviation was applied",
-				"A Debtors control account exists under Accounts Receivable and is linked as the default receivable",
-				"The company is selectable in Global Defaults, which means new documents will inherit it",
-				"Nothing here is tax-specific yet: no SST account and no tax template has been created"
+				"A submitted Delivery Note writes a Stock Ledger Entry that reduces the Bin quantity and computes cost of goods sold",
+				"It writes a General Ledger pair: cost of goods sold debited, stock in hand credited, at the same value",
+				"It writes a Payment Ledger-adjacent effect only later, when the invoice claims the revenue, not here",
+				"Nothing is written while the document is a draft, which is why an unsubmitted pile is invisible to reports",
+				"Teach the client to look for the ledger rows, not the document status, when they doubt a posting"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Root groups", "5 groups", "Accounts → Chart of Accounts"],
-					["Account suffix", "… - SM", "Any ledger account row"],
-					["Receivable account", "Debtors - SM", "Company → Accounts tab"],
-					["Fiscal year", "01-01-2026 → 31-12-2026", "Company → Accounts tab"],
-					["Default company", "Seri Murni Sdn Bhd", "Setup → Global Defaults"]
+					[
+						"Stock Ledger Entry exists for the note",
+						"One outgoing row, negative qty",
+						"Stock → Stock Ledger, filter by voucher"
+					],
+					[
+						"Cost of goods sold posted",
+						"600.00 for 5 units at 120.00",
+						"Accounts → General Ledger, filter by voucher"
+					],
+					["Stock in hand credited", "600.00 on the asset side", "Same General Ledger voucher"],
+					[
+						"Bin quantity reduced",
+						"45 from a starting 50",
+						"Stock → Stock Balance, Main Warehouse"
+					],
+					[
+						"Draft documents invisible",
+						"Zero rows from the draft",
+						"Stock Ledger grouped by docstatus"
+					]
 				]
 			},
-			"notes": "This is the verification habit the whole course teaches: after every configuration step, check a named value in a named place. If the suffix is missing, the company was created with a different abbreviation. If fewer than five roots exist, the chart template did not load and the company should be deleted and recreated before any transaction exists.",
-			"callout": {
-				"tone": "warn",
-				"title": "Do not fix accounts by deleting them",
-				"text": "If the tree is wrong, delete the company while it is empty. Once a voucher exists, accounts can only be disabled, and the tree carries the mistake forever."
-			}
+			"notes": "The four-line check is what separates a consultant from a trainer. Anyone can say 'submit it'; you are showing the client the two ledgers and the bin disagreeing with their mental model at exactly the same instant, by the same amount. If a client ever reports a wrong stock figure, the first question is always the same: was the document submitted, and can you show me the voucher?"
 		},
 		{
-			"kicker": "Lesson 2 · Chart of accounts",
-			"title": "Add the three accounts your client will actually need",
+			"kicker": "Lesson 3 · Cancellation",
+			"title": "Cancel reverses; it does not delete",
 			"bullets": [
-				"Keep the template tree and add leaf accounts: renaming the standard tree breaks every report a consultant later runs",
-				"Add Petty Cash as a cash-type ledger so it appears in cash flow and can be reconciled",
-				"Add Freight Inward as an expense so landed cost and purchase charges have a home",
-				"Add SST Payable as an account of type Tax, which is what tax reports expect",
-				"Group accounts hold no postings; leaf accounts do, and getting this wrong produces silent zero-value reports"
+				"Cancelling a submitted document writes offsetting entries rather than removing the original ones",
+				"The document keeps its name, its date, its owner and its links, so the story of what happened survives",
+				"The stock comes back and the ledger is balanced back to zero, but the history now includes both attempts",
+				"A cancelled document still appears in searches and in the Version log, which is exactly what an auditor wants",
+				"Say the phrase early: we never delete, we reverse — deleting is reserved for drafts nobody submitted"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Accounts → Chart of Accounts → Add Account",
-						"Account Name: Petty Cash",
-						"New account under Assets → Current Assets"
+						"Open the submitted Delivery Note",
+						"(open)",
+						"Status Submitted, name SM-DN-2026-0001"
 					],
-					["2", "Set Is Group", "No", "Account accepts journal entries"],
-					["3", "Add Account", "Freight Inward, under Expenses", "New expense ledger"],
-					["4", "Add Account", "SST Payable, under Current Liabilities", "Account type selectable"],
-					["5", "Set Account Type", "Tax", "Account flagged as a tax account"],
+					[
+						"2",
+						"Click Cancel and confirm",
+						"(cancel)",
+						"Status Cancelled, document opens read-only"
+					],
+					[
+						"3",
+						"Open the Stock Ledger for the item",
+						"SM-BL200",
+						"Two rows: the original and its reversal"
+					],
+					[
+						"4",
+						"Open the General Ledger for the voucher",
+						"SM-DN-2026-0001",
+						"Four rows: the original pair and the reversal pair"
+					],
+					[
+						"5",
+						"Open Stock Balance",
+						"Main Warehouse",
+						"Quantity back to 50, but the history is longer"
+					],
 					[
 						"6",
-						"Add Account",
-						"Service Tax Payable, type Tax",
-						"Second tax ledger for 8 % service tax"
-					],
-					["7", "Save each", "(no voucher)", "Tree shows all four with the - SM suffix"]
+						"Search the document name",
+						"SM-DN-2026-0001",
+						"Still found, still labelled Cancelled"
+					]
 				]
 			},
-			"notes": "Consultants are hired for judgement, not clicking. Explain why these four: petty cash because Malaysian SMEs keep a float, freight inward because imports and delivery charges must land somewhere other than a generic expense, and two tax accounts because sales tax and service tax are declared separately. A single 'Tax Payable' account forces the client to unpick it manually at filing time.",
-			"paths": ["Accounts → Chart of Accounts → Add Account"]
+			"notes": "Clients ask for delete because their spreadsheet let them. Show them the reversal rows and the argument ends: the stock is back, the books balance, and the record of the mistake is permanent in exactly the way statutory audit wants. The only document that should ever be deleted is a draft — and even then, explain that cancelling is safer."
 		},
 		{
-			"kicker": "Lesson 2 · Expected outcome",
-			"title": "Verify the tree, not the form",
+			"kicker": "Lesson 4 · Amendment",
+			"title": "Amend creates a linked copy, not an edit",
 			"bullets": [
-				"The tree shows Petty Cash under Current Assets and both tax accounts under Current Liabilities",
-				"Opening a leaf account shows no children; opening a group shows an Add Child button",
-				"Trying to post a Journal Entry to a group account is refused with a clear message",
-				"Freight Inward appears in the Profit and Loss report under Expenses, at zero",
-				"The two tax accounts appear in the tax account selector of a tax template"
+				"Amend is only offered on a cancelled document: cancel first, then amend, in that order, always",
+				"The new document carries amended_from pointing at the original, which is how the chain is reconstructed",
+				"The original stays cancelled and untouched, so the pair tells the truth about the correction",
+				"Amending a submitted document without cancelling is impossible by design, not by configuration",
+				"Version numbers climb in the name, so three attempts read as three documents with a visible lineage"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Petty Cash parent", "Current Assets", "Chart of Accounts tree"],
-					["SST Payable type", "Tax", "Account form"],
-					["Group posting", "Blocked", "Try a Journal Entry"],
-					["P&L line", "Freight Inward, 0.00", "Accounts → Profit and Loss"],
-					["Tax selector", "Both tax accounts listed", "Sales Taxes and Charges Template"]
+					[
+						"Amendment link present",
+						"amended_from = SM-DN-2026-0001",
+						"Open the new note, Connections tab"
+					],
+					["New name issued", "SM-DN-2026-0002", "Document header after save"],
+					["Original untouched", "Status still Cancelled", "Search the original name"],
+					["Chain readable", "Two documents, one lineage", "List view filtered by item"],
+					["Ledger effect", "Only the new submission posts", "Stock Ledger, group by voucher"]
 				]
 			},
-			"notes": "The group-posting test is the one learners remember, because ERPNext refuses it explicitly. Run it once in front of the client so they understand why 'add a new account' is sometimes the wrong answer. Keep the account list short and meaningful; a 300-account chart is the most common sign of an implementation done without a designer.",
-			"callout": {
-				"tone": "tip",
-				"title": "Name for the report",
-				"text": "Account names are read by managers on the P&L, not by developers. Write 'Freight Inward', not 'Account 5200'."
-			}
+			"notes": "The habit to install is cancel, then amend, in that order, and never 'edit and save' on something submitted. When the client asks why they cannot simply fix the quantity, the answer is the ledger: the submitted rows are already in the stock and the books, and correcting them by editing would leave no trace of what was posted. Amendment keeps both halves of the story."
 		},
 		{
-			"kicker": "Lesson 3 · Company defaults",
-			"title": "The defaults that every document silently inherits",
+			"kicker": "Lesson 5 · Editable exceptions",
+			"title": "The few fields a submitted document still allows",
 			"bullets": [
-				"Round Off and Write Off accounts decide where rounding and bad-debt differences land",
-				"Default Cost Center pre-fills every line so no posting is ever unallocated",
-				"Global Defaults sets the company used when a user creates a document from the home screen",
-				"Defaults are cheap now and painful later: changing them creates an inconsistency between periods",
-				"Write the choices down in the configuration worksheet, because nobody remembers them at audit time"
+				"Some fields are flagged Allow on Submit, and those stay editable after the document is committed",
+				"Supplier bill number and bill date on a Purchase Invoice are the classic examples consultants rely on",
+				"Shipping address and contact details can often be corrected without unwinding a stock movement",
+				"The flag is per field, per doctype, so the honest answer is 'check this field', not 'check the document'",
+				"Anything that changes money or quantity is never allow-on-submit, because the ledger already posted"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Bill number editable after submit",
+						"Accepts a value and saves",
+						"Purchase Invoice, Supplier tabs"
+					],
+					["Quantity editable after submit", "Field is read-only", "Same invoice, Items table"],
+					["Rate editable after submit", "Field is read-only", "Same invoice, Items table"],
+					[
+						"Allow on Submit visible",
+						"Tick box on the field definition",
+						"Setup → Customize Form → field"
+					],
+					["Change recorded", "Version log entry with old and new", "Menu → Version"]
+				]
+			},
+			"notes": "This lesson prevents the most common support ticket in the first month: 'the field is greyed out'. Rather than promising that documents are editable, teach the client that a committed document is frozen except where somebody deliberately allowed a field, and that the correction will appear in the Version log. Then show them the Version log so the promise is visibly true."
+		},
+		{
+			"kicker": "Lesson 6 · Referencing documents",
+			"title": "Why a cancel sometimes refuses: active references",
+			"bullets": [
+				"A document cannot be cancelled while another submitted document points at it as its source",
+				"A Delivery Note with a submitted Sales Invoice against it will refuse cancellation, with a named reason",
+				"The message names the blocking documents, so the fix is a sequence of cancels from the bottom up",
+				"This is a feature, not a bug: it stops an invoice existing for goods that were never delivered",
+				"Teach the direction of the chain: order, then delivery, then invoice, then payment, cancelled in reverse"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Company → Accounts tab",
-						"Round Off Account: Round Off - SM",
-						"Field accepts the ledger"
+						"Submit a Delivery Note from a Sales Order",
+						"(submit)",
+						"Status Submitted, invoiceable"
 					],
 					[
 						"2",
-						"Company → Accounts tab",
-						"Write Off Account: Write Off - SM",
-						"Second default set"
+						"Create and submit a Sales Invoice from it",
+						"(submit)",
+						"Invoice submitted, linked to the note"
 					],
 					[
 						"3",
-						"Company → Accounts tab",
-						"Default Cost Center: Main - SM",
-						"Cost centre pre-filled on new documents"
+						"Try to cancel the Delivery Note",
+						"(cancel)",
+						"Red error naming Active Referencing Documents"
 					],
-					[
-						"4",
-						"Company → Defaults tab",
-						"Default Warehouse: Main Warehouse - SM",
-						"Used by stock documents"
-					],
-					[
-						"5",
-						"Setup → Global Defaults",
-						"Default Company: Seri Murni Sdn Bhd",
-						"Home screen uses this company"
-					],
-					["6", "Save both forms", "(no voucher)", "Values persist after a refresh"]
+					["4", "Read the message", "(read)", "The invoice name is listed as the blocker"],
+					["5", "Cancel the invoice first", "(cancel)", "Invoice cancelled, no ledger conflict"],
+					["6", "Now cancel the Delivery Note", "(cancel)", "Cancel succeeds; stock returns"]
 				]
 			},
-			"notes": "These fields are where implementations quietly diverge: one site rounds to a salary-expense account, another to a suspense account, and the P&L becomes incomparable across years. Explain the intent of each default and let the client choose, then record the choice. If a client has no opinion, propose the conventional option and move on.",
-			"paths": ["Setup → Company → Accounts", "Setup → Global Defaults"]
+			"notes": "Expect this error in the first week of every go-live, always in the same shape: someone wants to undo a delivery and cannot. Walk the chain out loud — the invoice exists because the delivery happened, so the invoice must go first, then the delivery. Clients remember the direction better than they remember the message."
 		},
 		{
-			"kicker": "Lesson 3 · Expected outcome",
-			"title": "Prove the defaults are wired",
+			"kicker": "Lesson 7 · The audit trail",
+			"title": "Showing a client the system's own memory",
 			"bullets": [
-				"A new Sales Invoice opens with the company already filled in",
-				"Each line shows the default cost centre without the user typing it",
-				"A journal entry can be posted with a 0.05 difference and lands in Round Off",
-				"Stock documents default to Main Warehouse, not to the retail counter",
-				"The configuration worksheet has six completed rows you can show the client"
+				"Every saved change to a document writes a Version entry with the field, the old value and the new value",
+				"Comments and assignments sit beside it, so 'who asked for this' has an answer inside the document",
+				"The Version log is what you open when a number is questioned and nobody admits to changing it",
+				"It is read-only to normal users and cannot be edited from the interface, which is the point",
+				"Show it once during training and the 'the system changed my number' conversation largely disappears"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["New invoice company", "Seri Murni Sdn Bhd", "Selling → Sales Invoice → New"],
-					["Line cost centre", "Main - SM", "Item table, Cost Center column"],
-					["Rounding account", "Round Off - SM", "Journal Entry with 0.05 difference"],
-					["Default warehouse", "Main Warehouse - SM", "Stock Entry → New"],
-					["Worksheet rows", "6", "Your configuration worksheet"]
+					[
+						"Version entry written",
+						"Field, old value, new value, user, timestamp",
+						"Menu → Version on the document"
+					],
+					["Comment visible", "Text with author and time", "Activity panel on the document"],
+					["Audit rows protected", "No edit controls on Version rows", "Same panel"],
+					["Trace across documents", "Linked document names listed", "Connections tab"],
+					["Exportable evidence", "Rows copy to a spreadsheet", "Version list view"]
 				]
 			},
-			"notes": "Use the rounding test deliberately: post a journal entry that is out by five sen and watch ERPNext route the difference. It teaches two things at once, that ERPNext enforces balance and that the round-off account is real, not decorative. Then delete the test voucher so the client's trial balance stays clean.",
-			"callout": {
-				"tone": "warn",
-				"title": "Delete your test vouchers",
-				"text": "Cancel and delete every test journal entry before handover. A stray RM 0.05 posting is the first thing an auditor asks about."
-			}
+			"notes": "This is the slide that buys trust. Instead of claiming the system is auditable, you open a document, change the bill number, and let the Version row appear in front of the client with their own name on it. Then say the sentence they will repeat to their auditor: nothing that matters can be changed without leaving a mark."
 		},
 		{
-			"kicker": "Lesson 4 · Cost centres",
-			"title": "A cost centre tree the client can report on",
+			"kicker": "Lesson 8 · Choosing the correction",
+			"title": "Amend, cancel, or write a new document?",
 			"bullets": [
-				"Cost centres are a dimension on postings, so they never change the total, only the analysis",
-				"Build the tree around how the client makes decisions: outlet, channel or production line",
-				"Parent cost centres are groups; only leaves can receive postings",
-				"Every transaction line needs one, which is why the default is set at company level",
-				"Too many cost centres is worse than too few: nobody allocates 40 buckets correctly"
+				"Same document, wrong content, nothing downstream yet: cancel, then amend, and keep the chain",
+				"Wrong document entirely, nothing referenced: cancel it and raise the correct doctype instead",
+				"Downstream documents already exist: unwind from the bottom of the chain, never from the middle",
+				"Nothing was ever submitted: edit the draft, or delete it, because no ledger or stock exists",
+				"Financial corrections after a closed period go through journals, not by touching the original"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Draft with a typo", "Editable in place", "Open it and correct the field"],
+					["Submitted, no references", "Cancel, then amend", "Actions menu"],
+					[
+						"Submitted, invoice exists",
+						"Cancel invoice, then the note",
+						"Actions menu, in that order"
+					],
+					["Wrong customer on a submitted invoice", "Cancel and amend, never edit", "Actions menu"],
+					[
+						"Closed period discovered later",
+						"Journal entry in the open period",
+						"Accounts → Journal Entry"
+					]
+				]
+			},
+			"notes": "Give the client a decision table rather than a lecture. The four rows here cover almost every correction they will face in the first quarter, and the closed-period row is the one that saves an argument with the auditor. Say plainly that journals are not a loophole: they are the documented way to correct a period that has been reported."
+		},
+		{
+			"kicker": "Lesson 9 · What reports read",
+			"title": "Reports only believe submitted documents",
+			"bullets": [
+				"The General Ledger, the Stock Ledger and the financial statements read submitted records only",
+				"A draft invoice is absent from receivables ageing, so a pile of drafts is a hidden cash-flow gap",
+				"Stock Balance counts submitted stock entries, so a draft delivery looks like stock that is still yours",
+				"The status filter in a list view is your fastest diagnostic when a total will not reconcile",
+				"Agree one reporting rule with the client: nothing counts until it is submitted, and then it always counts"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Draft invoice in ageing", "Not present", "Accounts Receivable report"],
+					[
+						"Submitted invoice in ageing",
+						"Present with the outstanding amount",
+						"Same report, after submit"
+					],
+					["Draft delivery in stock", "Still counted as available", "Stock Balance"],
+					[
+						"Submitted delivery in stock",
+						"Reduced by the delivered quantity",
+						"Same report, after submit"
+					],
+					["Filter to prove it", "docstatus = 0 lists the drafts", "List view status filter"]
+				]
+			},
+			"notes": "This is where a month-end reconciles or does not. Show the client the ageing report before and after submitting one invoice, then ask them what a hundred unsubmitted invoices would do to their cash forecast. The rule you extract from them — nothing counts until it is submitted — becomes the operating discipline for the whole project."
+		},
+		{
+			"kicker": "Lesson 10 · Teaching it",
+			"title": "The five-minute lifecycle demo you can give anywhere",
+			"bullets": [
+				"Draft a document, show it does nothing, submit it, show two ledgers move, cancel it, show the reversal",
+				"Amend the cancelled document, show the link, then open the Version log and let them read their own name",
+				"Finish with the reporting rule: drafts are invisible, submitted is permanent, cancelled is still history",
+				"This demo fits in five minutes and answers most objections raised in a requirements workshop",
+				"Rehearse it once; the sequence is what makes it land, not the words"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Accounts → Cost Center → New", "Retail - SM", "New child cost centre"],
-					["2", "Set Parent", "Main - SM", "Tree shows Retail under Main"],
-					[
-						"3",
-						"Add Cost Center",
-						"Assembly - SM, parent Main - SM",
-						"Third cost centre in the tree"
-					],
-					["4", "Add Cost Center", "Showroom - SM, parent Retail - SM", "Nested third level"],
-					["5", "Open Main - SM", "Is Group: Yes if it has children", "Group cannot be posted to"],
-					["6", "Save all", "(no voucher)", "Cost centre tree renders with indentation"]
-				]
-			},
-			"notes": "Ask one question before building: 'which number do you want split three ways on the P&L?' The answer defines the dimension. For a distributor with a showroom and an assembly bench, three cost centres are enough. If the client asks for profit by customer, that is a group-by in a report, not a cost centre, and mixing the two is a classic consultant error.",
-			"paths": ["Accounts → Cost Center → New"]
-		},
-		{
-			"kicker": "Lesson 4 · Expected outcome",
-			"title": "Dimension postings that add up to the total",
-			"bullets": [
-				"A journal entry posted to Showroom appears in the cost-centre column of the P&L",
-				"The sum of all cost-centre columns equals the company total for that account",
-				"Posting to the parent Main - SM is refused because it is a group",
-				"The Cost Center field on a new invoice line defaults to Main - SM",
-				"Cost Center-wise Profit and Loss shows four columns, three of them with zero balances"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Tree", "Main → Retail → Showroom, plus Assembly", "Cost Center list"],
-					["Group posting", "Refused", "Journal Entry to Main - SM"],
-					["Report columns", "4 cost centres", "Cost Center-wise Profit and Loss"],
-					["Dimension total", "Equals company total", "Same report, Total row"],
-					["Default on lines", "Main - SM", "Sales Invoice → New"]
-				]
-			},
-			"notes": "The reconciliation check, that the columns sum to the total, is what separates a consultant from a data-entry clerk. Run it every time you add a dimension. If the client later asks for branch and cost centre both, explain that ERPNext supports one cost centre plus additional accounting dimensions, and that adding a second dimension is a design decision rather than a checkbox.",
-			"callout": {
-				"tone": "malaysia",
-				"title": "Branch, outlet or state?",
-				"text": "Malaysian SMEs often report by outlet. If the outlets have their own bank accounts and stock, use separate warehouses and one cost centre per outlet rather than 14 cost centres."
-			}
-		},
-		{
-			"kicker": "Lesson 5 · Malaysian SST",
-			"title": "Two tax templates, three accounts, no GST",
-			"bullets": [
-				"Malaysia charges SST, so ignore the GST fields and templates that ship with older data",
-				"An Item Tax Template applies a rate and account to an item, and is what makes mixed-rate invoices correct",
-				"A Sales Taxes and Charges Template applies tax at document level, usually On Net Total",
-				"Sales tax is 10 % on goods and service tax 8 % on services for the sample company, each with its own account",
-				"Keep 'Included in Paid Amount' ticked, otherwise the invoice total and the tax total disagree"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Accounts → Item Tax Template → New", "SST 10% - SM", "Empty tax row table"],
-					[
-						"2",
-						"Add row",
-						"Tax Type: Sales Tax, Account: SST Payable - SM, Rate: 10",
-						"One tax row"
-					],
-					[
-						"3",
-						"New Item Tax Template",
-						"Service Tax 8% - SM, account Service Tax Payable, rate 8",
-						"Second template"
-					],
+					["1", "Create and save a delivery note", "(save)", "Draft, and stock unchanged"],
+					["2", "Show Stock Balance", "SM-BL200", "Unchanged quantity"],
+					["3", "Submit the note", "(submit)", "Status Submitted, ledger rows appear"],
 					[
 						"4",
-						"Accounts → Sales Taxes and Charges Template → New",
-						"SST Sales 10% - SM",
-						"Charges table"
+						"Show stock and General Ledger",
+						"same voucher",
+						"Quantity down, cost of goods sold posted"
 					],
 					[
 						"5",
-						"Add row",
-						"On Net Total, account SST Payable - SM, rate 10",
-						"Row with charge type On Net Total"
+						"Cancel, then amend",
+						"(cancel, amend)",
+						"Reversal rows, new document with amended_from"
 					],
-					[
-						"6",
-						"Tick flags",
-						"Included in Print Rate and Included in Paid Amount",
-						"Both checkboxes on"
-					],
-					["7", "Save as default", "Default: Yes", "Template used automatically on new invoices"]
+					["6", "Open Version", "(read)", "Field changes with user and timestamp"]
 				]
 			},
-			"notes": "Explain the division of labour: the item tax template decides which account and rate a product carries, and the sales taxes template decides what appears on the invoice footer. For a client selling only goods, one document template is enough. For a mixed business, both templates plus per-item assignment are required, and the expected outcomes in this lesson prove it.",
-			"paths": ["Accounts → Item Tax Template", "Accounts → Sales Taxes and Charges Template"]
-		},
-		{
-			"kicker": "Lesson 5 · Expected outcome",
-			"title": "Predict the tax before you save the invoice",
-			"bullets": [
-				"A test invoice of 1,200.00 net with SST 10 % shows tax 120.00 and grand total 1,320.00",
-				"Submitting it writes Dr Debtors 1,320.00, Cr Sales 1,200.00 and Cr SST Payable 120.00",
-				"An item with the service tax template shows 8 % even on the same invoice",
-				"An item with no tax template shows zero tax and no tax row on the printed document",
-				"The tax account in the general ledger matches the figure on the invoice footer, to the sen"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Net / tax / total", "1,200.00 / 120.00 / 1,320.00", "Sales Invoice totals"],
-					["GL debit", "Debtors 1,320.00", "Accounts → General Ledger"],
-					["GL credits", "Sales 1,200.00 + SST 120.00", "Same report"],
-					["Service tax line", "8 % on its own line", "Mixed test invoice"],
-					["Untaxed item", "0.00 tax", "Same invoice"]
-				]
-			},
-			"notes": "Make learners compute 1,200 × 10 % before they look at the screen. Consultants are expected to predict a total to the sen during a workshop, and the only way to be trusted is repetition. If the totals disagree, the usual causes are a template applied twice, a rate typed on the item as well as the template, or a currency with more than two decimals.",
-			"callout": {
-				"tone": "malaysia",
-				"title": "SST registration matters",
-				"text": "Only SST-registered clients charge SST. If the client is below the threshold, configure zero-rated templates and say so in the configuration document."
-			}
+			"notes": "Keep this demo rehearsed and short. The temptation is to explain docstatus as a database concept; resist it and stay with the four visible moments — draft does nothing, submit posts, cancel reverses, amend links. If you can deliver this in five minutes without notes, you can open almost any ERPNext workshop without losing the room."
 		}
 	],
 	"lab": {
-		"title": "Lab · Build the Seri Murni company, accounts and tax",
+		"title": "Lab · Prove the lifecycle on Seri Murni's stock",
 		"minutes": 60,
 		"steps": [
-			"Create the company Seri Murni Sdn Bhd, abbreviation SM, Malaysia, MYR, FY 2026, Standard chart",
-			"Verify five root groups exist and that every account ends with - SM",
-			"Add Petty Cash, Freight Inward, SST Payable (type Tax) and Service Tax Payable (type Tax)",
-			"Set Round Off Account, Write Off Account, Default Cost Center and Default Warehouse on the company",
-			"Set the default company in Global Defaults and confirm a new invoice picks it up",
-			"Create cost centres Retail - SM, Showroom - SM and Assembly - SM under Main - SM",
-			"Create the SST 10% and Service Tax 8% item tax templates, then the SST Sales 10% document template",
-			"Raise a test invoice of five units at 240.00 with the SST template, check 1,200.00 / 120.00 / 1,320.00, then cancel and delete it",
-			"Complete the Volume 0 configuration worksheet rows for lessons 1 to 5"
+			"Open a new Delivery Note for Aeon Big, item SM-BL200 qty 5 from Main Warehouse, and save without submitting",
+			"Record the Stock Balance for SM-BL200 and confirm the draft has not changed it",
+			"Submit the note, then read the Stock Ledger row and the two General Ledger rows for that voucher",
+			"Confirm cost of goods sold of 600.00 at 120.00 per unit and that gross profit is unaffected until invoiced",
+			"Cancel the note, then read the reversal rows in both ledgers and confirm the quantity is restored",
+			"Amend the cancelled note, change the quantity to 4, submit it and confirm amended_from points at the original",
+			"Open the Version log on the amended document and report every field change with its user and timestamp",
+			"Create a Sales Invoice from the amended note, submit it, then attempt to cancel the note and read the blocker error",
+			"Cancel the invoice first and then the note, and confirm the chain unwinds bottom-up without a ledger imbalance"
 		],
-		"done": "Your tree shows the four new accounts and three cost centres, the test invoice computed 120.00 tax to the sen, and the worksheet has a written choice for every default you set."
+		"done": "The candidate can show a draft that moved nothing, a submission that posted to two ledgers, a cancellation that reversed rather than deleted, an amendment chained by amended_from, and the exact error text of a blocked cancel."
 	},
 	"quiz": [
 		{
-			"question": "Why does the company abbreviation matter at creation time?",
+			"question": "A client wants to correct the quantity on a submitted Delivery Note. What is the correct instruction?",
 			"options": [
-				"It is only cosmetic and can be changed freely later",
-				"It becomes the suffix on every account, warehouse and cost centre name",
-				"It sets the tax registration number",
-				"It decides the chart of accounts language"
+				"Edit the row and save, since quantity is allow-on-submit",
+				"Cancel the note, then amend it, because submission already posted stock and cost",
+				"Delete the note and create a fresh one to keep the books clean",
+				"Ask a System Manager to unlock docstatus in the database"
 			],
 			"answer": 1,
-			"why": "The abbreviation is appended to record names such as Debtors - SM. Changing it later means renaming dozens of linked records, so choose it before saving."
+			"why": "A submitted document is frozen because its Stock Ledger and General Ledger rows already exist. Cancel reverses those rows and amend creates a linked copy, which is the only correction that keeps the audit trail honest."
 		},
 		{
-			"question": "A client is SST registered and sells goods and repair services. What is the correct setup?",
+			"question": "What happens to stock when a Delivery Note is saved as a draft?",
 			"options": [
-				"One 10 % tax template applied to all invoices",
-				"Per-item tax templates for 10 % sales tax and 8 % service tax, plus a document template",
-				"Two companies, one per tax rate",
-				"A single manual tax line typed on each invoice"
+				"Stock is reserved and projected quantity drops, actual quantity unchanged",
+				"Nothing at all: no stock ledger entry is written until submission",
+				"Stock drops immediately and is restored if the draft is discarded",
+				"Stock drops only if the item is not batch-tracked"
 			],
 			"answer": 1,
-			"why": "Item tax templates carry the per-item rate and account, so a mixed invoice is correct line by line, while the document template controls what appears on the invoice."
+			"why": "Draft documents post nothing. Projected quantity on a Sales Order is a different mechanism; on a draft Delivery Note there is neither stock movement nor ledger effect, which is why unsubmitted work is invisible to reports."
 		},
 		{
-			"question": "What happens if you post a journal entry to a group account?",
+			"question": "A Delivery Note refuses to cancel and names an active referencing document. What does that mean?",
 			"options": [
-				"It is allowed but greyed out in reports",
-				"ERPNext refuses the posting because group accounts cannot hold entries",
-				"The entry is posted to the first child account",
-				"It posts with a warning only"
+				"The document is locked by another user editing it right now",
+				"A submitted Sales Invoice points at the note, so the invoice must be cancelled first",
+				"The stock is negative and must be corrected before cancelling",
+				"The note was amended and only the amendment can be cancelled"
 			],
 			"answer": 1,
-			"why": "Group accounts exist to organise the tree. Only leaf accounts accept postings, which is why the Add Account form asks whether the new account is a group."
+			"why": "ERPNext blocks cancellation while a submitted document references the note, because otherwise an invoice would exist for goods that were never delivered. The chain unwinds from the bottom: invoice, then delivery."
 		},
 		{
-			"question": "Which default keeps every posting allocated to a dimension?",
+			"question": "Where do you prove that a field was changed and by whom?",
 			"options": [
-				"Round Off Account",
-				"Default Cost Center on the company",
-				"Default Warehouse",
-				"Default Price List"
+				"In the document's comments, if somebody wrote it down",
+				"In the Version log, which records field, old value, new value, user and time",
+				"In the Stock Ledger, since every change produces a row",
+				"In the browser history of the user who made the change"
 			],
 			"answer": 1,
-			"why": "The company-level default cost centre pre-fills every document line, so no posting is left without a dimension and cost-centre reports add up."
+			"why": "Every saved change writes a Version entry with the field, the previous and new value, the user and the timestamp. It is read-only in the interface, which is what makes it usable as audit evidence."
 		},
 		{
-			"question": "A test invoice of 1,200.00 with a 10 % SST template should show which grand total?",
-			"options": ["1,200.00", "1,320.00", "1,308.00", "1,080.00"],
+			"question": "A hundred Sales Invoices are sitting as drafts at month end. What does the receivables ageing show?",
+			"options": [
+				"All hundred, because the invoice exists as a record",
+				"None of them, because reports read submitted documents only",
+				"Only the ones with a due date inside the period",
+				"The total value, but without customer names"
+			],
 			"answer": 1,
-			"why": "Tax is 120.00 on a net of 1,200.00, so the payable total is 1,320.00. A different figure means a template, rate or inclusion flag is wrong."
+			"why": "Financial and stock reports read submitted records. A pile of drafts is a hidden cash-flow and stock gap, which is why the reporting rule — nothing counts until it is submitted — belongs in the client's operating discipline."
 		}
 	],
 	"memory": {
-		"spine": "Setup runs broad to narrow, company then tree then defaults then dimensions, and every step is proved with a document afterwards.",
+		"spine": "A document does nothing until it is submitted, and after that it is never deleted, only reversed or amended.",
 		"device": {
 			"kind": "phrase",
-			"label": "Broad to narrow, then prove it",
+			"label": "Draft, commit, cancel, amend",
 			"expansion": [
-				"Company first: abbreviation, currency and fiscal year, because everything else hangs off it",
-				"Then the tree: keep the template, add leaf accounts, never rename the standard tree",
-				"Then defaults: round off and write off accounts that every document silently inherits",
-				"Then dimensions: cost centres split a posting for analysis, never the total",
-				"Then tax: SST templates and accounts, and no GST anywhere"
+				"Draft does nothing at all: no stock, no ledger, no report row",
+				"Submit is the commit: one click writes the stock ledger and the general ledger",
+				"Cancel reverses with offsetting rows and keeps the document for the record",
+				"Amend only follows a cancel and links back through amended_from",
+				"References block a cancel, so a chain unwinds from the invoice down to the delivery"
 			]
 		},
 		"cards": [
 			{
-				"q": "Which five root groups must a new company show?",
-				"a": "Application of Funds, Sources of Funds, Equity, Income and Expenses. A missing group means the template did not load.",
-				"hint": "Count them in the tree"
+				"q": "What does saving a draft change in the stock and the books?",
+				"a": "Nothing. No stock ledger entry and no general ledger row exists until the document is submitted, so drafts are invisible to reports.",
+				"hint": "Draft is a proposal"
 			},
 			{
-				"q": "Why never rename the standard account tree?",
-				"a": "Reports and tax templates look accounts up by name, so renaming breaks every report the client will ever ask for.",
-				"hint": "Add leaves, keep nodes"
+				"q": "Why can a submitted document not simply be deleted?",
+				"a": "Its stock and ledger rows are already posted. Cancelling writes offsetting rows and keeps the record, which is what an auditor needs to see.",
+				"hint": "Reverse, never remove"
 			},
 			{
-				"q": "Where do rounding differences land?",
-				"a": "The Round Off account set in company defaults, never in the customer's receivable.",
-				"hint": "One account, named once"
+				"q": "What must happen before a document can be amended?",
+				"a": "It must be cancelled first. Amend then creates a new document carrying amended_from, while the original stays cancelled and untouched.",
+				"hint": "Cancel, then amend"
 			},
 			{
-				"q": "Do cost centres change the trial balance?",
-				"a": "No. A dimension splits a posting for analysis while the total stays exactly the same.",
-				"hint": "Analysis, not amount"
+				"q": "What does the error Active Referencing Documents tell you to do?",
+				"a": "A submitted document points at this one, so cancel from the bottom of the chain upwards: invoice first, then delivery note.",
+				"hint": "Unwind downward"
 			},
 			{
-				"q": "A 1,200.00 net invoice at SST 10 per cent, what are tax and total?",
-				"a": "120.00 tax and 1,320.00 grand total. Predict it before the invoice is saved.",
-				"hint": "The course anchor numbers"
+				"q": "Which single report check proves a posting really happened?",
+				"a": "Open the Stock Ledger and the General Ledger filtered by the voucher. If the rows are there, the document posted; if not, it is still a draft.",
+				"hint": "Follow the voucher"
 			}
 		],
 		"trap": {
-			"what": "The company abbreviation is changed after documents have been posted.",
-			"why": "The abbreviation is baked into every account name and series prefix already used, so changing it orphans history instead of renaming it."
+			"what": "The client asks you to 'just delete' a wrongly submitted invoice so the ageing report looks right.",
+			"why": "Submitted documents cannot be deleted because their ledger rows already exist. Cancel it, then amend or re-raise, and show the Version log so the correction is visible rather than erased."
 		}
 	},
-	"narration": "Welcome to the consultant track. This course is not about how ERPNext is built; it is about standing it up for a client, entering real data and proving the result to the sen. Volume zero starts with the company. Every account name carries the company abbreviation, so choose the two letters before you save. Country selects the chart of accounts template, currency is effectively fixed after the first transaction, and the fiscal year decides which period your postings land in. Then you verify, not the form, but the result: five root groups, every account ending in your abbreviation, a debtors control account, and the company selectable in global defaults. Next, add the accounts your client actually needs: petty cash, freight inward, and two tax accounts, one for sales tax and one for service tax, both flagged as tax accounts. Group accounts never take postings, and ERPNext refuses the voucher. Defaults come next: round off, write off, default cost centre and default warehouse. They look cosmetic, and they pre-fill every document. Then cost centres, built around how the client makes decisions, with a check that the columns add up to the total. Finally Malaysian SST: item tax templates for ten percent goods and eight percent services, a document template on net total, and a test invoice that must show one thousand two hundred net, one hundred twenty tax, and one thousand three hundred twenty payable. In the lab you build it and record every choice."
+	"narration": "Every ERPNext document has three states, and one hidden field decides which state it is in. A draft is a proposal: you can type anything, save it as often as you like, and nothing happens to stock or to the books. A submitted document is a commitment. The single click writes a stock ledger entry and a general ledger pair, and the document freezes. A cancelled document is history: the postings are reversed by offsetting rows, and the record stays exactly where it was. Nothing is deleted, which is why an auditor can follow a mistake from beginning to end. When something is wrong, cancel first and then amend, because amendment is only offered on a cancelled document and it creates a new one linked back through amended_from. If a cancel is refused, look for the active referencing document and unwind the chain from the bottom, invoice before delivery. And remember what reports read: only submitted records. A hundred draft invoices are invisible to receivables ageing. Teach the five minute demo, draft, submit, cancel, amend, and most objections never get raised."
 }

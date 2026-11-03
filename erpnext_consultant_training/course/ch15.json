@@ -1,395 +1,400 @@
 {
 	"id": "ch15",
 	"number": 15,
-	"title": "Volume 6 · Bills of Materials and Work Orders",
-	"subtitle": "Lessons 1–4: a bill of materials the floor will follow, a work order that reserves the right stock, and a completion that leaves a sane valuation",
+	"title": "Volume 5 · Journals, Accruals and the Bank",
+	"subtitle": "Lessons 1–4: the four journal situations a consultant meets every month, and a bank reconciliation that closes to zero",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Build a bill of materials with materials, operations and a defensible cost",
-		"Plan a work order from real demand and read what it reserves",
-		"Issue components to the floor without losing the valuation trail",
-		"Complete production so finished goods carry materials plus capacity cost"
+		"Post accruals and prepayments that reverse cleanly in the next period",
+		"Read any journal entry and say which reports it will move",
+		"Reconcile a bank statement to the ledger without a plug figure",
+		"Correct a misposting with a reversal or amendment rather than an edit"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Bill of materials",
-			"title": "Write a bill of materials the floor will follow",
+			"kicker": "Lesson 1 · Journal entry",
+			"title": "Post an accrual that survives the close",
 			"bullets": [
-				"A BOM is a recipe: quantities, operations and the cost of both",
-				"Quantities must be per single finished unit, or every work order multiplies the error",
-				"Operations carry time and rate, which is how labour enters the finished cost",
-				"Include only what the floor actually consumes, not what the drawing says in theory"
+				"An accrual records a cost in the month it was incurred, before the invoice arrives",
+				"The journal must name the same cost centre and cost type the invoice will later use",
+				"Use a dedicated accrued liabilities account, never the creditor control account",
+				"Every accrual needs a reversal date, or last month's cost is counted twice"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Manufacturing → Bill of Materials → New",
-						"Item SM-ASM, quantity 1, company SM",
-						"Empty BOM form"
+						"Accounts → Journal Entry → New",
+						"Entry type Journal Entry, date 31-01-2026",
+						"Empty double-entry grid"
 					],
 					[
 						"2",
-						"Add components",
-						"SM-MTR 2 Nos at 80.00, SM-HSG 1 Nos at 40.00",
-						"Material cost 200.00"
+						"First row",
+						"Electricity - SM, debit 800.00, cost centre Main - SM",
+						"Debit row accepted"
 					],
-					[
-						"3",
-						"Add operation",
-						"Assembly, workstation Assembly Line, 30 minutes",
-						"Operation row accepted"
-					],
-					["4", "Set the rate", "60.00 per hour on the operation", "Operating cost 30.00"],
-					["5", "Save and Submit", "Confirm", "BOM-SM-ASM-001, total cost 230.00"],
-					["6", "Check the tree", "Manufacturing → BOM Tree", "One level, two components"]
-				]
-			},
-			"notes": "Two motors at eighty and one housing at forty is two hundred of material, and half an hour at sixty adds thirty of capacity, so the assembly costs two hundred thirty to make. If the learner cannot predict that number before saving, they will not notice when a supplier price change silently makes every finished unit wrong. The BOM is the only place where a costing error is cheap to fix."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the BOM",
-			"title": "The cost roll-up, proved line by line",
-			"bullets": [
-				"Material cost, operating cost and total must each be visible and explainable",
-				"A BOM without operations still works, but labour then never reaches inventory",
-				"Quantity per unit of one keeps the work order arithmetic trivial",
-				"Every BOM needs an owner, because prices and routings both change"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Material cost", "200.00", "BOM → Costing section"],
-					["Operating cost", "30.00", "BOM → Operations table"],
-					["Total cost per unit", "230.00", "BOM total"],
-					["Selling price assumption", "350.00", "Item price for SM-ASM"],
-					["Gross margin per unit", "120.00, about 34 per cent", "Your own arithmetic"]
-				]
-			},
-			"notes": "A three hundred fifty selling price against two hundred thirty of cost gives one hundred twenty of margin, roughly thirty four per cent, and that single ratio is what the owner will ask about in the first production meeting. Teach the learner to state it before anyone asks, because a consultant who arrives with the margin already computed sets the tone for the whole engagement."
-		},
-		{
-			"kicker": "Lesson 3 · Work order",
-			"title": "Plan a work order from real demand",
-			"bullets": [
-				"A work order is a promise to the floor: this item, this quantity, this date",
-				"Required items are reserved against the warehouse you nominate, not against hope",
-				"The planned start date drives the material request, so set it honestly",
-				"Do not create work orders for stock you have not sold unless the client plans to stock"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Manufacturing → Work Order → New",
-						"Item SM-ASM, quantity 10, BOM-SM-ASM-001",
-						"Required items populated"
-					],
-					[
-						"2",
-						"Set the dates",
-						"Planned start 05-02-2026, planned end 07-02-2026",
-						"Schedule recorded"
-					],
-					["3", "Set source warehouse", "Main - SM for components", "Reserved quantities shown"],
-					["4", "Save and Submit", "Confirm", "WO-SM-2026-0001, status Not Started"],
-					["5", "Read required items", "SM-MTR 20, SM-HSG 10", "Reserved against Main"],
+					["3", "Second row", "Accrued Expenses - SM, credit 800.00", "Difference shows 0.00"],
+					["4", "Reference", "TNB January bill not yet received", "Remark stored for the auditor"],
+					["5", "Save and Submit", "Confirm", "Journal JE-SM-2026-0001 submitted"],
 					[
 						"6",
-						"Check availability",
-						"Stock Balance for both components",
-						"Enough or a shortage flagged"
+						"Read the GL",
+						"Filter the journal voucher",
+						"Dr Electricity 800.00, Cr Accrued Expenses 800.00"
 					]
 				]
 			},
-			"notes": "Ten assemblies need twenty motors and ten housings, and the work order says so before anything moves. That is the value of the document: it converts a sales promise into a material promise. If availability is short, the conversation happens on the planning screen rather than on the assembly floor, which is a day earlier and considerably cheaper."
+			"notes": "The accrual is not the hard part; the reversal is. Teach the learner to write the reversal date in the remark before submitting, because the person who reverses it in February is usually someone else. A dedicated accrued liabilities account also keeps the creditor control account honest, which matters the moment the client runs an ageing report and finds a supplier they never bought from."
 		},
 		{
-			"kicker": "Lesson 4 · Verify the reservation",
-			"title": "What the work order actually reserves",
+			"kicker": "Lesson 2 · Verify the journal",
+			"title": "Read a journal the way an auditor does",
 			"bullets": [
-				"Reserved quantity is a planning number and does not move the stock ledger",
-				"Stock only moves when material is transferred to the floor",
-				"A work order with no reservation means the item is not stock-tracked or the warehouse is wrong",
-				"Status changes are the audit trail of the production process"
+				"A journal touches only the accounts you name, so nothing is hidden by a document type",
+				"Debits must equal credits before you look at any report",
+				"If a party is named, the entry moves the party ledger as well as the account",
+				"A journal that adjusts debtors directly is usually a workaround, not a correction"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Reserved SM-MTR", "20 units", "Work Order → Required Items"],
-					["Reserved SM-HSG", "10 units", "Work Order → Required Items"],
-					["Stock ledger effect", "none until material transfer", "Stock Ledger for SM-MTR"],
-					["Work order status", "Not Started", "Work Order header"],
-					["Projected quantity at Main", "reduced by the reservation", "Stock → Item dashboard"]
+					["Debit total equals credit total", "800.00 = 800.00", "Journal Entry footer"],
+					["Profit and loss effect", "expense up 800.00", "Profit and Loss Statement, January"],
+					["Balance sheet effect", "accrued liabilities up 800.00", "Balance Sheet, 31-01-2026"],
+					["Party ledger rows", "none, no party named", "Accounts → Party Ledger"],
+					["Cost centre split", "Main - SM 800.00", "Cost Center-wise P&L"]
 				]
 			},
-			"notes": "This is where learners confuse planning with posting. Reserved quantities live in the work order and in availability reports, while the stock ledger stays untouched until the transfer. Say the sentence twice: a reservation is a promise, a transfer is a movement. The distinction prevents the classic panic when a client sees stock still in main after an issue was supposedly made."
+			"notes": "The fastest way to teach this is to ask which two reports move before the entry is submitted, then check. Expense up, liability up, profit down, cash untouched. A learner who can recite that for any journal is ready to sit in front of an accountant, because the accountant's first question is always which line changes."
 		},
 		{
-			"kicker": "Lesson 5 · Material issue",
-			"title": "Issue components to the floor",
+			"kicker": "Lesson 3 · Prepayment",
+			"title": "Release a prepayment month by month",
 			"bullets": [
-				"Material transfer for manufacture moves components to the work-in-progress warehouse",
-				"The transfer is the moment cost leaves raw stock and joins the production order",
-				"Transfer exactly what the work order asks for, not the whole shelf",
-				"Partial transfers are normal for long builds, and the work order tracks the balance"
+				"A prepayment is an asset until the cover it buys is consumed",
+				"One twelfth per month is the discipline that keeps the balance sheet believable",
+				"Post the release as a journal, not by editing the original payment",
+				"Keep a schedule with twelve dates, because a spreadsheet is the audit evidence"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open WO-SM-2026-0001 → Create → Material Transfer",
-						"Nothing",
-						"Stock entry pre-filled with components"
+						"Purchase invoice",
+						"Insurance Premium 1,200.00 paid for twelve months",
+						"Expense posted on payment"
 					],
 					[
 						"2",
-						"Set warehouses",
-						"From Main - SM to Assembly Floor - SM",
-						"Transfer type for manufacture"
+						"Reclassify",
+						"Journal: Dr Prepaid Insurance 1,200.00, Cr Insurance Expense 1,200.00",
+						"Balance moved to the asset"
 					],
 					[
 						"3",
-						"Confirm quantities",
-						"SM-MTR 20, SM-HSG 10",
-						"Transferred quantity equals required"
+						"Monthly release",
+						"Journal: Dr Insurance Expense 100.00, Cr Prepaid Insurance 100.00",
+						"One month consumed"
 					],
-					["4", "Save and Submit", "Confirm", "Stock entry STE-SM-2026-0010 submitted"],
-					[
-						"5",
-						"Check the bins",
-						"Main and Assembly Floor",
-						"Main falls by 20 and 10, floor rises"
-					],
-					[
-						"6",
-						"Check the work order",
-						"Transfer status",
-						"Material transferred, status In Process"
-					]
-				]
-			},
-			"notes": "Twenty motors and ten housings leave main and arrive on the floor, and the total value of the company has not changed. That is the point to make loudly, because the client's accountant will see two ledger rows and ask which one is the cost. Neither is: cost becomes expense only when the finished item is sold."
-		},
-		{
-			"kicker": "Lesson 6 · Verify the WIP",
-			"title": "Work in progress on the floor, in numbers",
-			"bullets": [
-				"Work in progress is the value of components consumed but not yet finished",
-				"The floor warehouse quantity is your visual WIP, and it must match the work order",
-				"No profit appears at this stage, however long the build takes",
-				"A floor balance that outlives the work order is scrap or theft, not WIP"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Components on the floor", "SM-MTR 20, SM-HSG 10", "Stock → Bin, Assembly Floor - SM"],
-					["Value on the floor", "2,000.00", "Stock Balance, Assembly Floor"],
-					[
-						"Main warehouse after issue",
-						"reduced by 20 motors and 10 housings",
-						"Stock → Bin, Main - SM"
-					],
-					["Work order status", "In Process", "Work Order header"],
-					["Profit and loss effect", "none", "Profit and Loss Statement"]
-				]
-			},
-			"notes": "Two thousand of components sitting on the floor is a number a client can see with their own eyes, and that is why the floor warehouse earns its place. When the count on the floor disagrees with the work order, the conversation is about physical control rather than accounting, and it is the warehouse supervisor who owns the answer."
-		},
-		{
-			"kicker": "Lesson 7 · Completion",
-			"title": "Complete the order and value the finished goods",
-			"bullets": [
-				"The manufacture entry consumes components and produces the finished item in one document",
-				"Valuation carries materials plus the operating cost you configured",
-				"A short completion leaves components on the floor, which the next transfer must explain",
-				"Scrap and rework belong in the same work order, not in a separate correction later"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open the work order → Create → Manufacture",
-						"Nothing",
-						"Entry with consumed and produced rows"
-					],
-					[
-						"2",
-						"Check the consumed rows",
-						"SM-MTR 20, SM-HSG 10 from Assembly Floor",
-						"Consumption pre-filled"
-					],
-					["3", "Check the produced row", "SM-ASM 10 units into Main - SM", "Finished quantity 10"],
 					[
 						"4",
-						"Confirm operating cost",
-						"0.50 hours × 10 units at 60.00 per hour",
-						"Operating cost 300.00"
+						"Repeat",
+						"Same journal on the last day of each month",
+						"Eleven remaining, if starting in February"
 					],
-					["5", "Save and Submit", "Confirm", "Finished goods valued at 230.00 each"],
-					["6", "Read the stock ledger", "Filter SM-ASM", "Incoming 10 at 230.00, value 2,300.00"]
-				]
-			},
-			"notes": "Two thousand of materials plus three hundred of capacity gives two thousand three hundred, or two hundred thirty per assembly, which matches the BOM exactly. When the completion value differs from the BOM, the difference is always one of three things: a rate change on a component, an operation time recorded differently, or additional costs added on the entry."
-		},
-		{
-			"kicker": "Volume 6 · Reference",
-			"title": "Production documents in order",
-			"bullets": [
-				"Each document answers one question and hands the next one a number",
-				"Skipping the material transfer makes the completion consume stock that is not there",
-				"The work order is the only place where planned and actual quantities meet",
-				"Every document has a status that tells you where the build actually stands"
-			],
-			"table": {
-				"headers": ["Document", "When", "Purpose", "What to verify"],
-				"rows": [
+					["5", "Check the balance", "Prepaid Insurance account", "1,100.00 after one release"],
 					[
-						"Bill of Materials",
-						"Once per product",
-						"Defines materials, operations and cost",
-						"Cost per unit matches the quote"
-					],
-					[
-						"Work Order",
-						"Per build",
-						"Reserves stock and schedules the floor",
-						"Required quantities are correct"
-					],
-					[
-						"Material Transfer for Manufacture",
-						"At build start",
-						"Moves components to the floor",
-						"Floor quantity equals required"
-					],
-					[
-						"Manufacture entry",
-						"At completion",
-						"Consumes components, produces finished goods",
-						"Valuation equals materials plus operations"
-					],
-					[
-						"Stock Entry for scrap",
-						"When a unit fails",
-						"Removes the failed unit and its cost",
-						"Cost per good unit recalculated"
+						"6",
+						"Attach the schedule",
+						"Twelve dated rows in the worksheet",
+						"Evidence for the auditor"
 					]
 				]
 			},
-			"notes": "Walk this table once with the client's production supervisor and once with their accountant, and you will hear two different questions: can I build it, and what did it cost. Answering both from the same five documents is what makes ERPNext usable on a shop floor rather than merely installed."
+			"notes": "Clients rarely object to the reclass, but they do object to eleven manual journals appearing every year. Show them the schedule first and agree who posts it, finance or the consultant, because an unposted release is the most common cause of a prepaid balance that never clears. If the amount is below the client's capitalisation threshold, say so and skip it."
+		},
+		{
+			"kicker": "Lesson 4 · Verify the prepayment",
+			"title": "The prepaid schedule balances",
+			"bullets": [
+				"The prepaid balance must equal the unexpired months multiplied by the monthly amount",
+				"Expense recognised so far plus remaining prepayment equals the original invoice",
+				"A prepayment with no schedule is a suspense account in disguise",
+				"Check the cost centre, because prepaid insurance is often split across branches"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Original prepayment", "1,200.00", "Purchase Invoice for the premium"],
+					["Months released", "1 of 12", "Journal entries this period"],
+					["Prepaid Insurance balance", "1,100.00", "Balance Sheet, 31-01-2026"],
+					["Insurance expense this month", "100.00", "Profit and Loss Statement"],
+					["Expense plus prepaid", "100.00 plus 1,100.00 equals 1,200.00", "Your own arithmetic"]
+				]
+			},
+			"notes": "The identity here is the same shape as the stock identity, and that repetition is useful: whatever the topic, the proof is that the parts add to the whole. When a client's prepaid balance does not divide neatly into twelve, either the cover period is wrong or a month was posted twice, and both are five-minute fixes if caught in the same period."
+		},
+		{
+			"kicker": "Lesson 5 · Bank reconciliation",
+			"title": "Reconcile the statement to the ledger, not to a plug",
+			"bullets": [
+				"Reconciliation proves every line on the statement exists in the ledger, and vice versa",
+				"Unreconciled payments are usually timing, but two in a row means a real error",
+				"Use the bank reconciliation tool so the evidence is stored against each voucher",
+				"Agree the closing balance first, then work backwards through unmatched lines"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Bank Reconciliation",
+						"Bank - SM, 31-01-2026",
+						"Statement and ledger side by side"
+					],
+					[
+						"2",
+						"Enter the statement closing balance",
+						"18,450.00",
+						"Difference against the ledger shown"
+					],
+					[
+						"3",
+						"Match the 1,320.00 receipt",
+						"Aeon Big payment PE-SM-2026-0002",
+						"Row ticked, difference falls"
+					],
+					[
+						"4",
+						"Match the 1,320.00 supplier payment",
+						"Sunrise Components payment",
+						"Second row ticked"
+					],
+					[
+						"5",
+						"Review unmatched lines",
+						"Bank charges 35.00 not in ledger",
+						"Create the charge entry"
+					],
+					["6", "Finish", "Difference 0.00", "Reconciliation dated and saved"]
+				]
+			},
+			"notes": "Bank charges are the classic missing entry: the statement knows about them and the ledger does not, so the difference never clears by matching. Guide the learner to create the small entry rather than leaving a 35.00 variance, because a reconciliation with a plug figure teaches the client that the tool is decorative."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the reconciliation",
+			"title": "What a clean reconciliation actually proves",
+			"bullets": [
+				"Every statement line matched means cash is fully explained for the period",
+				"The reconciled ledger balance equals the statement balance at the cut-off date",
+				"Unpresented cheques and deposits in transit remain as timing differences, and they must be listed",
+				"A zero difference with matched lines is evidence, whereas a zero difference typed by hand is not"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Statement closing balance", "18,450.00", "Bank statement"],
+					["Ledger balance at the same date", "18,450.00", "General Ledger, Bank - SM"],
+					["Matched lines", "all except listed timing items", "Bank Reconciliation screen"],
+					["Unpresented cheques", "listed with numbers and dates", "Reconciliation worksheet"],
+					["Difference", "0.00", "Reconciliation footer"]
+				]
+			},
+			"notes": "This is the one reconciliation a client will sign without argument, because the bank is the independent third party. Use it as the pattern for the others: start from the external document, prove every line, and list the timing differences rather than absorbing them. A consultant who can close a bank reconciliation in ten minutes is trusted with the rest of the close."
+		},
+		{
+			"kicker": "Lesson 7 · Corrections",
+			"title": "Correct a mistake with a reversal, not an edit",
+			"bullets": [
+				"Submitted entries are history, so the remedy is a reversal or an amendment with a trail",
+				"Cancelling a journal removes its ledger effect and leaves the document visible as cancelled",
+				"Amending keeps a link between versions, which is what an auditor reads",
+				"Never delete a document to fix a number, and never journal against a control account"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the wrong journal",
+						"JE-SM-2026-0001, posted to the wrong cost centre",
+						"Submitted document"
+					],
+					[
+						"2",
+						"Choose the remedy",
+						"Amend, because the document is in an open period",
+						"New version marked amended"
+					],
+					["3", "Change the cost centre", "From Retail Counter to Main - SM", "Amounts unchanged"],
+					["4", "Save and Submit", "Confirm", "Amendment recorded with a version history"],
+					[
+						"5",
+						"Alternative remedy",
+						"Cancel and create a reversing journal",
+						"Original shown as cancelled"
+					],
+					["6", "Check both accounts", "Cost centre-wise P&L", "Only Main carries the 800.00"]
+				]
+			},
+			"notes": "Give the learner both remedies and the rule that chooses between them: amend inside the open period, reverse once the period is closed or reported. What is never acceptable is deleting the document, because the gap it leaves is exactly what an auditor looks for. Say that sentence in the workshop and the client's finance team will repeat it."
+		},
+		{
+			"kicker": "Volume 5 · Reference",
+			"title": "When a journal is the right document",
+			"bullets": [
+				"Journals belong to adjustments, not to transactions that have their own document",
+				"If a purchase or sale happened, use the invoice; a journal hides the tax and the party",
+				"Accruals, prepayments, depreciation and corrections are the natural journal cases",
+				"Every journal needs a reason in the remark, because the next reader has no context"
+			],
+			"table": {
+				"headers": ["Situation", "Right document", "Why", "Never do this"],
+				"rows": [
+					[
+						"Goods bought on credit",
+						"Purchase Invoice",
+						"Creates creditor and input tax",
+						"Journal to stock and creditors"
+					],
+					[
+						"Cost incurred, invoice not received",
+						"Journal Entry",
+						"Accrual with a reversal date",
+						"Leave it unrecorded until the bill"
+					],
+					[
+						"Insurance paid for a year",
+						"Invoice plus journals",
+						"Reclassify, then release monthly",
+						"Expense it all in month one"
+					],
+					[
+						"Depreciation",
+						"Journal Entry",
+						"Asset and accumulated depreciation",
+						"Adjust the asset value directly"
+					],
+					["Wrong cost centre", "Amend or reverse", "Keeps the audit trail", "Delete and re-enter"]
+				]
+			},
+			"notes": "Consultants are tempted to solve awkward data with a journal because it is quick, and that is how control accounts end up with unexplained balances. This table gives the learner a defensible answer in the meeting: if the transaction happened, use its document; if only the timing happened, use a journal. The remark field is not optional either, since the next reader is usually the client's auditor."
 		}
 	],
 	"lab": {
-		"title": "Lab · Build a BOM, run a work order and value the output",
+		"title": "Lab · Accrue, prepay, reconcile the bank and correct a posting",
 		"minutes": 45,
 		"steps": [
-			"Create the SM-ASM bill of materials with two motors, one housing and a 30 minute operation",
-			"Confirm the cost roll-up of 200.00 materials and 30.00 operations",
-			"Create a work order for 10 units and confirm the 20 and 10 component requirement",
-			"Issue the components to the Assembly Floor and confirm main warehouse falls",
-			"Confirm the floor holds 2,000.00 of work in progress and no profit has moved",
-			"Complete the work order with 10 finished units and 300.00 of operating cost",
-			"Confirm finished goods valuation of 230.00 per unit and total 2,300.00",
-			"Compare the completion value with the BOM and explain any difference"
+			"Post the 800.00 electricity accrual dated 31-01-2026 with a cost centre",
+			"Confirm profit falls by 800.00 and accrued liabilities rise by the same amount",
+			"Reclassify the 1,200.00 insurance premium to prepaid and release one month",
+			"Prove expense plus prepaid equals the original 1,200.00",
+			"Reconcile Bank - SM to a statement closing balance of 18,450.00",
+			"Create the 35.00 bank charge that the statement shows and the ledger does not",
+			"Take the reconciliation difference to 0.00 and save the evidence",
+			"Amend the misposted journal and confirm only the correct cost centre carries it"
 		],
-		"done": "Done when 10 assemblies sit in main at 230.00 each, the floor is empty of components for this order, and the completion value matches the BOM line for line."
+		"done": "Done when the accrual and the prepayment both reconcile to their identities, the bank reconciliation shows 0.00 difference with every line matched or listed, and the corrected journal has a version trail."
 	},
 	"quiz": [
 		{
-			"question": "Two motors at 80.00, one housing at 40.00 and half an hour at 60.00 per hour give a unit cost of what?",
-			"options": ["200.00", "230.00", "260.00", "180.00"],
-			"answer": 1,
-			"why": "Materials are 2 × 80 + 40 = 200, and the operation is 0.5 × 60 = 30, so the BOM costs 230.00 per unit."
-		},
-		{
-			"question": "What does submitting a work order do to the stock ledger?",
+			"question": "Why must an accrual carry a reversal date?",
 			"options": [
-				"Moves components to the floor",
-				"Nothing, it only reserves",
-				"Produces finished goods",
-				"Creates a purchase order"
+				"So the tax can be claimed",
+				"So the cost is not counted twice when the invoice arrives",
+				"So the party ledger stays clean",
+				"So the bank reconciles"
 			],
 			"answer": 1,
-			"why": "A work order reserves quantities for planning. Stock moves only when material is transferred to the floor."
+			"why": "The invoice will post the same cost when it arrives, so the accrual must reverse in the following period to avoid double counting."
 		},
 		{
-			"question": "When does component cost become an expense?",
+			"question": "A 1,200.00 annual insurance premium is released monthly. What is the prepaid balance after one month?",
+			"options": ["1,200.00", "1,100.00", "100.00", "1,000.00"],
+			"answer": 1,
+			"why": "One month of 100.00 is released, leaving 1,100.00 unexpired and sitting as an asset on the balance sheet."
+		},
+		{
+			"question": "The bank reconciliation shows a 35.00 difference caused by a bank charge. What is correct?",
 			"options": [
-				"At the material transfer",
-				"At work order completion",
-				"When the finished item is sold",
-				"When the BOM is saved"
+				"Ignore it as immaterial",
+				"Create the bank charge entry in the ledger",
+				"Adjust the statement balance",
+				"Post it to accrued liabilities"
+			],
+			"answer": 1,
+			"why": "The statement is the external evidence, so the missing bank charge belongs in the ledger. A plug figure destroys the value of the reconciliation."
+		},
+		{
+			"question": "A journal posted to the wrong cost centre in an open period. Best remedy?",
+			"options": [
+				"Delete the journal",
+				"Amend the document and resubmit",
+				"Post a second journal to the opposite cost centre",
+				"Cancel the fiscal year"
+			],
+			"answer": 1,
+			"why": "Amending inside an open period keeps a version trail. Deleting destroys history, and a second journal leaves two wrong rows instead of one."
+		},
+		{
+			"question": "Which situation genuinely needs a journal rather than a document?",
+			"options": [
+				"A credit sale",
+				"A stock purchase",
+				"Depreciation for the month",
+				"A customer payment"
 			],
 			"answer": 2,
-			"why": "Component and labour cost accumulate in inventory until the finished item is sold, at which point cost of goods sold is recognised."
-		},
-		{
-			"question": "What does the manufacture entry add to finished goods valuation?",
-			"options": [
-				"Only material cost",
-				"Materials plus operating cost",
-				"Selling price",
-				"Only operating cost"
-			],
-			"answer": 1,
-			"why": "The manufacture entry consumes components and adds the operating cost from the BOM, giving the full production cost per unit."
-		},
-		{
-			"question": "10 assemblies cost 2,300.00 to build. Cost per unit is what?",
-			"options": ["230.00", "200.00", "255.56", "300.00"],
-			"answer": 0,
-			"why": "2,000 of materials plus 300 of operations is 2,300 across 10 good units, which is 230.00 each."
+			"why": "Depreciation has no external document, so a journal is its natural form. Sales, purchases and payments all have dedicated documents that also handle tax and parties."
 		}
 	],
 	"memory": {
-		"spine": "A recipe, a promise, a reservation, an issue and a completion: five steps from demand to finished goods, each with its own document.",
+		"spine": "Four journal situations recur every month, and each one has a reversal date that decides whether the next period is clean.",
 		"device": {
-			"kind": "phrase",
-			"label": "Recipe, promise, reserve, issue, complete",
+			"kind": "rule",
+			"label": "Accrue, prepay, reconcile, reverse",
 			"expansion": [
-				"BOM: quantities and operations, with the cost of both, written so the floor can follow it",
-				"Work order: this item, this quantity, this date, a promise to the floor",
-				"Reservation: planning only, because quantities reserved never move the ledger",
-				"Material Transfer for Manufacture: components move to the work in progress warehouse",
-				"Manufacture: components consumed and finished goods produced in one document"
+				"Accrual: the cost belongs to this month, the invoice arrives next month, and a reversal is set now",
+				"Prepayment: an asset until the cover it buys is consumed, released month by month",
+				"Reconciliation proves every statement line exists in the ledger and every ledger line on the statement",
+				"Corrections are reversals or amendments with a trail, never edits to a submitted entry"
 			]
 		},
 		"cards": [
 			{
-				"q": "Does a work order move stock?",
-				"a": "No, it reserves. Only the transfer and the manufacture entry move quantity.",
-				"hint": "Promise versus movement"
+				"q": "When does an accrual reverse?",
+				"a": "On the reversal date set when it was posted, so the actual invoice lands cleanly in the next period.",
+				"hint": "Decide the date at posting time"
 			},
 			{
-				"q": "What is work in progress?",
-				"a": "The value of components consumed but not yet finished, sitting in the work in progress warehouse.",
-				"hint": "Half made stock"
+				"q": "What is a prepayment before it is consumed?",
+				"a": "An asset: cover that has been paid for but not yet used.",
+				"hint": "Asset until used"
 			},
 			{
-				"q": "What does a BOM cost roll up contain?",
-				"a": "Material cost plus operating cost per unit, at the BOM's own rates and operations.",
-				"hint": "Material plus operations"
+				"q": "What does a clean bank reconciliation prove?",
+				"a": "That every statement line is matched to the ledger, so cash for the period is fully explained with no plug.",
+				"hint": "No suspense account"
 			},
 			{
-				"q": "Where are components actually consumed?",
-				"a": "In the Manufacture stock entry, which also produces and values the finished item.",
-				"hint": "One document, two directions"
+				"q": "How is a submitted journal corrected?",
+				"a": "Reverse it, or cancel and amend, because the trail is the whole point.",
+				"hint": "History is append only"
 			},
 			{
-				"q": "Why must the finished valuation be explainable?",
-				"a": "It becomes the cost of every later sale, so an unexplainable BOM cost is an unexplainable margin.",
-				"hint": "Cost in, cost out"
+				"q": "Which four journal situations recur monthly?",
+				"a": "Accrual, prepayment release, depreciation and correction.",
+				"hint": "The monthly four"
 			}
 		],
 		"trap": {
-			"what": "Components are issued straight out of the main warehouse and the work in progress step is skipped.",
-			"why": "Nothing is ever in process, so a half finished order looks like a stock loss and the finished goods value cannot be rebuilt."
+			"what": "A suspense account absorbs whatever the bank reconciliation cannot explain.",
+			"why": "Cash is then explained by an account nobody owns, and the balance grows every month until the close cannot be defended."
 		}
 	},
-	"narration": "Manufacturing scares functional consultants because it looks technical, and it is not. A bill of materials is a recipe: two motors at eighty, one housing at forty, half an hour of assembly at sixty an hour, which gives two hundred thirty per unit. A work order turns demand into a reservation: ten assemblies need twenty motors and ten housings, and nothing has moved yet. The material transfer moves components to the floor, where they are work in progress and still not an expense. Completion consumes the components, adds three hundred of operating cost, and produces ten assemblies at two hundred thirty each. Four documents, one cost, no mystery. If the completion differs from the BOM, check the rate, the time and any extra charges before blaming the system, and write the answer in the production worksheet. A client who can explain a cost per unit from four documents will trust the system with their quotations, and that trust is the whole point of the volume."
+	"narration": "Journals are where the accounting primer becomes a daily tool. An accrual records a cost before the invoice arrives, and it must reverse, or February carries January's electricity twice. A prepayment is an asset until the cover is used, so one thousand two hundred of insurance becomes one hundred a month, leaving one thousand one hundred on the balance sheet after the first release. Then the bank. Match every statement line, create the bank charge the ledger is missing, and drive the difference to zero with evidence rather than a plug. And when something was posted to the wrong place, amend it inside the open period or reverse it afterwards. Never delete, because the gap is exactly what an auditor looks for first. Practise the four situations until they are reflexes: accrual, prepayment, bank charge, wrong cost centre. Each one has a canonical remedy, and each remedy leaves a document behind, which is what turns a bookkeeping task into a consulting deliverable."
 }

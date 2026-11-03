@@ -1,364 +1,388 @@
 {
 	"id": "ch12",
 	"number": 12,
-	"title": "Volume 4 · FIFO, Landed Cost and Valuation Reports",
-	"subtitle": "Lessons 5–8: how FIFO layers produce cost of goods sold, how landed cost changes them, and the three reports a consultant is asked to defend",
+	"title": "Volume 3 · Supplier Reality: Returns, Advances and Landed Cost",
+	"subtitle": "Lessons 5–8: debit notes, advance payments, landed cost allocation and the ageing conversation every client has in week three",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Explain FIFO cost of goods sold from the layers rather than from the report",
-		"Use repost item valuation safely and know when it refuses to run",
-		"Read stock balance, stock ledger and stock ageing without confusing them",
-		"Decide whether negative stock should be blocked, and defend the answer"
+		"Return faulty goods and reverse both stock and tax correctly",
+		"Handle an advance payment without leaving a permanent unallocated balance",
+		"Push freight and duty into stock value so gross profit tells the truth",
+		"Read supplier ageing and explain it to a business owner in one page"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · FIFO layers",
-			"title": "Watch FIFO build layers, then consume the oldest",
+			"kicker": "Lesson 5 · Purchase return",
+			"title": "Return one damaged blender without breaking the books",
 			"bullets": [
-				"Each receipt creates a valuation layer at its own rate, and sales consume the oldest first",
-				"Cost of goods sold is the sum of the layers consumed, not a single average rate",
-				"Serial and batch numbers decide which units leave, but FIFO still fixes the cost",
-				"Changing valuation method after go-live is a migration, not a setting"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Purchase receipt", "10 units of SM-BL200 at 120.00", "Layer one, value 1,200.00"],
-					["2", "Second receipt", "10 units at 130.00", "Layer two, value 1,300.00"],
-					["3", "Check the bin", "Main warehouse", "20 units, value 2,500.00"],
-					["4", "Sell 12 units", "Delivery note at 240.00 each", "COGS computed from layers"],
-					["5", "Read the stock ledger", "Filter SM-BL200", "Outgoing 12 units, value 1,460.00"],
-					["6", "Read the bin again", "Main warehouse", "8 units, value 1,040.00 at 130.00"]
-				]
-			},
-			"notes": "The number to make the learner predict is one thousand four hundred sixty: ten units from the one twenty layer and two from the one thirty layer. If they say one thousand five hundred, they are averaging, which is a different valuation method. Show the two ledger rows rather than the report total, because the rows are the evidence and the report is only the summary."
-		},
-		{
-			"kicker": "Lesson 6 · Verify the layers",
-			"title": "The cost arithmetic that must balance",
-			"bullets": [
-				"Total value in equals total value out plus the value remaining, always",
-				"Averaging the two rates hides the layer structure and double-counts in mixed sales",
-				"Gross profit per line differs across the month even when the selling price does not",
-				"Reports that round to whole currency units must still reconcile to the stock ledger"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Value received", "2,500.00 across two layers", "Stock Ledger, incoming rows"],
-					["Cost of goods sold for 12 units", "1,460.00", "Stock Ledger, outgoing row"],
-					["Remaining stock", "8 units, 1,040.00", "Stock Balance for SM-BL200"],
-					[
-						"Gross profit at 240.00 each",
-						"2,880.00 minus 1,460.00 equals 1,420.00",
-						"Gross Profit report"
-					],
-					[
-						"Value in equals value out plus remaining",
-						"2,500.00 equals 1,460.00 plus 1,040.00",
-						"Your own arithmetic"
-					]
-				]
-			},
-			"notes": "Every valuation conversation ends with that identity: what came in equals what went out plus what is left. If it does not balance, a repost is pending, a landed cost arrived late, or someone posted a stock entry with a hand-typed rate. Make the learner write the identity on paper before opening any report, because it works for nine problems out of ten."
-		},
-		{
-			"kicker": "Lesson 7 · Repost valuation",
-			"title": "Correct a wrong valuation with a repost, not a journal",
-			"bullets": [
-				"Repost item valuation recalculates layers from history and rewrites downstream cost",
-				"It is the correct remedy when a rate was wrong, a landed cost arrived late or a period was opened wrongly",
-				"It refuses to run across a closed accounting period, which protects submitted reports",
-				"Every repost leaves a background job and a ledger movement, so run it deliberately"
+				"A return reverses the receipt first, then the bill, which is the order auditors expect",
+				"ERPNext creates a debit note from the purchase invoice, so tax reverses with the goods",
+				"Return to Returns Quarantine rather than straight to Main, so the goods are visibly excluded",
+				"Never edit the original receipt; a return is a new document with its own number"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Stock → Repost Item Valuation → New",
-						"Item SM-BL200, warehouse Main - SM",
-						"Form with posting date"
+						"Open PR-SM-2026-0001 → Create → Purchase Return",
+						"Nothing",
+						"Negative quantity form pre-filled"
 					],
-					[
-						"2",
-						"Set the basis",
-						"Repost from 01-01-2026, based on valuation rate",
-						"Date and basis recorded"
-					],
-					["3", "Save and Submit", "Confirm", "Status Queued for the background worker"],
-					["4", "Check the job", "Repost Item Valuation status", "Completed, entries updated"],
+					["2", "Quantity", "-1 in warehouse Returns Quarantine - SM", "Negative line accepted"],
+					["3", "Reason", "Damaged in transit", "Remark stored on the return"],
+					["4", "Save and Submit", "Confirm", "Return receipt PR-SM-2026-0002"],
 					[
 						"5",
-						"Read the stock ledger",
-						"Filter the repost voucher",
-						"Adjustment rows for affected days"
+						"Open PINV-SM-2026-0001 → Create → Debit Note",
+						"Quantity 1",
+						"Debit note PINV-SM-2026-0002"
 					],
-					[
-						"6",
-						"Try a closed period",
-						"Posting date in the closed month",
-						"Validation error, repost refused"
-					]
+					["6", "Read the bin", "SM-BL200 at Main and Quarantine", "Main 9, Quarantine 1"]
 				]
 			},
-			"notes": "Reposts are the tool that keeps a migration honest, and they are also the tool that scares finance if used casually. Explain the trade: the recalculation is exact, but it changes cost of goods sold after the fact, so the month's profit moves. That is acceptable in the first two months of a go-live and unacceptable after the accounts are filed."
+			"notes": "Doing the return before the debit note is what keeps the stock ledger and the ledger in step. If you reverse the bill first, the stock sits in quarantine with no matching liability and the audit trail needs a manual explanation. Practise the sequence until it is automatic, because the first live return will happen under pressure, minutes before the client's month-end cut-off."
 		},
 		{
-			"kicker": "Lesson 8 · Negative stock",
-			"title": "Decide about negative stock before it decides for you",
+			"kicker": "Lesson 6 · Verify the return",
+			"title": "Nine units, and the tax comes back with them",
 			"bullets": [
-				"Allowing negative stock keeps operations moving but leaves valuation guessing",
-				"Blocking it forces the paperwork to catch up, which is usually what a controlled client wants",
-				"The setting lives in Stock Settings and applies to the whole company",
-				"Either way, the ageing report is the early warning that something is being issued twice"
+				"Stock falls by the returned quantity at its original valuation",
+				"The debit note reduces the creditor and reverses the input tax proportionally",
+				"The supplier's balance now shows a credit that can offset the next invoice",
+				"Returned goods in quarantine are still owned, so they remain in stock value"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Main warehouse quantity", "9", "Stock → Bin, Main warehouse"],
+					["Quarantine quantity", "1", "Stock → Bin, Returns Quarantine"],
+					["Stock value at Main", "1,080.00", "Stock Balance report"],
+					["Debit note total", "132.00 including 12.00 tax", "Debit note totals"],
+					["Creditor balance", "1,188.00 outstanding", "Accounts Payable, Sunrise Components"]
+				]
+			},
+			"notes": "The debit note total of 132.00 is the one number to make the learner predict, because it proves they understand that tax follows goods. If they say 120.00, they have not seen that a return reverses input tax as well as stock. Make them compute it before opening the debit note, then let them compare."
+		},
+		{
+			"kicker": "Lesson 7 · Advance payment",
+			"title": "Pay before delivery without losing the money",
+			"bullets": [
+				"An advance is a payment with no invoice, recorded as a liability to the supplier",
+				"ERPNext tracks it as Advance Paid, which reduces the outstanding on the next bill",
+				"Leave Payment References empty: an advance is proved by Unallocated Amount in the Writeoff section",
+				"Allocate the advance to the invoice, otherwise it sits forever as an unexplained credit",
+				"The advance appears separately on the balance sheet until it is consumed"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Stock → Stock Settings",
-						"Untick allow negative stock",
-						"Setting saved for the company"
+						"Accounts → Payment Entry → New",
+						"Payment type Pay, party Sunrise Components",
+						"Unallocated payment form"
 					],
 					[
 						"2",
-						"Attempt to sell 60 units",
-						"Delivery note with 47 available",
-						"Error: quantity exceeds stock"
+						"Accounts and Transaction Details",
+						"Account Paid From Bank - SM",
+						"Bank side of the form complete"
 					],
-					["3", "Tick allow negative stock", "Save settings", "Setting now permissive"],
-					["4", "Submit the same delivery", "Confirm", "Negative bin, valuation flagged"],
-					["5", "Read the stock ledger", "Filter SM-BL200", "Outgoing row with a warning rate"],
-					["6", "Repair the cause", "Post the missing receipt", "Bin returns to a positive balance"]
+					[
+						"3",
+						"Amount and Writeoff",
+						"660.00 paid, Unallocated Amount 660.00",
+						"Payment References still empty"
+					],
+					["4", "Save and Submit", "Confirm", "Advance Paid 660.00 on the supplier record"],
+					["5", "Create the purchase invoice", "5 units at 120.00 plus SST", "Total 660.00"],
+					[
+						"6",
+						"Get advances against the invoice",
+						"Include the 660.00 advance",
+						"Outstanding 0.00 after allocation"
+					],
+					["7", "Read supplier ledger", "Sunrise Components", "Advance consumed, invoice settled"]
 				]
 			},
-			"notes": "Most Malaysian distributors start with negative stock blocked, because a warehouse that cannot issue unrecorded goods learns to record receipts quickly. If a client insists on allowing it, agree a weekly negative stock report with a named owner, or the balance sheet will carry an unexplained valuation within one quarter. Either answer is defensible; silence is not."
+			"notes": "Advances are where cash leaves before paperwork exists, which is exactly the situation that produces month-end surprises. The empty Payment References table is correct here and worth saying out loud, because learners expect an allocation and try to create one. Show the supplier ledger before and after allocation: before, a 660.00 debit with the whole amount sitting as unallocated; after, zero. If they can explain that movement, they can explain any advance query the client's finance team raises."
 		},
 		{
-			"kicker": "Lesson 8 · Verify the reports",
-			"title": "Balance, ledger and ageing in one pass",
+			"kicker": "Lesson 8 · Landed cost",
+			"title": "Put the freight into the stock, not into an expense",
 			"bullets": [
-				"Three reports must agree before you present a stock number to anyone",
-				"Balance gives the number, ledger proves it, ageing raises the risk conversation",
-				"A repost changes the ledger and therefore the balance, so re-read both afterwards",
-				"Write the three figures on one page and keep it with the month-end pack"
+				"Landed cost allocates freight, duty and clearing charges across the received units",
+				"Without it, gross profit is overstated and every margin report lies by the freight amount",
+				"Allocation can be by quantity, amount or weight, and the choice must match the business",
+				"The voucher creates a stock ledger revaluation and a matching GL entry"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Stock → Landed Cost Voucher → New",
+						"Company SM, receipt PR-SM-2026-0001",
+						"Receipt items listed"
+					],
+					[
+						"2",
+						"Add freight charge",
+						"60.00, expense account Freight Inward - SM",
+						"Charge row added"
+					],
+					["3", "Choose allocation", "By quantity across 10 units", "Rate preview 6.00 per unit"],
+					["4", "Save and Submit", "Confirm", "Voucher LCV-SM-2026-0001 submitted"],
+					["5", "Open Stock Ledger", "Filter SM-BL200", "Revaluation row: value +60.00"],
+					["6", "Check valuation", "Stock Balance for SM-BL200", "126.00 per unit"]
+				]
+			},
+			"notes": "Freight of 60.00 across ten units gives 6.00 each, and valuation moves from 120.00 to 126.00. The moment a learner computes that, they can also explain why the margin on a 240.00 sale is 114.00 rather than 120.00. Landed cost is the single most requested report fix in distribution projects, because owners compare gross profit to their own mental arithmetic."
+		},
+		{
+			"kicker": "Volume 3 · Payment run",
+			"title": "Bundle supplier payments without losing the allocation",
+			"bullets": [
+				"A payment order groups the invoices you intend to pay on one date, so the bank sees one instruction",
+				"Every line must carry its invoice reference, or the allocation is lost when the file is produced",
+				"Each generated payment entry shows its settlement in the Reference section as a Payment References row",
+				"Payment orders are optional, but they leave an audit trail that a single manual payment cannot",
+				"Reconcile the total before submitting, because a payment order posts real bank entries"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Payment Order → New",
+						"Company SM, payment order date 10-02-2026",
+						"Empty order form"
+					],
+					[
+						"2",
+						"Get invoices from",
+						"Supplier Sunrise Components, due before 28-02-2026",
+						"Invoice PINV-SM-2026-0002 listed"
+					],
+					["3", "Check the amount", "1,188.00 after the debit note", "Total payable 1,188.00"],
+					["4", "Set the bank account", "Bank - SM", "Account carried to every row"],
+					["5", "Save and Submit", "Confirm", "Status Submitted, payment entries created"],
+					[
+						"6",
+						"Open a generated payment entry",
+						"Reference → Payment References",
+						"Row of 1,188.00 against PINV-SM-2026-0002"
+					],
+					["7", "Open Payment Reconciliation", "Supplier Sunrise Components", "Unallocated 0.00"]
+				]
+			},
+			"notes": "Payment orders are the difference between a payment run that takes ten minutes and one that takes an afternoon. Show the learner the generated payment entries and their allocations, because that is the evidence the bank file and the ledger agree. If a client insists on manual payments, at minimum insist on allocation, or the supplier ageing will drift from the bank within a month."
+		},
+		{
+			"kicker": "Lesson 8 · Verify landed cost",
+			"title": "What the revaluation does to the margin",
+			"bullets": [
+				"Landed cost is only useful if the reports downstream pick up the new valuation",
+				"Gross profit compares selling price to the revalued cost, not the purchase rate",
+				"The offsetting entry goes to the expense account you nominated, so freight is not double counted",
+				"Recompute one sale by hand and compare it with the report before showing the client"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Stock balance value", "1,040.00 for 8 units", "Stock Balance, SM-BL200 at Main"],
-					["Ledger closing value", "1,040.00", "Stock Ledger, last row for the item"],
+					["Valuation per unit", "126.00", "Stock Balance for SM-BL200"],
+					["Stock value, nine units", "1,134.00", "Stock Balance report total"],
 					[
-						"Ageing bucket for the 8 units",
-						"0 to 30 days since the 130.00 receipt",
-						"Stock Ageing report"
+						"Landed cost entry",
+						"Dr Stock 60.00, Cr Freight Inward 60.00",
+						"General Ledger, voucher LCV-SM-2026-0001"
 					],
-					[
-						"Value after a completed repost",
-						"unchanged if the original rate was right",
-						"Stock Balance, re-run"
-					],
-					["Repost entries pending", "0", "Repost Item Valuation list"]
+					["Gross profit on a 240.00 sale", "114.00", "Accounts → Gross Profit report"],
+					["After a 10 % discount at 216.00", "90.00", "Gross Profit, invoice level"]
 				]
 			},
-			"notes": "The habit worth teaching is the one-page proof: three numbers, one source each, signed and dated. When a client questions stock value three weeks later, that page settles it without reopening the ledger. If the balance and the ledger disagree, a repost is still queued, and the answer is to wait rather than to explain."
+			"notes": "The point of this check is that the learner can defend the margin number in front of an owner who does the arithmetic in their head. Two hundred forty less one hundred twenty six is one hundred fourteen, and a ten per cent discount leaves ninety. If the report says otherwise, the landed cost was posted after the margin report date or allocated by amount instead of quantity."
 		},
 		{
-			"kicker": "Volume 4 · Reference",
-			"title": "The three stock reports, and what each answers",
+			"kicker": "Volume 3 · Reference",
+			"title": "Supplier documents and what each one fixes",
 			"bullets": [
-				"Stock balance answers what is on hand and what it is worth today",
-				"Stock ledger answers why, one movement at a time, with the rate used",
-				"Stock ageing answers how long it has been sitting there and what it costs to keep",
-				"Reconciling the three to each other is a five minute monthly discipline"
+				"Every remedy is a document with a number, never an edit to history",
+				"Debit notes reverse goods and tax together, keeping the match intact",
+				"Advances are consumed by allocation, not by journal entry",
+				"Landed cost changes valuation, so it must be posted before the margin report is trusted"
 			],
 			"table": {
-				"headers": ["Report", "Question it answers", "What to check", "Common misreading"],
+				"headers": ["Document", "Use when", "Ledger effect", "Trap to avoid"],
 				"rows": [
 					[
-						"Stock Balance",
-						"What do we hold and what is it worth",
-						"Quantity and value per warehouse",
-						"Value includes items already sold but not delivered"
+						"Purchase Return",
+						"Goods go back to the supplier",
+						"Dr Stock Received, Cr Stock",
+						"Doing the debit note first"
 					],
 					[
-						"Stock Ledger",
-						"Why did the quantity or value change",
-						"Rate, voucher and posting time",
-						"Rows are not in document order"
+						"Debit Note",
+						"Supplier owes you money or goods",
+						"Cr Creditors, Cr SST Input",
+						"Returning only part of the tax"
 					],
 					[
-						"Stock Ageing",
-						"How old is the stock",
-						"Buckets against valuation",
-						"Ageing is by receipt, not by last movement"
+						"Payment Entry, advance",
+						"Supplier wants money before delivery",
+						"Dr Creditor advance, Cr Bank",
+						"Leaving the advance unallocated"
 					],
 					[
-						"Item Reorder Level",
-						"What must be bought",
-						"Items below the level",
-						"Ignores stock already on order"
+						"Landed Cost Voucher",
+						"Freight, duty or clearing arrives after receipt",
+						"Dr Stock, Cr expense",
+						"Allocating by amount when units differ"
 					],
 					[
-						"Gross Profit",
-						"Did the sale make money",
-						"Cost comes from valuation",
-						"Discounts change the selling side only"
+						"Payment Terms Template",
+						"Standard due dates across suppliers",
+						"None, drives due date",
+						"Typing due dates by hand"
 					]
 				]
 			},
-			"notes": "A consultant is asked about stock value more often than any other number, and the answer always starts with which report. Say stock balance for the number, stock ledger for the story, ageing for the risk. When the client's figure disagrees with the report, ask which of the three they are quoting, and the conversation halves in length."
+			"notes": "Treat this page as the remedy list for a support call. Each row answers a question a client will ask in the first month: the goods came back, the supplier wants money up front, freight arrived late. If a consultant can name the document without looking it up, the client stops worrying about the migration."
 		},
 		{
-			"kicker": "Volume 4 · Reference",
-			"title": "Valuation methods and when each is defensible",
+			"kicker": "Volume 3 · Reference",
+			"title": "Supplier ageing, read properly",
 			"bullets": [
-				"FIFO suits distribution where suppliers change rates between deliveries",
-				"Moving average suits steady buying where price swings are small and reporting simplicity matters",
-				"Standard cost only belongs where a costing team maintains the standard and variances are reviewed",
-				"The method must match the client's accounting policy, not the consultant's preference"
+				"Ageing buckets answer when money leaves, not whether the bill is correct",
+				"An invoice with no due date lands in the oldest bucket and distorts the whole report",
+				"Advances and debit notes appear as negatives, which is correct and often misread",
+				"Reconcile the ageing total to the creditor control account before presenting it"
 			],
 			"table": {
-				"headers": ["Method", "Behaviour", "Choose when", "Risk"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
+					["Total payable", "1,188.00 after the return", "Accounts Payable report"],
+					["Creditors control balance", "1,188.00 credit", "General Ledger, Creditors - SM"],
+					["Ageing buckets", "0 to 30 days, none overdue", "Accounts Payable → Ageing"],
+					["Unallocated advances", "0.00 once consumed by the invoice", "Payment Reconciliation"],
 					[
-						"FIFO",
-						"Oldest layer leaves first",
-						"Rates move between receipts",
-						"Layer creep makes old stock look cheap"
-					],
-					[
-						"Moving Average",
-						"Cost blends on every receipt",
-						"Prices are stable",
-						"Hides a bad purchase inside the average"
-					],
-					[
-						"Standard Cost",
-						"Fixed rate until changed",
-						"Manufacturing with variance analysis",
-						"Variance account grows unattended"
-					],
-					[
-						"LIFO",
-						"Not supported",
-						"Never, in ERPNext or IFRS",
-						"Reports would need a manual restatement"
+						"Interim stock account",
+						"0.00 when every receipt is billed",
+						"General Ledger, Stock Received But Not Billed"
 					]
 				]
 			},
-			"notes": "Nine out of ten distribution clients should run FIFO, because their purchase rates genuinely move and their auditors expect the oldest stock to leave first. Say that plainly, but write it in the configuration worksheet with the client's signature, because the choice fixes how every margin report reads for the life of the system."
+			"notes": "Presenting supplier ageing to an owner is a consultant skill, not a report skill. Lead with total payable, confirm it ties to the control account, then explain that the older bucket is a cash conversation rather than an accounting error. When the interim account is not zero, a receipt is unbilled, and that is the only real finding worth raising."
 		}
 	],
 	"lab": {
-		"title": "Lab · Build FIFO layers, compute cost of goods sold and repair a valuation",
+		"title": "Lab · Return, advance, land the cost and read the ageing",
 		"minutes": 45,
 		"steps": [
-			"Receive 10 units of SM-BL200 at 120.00 and confirm layer one",
-			"Receive 10 more at 130.00 and confirm the bin value of 2,500.00",
-			"Sell 12 units and read the outgoing stock ledger row",
-			"Confirm cost of goods sold of 1,460.00 and remaining stock of 1,040.00",
-			"Prove the identity: value in equals value out plus value remaining",
-			"Post a repost item valuation for the item and read the resulting adjustment rows",
-			"Attempt a repost into a closed period and record the validation message",
-			"Block negative stock, attempt to oversell and record the error"
+			"Return one damaged blender to Returns Quarantine and record the return receipt number",
+			"Raise the debit note from the purchase invoice and confirm the 132.00 total",
+			"Compute the new stock value at Main and check it against Stock Balance",
+			"Record a 660.00 advance payment to Sunrise Components from the bank",
+			"Create the 660.00 invoice and allocate the advance against it",
+			"Post a landed cost voucher for 60.00 freight across the received units",
+			"Confirm the new valuation per unit and recompute the gross profit on a 240.00 sale",
+			"Open supplier ageing and tie the total to the creditors control account"
 		],
-		"done": "Done when cost of goods sold of 1,460.00 and remaining stock of 1,040.00 add to the 2,500.00 received, and both the repost and the negative-stock rules have been demonstrated."
+		"done": "Done when Main holds 9 units at 126.00 each, the supplier has no unallocated advance, and the ageing total equals the creditors control balance to the cent."
 	},
 	"quiz": [
 		{
-			"question": "Two receipts of 10 units at 120.00 and 10 at 130.00, then a sale of 12 units. FIFO cost of goods sold is what?",
-			"options": ["1,500.00", "1,460.00", "1,560.00", "1,400.00"],
-			"answer": 1,
-			"why": "FIFO consumes the oldest layer first: 10 × 120 = 1,200 plus 2 × 130 = 260, giving 1,460.00."
-		},
-		{
-			"question": "Which identity must always hold after any stock movement?",
+			"question": "In which order should a purchase return be handled?",
 			"options": [
-				"Value in equals value out minus remaining",
-				"Value in equals value out plus value remaining",
-				"Value out equals value in plus remaining",
-				"Remaining equals value in plus value out"
+				"Debit note, then return receipt",
+				"Return receipt, then debit note",
+				"Journal entry for both",
+				"Cancel the original invoice"
 			],
 			"answer": 1,
-			"why": "What was received must equal what was issued plus what remains. A break in that identity means a pending repost or a hand-typed rate."
+			"why": "Reversing stock first keeps the stock ledger and the accounting ledger in step, and the debit note then reverses the matching creditor and tax amounts."
 		},
 		{
-			"question": "When is repost item valuation the right tool?",
+			"question": "A debit note for one blender at 120.00 with 10 % tax totals what?",
+			"options": ["120.00", "132.00", "108.00", "240.00"],
+			"answer": 1,
+			"why": "Goods of 120.00 plus 12.00 input tax reverses 132.00 against the supplier, because tax follows the goods out of the business."
+		},
+		{
+			"question": "How is an advance payment cleared against an invoice?",
 			"options": [
-				"To change the selling price",
-				"To recalculate cost after a wrong rate or late landed cost",
-				"To correct a customer balance",
-				"To close a period"
+				"By a journal entry",
+				"By allocating it in the payment or invoice",
+				"By cancelling it",
+				"By editing the supplier"
 			],
 			"answer": 1,
-			"why": "Repost recalculates valuation layers from history, which is exactly what a wrong rate or a late landed cost voucher requires."
+			"why": "ERPNext keeps advances as unallocated amounts and consumes them when you allocate against an invoice, which is what keeps the supplier ledger clean."
 		},
 		{
-			"question": "What happens when you try to post a repost into a closed accounting period?",
+			"question": "Landed cost of 60.00 across 10 units changes valuation to what?",
+			"options": ["120.00", "126.00", "132.00", "180.00"],
+			"answer": 1,
+			"why": "Freight is spread over quantity, so 6.00 per unit is added to the 120.00 purchase rate. Gross profit on a 240.00 sale becomes 114.00."
+		},
+		{
+			"question": "What does a non-zero Stock Received But Not Billed balance indicate?",
 			"options": [
-				"It posts with a warning",
-				"It is refused by validation",
-				"It posts to the next open period",
-				"It cancels the closing voucher"
+				"A tax error",
+				"A receipt that has not been billed",
+				"An unallocated advance",
+				"Negative stock"
 			],
 			"answer": 1,
-			"why": "ERPNext blocks valuation changes inside a closed period so that submitted financial statements cannot shift underneath the client."
-		},
-		{
-			"question": "Which report answers why a stock value changed?",
-			"options": ["Stock Balance", "Stock Ledger", "Stock Ageing", "Item Reorder Level"],
-			"answer": 1,
-			"why": "The stock ledger holds every movement with its rate and voucher, so it explains the change rather than just stating the balance."
+			"why": "The interim account clears when the purchase invoice is submitted, so any remaining balance means at least one receipt is still waiting for its bill."
 		}
 	],
 	"memory": {
-		"spine": "Value in equals value out plus value left, and under FIFO the cost of a sale belongs to the oldest layer, not to the item.",
+		"spine": "Reverse in the order you posted, put freight into the stock rather than the expense column, and let the allocation do the work.",
 		"device": {
 			"kind": "rule",
-			"label": "Value in equals value out plus value left",
+			"label": "Reverse in the order you posted",
 			"expansion": [
-				"Every receipt creates a valuation layer at its own rate",
-				"Issues consume the oldest layer first, so cost follows the queue rather than the item",
-				"Repost Item Valuation recalculates layers from history and rewrites downstream cost",
-				"Negative stock keeps operations moving and leaves valuation guessing",
-				"Three reports must agree before any stock number is presented"
+				"A return reverses the receipt first and the bill second, which is the order auditors expect",
+				"An advance is a payment with no invoice, so it is a liability until it is allocated",
+				"Landed cost allocates freight, duty and clearing into the stock valuation, not the profit and loss",
+				"A payment order groups invoices due on one date so the bank sees one instruction",
+				"Every remedy is a new document with a number, and history is never edited"
 			]
 		},
 		"cards": [
 			{
-				"q": "Which layer does a sale consume under FIFO?",
-				"a": "The oldest remaining layer, at that layer's own rate.",
-				"hint": "First in, first costed"
+				"q": "One damaged unit goes back to the supplier. In what order?",
+				"a": "The goods return first, then the bill adjustment, so stock and tax reverse together.",
+				"hint": "Reverse, then bill"
 			},
 			{
-				"q": "Receipts at 100 and 120, then one unit sold. What is the cost?",
-				"a": "100, because the oldest layer leaves first and 120 stays in stock.",
-				"hint": "Queue, not average"
+				"q": "How is an advance to a supplier recorded?",
+				"a": "A payment entry with no allocation against an invoice, so it stays a liability rather than an expense.",
+				"hint": "Money before paper"
 			},
 			{
-				"q": "How is a wrong valuation corrected?",
-				"a": "Repost Item Valuation. A journal would create a second version of the truth beside the ledger.",
-				"hint": "Recalculate history"
+				"q": "Where does inbound freight belong?",
+				"a": "In a Landed Cost Voucher, allocated across the received units and revaluing the stock they sit in.",
+				"hint": "Into stock, not expense"
 			},
 			{
-				"q": "What does negative stock do to valuation?",
-				"a": "It guesses a rate, usually the last known, so cost of goods sold and stock value both drift.",
-				"hint": "A guess dressed as a number"
+				"q": "What must be true after a landed cost allocation?",
+				"a": "The downstream margin reports actually use the new valuation, otherwise the allocation is decoration.",
+				"hint": "Revaluation must be read"
 			},
 			{
-				"q": "Which three figures must agree?",
-				"a": "Stock Balance quantity, the stock ledger value and the stock account in the general ledger.",
-				"hint": "Quantity, history, value"
+				"q": "What do ageing buckets tell you?",
+				"a": "When money leaves, not whether the bill is correct. Correctness is the three way match.",
+				"hint": "Timing, not truth"
 			}
 		],
 		"trap": {
-			"what": "Landed cost is added after the stock it belongs to has already been sold.",
-			"why": "The sale consumed a layer without the freight, so cost of goods sold is understated and the revaluation creates profit from nothing."
+			"what": "Freight is booked straight to an expense because the landed cost voucher looks like extra work.",
+			"why": "The cost lands once, stock stays under valued, and every later sale reports a margin that cannot be defended."
 		}
 	},
-	"narration": "Valuation is where a consultant earns trust, because the owner will check the margin with a calculator. Under FIFO, each receipt creates a layer, and a sale consumes the oldest first. Ten blenders at one hundred twenty and ten at one hundred thirty gives twenty five hundred of stock. Sell twelve and cost of goods sold is one thousand four hundred sixty, leaving eight units worth one thousand forty. That identity, value in equals value out plus value remaining, is the test for every valuation problem. When a rate was wrong or freight arrived late, the answer is a repost item valuation, not a journal entry, and the system will refuse to run it inside a closed period. And negative stock is a decision, not an accident: block it and operations learns to paperwork faster. Decide it, write it down, and the reports stop arguing. Every valuation question ends the same way: show the identity, then show the rows that prove it."
+	"narration": "Suppliers rarely behave the way the process diagram says. They deliver late, send one damaged unit, ask for money before the goods arrive, and send the freight invoice a fortnight afterwards. Each of those has one right document. A return reverses stock first, then the debit note reverses the creditor and the tax, which is why nine units remain at one hundred twenty six each. An advance is money without an invoice, consumed by allocation rather than by a journal, otherwise it sits on the balance sheet forever and the client's auditor asks why. And landed cost is what turns a one hundred twenty rate into a one hundred twenty six valuation, so a two hundred forty sale earns one hundred fourteen rather than one hundred twenty, and the owner's own arithmetic finally agrees with the report. Get those three right and the supplier ageing conversation becomes arithmetic instead of an argument, which is exactly the conversation a distribution client wants to have in week three."
 }

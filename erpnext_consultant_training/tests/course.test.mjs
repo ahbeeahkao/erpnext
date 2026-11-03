@@ -20,7 +20,7 @@ const corpus = JSON.stringify(chapters);
 describe("course manifest", () => {
 	it("describes a consultant course with a volume roadmap", () => {
 		assert.match(manifest.title, /Consultant/);
-		assert.equal(manifest.chapters.length, 24);
+		assert.equal(manifest.chapters.length, 27);
 		assert.ok(manifest.sample_company.includes("Seri Murni"));
 		assert.ok(manifest.volumes.length >= 10, `${manifest.volumes.length} volumes listed`);
 		const built = manifest.volumes.filter((volume) => volume.status === "built");
@@ -265,8 +265,8 @@ describe("memory layer", () => {
 	it("gives every chapter its own device and every card its own question", () => {
 		assert.equal(new Set(labels).size, chapters.length, "two chapters share a device label");
 		const questions = chapters.flatMap((chapter) => chapter.memory.cards.map((card) => card.q));
-		assert.equal(questions.length, 120, "twenty-four chapters of five cards");
-		assert.equal(new Set(questions).size, 120, "a recall question is repeated");
+		assert.equal(questions.length, 135, "twenty-seven chapters of five cards");
+		assert.equal(new Set(questions).size, 135, "a recall question is repeated");
 	});
 
 	it("indexes ten laws in three buckets", () => {
@@ -293,7 +293,7 @@ describe("memory layer", () => {
 	it("ships the printable and importable artefacts, and keeps them in step", () => {
 		const csv = text("memory/cards.csv").trim().split("\n");
 		assert.equal(csv[0], "front,back,tag");
-		assert.equal(csv.length - 1, 120, "one CSV row per recall card");
+		assert.equal(csv.length - 1, 135, "one CSV row per recall card");
 		const quote = (value) => `"${String(value).replace(/"/g, '""')}"`;
 		const first = chapters[0].memory.cards[0];
 		assert.ok(csv[1].includes(quote(first.q)), "memory/cards.csv is stale — run npm run memory");
@@ -333,7 +333,7 @@ describe("course as a whole", () => {
 		assert.ok(steps >= 180, `${steps} lab steps`);
 		assert.ok(minutes >= 2500, `${minutes} minutes of syllabus`);
 		const cards = chapters.reduce((sum, chapter) => sum + chapter.memory.cards.length, 0);
-		assert.equal(cards, 120, "five recall cards per chapter");
+		assert.equal(cards, 135, "five recall cards per chapter");
 		assert.equal(tables, slides, "every teaching slide carries a table");
 	});
 

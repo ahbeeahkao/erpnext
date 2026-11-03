@@ -36,28 +36,31 @@ _Three laws about action: one document per event, who may do or see what, and th
 | --- | -------------------------------------------------------------- | --------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Primer · Accounting Concepts in ERPNext                        | **DEAD CLIC**                                 | acronym | Every transaction has two sides, ERPNext posts both, and the trial balance only proves you entered it twice in the same place.          |
 | 2   | Primer · Distribution Concepts in ERPNext                      | **TRIC**                                      | acronym | Distribution is three flows, goods, money and information, and every ERPNext document moves exactly one of them at a time.              |
-| 3   | Volume 0 · Standing Up the Company                             | **Broad to narrow, then prove it**            | phrase  | Setup runs broad to narrow, company then tree then defaults then dimensions, and every step is proved with a document afterwards.       |
-| 4   | Volume 0 · Making the System Usable                            | **Master data before permissions**            | rule    | Master data comes before permissions, because a wrong UOM or warehouse produces a balance that looks right and is not.                  |
-| 5   | Volume 1 · The Item Master                                     | **GUST**                                      | acronym | One gate decides whether an item touches stock at all, then four decisions decide what every later document will ask for.               |
-| 6   | Volume 1 · Parties and Pricing                                 | **Party, address, terms, price**              | path    | A party is a set of defaults plus two controls, and pricing resolves in one direction: the item price is a fact, a rule is an override. |
-| 7   | Volume 2 · Quote to Cash, Step by Step                         | **Four chases**                               | story   | Four documents chase each other from offer to cash, and only the last two of them touch the ledger and the stock.                       |
-| 8   | Volume 2 · When Reality Intervenes                             | **One order, many documents**                 | rule    | Reality splits one order across many documents, and every remedy is a new document rather than an edit to the last one.                 |
-| 9   | Volume 3 · Buying, Step by Step                                | **Buying is selling backwards**               | rule    | Buying is selling backwards, document for document, with one asymmetry that decides whether the interim stock account ever clears.      |
-| 10  | Volume 3 · Supplier Reality: Returns, Advances and Landed Cost | **Reverse in the order you posted**           | rule    | Reverse in the order you posted, put freight into the stock rather than the expense column, and let the allocation do the work.         |
-| 11  | Volume 4 · Warehouses, Transfers and Stock Counts              | **One voucher, two rows**                     | phrase  | A transfer is a receipt and an issue wearing one voucher, so the total never moves while the location does.                             |
-| 12  | Volume 4 · FIFO, Landed Cost and Valuation Reports             | **Value in equals value out plus value left** | rule    | Value in equals value out plus value left, and under FIFO the cost of a sale belongs to the oldest layer, not to the item.              |
-| 13  | Volume 5 · Journals, Accruals and the Bank                     | **Accrue, prepay, reconcile, reverse**        | rule    | Four journal situations recur every month, and each one has a reversal date that decides whether the next period is clean.              |
-| 14  | Volume 5 · Month-End and Year-End Close                        | **Move, judge, calculate, lock**              | phrase  | Close in one order: fix what moves, then judge, then calculate, and only then lock the period so nobody can edit it.                    |
-| 15  | Volume 6 · Bills of Materials and Work Orders                  | **Recipe, promise, reserve, issue, complete** | phrase  | A recipe, a promise, a reservation, an issue and a completion: five steps from demand to finished goods, each with its own document.    |
-| 16  | Volume 6 · Production Costing, Scrap and Subcontracting        | **Good units carry the bad ones**             | rule    | Total production cost is fixed; the only question is how many good units must carry it, and scrap never answers that with a journal.    |
-| 17  | Volume 7 · Projects, Timesheets and Billable Work              | **Every entry names the project**             | rule    | A project is a collector, and it only collects what names it, so every hour and every invoice must carry the project field.             |
-| 18  | Volume 7 · Assets, Quality and CRM                             | **Capitalise, depreciate, inspect, qualify**  | phrase  | Capitalise, depreciate, inspect and qualify: four modules, one habit of proving each of them against a register and a report.           |
-| 19  | Volume 8 · Print Formats, Naming and Notifications             | **Readable, numbered, said once**             | phrase  | Documents customers can read, numbers an auditor can follow and messages that arrive once: three controls, all configuration, no code.  |
-| 20  | Volume 8 · Permissions, Workflows and Automation               | **Roles do, permissions see**                 | rule    | A role says what a job may do, a user permission says which rows it may see, and the only test that counts is the restricted login.     |
-| 21  | Volume 9 · Malaysian Tax and Statutory Setup                   | **One template per rate per direction**       | rule    | One tax template per rate per direction, an item category that follows the product, and a return that is the ledger seen three ways.    |
-| 22  | Volume 9 · e-Invoice (MyInvois) End to End                     | **Validate, submit, read, cancel inside 72**  | phrase  | Master data validates before anything is submitted, a submission returns two lists, and cancellation lives inside 72 hours only.        |
-| 23  | Volume 10 · Migration: Mapping, Opening Balances and Import    | **Agree, then parents before children**       | phrase  | Agree the mapping on paper, then import parents before children, and let one dated journal carry every opening balance.                 |
-| 24  | Volume 10 · UAT, Cut-Over and Go-Live                          | **Script, sequence, numbers, hand over**      | phrase  | A script the client signs, a weekend in dependency order, a fortnight measured in numbers, and a pack that outlives the consultant.     |
+| 3   | Volume 0 · How ERPNext Thinks: The Document Lifecycle          | **Draft, commit, cancel, amend**              | phrase  | A document does nothing until it is submitted, and after that it is never deleted, only reversed or amended.                            |
+| 4   | Volume 0 · Driving the Desk Like an Operator                   | **Search, filter, save, share**               | path    | Search, filter, save, share: the Desk is navigated by one search box and made useful by saved views.                                    |
+| 5   | Volume 0 · Standing Up the Company                             | **Broad to narrow, then prove it**            | phrase  | Setup runs broad to narrow, company then tree then defaults then dimensions, and every step is proved with a document afterwards.       |
+| 6   | Volume 0 · Making the System Usable                            | **Master data before permissions**            | rule    | Master data comes before permissions, because a wrong UOM or warehouse produces a balance that looks right and is not.                  |
+| 7   | Volume 1 · The Item Master                                     | **GUST**                                      | acronym | One gate decides whether an item touches stock at all, then four decisions decide what every later document will ask for.               |
+| 8   | Volume 1 · Parties and Pricing                                 | **Party, address, terms, price**              | path    | A party is a set of defaults plus two controls, and pricing resolves in one direction: the item price is a fact, a rule is an override. |
+| 9   | Volume 2 · Quote to Cash, Step by Step                         | **Four chases**                               | story   | Four documents chase each other from offer to cash, and only the last two of them touch the ledger and the stock.                       |
+| 10  | Volume 2 · When Reality Intervenes                             | **One order, many documents**                 | rule    | Reality splits one order across many documents, and every remedy is a new document rather than an edit to the last one.                 |
+| 11  | Volume 3 · Buying, Step by Step                                | **Buying is selling backwards**               | rule    | Buying is selling backwards, document for document, with one asymmetry that decides whether the interim stock account ever clears.      |
+| 12  | Volume 3 · Supplier Reality: Returns, Advances and Landed Cost | **Reverse in the order you posted**           | rule    | Reverse in the order you posted, put freight into the stock rather than the expense column, and let the allocation do the work.         |
+| 13  | Volume 4 · Warehouses, Transfers and Stock Counts              | **One voucher, two rows**                     | phrase  | A transfer is a receipt and an issue wearing one voucher, so the total never moves while the location does.                             |
+| 14  | Volume 4 · FIFO, Landed Cost and Valuation Reports             | **Value in equals value out plus value left** | rule    | Value in equals value out plus value left, and under FIFO the cost of a sale belongs to the oldest layer, not to the item.              |
+| 15  | Volume 5 · Journals, Accruals and the Bank                     | **Accrue, prepay, reconcile, reverse**        | rule    | Four journal situations recur every month, and each one has a reversal date that decides whether the next period is clean.              |
+| 16  | Volume 5 · Month-End and Year-End Close                        | **Move, judge, calculate, lock**              | phrase  | Close in one order: fix what moves, then judge, then calculate, and only then lock the period so nobody can edit it.                    |
+| 17  | Volume 6 · Bills of Materials and Work Orders                  | **Recipe, promise, reserve, issue, complete** | phrase  | A recipe, a promise, a reservation, an issue and a completion: five steps from demand to finished goods, each with its own document.    |
+| 18  | Volume 6 · Production Costing, Scrap and Subcontracting        | **Good units carry the bad ones**             | rule    | Total production cost is fixed; the only question is how many good units must carry it, and scrap never answers that with a journal.    |
+| 19  | Volume 7 · Projects, Timesheets and Billable Work              | **Every entry names the project**             | rule    | A project is a collector, and it only collects what names it, so every hour and every invoice must carry the project field.             |
+| 20  | Volume 7 · Assets, Quality and CRM                             | **Capitalise, depreciate, inspect, qualify**  | phrase  | Capitalise, depreciate, inspect and qualify: four modules, one habit of proving each of them against a register and a report.           |
+| 21  | Volume 8 · Print Formats, Naming and Notifications             | **Readable, numbered, said once**             | phrase  | Documents customers can read, numbers an auditor can follow and messages that arrive once: three controls, all configuration, no code.  |
+| 22  | Volume 8 · Permissions, Workflows and Automation               | **Roles do, permissions see**                 | rule    | A role says what a job may do, a user permission says which rows it may see, and the only test that counts is the restricted login.     |
+| 23  | Volume 9 · Malaysian Tax and Statutory Setup                   | **One template per rate per direction**       | rule    | One tax template per rate per direction, an item category that follows the product, and a return that is the ledger seen three ways.    |
+| 24  | Volume 9 · e-Invoice (MyInvois) End to End                     | **Validate, submit, read, cancel inside 72**  | phrase  | Master data validates before anything is submitted, a submission returns two lists, and cancellation lives inside 72 hours only.        |
+| 25  | Volume 10 · Migration: Mapping, Opening Balances and Import    | **Agree, then parents before children**       | phrase  | Agree the mapping on paper, then import parents before children, and let one dated journal carry every opening balance.                 |
+| 26  | Volume 10 · UAT, Cut-Over and Go-Live                          | **Script, sequence, numbers, hand over**      | phrase  | A script the client signs, a weekend in dependency order, a fortnight measured in numbers, and a pack that outlives the consultant.     |
+| 27  | Volume 10 · Continuity: Backups, Staging and Upgrades          | **Backup, prove, stage, pin**                 | rule    | Pin the versions, prove the restore, test on staging, and let one named person approve the upgrade.                                     |
 
 ## The cards
 
@@ -92,7 +95,39 @@ _Trap:_ The receivable control account and the customer statement disagree at mo
 
 _Trap:_ Freight is booked as an expense line instead of being allocated into stock. The cost hits the profit and loss once, every later sale reports a margin that is too high, and the margin stack can never be reconciled.
 
-### 3. Volume 0 · Standing Up the Company — Broad to narrow, then prove it
+### 3. Volume 0 · How ERPNext Thinks: The Document Lifecycle — Draft, commit, cancel, amend
+
+-   Draft does nothing at all: no stock, no ledger, no report row
+-   Submit is the commit: one click writes the stock ledger and the general ledger
+-   Cancel reverses with offsetting rows and keeps the document for the record
+-   Amend only follows a cancel and links back through amended_from
+-   References block a cancel, so a chain unwinds from the invoice down to the delivery
+
+1. **What does saving a draft change in the stock and the books?** Nothing. No stock ledger entry and no general ledger row exists until the document is submitted, so drafts are invisible to reports.
+2. **Why can a submitted document not simply be deleted?** Its stock and ledger rows are already posted. Cancelling writes offsetting rows and keeps the record, which is what an auditor needs to see.
+3. **What must happen before a document can be amended?** It must be cancelled first. Amend then creates a new document carrying amended_from, while the original stays cancelled and untouched.
+4. **What does the error Active Referencing Documents tell you to do?** A submitted document points at this one, so cancel from the bottom of the chain upwards: invoice first, then delivery note.
+5. **Which single report check proves a posting really happened?** Open the Stock Ledger and the General Ledger filtered by the voucher. If the rows are there, the document posted; if not, it is still a draft.
+
+_Trap:_ The client asks you to 'just delete' a wrongly submitted invoice so the ageing report looks right. Submitted documents cannot be deleted because their ledger rows already exist. Cancel it, then amend or re-raise, and show the Version log so the correction is visible rather than erased.
+
+### 4. Volume 0 · Driving the Desk Like an Operator — Search, filter, save, share
+
+-   Search: two letters in the awesome bar beats any menu path you can memorise
+-   Filter: stack conditions in a list view until the question is answered
+-   Save: name the view for the job and make it the default for that role
+-   Share: permissions narrow the rows, so test the view as the restricted user
+-   Export last: a filtered export is a snapshot, never a report to reconcile against
+
+1. **Which control reaches every DocType, document and report from one field?** The awesome bar at the top of the Desk. Two letters and Enter open a doctype list; a document name jumps straight to the record.
+2. **What makes a saved filter more useful than a custom report?** It is configuration, so it survives upgrades, respects user permissions and can be changed by the client without a developer.
+3. **Why will the same saved view show different rows to two users?** Saved filters are shared, but user permissions restrict which records each person may see, so the row count differs by role.
+4. **When is Report Builder the wrong tool?** When the question needs joins across DocTypes or logic that SQL cannot express. That is a Query or Script Report, and you will maintain it.
+5. **What is the fastest way to prove a report total is right?** Reproduce the same filter in the list view and compare the record count and the total. The list shows its filters; the report hides them.
+
+_Trap:_ You build a perfect default view as administrator, demo it, and the dispatch clerk says it is empty on their login. User permissions filter the rows inside a saved view. Always sign in as the restricted user, or create one, before declaring the view finished.
+
+### 5. Volume 0 · Standing Up the Company — Broad to narrow, then prove it
 
 -   Company first: abbreviation, currency and fiscal year, because everything else hangs off it
 -   Then the tree: keep the template, add leaf accounts, never rename the standard tree
@@ -108,7 +143,7 @@ _Trap:_ Freight is booked as an expense line instead of being allocated into sto
 
 _Trap:_ The company abbreviation is changed after documents have been posted. The abbreviation is baked into every account name and series prefix already used, so changing it orphans history instead of renaming it.
 
-### 4. Volume 0 · Making the System Usable — Master data before permissions
+### 6. Volume 0 · Making the System Usable — Master data before permissions
 
 -   UOM and warehouses are masters: a typo becomes a plausible wrong balance
 -   A user is a login, a role is a bundle of DocType permissions, a role profile bundles roles
@@ -123,7 +158,7 @@ _Trap:_ The company abbreviation is changed after documents have been posted. Th
 
 _Trap:_ The storekeeper is given the Stock Manager role just to be safe. That role also opens Accounts and Buying, and the user permissions then look broken when the real problem was the grant nobody needed.
 
-### 5. Volume 1 · The Item Master — GUST
+### 7. Volume 1 · The Item Master — GUST
 
 -   Gate: Maintain Stock. Switched off, the item never reaches the stock ledger
 -   G: Group and brand, the reporting tree rather than a folder
@@ -139,7 +174,7 @@ _Trap:_ The storekeeper is given the Stock Manager role just to be safe. That ro
 
 _Trap:_ Batch tracking is switched on for an item that already holds stock. The existing quantity has no batch, so the next issue cannot choose one. Opening batches or a reconciliation must come first.
 
-### 6. Volume 1 · Parties and Pricing — Party, address, terms, price
+### 8. Volume 1 · Parties and Pricing — Party, address, terms, price
 
 -   Customer: group and territory for reporting, price list and payment terms for behaviour
 -   Address is its own record linked to the party, not a field typed on the customer
@@ -154,7 +189,7 @@ _Trap:_ Batch tracking is switched on for an item that already holds stock. The 
 
 _Trap:_ A pricing rule is created without a priority or a validity window. Two rules then match the same line and the winner depends on evaluation order, so one customer is charged differently on different days.
 
-### 7. Volume 2 · Quote to Cash, Step by Step — Four chases
+### 9. Volume 2 · Quote to Cash, Step by Step — Four chases
 
 -   Quote chases Order: the offer becomes a commitment with dates and warehouses
 -   Order chases Delivery: the physical event that moves stock and posts cost of goods sold
@@ -170,7 +205,7 @@ _Trap:_ A pricing rule is created without a priority or a validity window. Two r
 
 _Trap:_ The invoice is raised before the goods leave and the delivery note is then forgotten. Revenue and receivable rise while stock and cost of goods sold never move, so the margin looks perfect and the warehouse is wrong.
 
-### 8. Volume 2 · When Reality Intervenes — One order, many documents
+### 10. Volume 2 · When Reality Intervenes — One order, many documents
 
 -   A partial delivery edits the delivery note against the order and never creates a second order
 -   A discount reduces the line, and tax recalculates on the reduced net
@@ -185,7 +220,7 @@ _Trap:_ The invoice is raised before the goods leave and the delivery note is th
 
 _Trap:_ A credit note is raised as a new invoice carrying negative quantities. Revenue reverses but the original invoice stays open, so the customer balance is overstated and the ageing report lies.
 
-### 9. Volume 3 · Buying, Step by Step — Buying is selling backwards
+### 11. Volume 3 · Buying, Step by Step — Buying is selling backwards
 
 -   Purchase order mirrors the sales order: the commitment
 -   Purchase receipt mirrors the delivery note: the goods move, profit does not
@@ -201,7 +236,7 @@ _Trap:_ A credit note is raised as a new invoice carrying negative quantities. R
 
 _Trap:_ The purchase invoice is entered at a rate that differs from the order and the receipt. The mismatch surfaces late, after stock has been valued at the receipt rate, and the difference becomes a price variance nobody owns.
 
-### 10. Volume 3 · Supplier Reality: Returns, Advances and Landed Cost — Reverse in the order you posted
+### 12. Volume 3 · Supplier Reality: Returns, Advances and Landed Cost — Reverse in the order you posted
 
 -   A return reverses the receipt first and the bill second, which is the order auditors expect
 -   An advance is a payment with no invoice, so it is a liability until it is allocated
@@ -217,7 +252,7 @@ _Trap:_ The purchase invoice is entered at a rate that differs from the order an
 
 _Trap:_ Freight is booked straight to an expense because the landed cost voucher looks like extra work. The cost lands once, stock stays under valued, and every later sale reports a margin that cannot be defended.
 
-### 11. Volume 4 · Warehouses, Transfers and Stock Counts — One voucher, two rows
+### 13. Volume 4 · Warehouses, Transfers and Stock Counts — One voucher, two rows
 
 -   A warehouse is a location with its own ledger, so each one must earn its place
 -   A transfer moves quantity between warehouses and leaves the total and ownership untouched
@@ -233,7 +268,7 @@ _Trap:_ Freight is booked straight to an expense because the landed cost voucher
 
 _Trap:_ A transfer is posted to fix a count difference between two warehouses. The total is unchanged, so the system now agrees with itself and disagrees with the shelf, and the error only moves.
 
-### 12. Volume 4 · FIFO, Landed Cost and Valuation Reports — Value in equals value out plus value left
+### 14. Volume 4 · FIFO, Landed Cost and Valuation Reports — Value in equals value out plus value left
 
 -   Every receipt creates a valuation layer at its own rate
 -   Issues consume the oldest layer first, so cost follows the queue rather than the item
@@ -249,7 +284,7 @@ _Trap:_ A transfer is posted to fix a count difference between two warehouses. T
 
 _Trap:_ Landed cost is added after the stock it belongs to has already been sold. The sale consumed a layer without the freight, so cost of goods sold is understated and the revaluation creates profit from nothing.
 
-### 13. Volume 5 · Journals, Accruals and the Bank — Accrue, prepay, reconcile, reverse
+### 15. Volume 5 · Journals, Accruals and the Bank — Accrue, prepay, reconcile, reverse
 
 -   Accrual: the cost belongs to this month, the invoice arrives next month, and a reversal is set now
 -   Prepayment: an asset until the cover it buys is consumed, released month by month
@@ -264,7 +299,7 @@ _Trap:_ Landed cost is added after the stock it belongs to has already been sold
 
 _Trap:_ A suspense account absorbs whatever the bank reconciliation cannot explain. Cash is then explained by an account nobody owns, and the balance grows every month until the close cannot be defended.
 
-### 14. Volume 5 · Month-End and Year-End Close — Move, judge, calculate, lock
+### 16. Volume 5 · Month-End and Year-End Close — Move, judge, calculate, lock
 
 -   Cash: reconcile the bank statement to the ledger before anything else
 -   Count: reconcile stock and clear negative quantities
@@ -280,7 +315,7 @@ _Trap:_ A suspense account absorbs whatever the bank reconciliation cannot expla
 
 _Trap:_ The period is closed to stop people posting, before anything is reconciled. The voucher locks in whatever was wrong and every later report inherits it, so the correction costs twice the work.
 
-### 15. Volume 6 · Bills of Materials and Work Orders — Recipe, promise, reserve, issue, complete
+### 17. Volume 6 · Bills of Materials and Work Orders — Recipe, promise, reserve, issue, complete
 
 -   BOM: quantities and operations, with the cost of both, written so the floor can follow it
 -   Work order: this item, this quantity, this date, a promise to the floor
@@ -296,7 +331,7 @@ _Trap:_ The period is closed to stop people posting, before anything is reconcil
 
 _Trap:_ Components are issued straight out of the main warehouse and the work in progress step is skipped. Nothing is ever in process, so a half finished order looks like a stock loss and the finished goods value cannot be rebuilt.
 
-### 16. Volume 6 · Production Costing, Scrap and Subcontracting — Good units carry the bad ones
+### 18. Volume 6 · Production Costing, Scrap and Subcontracting — Good units carry the bad ones
 
 -   Finished cost is materials consumed plus operations recorded, divided by good units
 -   Scrap is a quantity decision on the document, never a cost typed into a journal
@@ -312,7 +347,7 @@ _Trap:_ Components are issued straight out of the main warehouse and the work in
 
 _Trap:_ Scrap is written off to an expense account at the end of the month instead of on the document. Finished units then carry a cost that excludes the loss, the true unit cost is understated, and the expense appears where nobody looks.
 
-### 17. Volume 7 · Projects, Timesheets and Billable Work — Every entry names the project
+### 19. Volume 7 · Projects, Timesheets and Billable Work — Every entry names the project
 
 -   A project is a cost collector whose profit and loss exists only if postings name it
 -   Four fields before work starts: rate, cost centre, dates and customer
@@ -328,7 +363,7 @@ _Trap:_ Scrap is written off to an expense account at the end of the month inste
 
 _Trap:_ Hours are captured on the timesheet but the invoice is raised by hand at a different rate. Revenue and cost no longer share a rate, so project margin is fiction and the timesheet becomes paperwork nobody trusts.
 
-### 18. Volume 7 · Assets, Quality and CRM — Capitalise, depreciate, inspect, qualify
+### 20. Volume 7 · Assets, Quality and CRM — Capitalise, depreciate, inspect, qualify
 
 -   Capitalise: a purchase invoice with an asset item creates the Asset record
 -   Depreciate: a journal generated from the schedule, monthly, not once in a December panic
@@ -344,7 +379,7 @@ _Trap:_ Hours are captured on the timesheet but the invoice is raised by hand at
 
 _Trap:_ Depreciation is posted once a year as a single large journal in December. Eleven months of the profit and loss are wrong and the register never matched the ledger in between, so nobody could catch it early.
 
-### 19. Volume 8 · Print Formats, Naming and Notifications — Readable, numbered, said once
+### 21. Volume 8 · Print Formats, Naming and Notifications — Readable, numbered, said once
 
 -   Print format: sections, fields and totals from the builder, with no code to maintain
 -   A Malaysian tax invoice needs the company name, registration number and SST number
@@ -360,7 +395,7 @@ _Trap:_ Depreciation is posted once a year as a single large journal in December
 
 _Trap:_ A notification is configured to fire on save as well as on submit. Every draft edit emails the customer, people stop reading the messages, and the control that catches late invoices is gone.
 
-### 20. Volume 8 · Permissions, Workflows and Automation — Roles do, permissions see
+### 22. Volume 8 · Permissions, Workflows and Automation — Roles do, permissions see
 
 -   Name roles after the job function, never after a person
 -   User permissions filter rows and outweigh what the role would otherwise show
@@ -376,7 +411,7 @@ _Trap:_ A notification is configured to fire on save as well as on submit. Every
 
 _Trap:_ A user permission is added to fix a report that looks wrong. The report was the symptom of an over broad role, so filtering rows hides the grant and the next report breaks differently.
 
-### 21. Volume 9 · Malaysian Tax and Statutory Setup — One template per rate per direction
+### 23. Volume 9 · Malaysian Tax and Statutory Setup — One template per rate per direction
 
 -   Sales tax out, service tax out and purchase tax in never share a template
 -   Goods at ten per cent and services at eight per cent sit on separate lines and templates
@@ -392,7 +427,7 @@ _Trap:_ A user permission is added to fix a report that looks wrong. The report 
 
 _Trap:_ An exempt customer is handled by typing zero per cent into the rate field. No exemption category or certificate sits behind the zero, so the return cannot evidence why tax was not charged.
 
-### 22. Volume 9 · e-Invoice (MyInvois) End to End — Validate, submit, read, cancel inside 72
+### 24. Volume 9 · e-Invoice (MyInvois) End to End — Validate, submit, read, cancel inside 72
 
 -   Validate the masters first: TIN, registration number, MSIC code and SST number
 -   Submit and read the answer: a submission ID, then accepted and rejected lists
@@ -408,7 +443,7 @@ _Trap:_ An exempt customer is handled by typing zero per cent into the rate fiel
 
 _Trap:_ A rejected document is resubmitted unchanged. The validator rejects it for exactly the same reason while the 72 hour clock keeps running, so the master data or tax code must be fixed first.
 
-### 23. Volume 10 · Migration: Mapping, Opening Balances and Import — Agree, then parents before children
+### 25. Volume 10 · Migration: Mapping, Opening Balances and Import — Agree, then parents before children
 
 -   The mapping workbook holds old value, new value, owner and decision date, signed before any import
 -   Completeness means every old value has a target, including the ones nobody uses
@@ -424,7 +459,7 @@ _Trap:_ A rejected document is resubmitted unchanged. The validator rejects it f
 
 _Trap:_ Opening balances are entered as dummy invoices so that ageing looks right. Revenue and tax are then overstated in the go live month and the auditor cannot separate history from opening figures.
 
-### 24. Volume 10 · UAT, Cut-Over and Go-Live — Script, sequence, numbers, hand over
+### 26. Volume 10 · UAT, Cut-Over and Go-Live — Script, sequence, numbers, hand over
 
 -   A test case states the action, the expected number and the evidence, and the client signs it
 -   Pass means the expected figure appears, not that no error message was shown
@@ -439,3 +474,19 @@ _Trap:_ Opening balances are entered as dummy invoices so that ageing looks righ
 5. **What goes into the handover pack?** Configuration record, mapping workbook, UAT sign off, cut over log, open items and how to run the close.
 
 _Trap:_ UAT is signed off because no errors were raised during the session. Nobody compared figures, so the first month end discovers the wrong tax template and the sign off protects the vendor, not the client.
+
+### 27. Volume 10 · Continuity: Backups, Staging and Upgrades — Backup, prove, stage, pin
+
+-   Backup, and store the encryption key somewhere the backup cannot reach
+-   Prove it with a timed restore drill into a scratch site, logged with a date
+-   Stage the upgrade on a site holding production-like data, never on production itself
+-   Pin the versions, schedule the window, and review the changelog before the change
+-   One named approver, one cut-off time, and a twenty-minute verification afterwards
+
+1. **What two facts does a restore drill give the client?** That the backup actually restores, and how many minutes the business needs before it can trade again. Both belong in the handover pack.
+2. **Why does staging need a copy of production data?** Upgrades break on custom fields, print formats and workflow states, which live in the data and configuration rather than in the code.
+3. **What belongs in the version register?** The exact Frappe, ERPNext and custom app versions, pinned at go-live, with the date each was last confirmed and who confirmed it.
+4. **Which five checks make up the post-upgrade verification?** Log in as a normal user, submit a test invoice, print it, run two saved reports, and submit one e-Invoice in sandbox.
+5. **What makes a rollback plan usable rather than aspirational?** A backup taken minutes before the change, a named decision maker, a cut-off time, and a short recorded list of transactions to replay.
+
+_Trap:_ The client says 'the hosting provider handles backups' and signs off go-live without a drill. Handled is not proven. Ask for the schedule in writing, run one timed restore into a scratch site, log the result, and make an unproven restore a go-live blocker rather than a footnote.

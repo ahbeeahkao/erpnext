@@ -1,391 +1,354 @@
 {
 	"id": "ch22",
 	"number": 22,
-	"title": "Volume 9 · e-Invoice (MyInvois) End to End",
-	"subtitle": "Lessons 5–8: master data that passes validation, submission and status reading, the 72 hour cancellation window, consolidated and self-billed documents",
+	"title": "Volume 8 · Permissions, Workflows and Automation",
+	"subtitle": "Lessons 5–8: roles that match the org chart, restrictions that hold, a discount workflow, and automation that does not run away",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Prepare company and customer data so submission does not fail validation",
-		"Submit an invoice and interpret accepted, rejected and validated responses",
-		"Cancel or reject inside the 72 hour window and know when it is refused",
-		"Decide what to consolidate and when to self-bill"
+		"Build roles and permissions that match who does what",
+		"Restrict a user to their own warehouse or branch without custom code",
+		"Add an approval workflow for discounts and prove it blocks what it should",
+		"Automate recurring documents safely and know what to leave manual"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Master data",
-			"title": "Prepare the data MyInvois checks first",
+			"kicker": "Lesson 5 · Roles",
+			"title": "Roles that match the org chart, not the software",
 			"bullets": [
-				"TIN, registration number, MSIC code and SST number are validated before anything else",
-				"A customer without a TIN is a general public sale, not a business invoice",
-				"Address and phone format matter, because the portal rejects malformed fields",
-				"Clean masters before the first submission, not after the first rejection"
+				"A role is a job function, so name it after the job and not after a person",
+				"Permission levels control what can be created, read, amended or deleted",
+				"Start restrictive and add, because removing access later is a political fight",
+				"Every role needs an owner who reviews membership quarterly"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					[
-						"1",
-						"Company record",
-						"TIN C2584563200, registration 202301234567, MSIC 46510",
-						"Company e-Invoice fields complete"
-					],
-					[
-						"2",
-						"Customer record",
-						"Aeon Big TIN and BRN, address with postcode and state",
-						"Customer validated data stored"
-					],
+					["1", "Users and Permissions → Role → New", "Sales Executive, desk user", "Role created"],
+					["2", "Open Role Permissions Manager", "Sales Order for that role", "Permission matrix"],
 					[
 						"3",
-						"Check contact",
-						"Phone with country code, email on the customer",
-						"Required fields present"
+						"Set levels",
+						"Read, Write, Create, Submit; no Delete or Cancel",
+						"Four ticks, two blanks"
 					],
-					["4", "Validate the TIN", "Portal taxpayer validation for the TIN", "TIN valid response"],
-					[
-						"5",
-						"Create a draft invoice",
-						"One line, 2,400.00 plus 240.00",
-						"Invoice ready to submit"
-					],
-					["6", "Run the pre-check", "Missing-field validation", "No blocking errors"]
-				]
-			},
-			"notes": "Validation failures are almost always master data, not software, and they arrive as a rejection notice that the finance team reads as a system failure. Run a pre-check across the customer list before go-live: every business customer needs a TIN, a registration number and a complete address. Half a day of cleaning saves a week of rejected submissions."
-		},
-		{
-			"kicker": "Lesson 6 · Submission",
-			"title": "Submit an invoice and read the response",
-			"bullets": [
-				"Submission returns a submission ID, then accepted and rejected lists",
-				"Accepted means received; validated is a later state with a UUID and a QR code",
-				"A rejected document comes back with an error list, and it is not a tax invoice",
-				"Store the UUID and the long ID against the invoice, because the portal is the source of truth"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open the sales invoice",
-						"SINV-SM-2026-0010, submitted",
-						"e-Invoice action available"
-					],
-					["2", "Submit to MyInvois", "Document type 01 Invoice", "Submission UID returned"],
-					["3", "Read the response", "Accepted documents list with one entry", "Status accepted"],
-					[
-						"4",
-						"Wait for validation",
-						"Poll the submission status",
-						"Validated with UUID and long ID"
-					],
-					["5", "Store identifiers", "UUID written to the invoice record", "Traceable for audits"],
+					["4", "Set user permissions", "Customer and territory restrictions", "Restriction rows"],
+					["5", "Assign to a user", "Aina as Sales Executive", "One role on the user"],
 					[
 						"6",
-						"Print or send",
-						"QR code and validation link on the invoice",
-						"Customer can verify"
+						"Log in as the user",
+						"Open a sales order",
+						"Create and submit buttons present, delete absent"
 					]
 				]
 			},
-			"notes": "Two states matter and clients confuse them: accepted, which means the portal has the file, and validated, which means it is a legal tax invoice with a UUID. Show both on screen, because a finance team that treats accepted as final will print invoices that cannot be verified. The QR code is what the customer scans, so test it once end to end."
+			"notes": "The instinct is to grant everything because the demo is easier, and the consequence arrives six months later when a salesperson deletes a submitted order. Start with read, write, create and submit; add cancel only for supervisors, and delete for nobody in a transaction doctype. A functional consultant who can explain that sentence has already delivered value."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the submission",
-			"title": "Accepted versus validated, on one screen",
+			"kicker": "Lesson 6 · User permissions",
+			"title": "Restrict a user to their own warehouse",
 			"bullets": [
-				"Submission ID, accepted count and validated UUID are three different facts",
-				"A rejected document is not a tax invoice, so the sale is unsubstantiated until it is fixed",
-				"The QR code and validation link are what the customer uses to check the document",
-				"Record identifiers on the invoice so a later audit can trace the exact document"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Submission identifier", "returned and stored", "Submission log"],
-					["Accepted documents", "1 of 1 for this invoice", "Portal response"],
-					["Validated state", "UUID and long ID present", "Invoice e-Invoice panel"],
-					["Document total", "2,640.00 matches the invoice", "Portal document details"],
-					["QR code", "prints and resolves", "Printed invoice"]
-				]
-			},
-			"notes": "The distinction between accepted and validated is the single most useful thing to teach a finance team, because it decides whether they can post the invoice to the customer. Scroll the printed page and scan the QR code once in front of them; the moment it resolves to the portal, the process becomes real rather than theoretical."
-		},
-		{
-			"kicker": "Lesson 7 · Cancellation",
-			"title": "Reject or cancel inside 72 hours",
-			"bullets": [
-				"Cancellation is limited to 72 hours after validation, and the limit is enforced by the portal",
-				"A cancellation needs a reason of up to 300 characters, so write it carefully",
-				"After the window, the remedy is a credit note or debit note, not a cancellation",
-				"Documents referenced by another document cannot be cancelled while that reference lives"
+				"User permissions filter the data a role can see, and they outweigh role permissions",
+				"A warehouse restriction is the standard way to keep branches apart without separate companies",
+				"Test as the restricted user, because administrators bypass these filters",
+				"Restrictions apply to reports too, which is what makes them trustworthy"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Open the validated invoice", "UUID recorded earlier", "e-Invoice status panel"],
+					["1", "Open the user", "Warehouse supervisor", "User form"],
 					[
 						"2",
-						"Choose cancel",
-						"Reason: wrong customer TIN, reissued",
-						"Reason under 300 characters"
+						"Add user permission",
+						"Allow Warehouse: Retail Counter - SM",
+						"Restriction row added"
 					],
-					["3", "Submit the cancellation", "Confirm", "Status cancelled on the portal"],
-					[
-						"4",
-						"Try after 72 hours",
-						"Same action on an older document",
-						"Error: operation period over"
-					],
-					[
-						"5",
-						"Try a referenced document",
-						"Invoice already referenced by a credit note",
-						"Error: active referencing documents"
-					],
-					["6", "Use the correct remedy", "Credit note and reissue", "New validated document"]
+					["3", "Set apply to all doctypes", "Yes, for stock doctypes", "Scope defined"],
+					["4", "Log in as that user", "Open Stock Balance", "Only Retail Counter shown"],
+					["5", "Try a transfer to Main", "Create a stock entry", "Main not selectable"],
+					["6", "Log back in as administrator", "Same report", "All warehouses visible"]
 				]
 			},
-			"notes": "The 72 hour rule is a business deadline, so put it in the finance team's daily routine rather than a document. One person checks the e-Invoice dashboard each morning and cancels what needs cancelling; after that, the credit note route applies. Explain both error messages by name, so nobody spends an afternoon retrying a cancellation that can never succeed."
+			"notes": "This is the single most requested control in multi-branch distribution, and it is pure configuration. Show the client the same report from two logins, because seeing the difference is what sells the control. Remind them that administrators bypass it, so the discipline depends on limiting administrator accounts to two named people."
 		},
 		{
-			"kicker": "Lesson 7 · Verify the cancellation",
-			"title": "What the portal will and will not allow",
+			"kicker": "Lesson 7 · Workflow",
+			"title": "Put an approval on discounts above ten per cent",
 			"bullets": [
-				"Cancellation is possible inside 72 hours with a reason, and refused after it",
-				"A document referenced by a credit note cannot be cancelled while that reference exists",
-				"The refused case must route to a credit note, not to a retry loop",
-				"Log every cancellation with the reason, because the portal keeps its own record"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Cancelled document status", "cancelled on the portal", "Portal document details"],
-					["Reason recorded", "under 300 characters, meaningful", "Cancellation log"],
-					["Late cancellation attempt", "OperationPeriodOver", "Portal error response"],
-					["Referenced document attempt", "ActiveReferencingDocuments", "Portal error response"],
-					["Replacement document", "new validated invoice issued", "Invoice list"]
-				]
-			},
-			"notes": "Two error names cover almost every failed cancellation, and knowing them saves a support call: OperationPeriodOver means the window has passed, ActiveReferencingDocuments means another document depends on this one. Teach the finance team to read the name and pick the remedy, because the portal will not offer an alternative."
-		},
-		{
-			"kicker": "Lesson 8 · Consolidation",
-			"title": "Consolidate small sales and self-bill correctly",
-			"bullets": [
-				"Consolidation groups many small receipts into one monthly e-Invoice for the general public",
-				"It is allowed for B2C within the rules, but not for business customers who need their own document",
-				"Self-billed invoices are issued by the buyer, typically for imports or agent sales",
-				"Both need a policy decision, because they change who is responsible for the submission"
+				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
+				"Conditions belong in transition rules, which keeps the workflow honest",
+				"Approvers need a role, not a person, so absence does not block the business",
+				"Every workflow needs an escape path, or urgent orders stall at month end"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Identify B2C receipts",
-						"Counter sales without a TIN",
-						"List of individual receipts"
+						"Settings → Workflow → New",
+						"Document Sales Order, state Draft",
+						"Workflow editor"
 					],
-					[
-						"2",
-						"Consolidate",
-						"One monthly document for the period",
-						"Consolidated e-Invoice created"
-					],
+					["2", "Add states", "Pending Approval, Approved, Rejected", "Three states defined"],
 					[
 						"3",
-						"Check the total",
-						"Sum of the receipts in the month",
-						"Total matches the sales report"
+						"Add a transition",
+						"Draft to Approved when discount is zero",
+						"Auto-approval path"
 					],
 					[
 						"4",
-						"Set a self-billing case",
-						"Import purchase from an overseas supplier",
-						"Self-billed document prepared"
+						"Add a second transition",
+						"Draft to Pending Approval when discount above 10",
+						"Approval path"
 					],
-					["5", "Submit as buyer", "Self-billed invoice type", "Accepted with buyer as issuer"],
+					["5", "Assign approver role", "Sales Manager", "Role attached to the state"],
 					[
 						"6",
-						"Record the policy",
-						"Which customers are consolidated and why",
-						"Written in the compliance file"
+						"Test both paths",
+						"One order at 5 per cent, one at 15 per cent",
+						"First submits, second waits"
 					]
 				]
 			},
-			"notes": "Consolidation is a legitimate relief for counter sales and a serious problem if applied to business customers, because they cannot claim input tax without their own validated document. Write the policy per customer type, get it signed, and check the monthly consolidated total against the sales report before submitting. Self-billing needs the same clarity, since the buyer becomes the issuer."
+			"notes": "The workflow is only useful if the client's approver role is filled by more than one person, so ask that question before building it. A fifteen per cent discount order that sits unapproved for three days costs more than the discount saved. Build the escape path deliberately and document who may use it."
 		},
 		{
-			"kicker": "Volume 9 · Reference",
-			"title": "e-Invoice document types and tax codes",
+			"kicker": "Lesson 8 · Automation",
+			"title": "Automate recurring documents, carefully",
 			"bullets": [
-				"Document type tells the portal what the document is, and the wrong type invalidates it",
-				"Tax type codes map to sales tax, service tax, tourism and the exemption code",
-				"Classification codes describe the product and drive reporting",
-				"Every invoice line needs both a classification and a tax type, not just a rate"
+				"Auto repeat creates a copy of a document on a schedule, which suits subscriptions and retainers",
+				"Test one cycle before enabling, because a wrong template repeats the error monthly",
+				"Automation never replaces the control, so someone still reviews the output",
+				"Start with one low-risk document and add others only after a clean month"
 			],
 			"table": {
-				"headers": ["Element", "Typical value", "Where it comes from", "What breaks if wrong"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
-						"Document type",
-						"01 Invoice, 02 Credit Note, 03 Debit Note, 04 Refund Note",
-						"Document type field",
-						"Portal rejects or misclassifies"
+						"1",
+						"Open the source document",
+						"Sales Invoice for the monthly retainer",
+						"Submitted invoice"
 					],
-					[
-						"Tax type",
-						"01 Sales Tax, 02 Service Tax, E Exemption",
-						"Invoice tax row",
-						"Return and e-Invoice disagree"
-					],
-					[
-						"Classification code",
-						"product classification from the portal list",
-						"Item record",
-						"Validation rejection"
-					],
-					["Unit code", "Nos, KGM, LTR", "UOM mapping", "Line rejected"],
-					[
-						"Tax rate and amount",
-						"10 % or 8 % with the computed amount",
-						"Tax template",
-						"Amount mismatch against invoice"
-					]
+					["2", "Create auto repeat", "Monthly on the first, 12 occurrences", "Schedule stored"],
+					["3", "Set the template", "Same items, customer and tax", "Template reviewed"],
+					["4", "Enable and wait", "First cycle on 01-03-2026", "New draft invoice created"],
+					["5", "Review the draft", "Amounts and dates correct", "Submit or amend"],
+					["6", "Check the log", "Auto Repeat list", "Next occurrence scheduled"]
 				]
 			},
-			"notes": "This table is the reference sheet to leave with the finance team, because most rejections trace to one of these five rows. Classification codes need mapping for every item sold, which is a morning's work with the portal list open, and the unit code mapping catches people who sell in cartons but invoice in pieces."
+			"notes": "Automation is where a small configuration error compounds twelve times a year, so the first cycle must be reviewed by a person. A retainer invoice that repeats the wrong tax template creates a filing problem every month. Enable one document, watch one cycle, then expand, and write that rule into the handover note."
 		},
 		{
-			"kicker": "Volume 9 · Reference",
-			"title": "Status board for the finance team",
+			"kicker": "Lesson 6 · Verify the restriction",
+			"title": "Same report, two logins",
 			"bullets": [
-				"Finance needs one screen that shows what is pending, rejected or cancelled",
-				"Rejected documents need an owner and a same-day fix, or the tax invoice does not exist",
-				"Weekly reconciliation of e-Invoice totals against the sales ledger catches drift early",
-				"Keep the evidence, because the portal keeps its own copy and yours must match"
+				"The test is not what the administrator sees but what the restricted role sees",
+				"Reports, lists and link fields must all respect the filter, not only forms",
+				"A restriction that silently does not apply is worse than no restriction at all",
+				"Record the test result, because the client will ask for evidence"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Pending submissions", "0 at the end of each day", "e-Invoice dashboard"],
-					["Rejected documents", "0, or listed with an owner", "e-Invoice status list"],
-					["Validated this month", "matches submitted invoices", "Sales invoice register"],
-					["Difference against ledger", "0.00", "Your own reconciliation"],
-					["Cancellations", "within 72 hours, reason recorded", "Portal cancellation log"]
+					[
+						"Warehouses visible to the supervisor",
+						"Retail Counter only",
+						"Stock Balance as that user"
+					],
+					["Transfer target options", "Main not selectable", "New stock entry as that user"],
+					["Report totals", "retail-only quantity and value", "Stock Balance as that user"],
+					["Administrator view", "all four warehouses", "Same report as administrator"],
+					["Evidence", "screenshot or note in the handover file", "Project documentation"]
 				]
 			},
-			"notes": "Give the client a daily ten-minute routine: open the dashboard, fix rejections, cancel what must be cancelled, and confirm nothing is pending overnight. Then a monthly check that validated totals equal the sales ledger. That rhythm is what keeps an e-Invoice project out of trouble, because the portal does not wait and neither does the deadline."
+			"notes": "Two logins, one report, a visible difference: that is the demonstration clients remember. Write the result down, because when the first complaint arrives about missing data the answer is already documented. If both logins look identical, the user permission was saved against the wrong field."
+		},
+		{
+			"kicker": "Lesson 7 · Verify the workflow",
+			"title": "States, roles and the escape path",
+			"bullets": [
+				"A workflow is correct when a low-discount order flows and a high-discount order waits",
+				"Approvers must see the document in their queue, not hunt for it by number",
+				"The escape path is documented and named, so emergencies do not become policy",
+				"Rejection is a state, not a deletion, so the history survives"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["5 per cent order", "submits without approval", "Sales Order list"],
+					["15 per cent order", "status Pending Approval", "Sales Order header"],
+					["Approver queue", "the pending order appears", "Workflow action list"],
+					[
+						"Rejected order",
+						"status Rejected, retained in the list",
+						"Sales Order list filtered by state"
+					],
+					["Escape path", "named user documented", "Workflow notes in the handover file"]
+				]
+			},
+			"notes": "The failure mode is a workflow with no queue, where the approver only learns about the order when the customer calls. Configure the queue view as part of the build, not afterwards, and teach the approver to work from it. A rejection that deletes the document would destroy the audit trail, which is why the state is retained."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "Automation options ranked by risk",
+			"bullets": [
+				"Permissions are the highest-value change and the lowest risk, so start there",
+				"Notifications are cheap and reversible; workflows change behaviour and need agreement",
+				"Auto repeat touches money documents, so it needs the tightest review",
+				"Every option here is configuration, and every one needs an owner"
+			],
+			"table": {
+				"headers": ["Option", "Risk", "First control", "Owner"],
+				"rows": [
+					["Roles and permissions", "Low, reversible", "Quarterly access review", "HR or admin"],
+					["User permissions", "Low, reversible", "Test with a restricted login", "Admin"],
+					[
+						"Notifications",
+						"Low, noisy if overused",
+						"One message per exception",
+						"Department head"
+					],
+					[
+						"Workflow",
+						"Medium, blocks work",
+						"Named approver role and escape path",
+						"Operations manager"
+					],
+					["Auto repeat", "High, repeats money", "Review the first cycle", "Finance manager"]
+				]
+			},
+			"notes": "Ranking by risk is what stops a client asking for everything at once. Permissions first, notifications second, workflow once the approver role exists, and auto repeat only for documents that are genuinely identical every period. Say the order out loud in the proposal and the delivery becomes predictable."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "The access review a consultant should leave behind",
+			"bullets": [
+				"Access reviews are a quarterly ritual, not a one-off configuration task",
+				"List every user, their roles and any user permissions, and get a signature",
+				"Remove leavers on the day they leave, which is the only control auditors test hard",
+				"Keep two administrators, named, and no shared logins"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Active users", "matches the HR list", "User list"],
+					["Administrators", "exactly two named people", "Role list for System Manager"],
+					["Restricted users", "each has a user permission row", "User permissions"],
+					["Leavers", "disabled on their last day", "User list, enabled column"],
+					["Review evidence", "signed quarterly sheet", "Client's audit file"]
+				]
+			},
+			"notes": "This sheet takes twenty minutes a quarter and prevents the finding that audits always produce: a leaver with live access. Hand it to the client as a template rather than a lecture, and put the first review date in the handover document. Consulting value often looks like a checklist somebody actually uses."
 		}
 	],
 	"lab": {
-		"title": "Lab · Prepare, submit, validate and cancel an e-Invoice",
+		"title": "Lab · Roles, a warehouse restriction, a discount workflow and an auto repeat",
 		"minutes": 45,
 		"steps": [
-			"Complete the company TIN, registration, MSIC and SST fields",
-			"Complete the customer TIN, registration, address and contact",
-			"Validate the customer TIN against the portal before invoicing",
-			"Submit a 2,640.00 invoice as document type 01 and record the submission UID",
-			"Confirm the validated state and store the UUID and long ID",
-			"Cancel the document with a reason and confirm the status",
-			"Attempt a cancellation past 72 hours and record the error name",
-			"Consolidate a month of counter sales and check the total against the sales report"
+			"Create the Sales Executive role with read, write, create and submit but no delete",
+			"Restrict a warehouse supervisor to Retail Counter with a user permission",
+			"Log in as that user and confirm only their warehouse appears in reports",
+			"Build a sales order workflow with an approval state above 10 per cent discount",
+			"Test a 5 per cent order and confirm it submits without approval",
+			"Test a 15 per cent order and confirm it waits in Pending Approval",
+			"Set an auto repeat for a monthly retainer invoice",
+			"Review the first generated draft and confirm amounts and tax"
 		],
-		"done": "Done when the invoice is validated with a stored UUID, the cancellation succeeded inside the window, the expired attempt returned its named error, and the consolidated total matches the sales report."
+		"done": "Done when the restricted user sees one warehouse only, the 15 per cent order cannot submit without approval, and the auto repeat produced a correct draft for review."
 	},
 	"quiz": [
 		{
-			"question": "What does an accepted submission mean?",
-			"options": [
-				"The invoice is legally validated",
-				"The portal received the document",
-				"The customer has paid",
-				"The tax is filed"
-			],
-			"answer": 1,
-			"why": "Accepted means the portal received the submission. Validation, with a UUID, is the later state that makes it a legal tax invoice."
-		},
-		{
-			"question": "How long does the portal allow a validated document to be cancelled?",
-			"options": ["24 hours", "48 hours", "72 hours", "7 days"],
+			"question": "Which permission should a sales role normally lack on submitted documents?",
+			"options": ["Read", "Create", "Delete", "Submit"],
 			"answer": 2,
-			"why": "Cancellation is limited to 72 hours after validation, after which the remedy is a credit note or debit note."
+			"why": "Delete on transaction doctypes destroys the audit trail. Sales roles normally read, create, write and submit, with cancel reserved for supervisors."
 		},
 		{
-			"question": "Which customers should not be consolidated into a monthly e-Invoice?",
+			"question": "What does a user permission do?",
 			"options": [
-				"Cash customers",
-				"Business customers needing their own document",
-				"Online orders",
-				"Walk-in buyers"
+				"Changes the role",
+				"Filters the records a user can see",
+				"Adds a new user",
+				"Disables the workflow"
 			],
 			"answer": 1,
-			"why": "Business customers need their own validated document to claim input tax, so consolidation is limited to B2C within the rules."
+			"why": "User permissions restrict data, such as one warehouse or territory, and they apply to reports as well as forms."
 		},
 		{
-			"question": "What does a self-billed invoice mean?",
+			"question": "Why should an approver be a role rather than a named person?",
 			"options": [
-				"The seller issues it",
-				"The buyer issues it",
-				"The portal issues it",
-				"Nobody issues it"
+				"Roles are cheaper",
+				"So the process continues when someone is away",
+				"Roles bypass permissions",
+				"It simplifies printing"
 			],
 			"answer": 1,
-			"why": "In self-billing the buyer issues the document, typically for imports or agent arrangements, which shifts responsibility for submission."
+			"why": "A role keeps the workflow moving during leave, whereas a named approver blocks the business whenever they are unavailable."
 		},
 		{
-			"question": "Which portal error appears when you cancel too late?",
-			"options": ["IncorrectState", "OperationPeriodOver", "ActiveReferencingDocuments", "InvalidTIN"],
+			"question": "What is the main risk of auto repeat?",
+			"options": [
+				"It deletes documents",
+				"An error repeats every cycle",
+				"It changes permissions",
+				"It stops notifications"
+			],
 			"answer": 1,
-			"why": "OperationPeriodOver indicates the 72 hour window has passed, so the correction must be a credit note rather than a cancellation."
+			"why": "Auto repeat copies a document on a schedule, so a wrong tax template or price repeats monthly until somebody reviews the draft."
+		},
+		{
+			"question": "Which automation should a consultant configure first?",
+			"options": ["Auto repeat", "Workflow", "Roles and permissions", "Notifications"],
+			"answer": 2,
+			"why": "Permissions deliver the highest control value with the lowest risk and are fully reversible, which is why they come first."
 		}
 	],
 	"memory": {
-		"spine": "Master data validates before anything is submitted, a submission returns two lists, and cancellation lives inside 72 hours only.",
+		"spine": "A role says what a job may do, a user permission says which rows it may see, and the only test that counts is the restricted login.",
 		"device": {
-			"kind": "phrase",
-			"label": "Validate, submit, read, cancel inside 72",
+			"kind": "rule",
+			"label": "Roles do, permissions see",
 			"expansion": [
-				"Validate the masters first: TIN, registration number, MSIC code and SST number",
-				"Submit and read the answer: a submission ID, then accepted and rejected lists",
-				"Accepted, validated and cancelled are three different states, not one",
-				"Cancellation inside 72 hours with a reason, refused afterwards",
-				"Consolidate many small sales to the public, and self bill when you invoice yourself"
+				"Name roles after the job function, never after a person",
+				"User permissions filter rows and outweigh what the role would otherwise show",
+				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
+				"Auto repeat copies a document on a schedule, which suits subscriptions and retainers only",
+				"Test the restricted login, not the administrator"
 			]
 		},
 		"cards": [
 			{
-				"q": "What does a submission return?",
-				"a": "A submission ID, an accepted list carrying validation identifiers, and a rejected list with reasons.",
-				"hint": "One ID and two lists"
+				"q": "Role permission or user permission, what is the difference?",
+				"a": "A role grants actions on a DocType, a user permission filters the records, and the narrower wins.",
+				"hint": "Do versus see"
 			},
 			{
-				"q": "How long is the cancellation window?",
-				"a": "72 hours after validation, after which only a credit or debit note can correct the document.",
-				"hint": "72, not 24"
+				"q": "How is a user kept to one warehouse?",
+				"a": "With a user permission on Warehouse for that user, not with a new role.",
+				"hint": "Row filter"
 			},
 			{
-				"q": "What are document types 01 to 04?",
-				"a": "Invoice, credit note, debit note and refund note.",
-				"hint": "Four types"
+				"q": "What makes a discount workflow correct?",
+				"a": "A low discount flows straight to submitted while a high one waits at pending approval for the right role.",
+				"hint": "States and transitions"
 			},
 			{
-				"q": "When is consolidation allowed?",
-				"a": "For many small sales to the general public grouped into one monthly e-Invoice, not for business buyers.",
-				"hint": "Consumer sales only"
+				"q": "When is auto repeat safe?",
+				"a": "For genuinely recurring documents with a fixed shape, never for ones a human must judge.",
+				"hint": "Rhythm, not judgement"
 			},
 			{
-				"q": "What must the finance team be able to see?",
-				"a": "One board showing pending, accepted, rejected and cancelled documents, with the reason for each rejection.",
-				"hint": "Status board"
+				"q": "What does an access review check?",
+				"a": "That every active login still matches a job, quarterly, including the ones nobody uses.",
+				"hint": "Quarterly ritual"
 			}
 		],
 		"trap": {
-			"what": "A rejected document is resubmitted unchanged.",
-			"why": "The validator rejects it for exactly the same reason while the 72 hour clock keeps running, so the master data or tax code must be fixed first."
+			"what": "A user permission is added to fix a report that looks wrong.",
+			"why": "The report was the symptom of an over broad role, so filtering rows hides the grant and the next report breaks differently."
 		}
 	},
-	"narration": "e-Invoice is a deadline, not a feature. Everything starts with master data: company and customer TIN, registration, MSIC, address, and a validated TIN before the first submission. When you submit, you get a submission identifier and an accepted list, but accepted only means the portal has the file. Validated is the state that matters, because that is where the UUID and the QR code come from, and that is the legal tax invoice. Cancellation lives inside seventy two hours with a reason, and after that the remedy is a credit note, which the portal enforces with named errors. Consolidate only consumer sales, self-bill only where the rules allow, and give the finance team a daily dashboard routine: clear rejections, cancel what must be cancelled, and confirm nothing is left pending overnight. A monthly tie-out between validated totals and the sales ledger is the check that keeps the project out of trouble."
+	"narration": "Permissions are the least glamorous part of a project and the part that determines whether it survives an audit. Roles follow the org chart, not the software, and the safe default is read, write, create and submit without delete. User permissions restrict a person to their warehouse or territory, and you prove it by logging in as them, because administrators bypass the filter. Then workflow: a discount above ten per cent waits for the sales manager, and the approver is a role so leave does not stop the business. Finally automation, where one wrong template repeats twelve times a year, so review the first cycle. Configure in that order and the client gets control before convenience, and finish with a quarterly access review that the client signs, because a leaver with live access is the finding every audit produces when nobody owns the list, and when nobody has written down who is allowed to do what."
 }
