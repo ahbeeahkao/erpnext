@@ -129,6 +129,11 @@ try {
 	click(/Open the demo/i);
 	await wait(800);
 	check("demo mode reaches the home screen", text().includes("Scan one item"));
+	check("the home screen lists six jobs", window.document.querySelectorAll(".task").length === 6);
+	check(
+		"issuing is a job, not a button on an item",
+		text().includes("Issue for consumption")
+	);
 	check("connection status is shown", text().includes("Online"));
 	check(
 		"bottom tabs are present",
