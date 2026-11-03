@@ -21,7 +21,7 @@ import type {
 	Warehouse,
 	WorkOrder,
 } from "../lib/types";
-import { newId } from "./Move";
+import { newId } from "../lib/ids";
 import { TaskFlowScreen, TaskHeader } from "./TaskFlow";
 
 function messageOf(error: unknown): string {

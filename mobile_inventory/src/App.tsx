@@ -3,7 +3,7 @@ import { AlertIcon, BackIcon, CheckIcon, QueueIcon, ScanIcon, SettingsIcon } fro
 import { Connect } from "./screens/Connect";
 import { Home } from "./screens/Home";
 import { ItemScreen } from "./screens/Item";
-import { MoveScreen } from "./screens/Move";
+import { TransferScreen } from "./screens/Transfer";
 import { QueueScreen } from "./screens/Queue";
 import {
 	IssueScreen,
@@ -24,14 +24,14 @@ import { clearQueue } from "./lib/queue";
 import { clearRecent } from "./lib/recent";
 import { clearSession, loadSession, saveSession } from "./lib/settings";
 import { clearStore } from "./lib/storage";
-import type { Connection, ItemInfo, JobKey, MoveKind, QueueOp, Session } from "./lib/types";
+import type { Connection, ItemInfo, JobKey, QueueOp, Session } from "./lib/types";
 
 type Screen =
 	| { name: "home" }
 	| { name: "queue" }
 	| { name: "settings" }
 	| { name: "item"; itemCode: string }
-	| { name: "move"; itemCode: string; kind: MoveKind }
+	| { name: "transfer"; itemCode: string }
 	| { name: JobKey };
 
 type Tab = "home" | "queue" | "settings";
@@ -272,19 +272,18 @@ export default function App() {
 						item={currentItem}
 						notify={notify}
 						onBack={() => setScreen({ name: "home" })}
-						onMove={(kind) => setScreen({ name: "move", itemCode: currentItem.item_code, kind })}
+						onTransfer={() => setScreen({ name: "transfer", itemCode: currentItem.item_code })}
 					/>
 				);
-			case "move":
+			case "transfer":
 				if (!currentItem) {
 					return <ItemLoading error={itemError} onBack={() => setScreen({ name: "home" })} />;
 				}
 				return (
-					<MoveScreen
+					<TransferScreen
 						client={client!}
 						session={session}
 						item={currentItem}
-						kind={screen.kind}
 						warehouses={warehouses}
 						online={online}
 						defaultWarehouse={session.defaultWarehouse}

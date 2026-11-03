@@ -3,8 +3,9 @@
 An installable, offline-first web app for warehouse work on a phone:
 
 - **Scan** any item barcode (camera or keyboard/Bluetooth scanner) and see live stock by warehouse.
-- **Receive / Issue / Transfer** stock, with batch and serial support and a unit cost for receipts.
-- **Count** stock — posts a Stock Reconciliation (zero counts included).
+- **Six jobs**: receive a delivery against its order, count a rack, put away, issue for consumption,
+  pick for a work order, pick for delivery — batch and serials throughout.
+- **Transfer** one item between warehouses when there is no document to start from.
 - **Works offline**: transactions are queued in IndexedDB and posted automatically when the
   connection returns, oldest first, never twice.
 - **Installable**: web manifest + service worker, so it opens full-screen from the home screen
@@ -278,8 +279,8 @@ Limits worth knowing:
 
 - Web Stock Entries one row at a time (fast enough for phone work; the desk is the tool for bulk).
 - Batch-tracked **counts** post at item/warehouse level; count batches individually in the desk.
-- Receipts need a unit cost, or an explicit “zero value receipt” (only appropriate for free
-  goods — it posts no stock value).
+- A receipt takes its prices from the purchase order, so a delivery with no order behind it cannot
+  be booked here — that is a stock adjustment in the Desk.
 
 ## Layout
 
@@ -287,7 +288,8 @@ Limits worth knowing:
 src/
   lib/payloads.ts     stock entry + count builders and validation (pure, unit tested)
   lib/receiving.ts    purchase-order receiving task: scan counting, validation, receipt builder
-  lib/taskflow.ts     shared engine for count / put away / pick tasks (pure, unit tested)
+  lib/taskflow.ts     shared engine for count / put away / issue / pick tasks (pure, unit tested)
+  lib/ids.ts          queue ids, which double as the idempotency marker
   lib/labels.ts       what a label sheet contains (pure, unit tested)
   lib/catalogue.ts    offline item/barcode/stock cache (pure, unit tested)
   lib/api.ts          ERPNext REST client (site-session or API-key auth)
@@ -296,7 +298,7 @@ src/
   lib/sync.ts         drain loop with idempotency + failure policy
   lib/storage.ts      IndexedDB wrapper (kv + queue stores)
   hooks/              camera scanning, online state, queue, toasts
-  screens/            Connect, Home, Receive, TaskFlow, Jobs, Item, Move, Queue, Settings
+  screens/            Connect, Home, Receive, TaskFlow, Jobs, Item, Transfer, Queue, Settings
   components/         UI kit, icons, scanner overlay, printable label sheet
 public/
   sw.js               offline shell (never caches /api/*)

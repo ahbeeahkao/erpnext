@@ -29,7 +29,7 @@ import type {
 	Session,
 	Warehouse,
 } from "../lib/types";
-import { newId } from "./Move";
+import { newId } from "../lib/ids";
 
 function messageOf(error: unknown): string {
 	if (error instanceof ApiError) return error.message;

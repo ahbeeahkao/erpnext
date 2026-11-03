@@ -6,6 +6,8 @@ import { describe, it } from "node:test";
 import {
 	buildReconciliationDoc,
 	buildStockEntryDoc,
+	MOVE_ENTRY_TYPE,
+	OP_LABELS,
 	mobileRef,
 	parseScanResponse,
 	parseSerials,
@@ -35,59 +37,31 @@ const ctx = { company: "Demo Co", postingDate: "2026-10-30" };
 
 const baseMove = (overrides = {}) => ({
 	id: "op-1",
-	kind: "receipt",
 	itemCode: "FG-1001",
 	qty: 5,
 	uom: "Kg",
-	toWarehouse: "Stores - DC",
-	rate: 12.5,
+	fromWarehouse: "Stores - DC",
+	toWarehouse: "Packing - DC",
 	...overrides,
 });
 
-describe("stock entry payloads", () => {
-	it("builds a Material Receipt with cost and device marker", () => {
+describe("the transfer payload", () => {
+	it("builds a Material Transfer with both warehouses and the device marker", () => {
 		const doc = buildStockEntryDoc(baseMove(), ctx);
 		assert.equal(doc.doctype, "Stock Entry");
-		assert.equal(doc.stock_entry_type, "Material Receipt");
+		assert.equal(doc.stock_entry_type, MOVE_ENTRY_TYPE);
 		assert.equal(doc.company, "Demo Co");
 		assert.equal(doc.posting_date, "2026-10-30");
 		assert.ok(String(doc.remarks).includes(mobileRef("op-1")));
+		assert.equal(doc.from_warehouse, "Stores - DC");
+		assert.equal(doc.to_warehouse, "Packing - DC");
 		const row = doc.items[0];
 		assert.deepEqual(
-			{ item_code: row.item_code, qty: row.qty, uom: row.uom, t_warehouse: row.t_warehouse },
-			{ item_code: "FG-1001", qty: 5, uom: "Kg", t_warehouse: "Stores - DC" }
+			{ item: row.item_code, qty: row.qty, uom: row.uom, s: row.s_warehouse, t: row.t_warehouse },
+			{ item: "FG-1001", qty: 5, uom: "Kg", s: "Stores - DC", t: "Packing - DC" }
 		);
-		assert.equal(row.basic_rate, 12.5);
-		assert.equal(row.s_warehouse, undefined);
-	});
-
-	it("marks zero-value receipts instead of sending a rate", () => {
-		const doc = buildStockEntryDoc(baseMove({ rate: null, zeroValuation: true }), ctx);
-		assert.equal(doc.items[0].allow_zero_valuation_rate, 1);
-		assert.equal(doc.items[0].basic_rate, undefined);
-	});
-
-	it("builds a Material Issue from the source warehouse", () => {
-		const doc = buildStockEntryDoc(
-			baseMove({ kind: "issue", toWarehouse: undefined, fromWarehouse: "Stores - DC" }),
-			ctx
-		);
-		assert.equal(doc.stock_entry_type, "Material Issue");
-		assert.equal(doc.items[0].s_warehouse, "Stores - DC");
-		assert.equal(doc.items[0].t_warehouse, undefined);
-		assert.equal(doc.items[0].basic_rate, undefined);
-	});
-
-	it("builds a Material Transfer with both warehouses on the doc and the row", () => {
-		const doc = buildStockEntryDoc(
-			baseMove({ kind: "transfer", fromWarehouse: "A", toWarehouse: "B", rate: null }),
-			ctx
-		);
-		assert.equal(doc.stock_entry_type, "Material Transfer");
-		assert.equal(doc.from_warehouse, "A");
-		assert.equal(doc.to_warehouse, "B");
-		assert.equal(doc.items[0].s_warehouse, "A");
-		assert.equal(doc.items[0].t_warehouse, "B");
+		assert.equal(row.basic_rate, undefined, "a transfer does not revalue stock");
+		assert.equal(row.allow_zero_valuation_rate, undefined);
 	});
 
 	it("sends batch and serial values with use_serial_batch_fields", () => {
@@ -101,15 +75,29 @@ describe("stock entry payloads", () => {
 	});
 
 	it("keeps the note in remarks but trims it", () => {
-		const remarks = remarksFor("op-2", "Material Issue", "  damaged  ");
-		assert.ok(remarks.startsWith("Mobile Inventory · Material Issue"));
+		const doc = buildStockEntryDoc(baseMove({ note: "  for the packing line  " }), ctx);
+		assert.match(String(doc.remarks), /· for the packing line$/);
+		assert.ok(String(doc.remarks).startsWith("Mobile Inventory · Material Transfer"));
+		const remarks = remarksFor("op-2", "Material Transfer", "  damaged  ");
 		assert.ok(remarks.endsWith("· damaged"));
 		assert.ok(remarks.includes("[MOBILE-INV:op-2]"));
 	});
+
+	it("splits serial numbers the way a scanner delivers them", () => {
+		assert.deepEqual(parseSerials("SN1 SN2,SN3;SN4"), ["SN1", "SN2", "SN3", "SN4"]);
+		assert.deepEqual(parseSerials("   "), []);
+	});
+
+	it("still describes a queue entry captured by an older build", () => {
+		const legacy = { kind: "receipt", summary: { itemCode: "FG-1001", qty: 2, uom: "Kg" } };
+		assert.equal(describeOp(legacy), "Receipt · FG-1001 · 2 Kg");
+		assert.equal(OP_LABELS.receipt, "Receipt");
+		assert.equal(OP_LABELS.transfer, "Transfer");
+	});
 });
 
-describe("move validation", () => {
-	it("accepts a complete receipt", () => {
+describe("transfer validation", () => {
+	it("accepts a complete transfer", () => {
 		assert.deepEqual(validateMove(baseMove()), []);
 	});
 
@@ -120,33 +108,33 @@ describe("move validation", () => {
 		assert.equal(validateQty(3), null);
 	});
 
-	it("requires a rate unless the receipt is explicitly zero value", () => {
-		const errors = validateMove(baseMove({ rate: null }));
-		assert.ok(errors.some((error) => error.includes("unit cost")));
-		assert.deepEqual(validateMove(baseMove({ rate: null, zeroValuation: true })), []);
-	});
-
-	it("requires distinct warehouses for a transfer", () => {
-		const errors = validateMove(
-			baseMove({ kind: "transfer", fromWarehouse: "A", toWarehouse: "A", rate: null })
+	it("needs two warehouses, and they must differ", () => {
+		assert.ok(validateMove(baseMove({ fromWarehouse: "" })).includes("Choose the source warehouse"));
+		assert.ok(validateMove(baseMove({ toWarehouse: "" })).includes("Choose the destination warehouse"));
+		assert.ok(
+			validateMove(baseMove({ toWarehouse: "Stores - DC" })).includes(
+				"Source and destination warehouses must differ"
+			)
 		);
-		assert.ok(errors.some((error) => error.includes("must differ")));
 	});
 
-	it("requires batch for batch items and a matching serial count", () => {
-		const batchErrors = validateMove(baseMove(), { has_batch_no: 1 });
-		assert.ok(batchErrors.some((error) => error.includes("batch")));
-
-		const serialErrors = validateMove(baseMove({ serialNo: "SN1", qty: 2 }), { has_serial_no: 1 });
-		assert.ok(serialErrors.some((error) => error.includes("Serial count")));
-
-		assert.deepEqual(validateMove(baseMove({ serialNo: "SN1 SN2", qty: 2 }), { has_serial_no: 1 }), []);
-	});
-
-	it("parses serial lists separated by spaces, commas or newlines", () => {
-		assert.deepEqual(parseSerials("A B\nC,D;E"), ["A", "B", "C", "D", "E"]);
-		assert.deepEqual(parseSerials("   "), []);
-		assert.deepEqual(parseSerials(undefined), []);
+	it("asks for a batch or serials when the item is tracked", () => {
+		assert.ok(
+			validateMove(baseMove(), { has_batch_no: 1, has_serial_no: 0 }).some((error) =>
+				error.includes("batch number")
+			)
+		);
+		assert.deepEqual(validateMove(baseMove({ batchNo: "B-1" }), { has_batch_no: 1, has_serial_no: 0 }), []);
+		assert.ok(
+			validateMove(baseMove(), { has_batch_no: 0, has_serial_no: 1 }).some((error) =>
+				error.includes("serial numbers")
+			)
+		);
+		assert.ok(
+			validateMove(baseMove({ serialNo: "SN1", qty: 2 }), { has_batch_no: 0, has_serial_no: 1 }).some(
+				(error) => error.includes("must equal the quantity")
+			)
+		);
 	});
 });
 

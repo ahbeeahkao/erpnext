@@ -69,24 +69,28 @@ export interface ScanMatch {
 	raw?: string;
 }
 
-export type MoveKind = "receipt" | "issue" | "transfer";
+/** What the app can still create by hand: one item moved between two warehouses. */
+export type MoveKind = "transfer";
+
+/**
+ * Receipt and issue were queued by older builds. They are no longer created (receiving and issuing
+ * are jobs), but a phone that upgraded mid-shift may still hold them, so the queue still knows them.
+ */
+export type LegacyMoveKind = "receipt" | "issue";
 export type TaskKind = "count-rack" | "putaway" | "issue" | "pick-wo" | "pick-dn";
 
 /** Every job the home screen can start. */
 export type JobKey = "receive" | TaskKind;
 
-export type OpKind = MoveKind | "count" | "po-receipt" | TaskKind;
+export type OpKind = MoveKind | LegacyMoveKind | "count" | "po-receipt" | TaskKind;
 
 export interface MoveInput {
 	id: string;
-	kind: MoveKind;
 	itemCode: string;
 	qty: number;
 	uom: string;
 	fromWarehouse?: string;
 	toWarehouse?: string;
-	rate?: number | null;
-	zeroValuation?: boolean;
 	batchNo?: string;
 	serialNo?: string;
 	note?: string;

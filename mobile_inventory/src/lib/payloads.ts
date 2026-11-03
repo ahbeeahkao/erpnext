@@ -10,21 +10,29 @@
 //   "Use Serial / Batch Fields" should be enabled for smooth batch posting).
 // * Stock Reconciliation fills `expense_account` / `cost_center` from the Company when omitted,
 //   and drops rows with no quantity change, which makes counts re-sendable.
-import type { CountInput, ItemInfo, MoveInput, MoveKind, ScanMatch } from "./types";
+import type { CountInput, ItemInfo, MoveInput, ScanMatch } from "./types";
 
 export const MOBILE_REF_PREFIX = "MOBILE-INV";
 export const MAX_QTY = 1_000_000;
 
-const STOCK_ENTRY_TYPE: Record<MoveKind, string> = {
-	receipt: "Material Receipt",
-	issue: "Material Issue",
-	transfer: "Material Transfer",
-};
+/** The one document a hand-made move becomes. */
+export const MOVE_ENTRY_TYPE = "Material Transfer";
 
-export const MOVE_LABEL: Record<MoveKind, string> = {
-	receipt: "Receive",
-	issue: "Issue",
+/**
+ * Queue labels, including the two move kinds older builds could queue: an upgraded phone may still be
+ * holding them, and "receipt · FG-1001" was never a readable row.
+ */
+export const OP_LABELS: Record<string, string> = {
 	transfer: "Transfer",
+	"po-receipt": "Receipt",
+	"count-rack": "Rack count",
+	putaway: "Put away",
+	issue: "Issue",
+	"pick-wo": "Pick for work order",
+	"pick-dn": "Pick for delivery",
+	// Queued by builds before the jobs existed; still described, never created again.
+	receipt: "Receipt",
+	count: "Count",
 };
 
 /** Idempotency marker embedded in `remarks`, so a retried op is never posted twice. */
@@ -70,22 +78,10 @@ export function validateMove(
 
 	if (!input.uom) errors.push("Unit of measure is required");
 
-	if (input.kind === "receipt" && !input.toWarehouse)
-		errors.push("Choose the warehouse receiving the stock");
-	if (input.kind === "issue" && !input.fromWarehouse) errors.push("Choose the warehouse the stock leaves");
-	if (input.kind === "transfer") {
-		if (!input.fromWarehouse) errors.push("Choose the source warehouse");
-		if (!input.toWarehouse) errors.push("Choose the destination warehouse");
-		if (input.fromWarehouse && input.fromWarehouse === input.toWarehouse) {
-			errors.push("Source and destination warehouses must differ");
-		}
-	}
-
-	if (input.kind === "receipt") {
-		const rate = input.rate ?? 0;
-		if (!input.zeroValuation && !(Number.isFinite(rate) && rate > 0)) {
-			errors.push("Enter a unit cost, or tick “Zero value receipt”");
-		}
+	if (!input.fromWarehouse) errors.push("Choose the source warehouse");
+	if (!input.toWarehouse) errors.push("Choose the destination warehouse");
+	if (input.fromWarehouse && input.fromWarehouse === input.toWarehouse) {
+		errors.push("Source and destination warehouses must differ");
 	}
 
 	if (item?.has_batch_no && !input.batchNo?.trim()) {
@@ -119,8 +115,8 @@ export function buildStockEntryDoc(input: MoveInput, ctx: DocContext): Record<st
 		uom: input.uom,
 	};
 
-	if (input.kind === "issue" || input.kind === "transfer") row.s_warehouse = input.fromWarehouse;
-	if (input.kind === "receipt" || input.kind === "transfer") row.t_warehouse = input.toWarehouse;
+	row.s_warehouse = input.fromWarehouse;
+	row.t_warehouse = input.toWarehouse;
 
 	if (input.batchNo?.trim()) {
 		row.batch_no = input.batchNo.trim();
@@ -131,26 +127,19 @@ export function buildStockEntryDoc(input: MoveInput, ctx: DocContext): Record<st
 		row.use_serial_batch_fields = 1;
 	}
 
-	if (input.kind === "receipt") {
-		if (input.zeroValuation) row.allow_zero_valuation_rate = 1;
-		else if (input.rate && input.rate > 0) row.basic_rate = input.rate;
-	}
-
 	const doc: Record<string, unknown> = {
 		doctype: "Stock Entry",
-		stock_entry_type: STOCK_ENTRY_TYPE[input.kind],
+		stock_entry_type: MOVE_ENTRY_TYPE,
 		company: ctx.company,
 		set_posting_time: 1,
 		posting_date: ctx.postingDate,
 		...(ctx.postingTime ? { posting_time: ctx.postingTime } : {}),
-		remarks: remarksFor(input.id, STOCK_ENTRY_TYPE[input.kind], input.note),
+		remarks: remarksFor(input.id, MOVE_ENTRY_TYPE, input.note),
 		items: [row],
 	};
 
-	if (input.kind === "transfer") {
-		doc.from_warehouse = input.fromWarehouse;
-		doc.to_warehouse = input.toWarehouse;
-	}
+	doc.from_warehouse = input.fromWarehouse;
+	doc.to_warehouse = input.toWarehouse;
 
 	return doc;
 }
@@ -240,6 +229,6 @@ export function describeOp(op: {
 	summary: { itemCode: string; qty: number; uom: string; label?: string };
 }): string {
 	if (op.summary.label) return op.summary.label;
-	const label = op.kind === "count" ? "Count" : MOVE_LABEL[op.kind as MoveKind] ?? op.kind;
+	const label = OP_LABELS[op.kind] ?? op.kind;
 	return `${label} · ${op.summary.itemCode} · ${op.summary.qty} ${op.summary.uom}`;
 }
