@@ -19,6 +19,7 @@ import {
 	validateReceipt,
 } from "../lib/receiving";
 import { todayIso } from "../lib/settings";
+import { applyCreatedBatch, batchText } from "../lib/taskflow";
 import type {
 	InventoryClient,
 	PurchaseOrder,
@@ -71,6 +72,7 @@ export function ReceiveScreen({
 	const [camera, setCamera] = useState(false);
 	const [errors, setErrors] = useState<string[]>([]);
 	const [busy, setBusy] = useState(false);
+	const [creatingBatch, setCreatingBatch] = useState<string | null>(null);
 
 	const scanRef = useRef<HTMLInputElement | null>(null);
 	const flagsRef = useRef(new Set<string>());
@@ -192,6 +194,22 @@ export function ReceiveScreen({
 		if (!task) return;
 		setTask(setLineQty(task, line.key, line.receivedNow + delta));
 		setErrors([]);
+	}
+
+	async function createBatchFor(line: ReceiptLine) {
+		if (!line.batchNo?.trim()) return;
+		setCreatingBatch(line.key);
+		try {
+			const batch = await client.createBatch(line.itemCode, line.batchNo);
+			setTask((current) =>
+				current ? patchLine(current, line.key, applyCreatedBatch({}, batch)) : current
+			);
+			notify(`Batch ${batch.batch_id} created`, "success");
+		} catch (error) {
+			notify(messageOf(error), "error");
+		} finally {
+			setCreatingBatch(null);
+		}
 	}
 
 	async function post(queueOnly: boolean) {
@@ -361,7 +379,7 @@ export function ReceiveScreen({
 									<>
 										{line.itemCode}
 										{task.blind ? null : ` · ordered ${formatQty(remaining, line.uom)}`}
-										{line.batchNo ? ` · batch ${line.batchNo}` : ""}
+										{line.batchNo ? ` · batch ${batchText(line)}` : ""}
 									</>
 								}
 								trailing={
@@ -456,13 +474,21 @@ export function ReceiveScreen({
 									) : null}
 
 									{line.hasBatchNo ? (
-										<Field label="Batch number" hint="Printed on the carton">
+										<Field
+											label="Batch number"
+											hint={
+												line.batchLabel
+													? `Created on the site as ${line.batchNo}`
+													: "Printed on the carton — create it if this lot is new"
+											}
+										>
 											<TextInput
-												value={line.batchNo ?? ""}
+												value={line.batchLabel ?? line.batchNo ?? ""}
 												onChange={(event) =>
 													setTask(
 														patchLine(task, line.key, {
 															batchNo: event.target.value,
+															batchLabel: undefined,
 														})
 													)
 												}
@@ -470,6 +496,19 @@ export function ReceiveScreen({
 												autoComplete="off"
 											/>
 										</Field>
+									) : null}
+
+									{line.hasBatchNo && !line.batchLabel && line.batchNo?.trim() ? (
+										<Button
+											variant="secondary"
+											loading={creatingBatch === line.key}
+											disabled={!online}
+											onClick={() => void createBatchFor(line)}
+										>
+											{online
+												? `Create batch “${line.batchNo.trim()}”`
+												: "Creating a batch needs a connection"}
+										</Button>
 									) : null}
 
 									{line.hasSerialNo ? (

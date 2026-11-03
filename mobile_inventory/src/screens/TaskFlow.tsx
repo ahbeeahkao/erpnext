@@ -9,11 +9,14 @@ import { formatQty } from "../lib/format";
 import { labelsForTask } from "../lib/labels";
 import {
 	addFlowLine,
+	applyCreatedBatch,
 	applyFlowScan,
+	batchText,
 	clearFlow,
 	describeBatch,
 	flowProgress,
 	flowQueueOp,
+	flowWarnings,
 	isShort,
 	requiredOnLine,
 	lineLocation,
@@ -74,12 +77,27 @@ export function TaskFlowScreen({
 	const [expanded, setExpanded] = useState<string | null>(null);
 	const [camera, setCamera] = useState(false);
 	const [labelsOpen, setLabelsOpen] = useState(false);
+	const [creatingBatch, setCreatingBatch] = useState<string | null>(null);
 	const [errors, setErrors] = useState<string[]>([]);
 	const [busy, setBusy] = useState(false);
 	/** Batches the server says are actually on the shelf, oldest expiry first. */
 	const [batches, setBatches] = useState<Record<string, BatchOption[]>>({});
 	const [loadingBatches, setLoadingBatches] = useState<string | null>(null);
 	const scanRef = useRef<HTMLInputElement | null>(null);
+
+	async function createBatchFor(line: FlowLine) {
+		if (!line.batchNo?.trim()) return;
+		setCreatingBatch(line.key);
+		try {
+			const batch = await client.createBatch(line.itemCode, line.batchNo);
+			onTask(patchFlowLine(task, line.key, applyCreatedBatch({}, batch)));
+			notify(`Batch ${batch.batch_id} created`, "success");
+		} catch (error) {
+			notify(messageOf(error), "error");
+		} finally {
+			setCreatingBatch(null);
+		}
+	}
 
 	async function suggestBatches(line: FlowLine) {
 		const warehouse =
@@ -174,6 +192,7 @@ export function TaskFlowScreen({
 	}
 
 	const progress = flowProgress(task);
+	const warnings = flowWarnings(task);
 	const percent = progress.linesTotal ? (progress.linesTouched / progress.linesTotal) * 100 : 0;
 	const showsSystemQty = task.kind === "count-rack";
 	const maybeNegative = task.kind === "count-rack" && !task.blind;
@@ -277,9 +296,12 @@ export function TaskFlowScreen({
 													: line.requiredQty !== undefined
 														? ` · expected ${formatQty(line.requiredQty, line.uom)}`
 														: ""}
+											{!task.blind && !showsSystemQty && line.systemQty !== undefined
+												? ` · on hand ${formatQty(line.systemQty, line.uom)}`
+												: ""}
 											{isShort(task, line) ? " · short" : ""}
 											{lineLocation(task, line) ? ` · ${lineLocation(task, line)}` : ""}
-											{line.batchNo ? ` · batch ${line.batchNo}` : ""}
+											{line.batchNo ? ` · batch ${batchText(line)}` : ""}
 										</>
 									}
 									trailing={
@@ -354,6 +376,17 @@ export function TaskFlowScreen({
 													autoComplete="off"
 												/>
 											</Field>
+										) : null}
+
+										{line.hasBatchNo && !line.batchLabel && line.batchNo?.trim() ? (
+											<Button
+												variant="secondary"
+												loading={creatingBatch === line.key}
+												disabled={!online}
+												onClick={() => void createBatchFor(line)}
+											>
+												{online ? `Create batch “${line.batchNo.trim()}”` : "Creating a batch needs a connection"}
+											</Button>
 										) : null}
 
 										{line.hasBatchNo && batches[line.key]?.length ? (
@@ -465,6 +498,17 @@ export function TaskFlowScreen({
 					})}
 				</Rows>
 			)}
+
+			{warnings.length ? (
+				<div className="banner banner--warn" role="status">
+					<AlertIcon width={18} height={18} />
+					<ul className="banner__list">
+						{warnings.map((message) => (
+							<li key={message}>{message}</li>
+						))}
+					</ul>
+				</div>
+			) : null}
 
 			{errors.length ? (
 				<div className="banner banner--error" role="alert">

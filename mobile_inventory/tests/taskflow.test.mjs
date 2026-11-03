@@ -6,8 +6,11 @@ import { describe, it } from "node:test";
 import {
 	addFlowLine,
 	applyFlowScan,
+	applyCreatedBatch,
+	batchText,
 	buildFlowDoc,
 	describeBatch,
+	flowWarnings,
 	isShort,
 	lineLocation,
 	clearFlow,
@@ -415,5 +418,52 @@ describe("short picks", () => {
 
 		const complete = buildFlowDoc(pick(3));
 		assert.doesNotMatch(complete.remarks, /Short pick/);
+	});
+});
+
+describe("creating a batch on the spot", () => {
+	it("posts the document name and shows the lot number", () => {
+		const line = { batchNo: "LOT-9", batchLabel: undefined };
+		const applied = applyCreatedBatch(line, { name: "a1b2c3", batch_id: "LOT-9" });
+		assert.equal(applied.batchNo, "a1b2c3", "batch_no is a link on a real site");
+		assert.equal(batchText(applied), "LOT-9", "the operator still reads the lot number");
+	});
+
+	it("falls back to the name when the site returns no batch id", () => {
+		const applied = applyCreatedBatch({}, { name: "a1b2c3", batch_id: "" });
+		assert.equal(batchText(applied), "a1b2c3");
+	});
+});
+
+describe("warnings that are not refusals", () => {
+	it("says when a pick exceeds what is on hand", () => {
+		const task = createFlowTask(
+			"t10",
+			"pick-dn",
+			{ ...header, reference: "SO-0001", customer: "Kedai Kopi" },
+			[pickLinesFromSalesOrder([{ name: "so1", item_code: "FG-1002", qty: 24, delivered_qty: 0, uom: "Nos", warehouse: "Stores - DEMO" }])[0]]
+		);
+		const picked = { ...task, lines: [{ ...task.lines[0], qty: 30, systemQty: 24 }] };
+		assert.match(flowWarnings(picked)[0], /picking 30 Nos but only 24 on hand/);
+		assert.ok(
+			validateFlow(picked).every((message) => !/on hand/.test(message)),
+			"the shelf warns, the document refuses — a short shelf is not a validation error"
+		);
+	});
+
+	it("says nothing when the shelf has enough, or when it does not know", () => {
+		const base = createFlowTask(
+			"t10",
+			"pick-wo",
+			{ ...header, reference: "WO-1", fromWarehouse: "Stores - DEMO", toWarehouse: "WIP" },
+			[line({ qty: 2, requiredQty: 5, fromWarehouse: "Stores - DEMO", toWarehouse: "WIP" })]
+		);
+		assert.deepEqual(flowWarnings({ ...base, lines: [{ ...base.lines[0], systemQty: 9 }] }), []);
+		assert.deepEqual(flowWarnings(base), [], "no on-hand figure, no warning");
+	});
+
+	it("never warns on a count, where finding more is the answer", () => {
+		const task = createFlowTask("t11", "count-rack", header, [line({ qty: 9, systemQty: 2 })]);
+		assert.deepEqual(flowWarnings(task), []);
 	});
 });

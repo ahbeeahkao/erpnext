@@ -5,11 +5,13 @@ import { beforeEach, describe, it } from "node:test";
 
 import {
 	MAX_ITEMS,
+	cachedBatches,
 	cachedItem,
 	cachedScan,
 	cachedStock,
 	catalogueSize,
 	clearCatalogue,
+	rememberBatches,
 	rememberItem,
 	rememberItems,
 	rememberScan,
@@ -71,6 +73,17 @@ describe("the offline catalogue", () => {
 		assert.equal(rows[0].actual_qty, 42);
 		assert.equal(rows[0].stale, true);
 		assert.deepEqual(await cachedStock("UNKNOWN"), []);
+	});
+
+	it("remembers the batches a shelf had, so a pick can be finished offline", async () => {
+		await rememberBatches("FG-1001", "Stores", [
+			{ batch_no: "LOT-A", qty: 12, expiry_date: "2027-01-31" },
+			{ batch_no: "LOT-B", qty: 3, expiry_date: null },
+		]);
+		const rows = await cachedBatches("FG-1001", "Stores");
+		assert.equal(rows.length, 2);
+		assert.equal(rows[0].batch_no, "LOT-A", "the server's FEFO order is kept as it came");
+		assert.deepEqual(await cachedBatches("FG-1001", "Cold Room"), [], "per warehouse, not global");
 	});
 
 	it("forgets everything on request", async () => {

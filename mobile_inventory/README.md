@@ -147,6 +147,8 @@ that used to stop a picker dead in a dead zone.
   quantity must never look like a current one.
 - Only network errors fall back. A permission error or a validation refusal is still an error, so
   the app never quietly answers a question the server refused to answer.
+- Batch lists are cached per item and warehouse too, so a pick of a batch-tracked item can be
+  finished offline.
 
 The first lookup of a brand-new item still needs a signal; nothing can invent master data.
 
@@ -156,6 +158,16 @@ The first lookup of a brand-new item still needs a signal; nothing can invent ma
 the server for the batches that actually have stock in that warehouse — the same FEFO list the Desk
 uses (`get_batches_by_oldest`) — and offers them as chips showing quantity and expiry. Tapping one
 sets the batch; typing a number still works for a batch that arrived with a delivery.
+
+**A lot that arrived without a batch can be created on the phone.** Type the lot number, tap
+*Create batch*, and the app posts a `Batch` to the site and puts **the document name** on the
+transaction row — because `batch_no` is a link — while the lot number stays on screen. This is the
+one write that is deliberately not queued: creating master data needs a site, and an invented batch
+name would be worse than a trip to the Desk.
+
+**The shelf is shown while you pick.** Pick lines carry the quantity on hand in that warehouse, and
+picking more than exists raises a warning — not a refusal. A short shelf is usually a question
+("has that pallet been counted?"), not an error the app should decide.
 
 **A short pick has to say why.** When a picked quantity is less than the document needs, the line
 asks for a reason (*Not on the shelf · Damaged · Reserved for another order · Quality hold*) and the
@@ -258,7 +270,5 @@ public/
 
 ## Roadmap
 
-- **Batch creation on receipt**: a batch-tracked item still needs its batch typed. ERPNext can
-  generate one from the item's numbering series, which the phone could do for the operator.
 - **Label templates**: the sheet is fixed at 50 × 25 mm; sites have their own label stock.
 - Direct printer support (CUPS/Bluetooth) needs a helper process, not a browser.

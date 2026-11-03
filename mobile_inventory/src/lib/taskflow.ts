@@ -9,6 +9,7 @@
 
 import type {
 	BatchOption,
+	CreatedBatch,
 	FlowLine,
 	FlowTask,
 	OpSummary,
@@ -116,6 +117,21 @@ export function isShort(task: FlowTask, line: FlowLine): boolean {
 	return line.qty < requiredOnLine(line);
 }
 
+/**
+ * A created batch is posted by its document name, because `batch_no` is a link; the lot number the
+ * operator typed is kept for display. Getting this backwards silently posts the wrong batch.
+ */
+export function applyCreatedBatch<T extends { batchNo?: string; batchLabel?: string }>(
+	line: T,
+	batch: CreatedBatch
+): T {
+	return { ...line, batchNo: batch.name, batchLabel: batch.batch_id || batch.name };
+}
+
+export function batchText(line: { batchNo?: string; batchLabel?: string }): string {
+	return line.batchLabel || line.batchNo || "";
+}
+
 export function requiredOnLine(line: FlowLine): number {
 	return Math.max(0, round3(toNumber(line.requiredQty) - 0));
 }
@@ -197,6 +213,22 @@ export function flowProgress(task: FlowTask): {
 		units: round3(task.lines.reduce((sum, line) => sum + line.qty, 0)),
 		expected: round3(task.lines.reduce((sum, line) => sum + requiredOnLine(line), 0)),
 	};
+}
+
+/**
+ * Things worth saying that are not refusals. Picking more than the shelf holds is often a real
+ * question ("is that pallet counted?"), so it is raised, not blocked.
+ */
+export function flowWarnings(task: FlowTask): string[] {
+	if (task.kind === "count-rack") return [];
+	return task.lines
+		.filter((line) => line.qty > 0 && line.systemQty !== undefined && line.qty > line.systemQty)
+		.map(
+			(line) =>
+				`${line.itemCode}: picking ${round3(line.qty)} ${line.uom} but only ${round3(
+					line.systemQty ?? 0
+				)} on hand`
+		);
 }
 
 /** Everything the server would refuse, refused here first. */

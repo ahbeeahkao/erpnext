@@ -90,6 +90,28 @@ async function resolveItem(client: InventoryClient, value: string) {
 	}
 }
 
+/** What the shelf actually holds, so a picker can see it before picking more than exists. */
+async function withOnHand(client: InventoryClient, lines: FlowLine[]): Promise<FlowLine[]> {
+	const codes = [...new Set(lines.map((line) => line.itemCode))];
+	const results = await Promise.allSettled(codes.map((code) => client.stockFor(code)));
+	const stock = new Map<string, { warehouse: string; qty: number }[]>();
+	results.forEach((result, index) => {
+		if (result.status !== "fulfilled") return;
+		stock.set(
+			codes[index],
+			result.value.map((row) => ({ warehouse: row.warehouse, qty: Number(row.actual_qty) || 0 }))
+		);
+	});
+	return lines.map((line) => {
+		const warehouse = line.fromWarehouse;
+		const rows = stock.get(line.itemCode);
+		if (!rows?.length) return line;
+		const here = warehouse ? rows.find((row) => row.warehouse === warehouse) : undefined;
+		const qty = here ? here.qty : rows.reduce((sum, row) => sum + row.qty, 0);
+		return { ...line, systemQty: Math.round(qty * 1000) / 1000 };
+	});
+}
+
 /** Document flows do not carry batch/serial flags, so learn them from the items themselves. */
 async function withItemFlags(client: InventoryClient, lines: FlowLine[]): Promise<FlowLine[]> {
 	const codes = [...new Set(lines.map((line) => line.itemCode))];
@@ -372,7 +394,10 @@ export function PickWorkOrderScreen(props: CommonProps) {
 		setOpening(order.name);
 		try {
 			const rows = await client.workOrderLines(order.name);
-			const lines = await withItemFlags(client, pickLinesFromWorkOrder(order, rows));
+			const lines = await withOnHand(
+				client,
+				await withItemFlags(client, pickLinesFromWorkOrder(order, rows))
+			);
 			if (!lines.length) {
 				notify("Every material on this work order is already issued", "info");
 				return;
@@ -491,7 +516,7 @@ export function PickDeliveryScreen(props: CommonProps) {
 		setOpening(order.name);
 		try {
 			const rows = await client.salesOrderLines(order.name);
-			const lines = await withItemFlags(client, pickLinesFromSalesOrder(rows));
+			const lines = await withOnHand(client, await withItemFlags(client, pickLinesFromSalesOrder(rows)));
 			if (!lines.length) {
 				notify("This order is already fully delivered", "info");
 				return;

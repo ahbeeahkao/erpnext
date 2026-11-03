@@ -272,6 +272,14 @@ try {
 	await wait(250);
 	check("choosing a batch sets it on the line", text().includes("batch MP-2411"));
 
+	// a lot that arrived without a batch document
+	type(window.document.querySelector('input[placeholder="e.g. LOT-2411-A"]'), "LOT-SMOKE-1");
+	await wait(200);
+	click(/Create batch/);
+	await wait(700);
+	check("a new lot can be created from the phone", /Batch LOT-SMOKE-1 created/.test(text()));
+	check("the line shows the lot number, not the document name", text().includes("batch LOT-SMOKE-1"));
+
 	// labels for what was picked
 	click(/Print labels/);
 	await wait(500);

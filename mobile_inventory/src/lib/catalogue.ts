@@ -9,7 +9,7 @@
 // offline: a stale quantity must never look like a fresh one.
 
 import { kvGet, kvSet } from "./storage.ts";
-import type { ItemInfo, StockRow } from "./types";
+import type { BatchOption, ItemInfo, StockRow } from "./types";
 
 const KEY = "catalogue:v1";
 /** Enough for the items a site actually moves; keeps the record small enough to rewrite cheaply. */
@@ -24,15 +24,16 @@ interface Catalogue {
 	items: Entry[];
 	barcodes: Record<string, string>;
 	stocks: Record<string, { rows: StockRow[]; at: number }>;
+	batches: Record<string, { rows: BatchOption[]; at: number }>;
 }
 
-const EMPTY: Catalogue = { items: [], barcodes: {}, stocks: {} };
+const EMPTY: Catalogue = { items: [], barcodes: {}, stocks: {}, batches: {} };
 let cache: Catalogue | null = null;
 
 async function load(): Promise<Catalogue> {
 	if (cache) return cache;
 	const stored = await kvGet<Catalogue>(KEY);
-	cache = stored && Array.isArray(stored.items) ? stored : { ...EMPTY, items: [], barcodes: {}, stocks: {} };
+	cache = stored && Array.isArray(stored.items) ? { ...EMPTY, ...stored } : { ...EMPTY, items: [] };
 	return cache;
 }
 
@@ -65,6 +66,28 @@ export async function rememberScan(value: string, itemCode: string): Promise<voi
 export async function rememberStock(itemCode: string, rows: StockRow[]): Promise<void> {
 	const catalogue = await load();
 	await save({ ...catalogue, stocks: { ...catalogue.stocks, [itemCode]: { rows, at: Date.now() } } });
+}
+
+function batchKey(itemCode: string, warehouse: string): string {
+	return `${itemCode}::${warehouse}`;
+}
+
+export async function rememberBatches(
+	itemCode: string,
+	warehouse: string,
+	rows: BatchOption[]
+): Promise<void> {
+	const catalogue = await load();
+	await save({
+		...catalogue,
+		batches: { ...catalogue.batches, [batchKey(itemCode, warehouse)]: { rows, at: Date.now() } },
+	});
+}
+
+/** The batch list as this device last saw it — good enough to pick offline, worth distrusting online. */
+export async function cachedBatches(itemCode: string, warehouse: string): Promise<BatchOption[]> {
+	const catalogue = await load();
+	return catalogue.batches[batchKey(itemCode, warehouse)]?.rows ?? [];
 }
 
 export async function cachedItem(itemCode: string): Promise<ItemInfo | null> {
@@ -111,6 +134,6 @@ export async function catalogueSize(): Promise<number> {
 
 /** Used by the "clear local data" button and by tests. */
 export async function clearCatalogue(): Promise<void> {
-	cache = { items: [], barcodes: {}, stocks: {} };
+	cache = { items: [], barcodes: {}, stocks: {}, batches: {} };
 	await kvSet(KEY, cache);
 }

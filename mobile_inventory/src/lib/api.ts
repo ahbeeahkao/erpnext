@@ -11,9 +11,11 @@
 // Reads use GET (whitelisted methods accept GET and query params) so they work in both modes
 // without a CSRF token; writes always POST.
 import {
+	cachedBatches,
 	cachedItem,
 	cachedScan,
 	cachedStock,
+	rememberBatches,
 	rememberItem,
 	rememberItems,
 	rememberScan,
@@ -21,10 +23,12 @@ import {
 	searchCachedItems,
 } from "./catalogue";
 import { ApiError, toApiError } from "./errors";
+import { warehousesForCompany } from "./warehouses";
 import { parseScanResponse } from "./payloads";
 import type {
 	BatchOption,
 	Connection,
+	CreatedBatch,
 	ExistingDoc,
 	InventoryClient,
 	InventoryDimension,
@@ -185,7 +189,8 @@ export class FrappeClient implements InventoryClient {
 			// Global Defaults may not be readable by every role; the first company is fine.
 		}
 
-		return { user, company, warehouses };
+		// Only this company's stores: another company's warehouse is not a place to put stock.
+		return { user, company, warehouses: warehousesForCompany(warehouses, company) };
 	}
 
 	async listWarehouses(): Promise<Warehouse[]> {
@@ -383,20 +388,39 @@ export class FrappeClient implements InventoryClient {
 	}
 
 	async availableBatches(itemCode: string, warehouse: string): Promise<BatchOption[]> {
-		// The server's own FEFO ordering: oldest expiry first, batches with no expiry last.
-		const rows = unwrap<Array<[Record<string, unknown>, string | null]>>(
-			await this.request("/api/method/erpnext.stock.doctype.batch.batch.get_batches_by_oldest", {
-				query: { item_code: itemCode, warehouse },
-			}),
-			"message"
+		try {
+			// The server's own FEFO ordering: oldest expiry first, batches with no expiry last.
+			const rows = unwrap<Array<[Record<string, unknown>, string | null]>>(
+				await this.request("/api/method/erpnext.stock.doctype.batch.batch.get_batches_by_oldest", {
+					query: { item_code: itemCode, warehouse },
+				}),
+				"message"
+			);
+			const batches = (rows ?? [])
+				.map(([batch, expiry]) => ({
+					batch_no: String(batch?.name ?? ""),
+					qty: Number(batch?.batch_qty ?? 0),
+					expiry_date: expiry ?? null,
+				}))
+				.filter((row) => row.batch_no);
+			void rememberBatches(itemCode, warehouse, batches);
+			return batches;
+		} catch (error) {
+			if (isOffline(error)) return cachedBatches(itemCode, warehouse);
+			throw error;
+		}
+	}
+
+	async createBatch(itemCode: string, batchId?: string): Promise<CreatedBatch> {
+		const body: Record<string, unknown> = { doctype: "Batch", item: itemCode };
+		if (batchId?.trim()) body.batch_id = batchId.trim();
+		const data = unwrap<{ name?: string; batch_id?: string }>(
+			await this.request("/api/resource/Batch", { method: "POST", body }),
+			"data"
 		);
-		return (rows ?? [])
-			.map(([batch, expiry]) => ({
-				batch_no: String(batch?.name ?? ""),
-				qty: Number(batch?.batch_qty ?? 0),
-				expiry_date: expiry ?? null,
-			}))
-			.filter((row) => row.batch_no);
+		if (!data?.name) throw new ApiError("The site did not return the new batch", "server");
+		// Post the document name, not the lot number: `batch_no` is a link on a real site.
+		return { name: data.name, batch_id: data.batch_id || data.name };
 	}
 
 	// ------------------------------------------------------------ work + sales

@@ -10,6 +10,7 @@ import type {
 	Connection,
 	ExistingDoc,
 	BatchOption,
+	CreatedBatch,
 	InventoryClient,
 	InventoryDimension,
 	ItemInfo,
@@ -483,6 +484,12 @@ export class DemoClient implements InventoryClient {
 			],
 		};
 		return this.delay(catalogue[itemCode] ?? [], 90);
+	}
+
+	async createBatch(itemCode: string, batchId?: string): Promise<CreatedBatch> {
+		itemFor(itemCode);
+		const lot = batchId?.trim() || `LOT-${++sequence}`;
+		return this.delay({ name: `BATCH-DEMO-${sequence}`, batch_id: lot }, 140);
 	}
 
 	async inventoryDimensions(): Promise<InventoryDimension[]> {

@@ -176,6 +176,8 @@ export interface ReceiptLine {
 	rejectedWarehouse?: string;
 	rate?: number;
 	batchNo?: string;
+	/** What the operator sees when the link value is not the lot number. */
+	batchLabel?: string;
 	serialNo?: string;
 	hasBatchNo?: boolean;
 	hasSerialNo?: boolean;
@@ -208,6 +210,12 @@ export interface BatchOption {
 	expiry_date?: string | null;
 }
 
+/** A batch the device just created on the site. `name` is the link value, `batch_id` what a human reads. */
+export interface CreatedBatch {
+	name: string;
+	batch_id: string;
+}
+
 export interface FlowLine {
 	/** Stable key: item code for scanned flows, source row name for document flows. */
 	key: string;
@@ -224,7 +232,10 @@ export interface FlowLine {
 	valuationRate?: number;
 	fromWarehouse?: string;
 	toWarehouse?: string;
+	/** The link value posted to ERPNext (a Batch document name). */
 	batchNo?: string;
+	/** What the operator sees when the link value is not the lot number. */
+	batchLabel?: string;
 	serialNo?: string;
 	hasBatchNo?: boolean;
 	hasSerialNo?: boolean;
@@ -334,6 +345,9 @@ export interface InventoryClient {
 
 	/** Batches with stock, oldest expiry first (FEFO) — what a picker should take. */
 	availableBatches(itemCode: string, warehouse: string): Promise<BatchOption[]>;
+
+	/** Creates a Batch for a lot that arrived without one. Needs a site: master data is not queued. */
+	createBatch(itemCode: string, batchId?: string): Promise<CreatedBatch>;
 
 	/** Sales orders with quantity still to deliver. */
 	openSalesOrders(): Promise<SalesOrder[]>;
