@@ -1677,7 +1677,7 @@ def get_coa(doctype: str, parent: str, is_root: bool | None = None, chart: str |
 	chart = chart if chart else frappe.flags.chart
 	frappe.flags.chart = chart
 
-	parent = None if parent == _("All Accounts") else parent
+	parent = None if is_root else parent
 	accounts = build_tree_from_json(chart)  # returns alist of dict in a tree render-able form
 
 	# filter out to show data for the selected node only
@@ -2888,17 +2888,13 @@ def _check_credit_limit_warn(doc):
 	if doc.get("is_return") or not doc.get("customer"):
 		return
 
-	from erpnext.selling.doctype.customer.customer import check_credit_limit
+	from erpnext.selling.doctype.customer.customer import (
+		check_credit_limit,
+		is_sales_order_credit_check_bypassed,
+	)
 
 	try:
-		bypass = cint(
-			frappe.db.get_value(
-				"Customer Credit Limit",
-				filters={"parent": doc.customer, "parenttype": "Customer", "company": doc.company},
-				fieldname="bypass_credit_limit_check",
-			)
-			or 0
-		)
+		bypass = is_sales_order_credit_check_bypassed(doc.customer, doc.company)
 
 		if doc.doctype == "Sales Invoice":
 			validate_against_credit_limit = bypass or any(
