@@ -183,6 +183,13 @@ try {
 	check("queued transaction posts on sync", /Posted/.test(text()));
 	check("server document name is shown", /STE-DEMO-\d+/.test(text()));
 
+	click(/What was posted\?/);
+	await wait(400);
+	check("the posted document can be inspected", text().includes("Document") && text().includes("Stock Entry"));
+	check("the lines that were posted are listed", text().includes("Cold Brew Bottle") || text().includes("FG-1002"));
+	click(/Hide what was posted/);
+	await wait(200);
+
 	// --- receive against a purchase order ------------------------------------
 	click(/^Scan$/);
 	await wait(600);

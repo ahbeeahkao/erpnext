@@ -17,6 +17,7 @@ import {
 	createFlowTask,
 	flowProgress,
 	flowQueueOp,
+	flowVariance,
 	pickLinesFromSalesOrder,
 	pickLinesFromWorkOrder,
 	removeFlowLine,
@@ -465,5 +466,25 @@ describe("warnings that are not refusals", () => {
 	it("never warns on a count, where finding more is the answer", () => {
 		const task = createFlowTask("t11", "count-rack", header, [line({ qty: 9, systemQty: 2 })]);
 		assert.deepEqual(flowWarnings(task), []);
+	});
+});
+
+describe("the variance a count produces", () => {
+	it("adds up what was found against what the system believed", () => {
+		const task = createFlowTask("t12", "count-rack", header, [
+			line({ key: "A", itemCode: "A", qty: 5, systemQty: 5 }),
+			line({ key: "B", itemCode: "B", qty: 8, systemQty: 10 }),
+			line({ key: "C", itemCode: "C", qty: 1, systemQty: 0 }),
+		]);
+		const variance = flowVariance(task);
+		assert.equal(variance.lines, 3);
+		assert.equal(variance.net, -1, "-2 found on one shelf, +1 on another");
+		assert.equal(variance.larger, 1);
+		assert.equal(variance.smaller, 1);
+	});
+
+	it("ignores lines the system never had a figure for", () => {
+		const task = createFlowTask("t12", "count-rack", header, [line({ qty: 4 })]);
+		assert.deepEqual(flowVariance(task), { lines: 0, net: 0, larger: 0, smaller: 0 });
 	});
 });

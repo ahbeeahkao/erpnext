@@ -16,6 +16,7 @@ import {
 	describeBatch,
 	flowProgress,
 	flowQueueOp,
+	flowVariance,
 	flowWarnings,
 	isShort,
 	requiredOnLine,
@@ -193,6 +194,7 @@ export function TaskFlowScreen({
 
 	const progress = flowProgress(task);
 	const warnings = flowWarnings(task);
+	const variance = flowVariance(task);
 	const percent = progress.linesTotal ? (progress.linesTouched / progress.linesTotal) * 100 : 0;
 	const showsSystemQty = task.kind === "count-rack";
 	const maybeNegative = task.kind === "count-rack" && !task.blind;
@@ -298,6 +300,11 @@ export function TaskFlowScreen({
 														: ""}
 											{!task.blind && !showsSystemQty && line.systemQty !== undefined
 												? ` · on hand ${formatQty(line.systemQty, line.uom)}`
+												: ""}
+											{showsSystemQty && !task.blind && line.systemQty !== undefined
+												? ` · ${line.qty - line.systemQty > 0 ? "+" : ""}${
+														Math.round((line.qty - line.systemQty) * 1000) / 1000
+													}`
 												: ""}
 											{isShort(task, line) ? " · short" : ""}
 											{lineLocation(task, line) ? ` · ${lineLocation(task, line)}` : ""}
@@ -565,7 +572,13 @@ export function TaskFlowScreen({
 				{task.kind === "count-rack"
 					? `One Stock Reconciliation for the whole rack: ${task.lines.length} line${
 							task.lines.length === 1 ? "" : "s"
-						}. Only scanned items are counted — nothing else in the warehouse is touched.`
+						}. ${
+							task.blind
+								? "The variance stays hidden while the count is blind."
+								: variance.lines
+									? `Net variance ${variance.net > 0 ? "+" : ""}${variance.net} — ${variance.larger} line(s) over, ${variance.smaller} under.`
+									: "Nothing counted against the system yet."
+						} Only scanned items are counted — nothing else in the warehouse is touched.`
 					: task.kind === "pick-dn"
 						? "The delivery note is created as a draft: dispatch checks it against the gate pass and submits."
 						: "One document for everything you scanned; the source and target stay on every row."}

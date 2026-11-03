@@ -1530,3 +1530,55 @@ button {
 		break-inside: avoid;
 	}
 }
+
+/* ------------------------------------------------------- queue document view */
+.link-btn {
+	align-self: flex-start;
+	margin-top: 6px;
+	padding: 6px 0;
+	background: none;
+	border: 0;
+	color: var(--info);
+	font-size: 0.76rem;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.kv {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 4px 12px;
+	font-size: 0.76rem;
+}
+
+.kv > span:nth-child(odd) {
+	color: var(--muted);
+}
+
+.mono {
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.kv-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.72rem;
+}
+
+.kv-table th {
+	text-align: left;
+	color: var(--muted);
+	font-weight: 500;
+	padding: 4px 6px 4px 0;
+	border-bottom: 1px solid var(--line);
+}
+
+.kv-table td {
+	padding: 4px 6px 4px 0;
+	border-bottom: 1px solid var(--line);
+	vertical-align: top;
+}
+
+.kv-table small {
+	color: var(--muted);
+}

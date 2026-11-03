@@ -216,6 +216,26 @@ export function flowProgress(task: FlowTask): {
 }
 
 /**
+ * What the count found against what the system believed. This is the whole point of counting, so it
+ * is computed the moment the numbers exist rather than left to a report nobody opens.
+ */
+export function flowVariance(task: FlowTask): {
+	lines: number;
+	net: number;
+	larger: number;
+	smaller: number;
+} {
+	const counted = task.lines.filter((line) => line.systemQty !== undefined);
+	const net = round3(counted.reduce((sum, line) => sum + (line.qty - (line.systemQty ?? 0)), 0));
+	return {
+		lines: counted.length,
+		net,
+		larger: counted.filter((line) => line.qty > (line.systemQty ?? 0)).length,
+		smaller: counted.filter((line) => line.qty < (line.systemQty ?? 0)).length,
+	};
+}
+
+/**
  * Things worth saying that are not refusals. Picking more than the shelf holds is often a real
  * question ("is that pallet counted?"), so it is raised, not blocked.
  */
