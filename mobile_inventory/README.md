@@ -231,6 +231,10 @@ IndexedDB before it is sent. Each document's `remarks` ends with a marker:
 Mobile Inventory · Material Receipt · [MOBILE-INV:8f14e45f-…] · GRN 8821
 ```
 
+Any entry in the queue can be opened — pending or posted — to show the document the phone is
+holding: type, posting date, supplier/customer, work order, and every line with its warehouses,
+batch, shelf and rejects. "What did I actually post?" is a question support answers ten times a day.
+
 Before posting, the sync engine searches the same doctype for that marker and reads back
 `docstatus`. A **submitted** document means the retry is a no-op. A **draft** — what a failed
 submit leaves behind — is submitted rather than recreated, which used to look "posted" on the phone

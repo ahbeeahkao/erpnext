@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CloudIcon, RefreshIcon, TrashIcon } from "../components/icons";
 import { Button, Field, Pill, Row, Rows, Select } from "../components/ui";
+import { catalogueSize } from "../lib/catalogue";
 import type { Connection, Session } from "../lib/types";
 
 export function SettingsScreen({
@@ -23,6 +24,18 @@ export function SettingsScreen({
 	onDisconnect: () => void;
 }) {
 	const [confirming, setConfirming] = useState(false);
+	const [cached, setCached] = useState<number | null>(null);
+
+	// The catalogue is what makes an offline scan work; worth showing what the device holds.
+	useEffect(() => {
+		let live = true;
+		void catalogueSize().then((size) => {
+			if (live) setCached(size);
+		});
+		return () => {
+			live = false;
+		};
+	}, [session]);
 
 	const modeLabel =
 		session.mode === "demo" ? "Demo (no server)" : session.mode === "token" ? "API key" : "Site session";
@@ -90,6 +103,12 @@ export function SettingsScreen({
 							pending ? "These will post automatically when online" : "Everything is posted"
 						}
 						trailing={<strong>{pending}</strong>}
+					/>
+					<Row
+						leading={<RefreshIcon width={20} height={20} />}
+						title="Items cached on this device"
+						subtitle="Scans and searches keep working offline for these items"
+						trailing={<strong>{cached ?? "—"}</strong>}
 					/>
 					<Row
 						leading={<RefreshIcon width={20} height={20} />}
