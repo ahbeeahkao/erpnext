@@ -6,6 +6,12 @@ import { Home } from "./screens/Home";
 import { ItemScreen } from "./screens/Item";
 import { MoveScreen } from "./screens/Move";
 import { QueueScreen } from "./screens/Queue";
+import {
+	PickDeliveryScreen,
+	PickWorkOrderScreen,
+	PutAwayScreen,
+	RackCountScreen,
+} from "./screens/Jobs";
 import { ReceiveScreen } from "./screens/Receive";
 import { SettingsScreen } from "./screens/Settings";
 import { useOnline } from "./hooks/useOnline";
@@ -17,7 +23,7 @@ import { clearQueue } from "./lib/queue";
 import { clearRecent } from "./lib/recent";
 import { clearSession, loadSession, saveSession } from "./lib/settings";
 import { clearStore } from "./lib/storage";
-import type { Connection, ItemInfo, MoveKind, QueueOp, Session } from "./lib/types";
+import type { Connection, ItemInfo, JobKey, MoveKind, QueueOp, Session } from "./lib/types";
 
 type Screen =
 	| { name: "home" }
@@ -26,7 +32,7 @@ type Screen =
 	| { name: "item"; itemCode: string }
 	| { name: "move"; itemCode: string; kind: MoveKind }
 	| { name: "count"; itemCode: string }
-	| { name: "receive" };
+	| { name: JobKey };
 
 type Tab = "home" | "queue" | "settings";
 
@@ -165,10 +171,37 @@ export default function App() {
 						syncing={queue.syncing}
 						onSync={() => void queue.syncNow()}
 						onOpenItem={(code) => void openItem(code)}
-						onReceive={() => setScreen({ name: "receive" })}
+						onTask={(task) => setScreen({ name: task })}
 						notify={notify}
 					/>
 				);
+			case "count-rack":
+			case "putaway":
+			case "pick-wo":
+			case "pick-dn": {
+				// Same props for every job: they differ in their data, not their wiring.
+				const JobScreen =
+					screen.name === "count-rack"
+						? RackCountScreen
+						: screen.name === "putaway"
+							? PutAwayScreen
+							: screen.name === "pick-wo"
+								? PickWorkOrderScreen
+								: PickDeliveryScreen;
+				return (
+					<JobScreen
+						client={client!}
+						session={session}
+						warehouses={warehouses}
+						defaultWarehouse={session.defaultWarehouse}
+						online={online}
+						notify={notify}
+						onBack={() => setScreen({ name: "home" })}
+						onQueued={enqueue}
+						onPosted={() => setScreen({ name: "home" })}
+					/>
+				);
+			}
 			case "receive":
 				return (
 					<ReceiveScreen

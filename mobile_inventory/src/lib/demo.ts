@@ -13,9 +13,13 @@ import type {
 	ItemInfo,
 	PurchaseOrder,
 	PurchaseOrderLine,
+	SalesOrder,
+	SalesOrderLine,
 	ScanMatch,
 	StockRow,
 	Warehouse,
+	WorkOrder,
+	WorkOrderLine,
 } from "./types";
 
 interface DemoItem extends ItemInfo {
@@ -216,6 +220,81 @@ const PURCHASE_ORDERS: Array<PurchaseOrder & { lines: PurchaseOrderLine[] }> = [
 /** How much of each order line has already been received on this device's demo site. */
 const poReceived = new Map<string, number>();
 
+/** A work order whose milk powder has not been issued yet. */
+const WORK_ORDERS: Array<WorkOrder & { lines: WorkOrderLine[] }> = [
+	{
+		name: "WO-DEMO-0001",
+		production_item: "FG-1002",
+		qty: 60,
+		produced_qty: 0,
+		status: "Not Started",
+		company: "Demo Company",
+		wip_warehouse: "Transit - DEMO",
+		source_warehouse: "Stores - DEMO",
+		planned_start_date: "2026-11-03 08:00:00",
+		lines: [
+			{
+				name: "wo1-row1",
+				item_code: "RM-2001",
+				item_name: "Milk Powder 25kg",
+				required_qty: 4,
+				transferred_qty: 1,
+				source_warehouse: "Stores - DEMO",
+				stock_uom: "Bag",
+			},
+			{
+				name: "wo1-row2",
+				item_code: "RM-2002",
+				item_name: "Sugar Syrup 20L",
+				required_qty: 6,
+				transferred_qty: 0,
+				source_warehouse: "Stores - DEMO",
+				stock_uom: "Can",
+			},
+		],
+	},
+];
+
+/** A sales order due out today. */
+const SALES_ORDERS: Array<SalesOrder & { lines: SalesOrderLine[] }> = [
+	{
+		name: "SO-DEMO-0001",
+		customer: "Kedai Kopi Jalan Ampang",
+		company: "Demo Company",
+		transaction_date: "2026-10-30",
+		delivery_date: "2026-11-03",
+		per_delivered: 0,
+		status: "To Deliver and Bill",
+		lines: [
+			{
+				name: "so1-row1",
+				item_code: "FG-1002",
+				item_name: "Cold Brew Bottle 330ml",
+				qty: 24,
+				delivered_qty: 0,
+				uom: "Nos",
+				stock_uom: "Nos",
+				conversion_factor: 1,
+				warehouse: "Stores - DEMO",
+			},
+			{
+				name: "so1-row2",
+				item_code: "ACC-3001",
+				item_name: "Paper Cup 12oz",
+				qty: 100,
+				delivered_qty: 20,
+				uom: "Nos",
+				stock_uom: "Nos",
+				conversion_factor: 1,
+				warehouse: "Stores - DEMO",
+			},
+		],
+	},
+];
+
+const woTransferred = new Map<string, number>();
+const soDelivered = new Map<string, number>();
+
 function applyDocument(doc: Record<string, unknown>): void {
 	const rows = Array.isArray(doc.items) ? (doc.items as Record<string, any>[]) : [];
 	if (!rows.length) throw new ApiError("The document has no items", "validation", 417);
@@ -223,12 +302,22 @@ function applyDocument(doc: Record<string, unknown>): void {
 	if (doc.doctype === "Purchase Receipt") {
 		for (const row of rows) {
 			const item = itemFor(String(row.item_code));
-			const qty = Number(row.stock_qty ?? row.qty) || 0;
+			const factor = Number(row.conversion_factor) || 1;
+			const qty = Number(row.stock_qty ?? Number(row.qty) * factor) || 0;
+			const rejected = (Number(row.rejected_qty) || 0) * factor;
 			if (qty <= 0)
 				throw new ApiError("Received quantity must be greater than zero", "validation", 417);
-			adjust(item.item_code, String(row.warehouse), qty, "this receipt");
+			if (rejected > qty)
+				throw new ApiError("Rejected quantity cannot exceed the quantity", "validation", 417);
+			if (rejected > 0) {
+				if (!row.rejected_warehouse) {
+					throw new ApiError("Rejected stock needs a warehouse", "validation", 417);
+				}
+				adjust(item.item_code, String(row.rejected_warehouse), rejected, "this receipt");
+			}
 			const lineKey = `${row.purchase_order}:${row.purchase_order_item}`;
 			poReceived.set(lineKey, (poReceived.get(lineKey) ?? 0) + qty);
+			adjust(item.item_code, String(row.warehouse), qty - rejected, "this receipt");
 		}
 		return;
 	}
@@ -252,7 +341,7 @@ function applyDocument(doc: Record<string, unknown>): void {
 			adjust(item.item_code, String(row.t_warehouse), qty, "this receipt");
 		} else if (type === "Material Issue") {
 			adjust(item.item_code, String(row.s_warehouse), -qty, "this issue");
-		} else if (type === "Material Transfer") {
+		} else if (type === "Material Transfer" || type === "Material Transfer for Manufacture") {
 			adjust(item.item_code, String(row.s_warehouse), -qty, "this transfer");
 			adjust(item.item_code, String(row.t_warehouse), qty, "this transfer");
 		} else {
@@ -377,6 +466,40 @@ export class DemoClient implements InventoryClient {
 			return !received;
 		}).map(({ lines: _lines, ...header }) => header);
 		return this.delay(open, 120);
+	}
+
+	async openWorkOrders(): Promise<WorkOrder[]> {
+		const open = WORK_ORDERS.map(({ lines: _lines, ...header }) => header);
+		return this.delay(open, 120);
+	}
+
+	async workOrderLines(workOrder: string): Promise<WorkOrderLine[]> {
+		const found = WORK_ORDERS.find((row) => row.name === workOrder);
+		if (!found) throw new ApiError(`Work order ${workOrder} was not found`, "validation", 404);
+		return this.delay(
+			found.lines.map((line) => ({
+				...line,
+				transferred_qty: (line.transferred_qty ?? 0) + (woTransferred.get(`${found.name}:${line.name}`) ?? 0),
+			})),
+			120
+		);
+	}
+
+	async openSalesOrders(): Promise<SalesOrder[]> {
+		const open = SALES_ORDERS.map(({ lines: _lines, ...header }) => header);
+		return this.delay(open, 120);
+	}
+
+	async salesOrderLines(salesOrder: string): Promise<SalesOrderLine[]> {
+		const found = SALES_ORDERS.find((row) => row.name === salesOrder);
+		if (!found) throw new ApiError(`Sales order ${salesOrder} was not found`, "validation", 404);
+		return this.delay(
+			found.lines.map((line) => ({
+				...line,
+				delivered_qty: (line.delivered_qty ?? 0) + (soDelivered.get(`${found.name}:${line.name}`) ?? 0),
+			})),
+			120
+		);
 	}
 
 	async purchaseOrderLines(order: string): Promise<PurchaseOrderLine[]> {

@@ -5,17 +5,20 @@ import {
 	BoxIcon,
 	ChevronIcon,
 	CloudIcon,
+	CountIcon,
 	InIcon,
+	OutIcon,
 	QueueIcon,
 	ScanIcon,
 	SearchIcon,
+	SwapIcon,
 	WifiOffIcon,
 } from "../components/icons";
 import { Button, EmptyState, Pill, Row, Rows, Spinner, TextInput } from "../components/ui";
 import { ApiError } from "../lib/errors";
 import { addRecent, loadRecent, type RecentItem } from "../lib/recent";
 import { shortWarehouse } from "../lib/format";
-import type { InventoryClient, ItemInfo, ScanMatch, Session } from "../lib/types";
+import type { InventoryClient, ItemInfo, JobKey, ScanMatch, Session } from "../lib/types";
 import type { Notify } from "../hooks/useToasts";
 
 interface HomeProps {
@@ -26,9 +29,53 @@ interface HomeProps {
 	syncing: boolean;
 	onSync: () => void;
 	onOpenItem: (itemCode: string) => void;
-	onReceive: () => void;
+	onTask: (task: JobKey) => void;
 	notify: Notify;
 }
+
+const TASKS: Array<{
+	key: JobKey;
+	title: string;
+	hint: string;
+	tone: string;
+	icon: typeof InIcon;
+}> = [
+	{
+		key: "receive",
+		title: "Receive a delivery",
+		hint: "Scan what arrived against its purchase order",
+		tone: "in",
+		icon: InIcon,
+	},
+	{
+		key: "count-rack",
+		title: "Count a rack",
+		hint: "Blind count, one reconciliation for the shelf",
+		tone: "count",
+		icon: CountIcon,
+	},
+	{
+		key: "putaway",
+		title: "Put away",
+		hint: "Move a delivery from the door to its place",
+		tone: "move",
+		icon: SwapIcon,
+	},
+	{
+		key: "pick-wo",
+		title: "Pick for a work order",
+		hint: "Issue material to production",
+		tone: "out",
+		icon: BoxIcon,
+	},
+	{
+		key: "pick-dn",
+		title: "Pick for delivery",
+		hint: "Pick an order and hand it to dispatch",
+		tone: "out",
+		icon: OutIcon,
+	},
+];
 
 export function Home({
 	client,
@@ -38,7 +85,7 @@ export function Home({
 	syncing,
 	onSync,
 	onOpenItem,
-	onReceive,
+	onTask,
 	notify,
 }: HomeProps) {
 	const [query, setQuery] = useState("");
@@ -170,16 +217,18 @@ export function Home({
 			<section className="section">
 				<h2 className="section__title">Today\'s tasks</h2>
 				<div className="tasks">
-					<button className="task" onClick={onReceive}>
-						<span className="task__icon task__icon--in">
-							<InIcon width={22} height={22} />
-						</span>
-						<span className="task__body">
-							<strong>Receive a delivery</strong>
-							<small>Scan what arrived against its purchase order</small>
-						</span>
-						<ChevronIcon width={18} height={18} />
-					</button>
+					{TASKS.map((job) => (
+						<button key={job.key} className="task" onClick={() => onTask(job.key)}>
+							<span className={`task__icon task__icon--${job.tone}`}>
+								<job.icon width={22} height={22} />
+							</span>
+							<span className="task__body">
+								<strong>{job.title}</strong>
+								<small>{job.hint}</small>
+							</span>
+							<ChevronIcon width={18} height={18} />
+						</button>
+					))}
 				</div>
 			</section>
 

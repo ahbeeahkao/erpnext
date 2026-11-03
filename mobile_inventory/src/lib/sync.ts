@@ -64,6 +64,12 @@ export async function drainQueue(
 				op.serverName = existing.name;
 				op.error = undefined;
 				synced += 1;
+			} else if (existing && existing.docstatus === 0 && op.submit === false) {
+				// A pick is handed over as a draft; the draft being there is the whole outcome.
+				op.status = "done";
+				op.serverName = existing.name;
+				op.error = undefined;
+				synced += 1;
 			} else if (existing && existing.docstatus === 0) {
 				// A draft left behind by a failed submit previously counted as "posted" and the
 				// stock never moved. Submit the draft instead of creating a second document.
@@ -75,11 +81,18 @@ export async function drainQueue(
 			} else {
 				// Nothing there, or a cancelled document: post a fresh one.
 				const created = await client.createDoc(op.doc);
-				const submitted = await client.submitDoc({ ...op.doc, name: created.name });
-				op.status = "done";
-				op.serverName = submitted.name || created.name;
-				op.error = undefined;
-				synced += 1;
+				if (op.submit === false) {
+					op.status = "done";
+					op.serverName = created.name;
+					op.error = undefined;
+					synced += 1;
+				} else {
+					const submitted = await client.submitDoc({ ...op.doc, name: created.name });
+					op.status = "done";
+					op.serverName = submitted.name || created.name;
+					op.error = undefined;
+					synced += 1;
+				}
 			}
 		} catch (error) {
 			const apiError =

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Scanner } from "../components/Scanner";
 import { AlertIcon, BackIcon, CheckIcon, CloudIcon, InIcon, ScanIcon } from "../components/icons";
-import { Button, EmptyState, Field, Pill, Row, Rows, Spinner, TextInput } from "../components/ui";
+import { Button, EmptyState, Field, Pill, Row, Rows, Select, Spinner, TextInput } from "../components/ui";
 import type { Notify } from "../hooks/useToasts";
 import { ApiError } from "../lib/errors";
 import { formatQty, nowTime } from "../lib/format";
@@ -14,6 +14,7 @@ import {
 	receiptQueueOp,
 	remainingToReceive,
 	setLineQty,
+	setLineRejected,
 	toggleBlind,
 	validateReceipt,
 } from "../lib/receiving";
@@ -403,6 +404,46 @@ export function ReceiveScreen({
 											aria-label={`Counted quantity for ${line.itemCode}`}
 										/>
 									</Field>
+
+									<Field
+										label={`Rejected (${line.uom})`}
+										hint="Damaged or wrong: goes to the quarantine warehouse, not into stock"
+									>
+										<TextInput
+											value={String(line.rejectedNow ?? 0)}
+											onChange={(event) =>
+												setTask(
+													setLineRejected(
+														task,
+														line.key,
+														Number(event.target.value.replace(/[^0-9.]/g, "")) || 0
+													)
+												)
+											}
+											inputMode="decimal"
+											aria-label={`Rejected quantity for ${line.itemCode}`}
+										/>
+									</Field>
+
+									{(line.rejectedNow ?? 0) > 0 ? (
+										<Field label="Rejected stock goes to">
+											<Select
+												value={line.rejectedWarehouse ?? ""}
+												onChange={(event) =>
+													setTask(
+														patchLine(task, line.key, { rejectedWarehouse: event.target.value })
+													)
+												}
+											>
+												<option value="">Choose a warehouse</option>
+												{warehouses.map((warehouse) => (
+													<option key={warehouse.name} value={warehouse.name}>
+														{warehouse.warehouse_name ?? warehouse.name}
+													</option>
+												))}
+											</Select>
+										</Field>
+									) : null}
 
 									{line.hasBatchNo ? (
 										<Field label="Batch number" hint="Printed on the carton">

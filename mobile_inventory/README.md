@@ -131,6 +131,31 @@ Receiving is the flagship flow, and it is deliberately not a form:
 Batch and serial flags come from the `Item` when a line is first scanned, because the purchase
 order row does not carry them; the batch field then appears for that line only.
 
+Rejects are captured on the same screen: a rejected quantity with a quarantine warehouse goes onto
+the receipt row as `rejected_qty` / `rejected_warehouse`, so the accepted stock never includes it.
+
+## The other jobs share one engine
+
+Counting a rack, putting away and picking are the same interaction — a set of lines you work
+through with a scanner — so they are one screen (`screens/TaskFlow.tsx`) over one pure module
+(`lib/taskflow.ts`). The task carries the differences: where its lines come from, and which
+document it becomes.
+
+- **Count a rack** starts empty and blind, and *grows* as you scan; there is no ceiling, because
+  finding more than the system knows is the answer you were looking for. Every scanned line goes on
+  the reconciliation, **including a zero count** — zero is a real answer.
+- **Put away** starts empty with a source and a target warehouse; each line can be sent somewhere
+  else from its detail panel.
+- **Pick for a work order** starts from the work order's material lines, minus what is already
+  issued. A **short pick is allowed** — what you could not find is information, not an error — but
+  an over-pick is refused on the device.
+- **Pick for delivery** starts from the sales order lines that still have quantity to deliver, and
+  produces a **draft** `Delivery Note`: the picker hands the goods over, dispatch checks the gate
+  pass and submits. The queue understands drafts, so `submit: false` means "create, do not submit".
+
+Scanning is barcode-aware: a scan goes through `scan_barcode`, so either a barcode or an item code
+finds the item.
+
 ## Offline queue and idempotency
 
 Every transaction is built into a complete ERPNext document **on the device** and stored in
@@ -161,13 +186,14 @@ Limits worth knowing:
 src/
   lib/payloads.ts     stock entry + count builders and validation (pure, unit tested)
   lib/receiving.ts    purchase-order receiving task: scan counting, validation, receipt builder
+  lib/taskflow.ts     shared engine for count / put away / pick tasks (pure, unit tested)
   lib/api.ts          ERPNext REST client (site-session or API-key auth)
   lib/demo.ts         in-memory adapter used by demo mode
   lib/queue.ts        queue persistence, ordering, back-off
   lib/sync.ts         drain loop with idempotency + failure policy
   lib/storage.ts      IndexedDB wrapper (kv + queue stores)
   hooks/              camera scanning, online state, queue, toasts
-  screens/            Connect, Home, Receive, Item, Move, Count, Queue, Settings
+  screens/            Connect, Home, Receive, TaskFlow, Jobs, Item, Move, Count, Queue, Settings
   components/         UI kit, icons, scanner overlay
 public/
   sw.js               offline shell (never caches /api/*)
@@ -176,11 +202,8 @@ public/
 
 ## Roadmap
 
-The next jobs, in the order a warehouse asks for them:
-
-- **Count a rack**: one task per shelf, blind, scan-to-count, one reconciliation for the whole rack.
-- **Put away**: scan a received carton, pick the location, done — location from an Inventory
-  Dimension rather than dozens of nested warehouses.
-- **Pick for a work order / delivery note**: scan to pick, with short-pick reasons.
+- **Locations inside a warehouse** via an Inventory Dimension, so put-away can name a shelf instead
+  of a separate warehouse. The document already carries the plant; this is the missing granularity.
 - **Batch picker** that lists existing batches with expiry, and creates new ones explicitly.
+- **Short-pick reasons** on the pick screen, so a short pick can be explained, not just recorded.
 - Label printing (CUPS/Bluetooth).

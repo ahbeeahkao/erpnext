@@ -1306,6 +1306,21 @@ button {
 	color: var(--accent);
 }
 
+.task__icon--count {
+	background: rgba(251, 191, 36, 0.14);
+	color: var(--warn);
+}
+
+.task__icon--move {
+	background: rgba(56, 189, 248, 0.14);
+	color: var(--info);
+}
+
+.task__icon--out {
+	background: rgba(248, 113, 113, 0.14);
+	color: var(--danger);
+}
+
 .task__body {
 	display: flex;
 	flex-direction: column;

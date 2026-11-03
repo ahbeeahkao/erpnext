@@ -19,10 +19,14 @@ import type {
 	ItemInfo,
 	PurchaseOrder,
 	PurchaseOrderLine,
+	SalesOrder,
+	SalesOrderLine,
 	ScanMatch,
 	Session,
 	StockRow,
 	Warehouse,
+	WorkOrder,
+	WorkOrderLine,
 } from "./types";
 
 const TIMEOUT_MS = 20_000;
@@ -305,6 +309,111 @@ export class FrappeClient implements InventoryClient {
 		);
 		const row = rows?.[0];
 		return row ? { name: row.name, docstatus: Number(row.docstatus) || 0 } : null;
+	}
+
+	// ------------------------------------------------------------ work + sales
+
+	async openWorkOrders(): Promise<WorkOrder[]> {
+		const rows = unwrap<WorkOrder[]>(
+			await this.request("/api/resource/Work Order", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"production_item",
+						"qty",
+						"produced_qty",
+						"status",
+						"company",
+						"wip_warehouse",
+						"source_warehouse",
+						"planned_start_date",
+					]),
+					filters: JSON.stringify([
+						["docstatus", "=", 1],
+						["status", "in", ["Not Started", "In Process"]],
+					]),
+					order_by: "planned_start_date asc",
+					limit_page_length: 20,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	async workOrderLines(workOrder: string): Promise<WorkOrderLine[]> {
+		const rows = unwrap<WorkOrderLine[]>(
+			await this.request("/api/resource/Work Order Item", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"item_code",
+						"item_name",
+						"required_qty",
+						"transferred_qty",
+						"source_warehouse",
+						"stock_uom",
+					]),
+					filters: JSON.stringify([["parent", "=", workOrder]]),
+					order_by: "idx asc",
+					limit_page_length: 500,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	async openSalesOrders(): Promise<SalesOrder[]> {
+		const rows = unwrap<SalesOrder[]>(
+			await this.request("/api/resource/Sales Order", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"customer",
+						"company",
+						"transaction_date",
+						"delivery_date",
+						"per_delivered",
+						"status",
+					]),
+					filters: JSON.stringify([
+						["docstatus", "=", 1],
+						["per_delivered", "<", 100],
+						["status", "not in", ["Closed", "Cancelled"]],
+					]),
+					order_by: "delivery_date asc",
+					limit_page_length: 20,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	async salesOrderLines(salesOrder: string): Promise<SalesOrderLine[]> {
+		const rows = unwrap<SalesOrderLine[]>(
+			await this.request("/api/resource/Sales Order Item", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"item_code",
+						"item_name",
+						"qty",
+						"delivered_qty",
+						"uom",
+						"stock_uom",
+						"conversion_factor",
+						"warehouse",
+					]),
+					filters: JSON.stringify([["parent", "=", salesOrder]]),
+					order_by: "idx asc",
+					limit_page_length: 500,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
 	}
 
 	// ------------------------------------------------------------------ buying

@@ -127,6 +127,18 @@ export function setLineQty(task: ReceiptTask, key: string, qty: number): Receipt
 	};
 }
 
+export function setLineRejected(task: ReceiptTask, key: string, qty: number): ReceiptTask {
+	const next = Math.max(0, round3(toNumber(qty)));
+	return {
+		...task,
+		lines: task.lines.map((line) =>
+			line.key === key
+				? { ...line, rejectedNow: Math.min(next, line.receivedNow) }
+				: line
+		),
+	};
+}
+
 export function patchLine(task: ReceiptTask, key: string, patch: Partial<ReceiptLine>): ReceiptTask {
 	return {
 		...task,
@@ -135,7 +147,7 @@ export function patchLine(task: ReceiptTask, key: string, patch: Partial<Receipt
 }
 
 export function clearReceipt(task: ReceiptTask): ReceiptTask {
-	return { ...task, lines: task.lines.map((line) => ({ ...line, receivedNow: 0 })) };
+	return { ...task, lines: task.lines.map((line) => ({ ...line, receivedNow: 0, rejectedNow: 0 })) };
 }
 
 export function toggleBlind(task: ReceiptTask): ReceiptTask {
@@ -176,6 +188,12 @@ export function validateReceipt(task: ReceiptTask, { tolerancePercent = DEFAULT_
 		if (!line.warehouse) {
 			errors.push(`${line.itemCode}: the order line has no warehouse`);
 		}
+		if ((line.rejectedNow ?? 0) > line.receivedNow) {
+			errors.push(`${line.itemCode}: you cannot reject more than arrived`);
+		}
+		if ((line.rejectedNow ?? 0) > 0 && !line.rejectedWarehouse) {
+			errors.push(`${line.itemCode}: choose where the rejected quantity goes`);
+		}
 		if (line.hasBatchNo && !line.batchNo?.trim()) {
 			errors.push(`${line.itemCode}: enter the batch number`);
 		}
@@ -207,6 +225,10 @@ export function buildPurchaseReceiptDoc(task: ReceiptTask): Record<string, unkno
 				purchase_order: task.order,
 				purchase_order_item: line.key,
 			};
+			if ((line.rejectedNow ?? 0) > 0) {
+				row.rejected_qty = line.rejectedNow;
+				row.rejected_warehouse = line.rejectedWarehouse;
+			}
 			if (line.batchNo?.trim()) {
 				row.batch_no = line.batchNo.trim();
 				row.use_serial_batch_fields = 1;

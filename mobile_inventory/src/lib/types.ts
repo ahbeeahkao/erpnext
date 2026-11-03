@@ -62,7 +62,12 @@ export interface ScanMatch {
 }
 
 export type MoveKind = "receipt" | "issue" | "transfer";
-export type OpKind = MoveKind | "count" | "po-receipt";
+export type TaskKind = "count-rack" | "putaway" | "pick-wo" | "pick-dn";
+
+/** Every job the home screen can start. */
+export type JobKey = "receive" | TaskKind;
+
+export type OpKind = MoveKind | "count" | "po-receipt" | TaskKind;
 
 export interface MoveInput {
 	id: string;
@@ -115,6 +120,8 @@ export interface QueueOp {
 	/** Full ERPNext document payload; built locally so it can be queued offline. */
 	doc: Record<string, unknown>;
 	summary: OpSummary;
+	/** false for documents that must stay drafts (a pick hands over to dispatch, who submits). */
+	submit?: boolean;
 	error?: string;
 	serverName?: string;
 	lastAttemptAt?: string;
@@ -162,6 +169,9 @@ export interface ReceiptLine {
 	alreadyReceived: number;
 	/** Counted on this device, in `uom`. */
 	receivedNow: number;
+	/** Part of `receivedNow` that is not fit to sell: goes to the quarantine warehouse. */
+	rejectedNow?: number;
+	rejectedWarehouse?: string;
 	rate?: number;
 	batchNo?: string;
 	serialNo?: string;
@@ -179,6 +189,91 @@ export interface ReceiptTask {
 	postingTime: string;
 	blind: boolean;
 	lines: ReceiptLine[];
+}
+
+export interface FlowLine {
+	/** Stable key: item code for scanned flows, source row name for document flows. */
+	key: string;
+	itemCode: string;
+	itemName?: string;
+	uom: string;
+	conversionFactor: number;
+	/** Captured on the device. */
+	qty: number;
+	/** What the job expects; hidden while blind, never removed. */
+	requiredQty?: number;
+	/** What the system believes is on the shelf (counts only). */
+	systemQty?: number;
+	valuationRate?: number;
+	fromWarehouse?: string;
+	toWarehouse?: string;
+	batchNo?: string;
+	serialNo?: string;
+	hasBatchNo?: boolean;
+	hasSerialNo?: boolean;
+	/** Child row on the source document (SO row / WO row). */
+	sourceRow?: string;
+}
+
+export interface FlowTask {
+	id: string;
+	kind: TaskKind;
+	title: string;
+	subtitle?: string;
+	/** What the job is about: a warehouse, a work order, a sales order. */
+	reference: string;
+	customer?: string;
+	company: string;
+	postingDate: string;
+	postingTime: string;
+	blind: boolean;
+	fromWarehouse?: string;
+	toWarehouse?: string;
+	lines: FlowLine[];
+}
+
+export interface WorkOrder {
+	name: string;
+	production_item?: string;
+	qty?: number;
+	produced_qty?: number;
+	status?: string;
+	company?: string;
+	wip_warehouse?: string;
+	source_warehouse?: string;
+	planned_start_date?: string;
+}
+
+export interface WorkOrderLine {
+	name: string;
+	item_code: string;
+	item_name?: string;
+	required_qty?: number;
+	transferred_qty?: number;
+	source_warehouse?: string;
+	stock_uom?: string;
+}
+
+export interface SalesOrder {
+	name: string;
+	customer?: string;
+	company?: string;
+	transaction_date?: string;
+	delivery_date?: string;
+	per_delivered?: number;
+	status?: string;
+}
+
+export interface SalesOrderLine {
+	name: string;
+	item_code: string;
+	item_name?: string;
+	qty: number;
+	delivered_qty?: number;
+	uom?: string;
+	stock_uom?: string;
+	conversion_factor?: number;
+	warehouse?: string;
 }
 
 export interface Connection {
@@ -203,4 +298,12 @@ export interface InventoryClient {
 	/** Purchase orders with quantity still to receive, oldest first. */
 	openPurchaseOrders(): Promise<PurchaseOrder[]>;
 	purchaseOrderLines(order: string): Promise<PurchaseOrderLine[]>;
+
+	/** Work orders with material still to pick. */
+	openWorkOrders(): Promise<WorkOrder[]>;
+	workOrderLines(workOrder: string): Promise<WorkOrderLine[]>;
+
+	/** Sales orders with quantity still to deliver. */
+	openSalesOrders(): Promise<SalesOrder[]>;
+	salesOrderLines(salesOrder: string): Promise<SalesOrderLine[]>;
 }

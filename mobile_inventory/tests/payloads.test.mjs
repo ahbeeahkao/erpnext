@@ -23,6 +23,7 @@ import {
 	receiptQueueOp,
 	remainingToReceive,
 	setLineQty,
+	setLineRejected,
 	toggleBlind,
 	validateReceipt,
 } from "../src/lib/receiving.ts";
@@ -433,6 +434,35 @@ describe("receiving against a purchase order", () => {
 			),
 		};
 		assert.match(validateReceipt(task)[0], /1 serial numbers for 2 units/);
+	});
+
+	it("sends rejects to their own warehouse instead of into stock", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "ACC-3001").task;
+		task = applyScan(task, "ACC-3001").task;
+		task = applyScan(task, "ACC-3001").task;
+
+		assert.equal(buildPurchaseReceiptDoc(task).items[0].rejected_qty, undefined, "no rejection, no field");
+
+		const rejected = setLineRejected(task, "row-2", 2);
+		assert.equal(rejected.lines[1].rejectedNow, 2);
+		assert.match(validateReceipt(rejected).join(" "), /choose where the rejected quantity goes/);
+
+		const placed = {
+			...rejected,
+			lines: rejected.lines.map((l) => (l.key === "row-2" ? { ...l, rejectedWarehouse: "Quarantine - DC" } : l)),
+		};
+		assert.deepEqual(validateReceipt(placed), []);
+		const doc = buildPurchaseReceiptDoc(placed);
+		assert.equal(doc.items[0].qty, 3);
+		assert.equal(doc.items[0].rejected_qty, 2);
+		assert.equal(doc.items[0].rejected_warehouse, "Quarantine - DC");
+	});
+
+	it("never lets a rejection exceed what arrived", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "ACC-3001").task;
+		assert.equal(setLineRejected(task, "row-2", 5).lines[1].rejectedNow, 1, "clamped to what arrived");
 	});
 
 	it("blind mode only hides the expectation, it never changes what is posted", () => {
