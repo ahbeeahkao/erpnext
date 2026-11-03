@@ -346,5 +346,50 @@
 			"why": "Only posted, submitted documents carry tax liability. Drafts have not happened and cancelled documents have been reversed."
 		}
 	],
+	"memory": {
+		"spine": "One tax template per rate per direction, an item category that follows the product, and a return that is the ledger seen three ways.",
+		"device": {
+			"kind": "rule",
+			"label": "One template per rate per direction",
+			"expansion": [
+				"Sales tax out, service tax out and purchase tax in never share a template",
+				"Goods at ten per cent and services at eight per cent sit on separate lines and templates",
+				"Item tax category overrides the customer default, which must be intended rather than discovered",
+				"SST-02 comes from posted invoices, so drafts and cancellations are excluded",
+				"The return, the tax summary and the ledger are one number seen three ways"
+			]
+		},
+		"cards": [
+			{
+				"q": "Why one template per rate per direction?",
+				"a": "The posting account and the return box differ by direction, and mixing them makes the return untraceable.",
+				"hint": "Account and box"
+			},
+			{
+				"q": "Goods at ten per cent and services at eight per cent on one invoice?",
+				"a": "Two lines on two templates, each rate posting to its own account.",
+				"hint": "Never one line"
+			},
+			{
+				"q": "Item tax category or customer default, which applies?",
+				"a": "The item's category wins, which is useful for exempt goods and dangerous when unintended.",
+				"hint": "Product beats party"
+			},
+			{
+				"q": "Which documents feed the SST-02 return?",
+				"a": "Posted invoices only, because drafts, cancelled documents and unsubmitted returns are excluded.",
+				"hint": "Posted only"
+			},
+			{
+				"q": "Which three numbers must agree?",
+				"a": "The return figure, the tax summary by account and the ledger balance of the tax account.",
+				"hint": "One number, three views"
+			}
+		],
+		"trap": {
+			"what": "An exempt customer is handled by typing zero per cent into the rate field.",
+			"why": "No exemption category or certificate sits behind the zero, so the return cannot evidence why tax was not charged."
+		}
+	},
 	"narration": "Malaysian tax is the part clients test you on first, because the numbers go to a government portal. Build separate templates for sales tax and service tax, with separate output and input accounts, because the return needs each box separately. Attach item tax templates so the rate follows the product: ten per cent goods, eight per cent services, zero for exempt with a stored certificate. Then the return: twelve hundred output less one hundred twenty input is one thousand eighty payable, and the same three numbers must appear in the tax summary, the ledger and the form. If they do not, the cause is a draft counted, a credit note that did not reverse tax, or a purchase without an input template. Keep the tax advisor's written confirmation with the configuration worksheet, because rates and thresholds change with every budget, and the consultant who documented the basis is the one who gets called back rather than blamed."
 }

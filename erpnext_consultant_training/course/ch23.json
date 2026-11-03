@@ -296,5 +296,50 @@
 			"why": "An opening that does not balance will corrupt every later comparison, and a suspense account merely moves the problem into a new line."
 		}
 	],
+	"memory": {
+		"spine": "Agree the mapping on paper, then import parents before children, and let one dated journal carry every opening balance.",
+		"device": {
+			"kind": "phrase",
+			"label": "Agree, then parents before children",
+			"expansion": [
+				"The mapping workbook holds old value, new value, owner and decision date, signed before any import",
+				"Completeness means every old value has a target, including the ones nobody uses",
+				"Dependency order, not spreadsheet order: item groups before items, territories before customers",
+				"Opening balances are one journal dated the day before go live, not typed invoices",
+				"The import log is the evidence: attempted, created, updated and failed"
+			]
+		},
+		"cards": [
+			{
+				"q": "What must the mapping workbook contain?",
+				"a": "Every old value with a new target, an owner and a decision date, signed before the import starts.",
+				"hint": "A written agreement"
+			},
+			{
+				"q": "Why import in dependency order?",
+				"a": "ERPNext refuses children without parents, so the order is the data model rather than a preference.",
+				"hint": "Parents first"
+			},
+			{
+				"q": "How are opening balances loaded?",
+				"a": "As a single journal dated the day before go live, with a source document behind every figure.",
+				"hint": "One journal"
+			},
+			{
+				"q": "What proves an import is complete?",
+				"a": "The log: rows attempted, created, updated and failed, plus a duplicate count.",
+				"hint": "The log is the evidence"
+			},
+			{
+				"q": "Which five checks come before anyone is allowed to transact?",
+				"a": "Assets equal liabilities plus equity, the trial balance balances, stock ties to the count, debtors to statements, tax to returns.",
+				"hint": "Paper, then access"
+			}
+		],
+		"trap": {
+			"what": "Opening balances are entered as dummy invoices so that ageing looks right.",
+			"why": "Revenue and tax are then overstated in the go live month and the auditor cannot separate history from opening figures."
+		}
+	},
 	"narration": "Migration is where a project is won or lost, and it starts on paper. A mapping workbook with old values, new values and a named owner for every exception is the document the client signs, and it is what ends arguments in month two. Import in dependency order: company, chart of accounts, warehouses and groups, then items, parties and price lists, then users, and only then opening balances. The opening is a journal dated the day before go-live plus a stock reconciliation, and it must balance: ninety six thousand two hundred ninety of assets against three thousand and sixty eight of liabilities and ninety three thousand two hundred twenty two of equity. If it does not balance, the doors stay closed, because every later correction is harder once documents exist. Map on paper, import in order, prove the opening, and only then open the doors to users, with the evidence table signed so the first audit is a page rather than a reconstruction."
 }

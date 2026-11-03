@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AlertIcon, BackIcon, CloudIcon, InIcon, OutIcon, SwapIcon } from "../components/icons";
 import { Button, Field, Pill, Select, TextInput } from "../components/ui";
 import { ApiError } from "../lib/errors";
-import { formatQty, shortWarehouse } from "../lib/format";
+import { formatQty, nowTime, shortWarehouse } from "../lib/format";
 import { MOVE_LABEL, buildStockEntryDoc, validateMove } from "../lib/payloads";
 import { todayIso } from "../lib/settings";
 import type {
@@ -57,6 +57,8 @@ export function MoveScreen({
 }) {
 	const copy = COPY[kind];
 	const Icon = copy.icon;
+	// Captured when the screen opens: a move posted tonight for yesterday must keep yesterday's date.
+	const stamp = useMemo(() => ({ date: todayIso(), time: nowTime() }), []);
 	const uom = item.stock_uom ?? "Nos";
 	const options = warehouses.map((warehouse) => warehouse.name);
 	const fallback = defaultWarehouse ?? options[0] ?? "";
@@ -144,7 +146,8 @@ export function MoveScreen({
 		setBusy(true);
 		const doc = buildStockEntryDoc(input, {
 			company: session.company ?? "",
-			postingDate: todayIso(),
+			postingDate: stamp.date,
+			postingTime: stamp.time,
 		});
 
 		try {
@@ -175,7 +178,11 @@ export function MoveScreen({
 			return;
 		}
 		setErrors([]);
-		const doc = buildStockEntryDoc(input, { company: session.company ?? "", postingDate: todayIso() });
+		const doc = buildStockEntryDoc(input, {
+			company: session.company ?? "",
+			postingDate: stamp.date,
+			postingTime: stamp.time,
+		});
 		await queue(input, doc, "Queued on this device");
 	}
 

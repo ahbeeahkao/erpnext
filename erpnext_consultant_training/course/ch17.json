@@ -271,5 +271,50 @@
 			"why": "Closing stops new time and cost, and the variance note becomes the reference for pricing the next engagement."
 		}
 	],
+	"memory": {
+		"spine": "A project is a collector, and it only collects what names it, so every hour and every invoice must carry the project field.",
+		"device": {
+			"kind": "rule",
+			"label": "Every entry names the project",
+			"expansion": [
+				"A project is a cost collector whose profit and loss exists only if postings name it",
+				"Four fields before work starts: rate, cost centre, dates and customer",
+				"A timesheet records hours against project and activity and carries both a billing and a costing rate",
+				"Invoice from the timesheet so hours, rate and project travel together",
+				"Closing stops time and cost, and does not reverse revenue already billed"
+			]
+		},
+		"cards": [
+			{
+				"q": "Why is a project profit and loss empty?",
+				"a": "Something was posted without the project field, because the collector only sees postings that name it.",
+				"hint": "Name it or lose it"
+			},
+			{
+				"q": "Where does project revenue come from?",
+				"a": "Sales invoices that name the project, not quotations and not orders.",
+				"hint": "Invoices, not promises"
+			},
+			{
+				"q": "What does a timesheet carry besides hours?",
+				"a": "A billing rate and a costing rate, so one hour is both revenue and cost.",
+				"hint": "Two rates, one hour"
+			},
+			{
+				"q": "Why invoice from the timesheet?",
+				"a": "Hours, rate and project land on the invoice without retyping, so the margin stays traceable.",
+				"hint": "No retyping"
+			},
+			{
+				"q": "What does closing a project do?",
+				"a": "It stops further time and cost postings, and it does not reverse revenue already billed.",
+				"hint": "Stop, do not undo"
+			}
+		],
+		"trap": {
+			"what": "Hours are captured on the timesheet but the invoice is raised by hand at a different rate.",
+			"why": "Revenue and cost no longer share a rate, so project margin is fiction and the timesheet becomes paperwork nobody trusts."
+		}
+	},
 	"narration": "Services work is deceptively simple, and the margin is where consultants get caught. A project is a cost collector: name it on a timesheet, name it on an invoice, and it carries both sides. Twenty hours at one hundred fifty is three thousand of revenue; twenty hours at eighty is one thousand six hundred of cost; the difference is one thousand four hundred, about forty six per cent. Service tax of eight per cent adds two hundred forty and stays a liability. Record non-billable time anyway, because it costs money even though it cannot be invoiced. Then close the project with a variance note, which is the only way the next quote gets better. A project that is never closed teaches nobody anything and quietly repeats its mistakes. Twenty hours, one rate, one invoice, one margin: when a client can state those four numbers from memory, the services practice is under control, and the next quotation is priced on evidence rather than optimism."
 }

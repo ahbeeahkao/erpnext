@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AlertIcon, BackIcon, CountIcon } from "../components/icons";
 import { Button, Field, Select, TextInput } from "../components/ui";
 import { ApiError } from "../lib/errors";
-import { formatQty } from "../lib/format";
+import { formatQty, nowTime } from "../lib/format";
 import { buildReconciliationDoc, validateCount } from "../lib/payloads";
 import { todayIso } from "../lib/settings";
 import type {
@@ -41,6 +41,8 @@ export function CountScreen({
 	notify: Notify;
 }) {
 	const uom = item.stock_uom ?? "Nos";
+	// Captured when the count starts, not when it syncs.
+	const stamp = useMemo(() => ({ date: todayIso(), time: nowTime() }), []);
 	const options = warehouses.map((warehouse) => warehouse.name);
 	const [warehouse, setWarehouse] = useState(defaultWarehouse ?? options[0] ?? "");
 	const [counted, setCounted] = useState("");
@@ -85,7 +87,8 @@ export function CountScreen({
 		setBusy(true);
 		const doc = buildReconciliationDoc(input, {
 			company: session.company ?? "",
-			postingDate: todayIso(),
+			postingDate: stamp.date,
+			postingTime: stamp.time,
 		});
 
 		const op: QueueOp = {

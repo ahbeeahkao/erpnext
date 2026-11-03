@@ -370,5 +370,50 @@
 			"why": "A frozen date prevents postings into a year whose statements are already reported and filed, preserving the audit trail."
 		}
 	],
+	"memory": {
+		"spine": "Close in one order: fix what moves, then judge, then calculate, and only then lock the period so nobody can edit it.",
+		"device": {
+			"kind": "phrase",
+			"label": "Move, judge, calculate, lock",
+			"expansion": [
+				"Cash: reconcile the bank statement to the ledger before anything else",
+				"Count: reconcile stock and clear negative quantities",
+				"Judge: accruals and prepayments for costs incurred but not yet billed",
+				"Calculate: depreciation and any valuation repost",
+				"Lock: the Period Closing Voucher posts the closing entries and marks the period reported"
+			]
+		},
+		"cards": [
+			{
+				"q": "What is the most common month end failure?",
+				"a": "Closing with unposted documents: drafts, unallocated payments and negative stock.",
+				"hint": "Check before you close"
+			},
+			{
+				"q": "What does the Period Closing Voucher actually do?",
+				"a": "It zeroes income and expense accounts into the closing account and leaves balance sheet accounts alone.",
+				"hint": "Profit and loss to zero"
+			},
+			{
+				"q": "Can a document be edited in a closed period?",
+				"a": "Not without reopening or correcting in the next period. The close is a lock, not a label.",
+				"hint": "Lock, do not argue"
+			},
+			{
+				"q": "At year end, what carries forward?",
+				"a": "Every balance sheet balance, while the profit and loss closes into equity.",
+				"hint": "Balances yes, profit no"
+			},
+			{
+				"q": "Who signs a close off?",
+				"a": "Every row of the close calendar needs an owner and a proof, and the pack must read without the system.",
+				"hint": "Names and evidence"
+			}
+		],
+		"trap": {
+			"what": "The period is closed to stop people posting, before anything is reconciled.",
+			"why": "The voucher locks in whatever was wrong and every later report inherits it, so the correction costs twice the work."
+		}
+	},
 	"narration": "Month end is a process, not an event, and the consultant who builds the process is the one who gets invited back. Five checks come first: the trial balance, the draft documents, the debtors and creditors control accounts, the bank reconciliation, and stock with tax. When all five are signed, the close can start. January carries twelve thousand of sales, six thousand of cost, and four thousand six hundred eighty of net profit once freight, accrual, insurance and the stock adjustment are counted. The closing voucher moves that to retained earnings and marks the period as reported. At year end the same discipline carries balances into the new year, and the frozen date stops anyone rewriting a year that has already been filed. A close calendar with a name against every task is what makes the process repeatable, and the signed five-page pack is what makes it auditable. Build both once, hand the ownership to the client's finance lead, and the consultant's job becomes review rather than rescue."
 }

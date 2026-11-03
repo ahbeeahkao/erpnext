@@ -16,11 +16,13 @@
   },
   "dependencies": {
     "@zxing/browser": "^0.1.5",
+    "jsbarcode": "^3.12.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.0",
+    "@types/jsbarcode": "^3.11.4",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^5.0.0",

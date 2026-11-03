@@ -1,5 +1,11 @@
 // Formatting helpers shared by the UI.
 
+/** Local clock time as ERPNext expects it (HH:MM:SS). Captured with the date, never at sync time. */
+export function nowTime(date = new Date()): string {
+	const pad = (value: number) => String(value).padStart(2, "0");
+	return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
 export function formatQty(value: number, uom?: string): string {
 	const rounded = Number.isFinite(value) ? Math.round(value * 1000) / 1000 : 0;
 	const text = rounded.toLocaleString(undefined, { maximumFractionDigits: 3 });

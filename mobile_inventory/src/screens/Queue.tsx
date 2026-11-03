@@ -1,5 +1,6 @@
-import { CheckIcon, QueueIcon, RefreshIcon, TrashIcon, WifiOffIcon } from "../components/icons";
-import { Button, EmptyState, Pill, Row, Rows } from "../components/ui";
+import { useState } from "react";
+import { QueueIcon, RefreshIcon, TrashIcon, WifiOffIcon } from "../components/icons";
+import { Button, EmptyState, Pill, Rows } from "../components/ui";
 import { relativeTime } from "../lib/format";
 import { describeOp } from "../lib/payloads";
 import type { QueueOp } from "../lib/types";
@@ -31,6 +32,7 @@ export function QueueScreen({
 	onRetry: (op: QueueOp) => void;
 	onRemove: (op: QueueOp) => void;
 }) {
+	const [openId, setOpenId] = useState<string | null>(null);
 	const unfinished = ops.filter((op) => op.status !== "done");
 	const finished = ops.filter((op) => op.status === "done");
 
@@ -74,6 +76,15 @@ export function QueueScreen({
 											{op.attempts === 1 ? "" : "s"}
 										</div>
 										{op.error ? <div className="row__error">{op.error}</div> : null}
+										<button
+											type="button"
+											className="link-btn"
+											onClick={() => setOpenId(openId === op.id ? null : op.id)}
+											aria-expanded={openId === op.id}
+										>
+											{openId === op.id ? "Hide what will be posted" : "What will be posted?"}
+										</button>
+										{openId === op.id ? <OpDetail op={op} /> : null}
 									</div>
 									<div className="row__actions">
 										<Button
@@ -109,17 +120,112 @@ export function QueueScreen({
 					<h2 className="section__title">Recently posted</h2>
 					<Rows>
 						{finished.map((op) => (
-							<Row
-								key={op.id}
-								leading={<CheckIcon width={18} height={18} className="text-success" />}
-								title={describeOp(op)}
-								subtitle={`${op.serverName ?? "posted"} · ${relativeTime(op.createdAt)}`}
-								trailing={<Pill tone="success">Posted</Pill>}
-							/>
+							<div className="row row--stack" key={op.id}>
+								<div className="row__body">
+									<div className="row__title">
+										{describeOp(op)} <Pill tone="success">Posted</Pill>
+									</div>
+									<div className="row__subtitle">
+										{op.serverName ?? "posted"} · {relativeTime(op.createdAt)}
+									</div>
+									<button
+										type="button"
+										className="link-btn"
+										onClick={() => setOpenId(openId === op.id ? null : op.id)}
+										aria-expanded={openId === op.id}
+									>
+										{openId === op.id ? "Hide what was posted" : "What was posted?"}
+									</button>
+									{openId === op.id ? <OpDetail op={op} /> : null}
+								</div>
+							</div>
 						))}
 					</Rows>
 				</section>
 			) : null}
+		</div>
+	);
+}
+
+/** The document the phone is holding, in the words of the person chasing it. */
+function OpDetail({ op }: { op: QueueOp }) {
+	const doc = op.doc;
+	const rows = Array.isArray(doc.items) ? (doc.items as Array<Record<string, unknown>>) : [];
+	const value = (key: string) => {
+		const raw = doc[key];
+		return raw === undefined || raw === null || raw === "" ? "—" : String(raw);
+	};
+
+	return (
+		<div className="panel">
+			<div className="kv">
+				<span>Document</span>
+				<span>{value("doctype")}</span>
+				<span>Posting date</span>
+				<span>
+					{value("posting_date")} {doc.posting_time ? String(doc.posting_time) : ""}
+				</span>
+				<span>Company</span>
+				<span>{value("company")}</span>
+				{doc.supplier ? (
+					<>
+						<span>Supplier</span>
+						<span>{String(doc.supplier)}</span>
+					</>
+				) : null}
+				{doc.customer ? (
+					<>
+						<span>Customer</span>
+						<span>{String(doc.customer)}</span>
+					</>
+				) : null}
+				{doc.work_order ? (
+					<>
+						<span>Work order</span>
+						<span>{String(doc.work_order)}</span>
+					</>
+				) : null}
+				<span>Reference</span>
+				<span className="mono">{op.serverName ?? op.id.slice(0, 8)}</span>
+			</div>
+
+			{rows.length ? (
+				<table className="kv-table">
+					<thead>
+						<tr>
+							<th>Item</th>
+							<th>Qty</th>
+							<th>From</th>
+							<th>To</th>
+						</tr>
+					</thead>
+					<tbody>
+						{rows.map((row, index) => (
+							<tr key={`${String(row.item_code)}-${index}`}>
+								<td>
+									{String(row.item_code)}
+									{row.batch_no ? <small> · {String(row.batch_no)}</small> : null}
+									{row.location ? <small> · {String(row.location)}</small> : null}
+								</td>
+								<td>
+									{String(row.qty)} {String(row.uom ?? "")}
+									{row.rejected_qty ? (
+										<small> · {String(row.rejected_qty)} rejected</small>
+									) : null}
+								</td>
+								<td>{row.s_warehouse ? String(row.s_warehouse) : String(row.warehouse ?? "—")}</td>
+								<td>{row.t_warehouse ? String(row.t_warehouse) : "—"}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			) : null}
+
+			<p className="muted">
+				{op.submit === false
+					? "Created as a draft on the site; dispatch submits it."
+					: "Submitted as soon as the connection allows."}
+			</p>
 		</div>
 	);
 }

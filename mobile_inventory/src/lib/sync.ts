@@ -55,19 +55,44 @@ export async function drainQueue(
 		await saveOp(op);
 
 		try {
-			const existing = await client.findByReference(mobileRef(op.id));
-			if (existing) {
+			const doctype = String(op.doc.doctype ?? "");
+			const existing = doctype ? await client.findDocument(doctype, mobileRef(op.id)) : null;
+
+			if (existing && existing.docstatus === 1) {
+				// Already posted: the retry is a no-op, which is the whole point of the marker.
 				op.status = "done";
-				op.serverName = existing;
+				op.serverName = existing.name;
+				op.error = undefined;
+				synced += 1;
+			} else if (existing && existing.docstatus === 0 && op.submit === false) {
+				// A pick is handed over as a draft; the draft being there is the whole outcome.
+				op.status = "done";
+				op.serverName = existing.name;
+				op.error = undefined;
+				synced += 1;
+			} else if (existing && existing.docstatus === 0) {
+				// A draft left behind by a failed submit previously counted as "posted" and the
+				// stock never moved. Submit the draft instead of creating a second document.
+				const submitted = await client.submitDoc({ doctype, name: existing.name });
+				op.status = "done";
+				op.serverName = submitted.name || existing.name;
 				op.error = undefined;
 				synced += 1;
 			} else {
+				// Nothing there, or a cancelled document: post a fresh one.
 				const created = await client.createDoc(op.doc);
-				const submitted = await client.submitDoc({ ...op.doc, name: created.name });
-				op.status = "done";
-				op.serverName = submitted.name || created.name;
-				op.error = undefined;
-				synced += 1;
+				if (op.submit === false) {
+					op.status = "done";
+					op.serverName = created.name;
+					op.error = undefined;
+					synced += 1;
+				} else {
+					const submitted = await client.submitDoc({ ...op.doc, name: created.name });
+					op.status = "done";
+					op.serverName = submitted.name || created.name;
+					op.error = undefined;
+					synced += 1;
+				}
 			}
 		} catch (error) {
 			const apiError =

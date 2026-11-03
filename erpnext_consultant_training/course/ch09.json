@@ -346,5 +346,50 @@
 			"why": "The stock ledger row carries quantity, rate and value. Landed cost vouchers later adjust that value, which is why it belongs with valuation, not with purchasing."
 		}
 	],
+	"memory": {
+		"spine": "Buying is selling backwards, document for document, with one asymmetry that decides whether the interim stock account ever clears.",
+		"device": {
+			"kind": "rule",
+			"label": "Buying is selling backwards",
+			"expansion": [
+				"Purchase order mirrors the sales order: the commitment",
+				"Purchase receipt mirrors the delivery note: the goods move, profit does not",
+				"Purchase invoice mirrors the sales invoice: the creditor appears and interim stock clears",
+				"Payment entry mirrors payment entry: cash out, allocated",
+				"The asymmetry: the receipt may be skipped on paper, but then interim stock never clears"
+			]
+		},
+		"cards": [
+			{
+				"q": "Which purchase document moves stock?",
+				"a": "The Purchase Receipt. It debits stock and credits an interim stock account, so no profit appears yet.",
+				"hint": "Balance sheet only"
+			},
+			{
+				"q": "What does the three way match compare?",
+				"a": "Quantity, rate and total across order, receipt and bill, and a mismatch is what blocks or flags the bill.",
+				"hint": "Order, goods, bill"
+			},
+			{
+				"q": "What goes wrong when you bill without receiving?",
+				"a": "The interim stock account never clears and no stock arrives, yet the liability exists for goods you do not hold.",
+				"hint": "The optional step is not free"
+			},
+			{
+				"q": "Which three numbers are read before a purchase order is submitted?",
+				"a": "Net total, tax and grand total, each equal to the sum of the lines.",
+				"hint": "Read, then submit"
+			},
+			{
+				"q": "What makes a supplier payment settle the bill?",
+				"a": "Allocation against the purchase invoice. The payment entry alone only moves cash.",
+				"hint": "Same rule as sales"
+			}
+		],
+		"trap": {
+			"what": "The purchase invoice is entered at a rate that differs from the order and the receipt.",
+			"why": "The mismatch surfaces late, after stock has been valued at the receipt rate, and the difference becomes a price variance nobody owns."
+		}
+	},
 	"narration": "Buying is the mirror image of selling, and it is where most consultants lose credibility, because the client's accountant knows this cycle cold. Start with the purchase order: ten blenders at one hundred twenty, plus ten per cent tax, is one thousand three hundred twenty, and the order moves no stock. The receipt is the document that matters, adding ten units at one hundred twenty and crediting stock received but not billed, an interim account that looks strange and is not an error. The bill clears that account, brings in one hundred twenty of input tax, and creates a creditor of one thousand three hundred twenty with a due date. Then the payment, allocated to the invoice, closes it. Three documents, one quantity, one rate, one total. Teach the learner to predict the tax before looking, and to read the three documents side by side, because that habit is what survives an audit. When a client says the system is wrong, walk this chain in order and the answer appears in one of the four rows."
 }

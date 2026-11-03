@@ -87,11 +87,30 @@ function click(pattern) {
 	target.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
 }
 
+function clickBack() {
+	const target = window.document.querySelector('button[aria-label^="Back"]');
+	if (!target) throw new Error(`No back button. Screen text: ${text().slice(0, 160)}`);
+	target.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+}
+
 function type(input, value) {
 	if (!input) throw new Error(`Input not found while typing ${value}`);
 	const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
 	setter.call(input, value);
 	input.dispatchEvent(new window.Event("input", { bubbles: true }));
+}
+
+function pick(select, value) {
+	if (!select) throw new Error(`Select not found while choosing ${value}`);
+	const setter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, "value").set;
+	setter.call(select, value);
+	select.dispatchEvent(new window.Event("change", { bubbles: true }));
+}
+
+function clickIcon(aria) {
+	const target = window.document.querySelector(`button[aria-label="${aria}"]`);
+	if (!target) throw new Error(`No button labelled ${aria}. Screen text: ${text().slice(0, 160)}`);
+	target.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
 }
 
 function check(label, condition) {
@@ -109,7 +128,7 @@ try {
 
 	click(/Open the demo/i);
 	await wait(800);
-	check("demo mode reaches the home screen", text().includes("Scan a barcode"));
+	check("demo mode reaches the home screen", text().includes("Scan one item"));
 	check("connection status is shown", text().includes("Online"));
 	check(
 		"bottom tabs are present",
@@ -144,7 +163,7 @@ try {
 	click(/^Receive now$/);
 	await wait(1400);
 	check("receipt is posted", /posted as STE-DEMO-/.test(text()));
-	check("returns home after posting", text().includes("Scan a barcode"));
+	check("returns home after posting", text().includes("Scan one item"));
 
 	// --- issue -> queue -> sync ----------------------------------------------
 	type(window.document.querySelector('input[aria-label="Search items"]'), "FG-1002");
@@ -163,6 +182,189 @@ try {
 	await wait(1600);
 	check("queued transaction posts on sync", /Posted/.test(text()));
 	check("server document name is shown", /STE-DEMO-\d+/.test(text()));
+
+	click(/What was posted\?/);
+	await wait(400);
+	check("the posted document can be inspected", text().includes("Document") && text().includes("Stock Entry"));
+	check("the lines that were posted are listed", text().includes("Cold Brew Bottle") || text().includes("FG-1002"));
+	click(/Hide what was posted/);
+	await wait(200);
+
+	// --- receive against a purchase order ------------------------------------
+	click(/^Scan$/);
+	await wait(600);
+	click(/Receive a delivery/i);
+	await wait(800);
+	check("receiving lists the deliveries due", text().includes("PO-DEMO-0001"));
+	check("the supplier names the job, not the doctype", text().includes("Kedai Kopi Supplies"));
+
+	click(/PO-DEMO-0001/);
+	await wait(900);
+	check("the order opens as a counting task", text().includes("Blind receiving"));
+	check("order lines are listed", text().includes("Arabica Beans 1kg"));
+
+	const scanInput = window.document.querySelector('input[aria-label="Scan item into this receipt"]');
+	type(scanInput, "FG-1001");
+	await wait(120);
+	scanInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+	await wait(400);
+	check("one scan adds one unit", text().includes("Post receipt · 1 unit"));
+	check("the line shows the scanned quantity", text().includes("1/2 lines"));
+	clickBack();
+	await wait(300);
+	clickBack();
+	await wait(500);
+
+	// --- count a rack --------------------------------------------------------
+	click(/Count a rack/);
+	await wait(400);
+	click(/Start counting/);
+	await wait(500);
+	const countInput = window.document.querySelector('input[aria-label="Scan item onto this task"]');
+	type(countInput, "8901234567894");
+	await wait(120);
+	countInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+	await wait(1200);
+	check("a scanned item becomes a count line", text().includes("1/1 lines"));
+	check("the count is blind by default", text().includes("Blind count"));
+	clickBack();
+	await wait(300);
+	clickBack();
+	await wait(500);
+
+	// --- put away ------------------------------------------------------------
+	click(/Put away/);
+	await wait(500);
+	check("the site's location dimension is offered", text().includes("Location"));
+	type(window.document.querySelector('input[aria-label="Location to put away to"]'), "A1-03");
+	await wait(150);
+	click(/Start putting away/);
+	await wait(500);
+	check(
+		"the shelf is carried onto the task",
+		window.document.querySelector('input[aria-label="Location for the whole task"]')?.value === "A1-03"
+	);
+	const putAwayInput = window.document.querySelector('input[aria-label="Scan item onto this task"]');
+	type(putAwayInput, "FG-1002");
+	await wait(120);
+	putAwayInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+	await wait(1000);
+	check("put away counts the carton", text().includes("1/1 lines"));
+	check("the line shows the shelf it is going to", text().includes("A1-03"));
+	clickBack();
+	await wait(300);
+	clickBack();
+	await wait(500);
+
+	// --- pick for a work order ----------------------------------------------
+	click(/Pick for a work order/);
+	await wait(900);
+	check("work orders waiting are listed", text().includes("WO-DEMO-0001"));
+	click(/WO-DEMO-0001/);
+	await wait(900);
+	check("the material to issue is listed", text().includes("Milk Powder 25kg"));
+	const pickWoInput = window.document.querySelector('input[aria-label="Scan item onto this task"]');
+	type(pickWoInput, "RM-2001");
+	await wait(120);
+	pickWoInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+	await wait(500);
+	check("a pick line counts up", text().includes("1/2 lines"));
+	check("the pick name is the work order", text().includes("WO-DEMO-0001"));
+
+	// the batches actually on the shelf, oldest expiry first
+	click(/Milk Powder 25kg/);
+	await wait(700);
+	check("available batches are offered with expiry", text().includes("MP-2411") && text().includes("exp 2027-05-30"));
+	click(/MP-2411/);
+	await wait(250);
+	check("choosing a batch sets it on the line", text().includes("batch MP-2411"));
+
+	// a lot that arrived without a batch document
+	type(window.document.querySelector('input[placeholder="e.g. LOT-2411-A"]'), "LOT-SMOKE-1");
+	await wait(200);
+	click(/Create batch/);
+	await wait(700);
+	check("a new lot can be created from the phone", /Batch LOT-SMOKE-1 created/.test(text()));
+	check("the line shows the lot number, not the document name", text().includes("batch LOT-SMOKE-1"));
+
+	// labels for what was picked
+	click(/Print labels/);
+	await wait(500);
+	check("a label sheet is built for the pick", /\d+ labels?/.test(text()) && text().includes("Milk Powder"));
+	check(
+		"labels are laid out at the shop's label size",
+		window.document.querySelector(".label")?.style.width === "50mm"
+	);
+	check("the printer-ready file can be saved", [...window.document.querySelectorAll("button")].some((button) => /Save \.zpl/.test(button.textContent ?? "")));
+	clickIcon("Close labels");
+	await wait(250);
+
+	// a short pick has to say why
+	click(/Post · 1 unit/);
+	await wait(500);
+	check("a short pick without a reason is refused", text().includes("say why it is short"));
+
+	const reason = [...window.document.querySelectorAll("select")].find((select) =>
+		[...select.options].some((option) => option.value === "Damaged")
+	);
+	pick(reason, "Damaged");
+	await wait(250);
+	click(/Post · 1 unit/);
+	await wait(1400);
+	check("the pick posts once the reason is given", /posted/.test(text()));
+
+	// --- pick for delivery -> draft -----------------------------------------
+	await wait(600);
+	click(/Pick for delivery/);
+	await wait(900);
+	check("sales orders due are listed", text().includes("Kedai Kopi Jalan Ampang"));
+	click(/Kedai Kopi Jalan Ampang/);
+	await wait(900);
+	check("the order lines are listed", text().includes("Cold Brew Bottle"));
+	const pickDnInput = window.document.querySelector('input[aria-label="Scan item onto this task"]');
+	type(pickDnInput, "ACC-3001");
+	await wait(120);
+	pickDnInput.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+	await wait(500);
+	check("a delivery pick counts up", text().includes("1/2 lines"));
+
+	click(/Paper Cup 12oz/);
+	await wait(400);
+	const deliveryReason = [...window.document.querySelectorAll("select")].find((select) =>
+		[...select.options].some((option) => option.value === "Not on the shelf")
+	);
+	pick(deliveryReason, "Not on the shelf");
+	await wait(200);
+
+	click(/Create draft/);
+	await wait(900);
+	check("the pick becomes a draft delivery note", /created as a draft/.test(text()));
+	check("back home after the pick", text().includes("Scan one item"));
+
+	// --- settings: is this site ready, and what label stock is loaded ---------
+	click(/^Settings$/);
+	await wait(600);
+	check("settings offers a site check", text().includes("Is this site ready?"));
+	click(/Check this site/);
+	await wait(900);
+	check(
+		"the site check reports what the site supports",
+		text().includes("Sign-in works") && text().includes("OK")
+	);
+
+	const stockSelect = [...window.document.querySelectorAll("select")].find((select) =>
+		[...select.options].some((option) => option.value === "100x50")
+	);
+	pick(stockSelect, "100x50");
+	await wait(500);
+	click(/^Scan$/);
+	await wait(400);
+	click(/^Settings$/);
+	await wait(600);
+	const remembered = [...window.document.querySelectorAll("select")].find((select) =>
+		[...select.options].some((option) => option.value === "100x50")
+	);
+	check("label stock is remembered across screens", remembered?.value === "100x50");
 } catch (error) {
 	console.error(`smoke test crashed: ${error instanceof Error ? error.message : error}`);
 	errors.push(String(error));

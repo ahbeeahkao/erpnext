@@ -3,17 +3,22 @@ import { Scanner } from "../components/Scanner";
 import {
 	AlertIcon,
 	BoxIcon,
+	ChevronIcon,
 	CloudIcon,
+	CountIcon,
+	InIcon,
+	OutIcon,
 	QueueIcon,
 	ScanIcon,
 	SearchIcon,
+	SwapIcon,
 	WifiOffIcon,
 } from "../components/icons";
 import { Button, EmptyState, Pill, Row, Rows, Spinner, TextInput } from "../components/ui";
 import { ApiError } from "../lib/errors";
 import { addRecent, loadRecent, type RecentItem } from "../lib/recent";
 import { shortWarehouse } from "../lib/format";
-import type { InventoryClient, ItemInfo, ScanMatch, Session } from "../lib/types";
+import type { InventoryClient, ItemInfo, JobKey, ScanMatch, Session } from "../lib/types";
 import type { Notify } from "../hooks/useToasts";
 
 interface HomeProps {
@@ -24,10 +29,65 @@ interface HomeProps {
 	syncing: boolean;
 	onSync: () => void;
 	onOpenItem: (itemCode: string) => void;
+	onTask: (task: JobKey) => void;
 	notify: Notify;
 }
 
-export function Home({ client, session, online, pending, syncing, onSync, onOpenItem, notify }: HomeProps) {
+const TASKS: Array<{
+	key: JobKey;
+	title: string;
+	hint: string;
+	tone: string;
+	icon: typeof InIcon;
+}> = [
+	{
+		key: "receive",
+		title: "Receive a delivery",
+		hint: "Scan what arrived against its purchase order",
+		tone: "in",
+		icon: InIcon,
+	},
+	{
+		key: "count-rack",
+		title: "Count a rack",
+		hint: "Blind count, one reconciliation for the shelf",
+		tone: "count",
+		icon: CountIcon,
+	},
+	{
+		key: "putaway",
+		title: "Put away",
+		hint: "Move a delivery from the door to its place",
+		tone: "move",
+		icon: SwapIcon,
+	},
+	{
+		key: "pick-wo",
+		title: "Pick for a work order",
+		hint: "Issue material to production",
+		tone: "out",
+		icon: BoxIcon,
+	},
+	{
+		key: "pick-dn",
+		title: "Pick for delivery",
+		hint: "Pick an order and hand it to dispatch",
+		tone: "out",
+		icon: OutIcon,
+	},
+];
+
+export function Home({
+	client,
+	session,
+	online,
+	pending,
+	syncing,
+	onSync,
+	onOpenItem,
+	onTask,
+	notify,
+}: HomeProps) {
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState<ItemInfo[]>([]);
 	const [searching, setSearching] = useState(false);
@@ -154,13 +214,31 @@ export function Home({ client, session, online, pending, syncing, onSync, onOpen
 				</button>
 			) : null}
 
+			<section className="section">
+				<h2 className="section__title">Today\'s tasks</h2>
+				<div className="tasks">
+					{TASKS.map((job) => (
+						<button key={job.key} className="task" onClick={() => onTask(job.key)}>
+							<span className={`task__icon task__icon--${job.tone}`}>
+								<job.icon width={22} height={22} />
+							</span>
+							<span className="task__body">
+								<strong>{job.title}</strong>
+								<small>{job.hint}</small>
+							</span>
+							<ChevronIcon width={18} height={18} />
+						</button>
+					))}
+				</div>
+			</section>
+
 			<button className="scan-card" onClick={() => setScanning(true)} disabled={resolving}>
 				<span className="scan-card__icon">
 					<ScanIcon width={30} height={30} />
 				</span>
 				<span>
-					<strong>{resolving ? "Looking up…" : "Scan a barcode"}</strong>
-					<small>Receive, issue, transfer or count in seconds</small>
+					<strong>{resolving ? "Looking up…" : "Scan one item"}</strong>
+					<small>Move, count or check the stock of a single item</small>
 				</span>
 			</button>
 

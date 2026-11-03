@@ -305,5 +305,50 @@
 			"why": "Permissions deliver the highest control value with the lowest risk and are fully reversible, which is why they come first."
 		}
 	],
+	"memory": {
+		"spine": "A role says what a job may do, a user permission says which rows it may see, and the only test that counts is the restricted login.",
+		"device": {
+			"kind": "rule",
+			"label": "Roles do, permissions see",
+			"expansion": [
+				"Name roles after the job function, never after a person",
+				"User permissions filter rows and outweigh what the role would otherwise show",
+				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
+				"Auto repeat copies a document on a schedule, which suits subscriptions and retainers only",
+				"Test the restricted login, not the administrator"
+			]
+		},
+		"cards": [
+			{
+				"q": "Role permission or user permission, what is the difference?",
+				"a": "A role grants actions on a DocType, a user permission filters the records, and the narrower wins.",
+				"hint": "Do versus see"
+			},
+			{
+				"q": "How is a user kept to one warehouse?",
+				"a": "With a user permission on Warehouse for that user, not with a new role.",
+				"hint": "Row filter"
+			},
+			{
+				"q": "What makes a discount workflow correct?",
+				"a": "A low discount flows straight to submitted while a high one waits at pending approval for the right role.",
+				"hint": "States and transitions"
+			},
+			{
+				"q": "When is auto repeat safe?",
+				"a": "For genuinely recurring documents with a fixed shape, never for ones a human must judge.",
+				"hint": "Rhythm, not judgement"
+			},
+			{
+				"q": "What does an access review check?",
+				"a": "That every active login still matches a job, quarterly, including the ones nobody uses.",
+				"hint": "Quarterly ritual"
+			}
+		],
+		"trap": {
+			"what": "A user permission is added to fix a report that looks wrong.",
+			"why": "The report was the symptom of an over broad role, so filtering rows hides the grant and the next report breaks differently."
+		}
+	},
 	"narration": "Permissions are the least glamorous part of a project and the part that determines whether it survives an audit. Roles follow the org chart, not the software, and the safe default is read, write, create and submit without delete. User permissions restrict a person to their warehouse or territory, and you prove it by logging in as them, because administrators bypass the filter. Then workflow: a discount above ten per cent waits for the sales manager, and the approver is a role so leave does not stop the business. Finally automation, where one wrong template repeats twelve times a year, so review the first cycle. Configure in that order and the client gets control before convenience, and finish with a quarterly access review that the client signs, because a leaver with live access is the finding every audit produces when nobody owns the list, and when nobody has written down who is allowed to do what."
 }

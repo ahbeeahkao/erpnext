@@ -6,17 +6,25 @@ import { Home } from "./screens/Home";
 import { ItemScreen } from "./screens/Item";
 import { MoveScreen } from "./screens/Move";
 import { QueueScreen } from "./screens/Queue";
+import {
+	PickDeliveryScreen,
+	PickWorkOrderScreen,
+	PutAwayScreen,
+	RackCountScreen,
+} from "./screens/Jobs";
+import { ReceiveScreen } from "./screens/Receive";
 import { SettingsScreen } from "./screens/Settings";
 import { useOnline } from "./hooks/useOnline";
 import { useQueue } from "./hooks/useQueue";
 import { useToasts } from "./hooks/useToasts";
+import { clearCatalogue } from "./lib/catalogue";
 import { createClient } from "./lib/client";
 import { ApiError } from "./lib/errors";
 import { clearQueue } from "./lib/queue";
 import { clearRecent } from "./lib/recent";
 import { clearSession, loadSession, saveSession } from "./lib/settings";
 import { clearStore } from "./lib/storage";
-import type { Connection, ItemInfo, MoveKind, QueueOp, Session } from "./lib/types";
+import type { Connection, ItemInfo, JobKey, MoveKind, QueueOp, Session } from "./lib/types";
 
 type Screen =
 	| { name: "home" }
@@ -24,7 +32,8 @@ type Screen =
 	| { name: "settings" }
 	| { name: "item"; itemCode: string }
 	| { name: "move"; itemCode: string; kind: MoveKind }
-	| { name: "count"; itemCode: string };
+	| { name: "count"; itemCode: string }
+	| { name: JobKey };
 
 type Tab = "home" | "queue" | "settings";
 
@@ -110,6 +119,16 @@ export default function App() {
 		[session]
 	);
 
+	const setLabelPrefs = useCallback(
+		async (patch: { labelSize?: Session["labelSize"]; printBridge?: string }) => {
+			if (!session) return;
+			const next = { ...session, ...patch };
+			setSession(next);
+			await saveSession(next);
+		},
+		[session]
+	);
+
 	const enqueue = useCallback(
 		async (op: QueueOp) => {
 			await queue.enqueue(op);
@@ -121,6 +140,7 @@ export default function App() {
 	const clearLocal = useCallback(async () => {
 		await clearQueue();
 		await clearRecent();
+		await clearCatalogue();
 		await clearStore("kv");
 		await queue.refresh();
 		notify("Local data cleared", "success");
@@ -163,7 +183,49 @@ export default function App() {
 						syncing={queue.syncing}
 						onSync={() => void queue.syncNow()}
 						onOpenItem={(code) => void openItem(code)}
+						onTask={(task) => setScreen({ name: task })}
 						notify={notify}
+					/>
+				);
+			case "count-rack":
+			case "putaway":
+			case "pick-wo":
+			case "pick-dn": {
+				// Same props for every job: they differ in their data, not their wiring.
+				const JobScreen =
+					screen.name === "count-rack"
+						? RackCountScreen
+						: screen.name === "putaway"
+							? PutAwayScreen
+							: screen.name === "pick-wo"
+								? PickWorkOrderScreen
+								: PickDeliveryScreen;
+				return (
+					<JobScreen
+						client={client!}
+						session={session}
+						warehouses={warehouses}
+						defaultWarehouse={session.defaultWarehouse}
+						online={online}
+						notify={notify}
+						onBack={() => setScreen({ name: "home" })}
+						onQueued={enqueue}
+						onPosted={() => setScreen({ name: "home" })}
+					/>
+				);
+			}
+			case "receive":
+				return (
+					<ReceiveScreen
+						client={client!}
+						session={session}
+						warehouses={warehouses}
+						defaultWarehouse={session.defaultWarehouse}
+						online={online}
+						notify={notify}
+						onBack={() => setScreen({ name: "home" })}
+						onQueued={enqueue}
+						onPosted={() => setScreen({ name: "home" })}
 					/>
 				);
 			case "queue":
@@ -187,6 +249,13 @@ export default function App() {
 						syncing={queue.syncing}
 						onSync={() => void queue.syncNow()}
 						onDefaultWarehouse={(warehouse) => void setDefaultWarehouse(warehouse)}
+						onLabelSize={(size) => void setLabelPrefs({ labelSize: size })}
+						onPrintBridge={(url) => void setLabelPrefs({ printBridge: url.trim() || undefined })}
+						onDiagnose={async () =>
+							client
+								? client.runDiagnostics()
+								: [{ id: "none", label: "Site check", ok: false, detail: "Not connected." }]
+						}
 						onClearLocal={clearLocal}
 						onDisconnect={() => void disconnect()}
 					/>

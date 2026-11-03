@@ -14,7 +14,21 @@ import {
 	validateMove,
 	validateQty,
 } from "../src/lib/payloads.ts";
+import {
+	applyScan,
+	buildPurchaseReceiptDoc,
+	clearReceipt,
+	createReceiptTask,
+	receiptProgress,
+	receiptQueueOp,
+	remainingToReceive,
+	setLineQty,
+	setLineRejected,
+	toggleBlind,
+	validateReceipt,
+} from "../src/lib/receiving.ts";
 import { pruneQueue, retryDelayMs, sortQueue } from "../src/lib/queue.ts";
+import { describeOp } from "../src/lib/payloads.ts";
 import { serverMessage, stripHtml, toApiError } from "../src/lib/errors.ts";
 
 const ctx = { company: "Demo Co", postingDate: "2026-10-30" };
@@ -284,5 +298,200 @@ describe("frappe error handling", () => {
 		assert.equal(toApiError(401, {}).kind, "auth");
 		assert.equal(toApiError(500, {}).kind, "server");
 		assert.equal(stripHtml("a<br>b &amp; c"), "a b & c");
+	});
+});
+
+describe("posting time is captured, not guessed", () => {
+	it("flags the document so ERPNext keeps our date instead of stamping server-now", () => {
+		const doc = buildStockEntryDoc(baseMove(), {
+			company: "Demo Co",
+			postingDate: "2026-11-02",
+			postingTime: "09:15:00",
+		});
+		assert.equal(doc.set_posting_time, 1);
+		assert.equal(doc.posting_date, "2026-11-02");
+		assert.equal(doc.posting_time, "09:15:00");
+	});
+
+	it("does the same for a count", () => {
+		const doc = buildReconciliationDoc(
+			{ id: "op-count", itemCode: "FG-1001", qty: 3, uom: "Kg", warehouse: "Stores - DC" },
+			{ company: "Demo Co", postingDate: "2026-11-02", postingTime: "09:15:00" }
+		);
+		assert.equal(doc.set_posting_time, 1);
+		assert.equal(doc.posting_time, "09:15:00");
+	});
+});
+
+describe("receiving against a purchase order", () => {
+	const header = {
+		order: "PO-0001",
+		supplier: "Kedai Kopi Supplies",
+		company: "Demo Co",
+		postingDate: "2026-11-02",
+		postingTime: "09:15:00",
+	};
+	const lines = () => [
+		{
+			name: "row-1",
+			item_code: "FG-1001",
+			item_name: "Arabica Beans 1kg",
+			qty: 40,
+			received_qty: 5,
+			uom: "Box",
+			stock_uom: "Kg",
+			conversion_factor: 12,
+			warehouse: "Stores - DC",
+			rate: 32,
+		},
+		{
+			name: "row-2",
+			item_code: "ACC-3001",
+			item_name: "Paper Cup 12oz",
+			qty: 10,
+			received_qty: 0,
+			uom: "Nos",
+			stock_uom: "Nos",
+			warehouse: "Stores - DC",
+		},
+	];
+
+	it("opens with every line at zero and the remaining quantity worked out", () => {
+		const task = createReceiptTask("task-1", header, lines());
+		assert.equal(task.lines.length, 2);
+		assert.equal(task.lines[0].receivedNow, 0);
+		assert.equal(task.lines[0].conversionFactor, 12);
+		assert.equal(task.lines[1].conversionFactor, 1, "missing factor falls back to 1");
+		assert.equal(remainingToReceive(task.lines[0]), 35, "40 ordered minus 5 already in");
+		assert.equal(task.blind, false);
+	});
+
+	it("counts by scanning: the same code twice is two units", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "ACC-3001").task;
+		const second = applyScan(task, " acc-3001 ");
+		assert.equal(second.outcome, "matched");
+		assert.equal(second.task.lines[1].receivedNow, 2);
+		assert.equal(second.line.itemCode, "ACC-3001");
+	});
+
+	it("says why a scan was ignored instead of silently dropping it", () => {
+		const task = createReceiptTask("task-1", header, lines());
+		assert.equal(applyScan(task, "RM-9999").outcome, "unknown-item");
+		assert.equal(applyScan(task, "RM-9999").task, task, "a rejected scan never changes the task");
+
+		let full = task;
+		for (let i = 0; i < 10; i += 1) full = applyScan(full, "ACC-3001").task;
+		assert.equal(full.lines[1].receivedNow, 10);
+		assert.equal(applyScan(full, "ACC-3001").outcome, "line-complete", "no over-receipt by scanning");
+	});
+
+	it("keeps the purchase order link and converts to stock units", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "FG-1001").task;
+		task = applyScan(task, "FG-1001").task;
+		const doc = buildPurchaseReceiptDoc(task);
+
+		assert.equal(doc.doctype, "Purchase Receipt");
+		assert.equal(doc.purchase_order, undefined, "the order link lives on the rows");
+		assert.equal(doc.set_posting_time, 1);
+		assert.equal(doc.posting_date, "2026-11-02");
+		assert.equal(doc.posting_time, "09:15:00");
+		assert.match(doc.remarks, /\[MOBILE-INV:task-1\]/);
+
+		assert.equal(doc.items.length, 1, "only the touched line is posted");
+		const row = doc.items[0];
+		assert.equal(row.item_code, "FG-1001");
+		assert.equal(row.qty, 2);
+		assert.equal(row.uom, "Box");
+		assert.equal(row.conversion_factor, 12);
+		assert.equal(row.stock_qty, 24, "2 Box of 12 is 24 Kg of stock");
+		assert.equal(row.purchase_order, "PO-0001");
+		assert.equal(row.purchase_order_item, "row-1");
+		assert.equal(row.warehouse, "Stores - DC");
+	});
+
+	it("refuses the mistakes the server would refuse hours later", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		assert.deepEqual(validateReceipt(task), ["Nothing received yet — scan or enter at least one line"]);
+
+		task = setLineQty(task, "row-1", 36);
+		assert.match(validateReceipt(task)[0], /only 35 Box left/);
+
+		task = setLineQty(task, "row-1", 2);
+		assert.deepEqual(validateReceipt(task), [], "a clean line passes");
+
+		task = {
+			...task,
+			lines: task.lines.map((l) => (l.key === "row-1" ? { ...l, hasBatchNo: true } : l)),
+		};
+		assert.match(validateReceipt(task)[0], /enter the batch number/);
+
+		task = {
+			...task,
+			lines: task.lines.map((l) =>
+				l.key === "row-1" ? { ...l, batchNo: "LOT-1", hasSerialNo: true, serialNo: "SN-1" } : l
+			),
+		};
+		assert.match(validateReceipt(task)[0], /1 serial numbers for 2 units/);
+	});
+
+	it("sends rejects to their own warehouse instead of into stock", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "ACC-3001").task;
+		task = applyScan(task, "ACC-3001").task;
+		task = applyScan(task, "ACC-3001").task;
+
+		assert.equal(buildPurchaseReceiptDoc(task).items[0].rejected_qty, undefined, "no rejection, no field");
+
+		const rejected = setLineRejected(task, "row-2", 2);
+		assert.equal(rejected.lines[1].rejectedNow, 2);
+		assert.match(validateReceipt(rejected).join(" "), /choose where the rejected quantity goes/);
+
+		const placed = {
+			...rejected,
+			lines: rejected.lines.map((l) => (l.key === "row-2" ? { ...l, rejectedWarehouse: "Quarantine - DC" } : l)),
+		};
+		assert.deepEqual(validateReceipt(placed), []);
+		const doc = buildPurchaseReceiptDoc(placed);
+		assert.equal(doc.items[0].qty, 3);
+		assert.equal(doc.items[0].rejected_qty, 2);
+		assert.equal(doc.items[0].rejected_warehouse, "Quarantine - DC");
+	});
+
+	it("never lets a rejection exceed what arrived", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "ACC-3001").task;
+		assert.equal(setLineRejected(task, "row-2", 5).lines[1].rejectedNow, 1, "clamped to what arrived");
+	});
+
+	it("blind mode only hides the expectation, it never changes what is posted", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "ACC-3001").task;
+		const before = buildPurchaseReceiptDoc(task);
+		const blind = toggleBlind(task);
+		assert.equal(blind.blind, true);
+		assert.deepEqual(buildPurchaseReceiptDoc(blind), before);
+	});
+
+	it("reports progress the way the header shows it", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "ACC-3001").task;
+		task = applyScan(task, "ACC-3001").task;
+		const progress = receiptProgress(task);
+		assert.equal(progress.linesTouched, 1);
+		assert.equal(progress.linesTotal, 2);
+		assert.equal(progress.units, 2);
+		assert.equal(clearReceipt(task).lines[1].receivedNow, 0);
+	});
+
+	it("queues as one operation with a readable summary", () => {
+		let task = createReceiptTask("task-1", header, lines());
+		task = applyScan(task, "ACC-3001").task;
+		const op = receiptQueueOp(task, "2026-11-02T01:15:00.000Z");
+		assert.equal(op.kind, "po-receipt");
+		assert.equal(op.status, "pending");
+		assert.equal(op.doc.doctype, "Purchase Receipt");
+		assert.match(describeOp(op), /Receipt · PO PO-0001 · 1 line/);
 	});
 });

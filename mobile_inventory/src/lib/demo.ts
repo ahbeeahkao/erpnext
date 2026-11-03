@@ -6,7 +6,25 @@
 // and the idempotency marker in `remarks` finds an already-posted document.
 import { ApiError } from "./errors";
 import { parseScanResponse } from "./payloads";
-import type { Connection, InventoryClient, ItemInfo, ScanMatch, StockRow, Warehouse } from "./types";
+import type {
+	Connection,
+	ExistingDoc,
+	BatchOption,
+	CreatedBatch,
+	DiagnosticCheck,
+	InventoryClient,
+	InventoryDimension,
+	ItemInfo,
+	PurchaseOrder,
+	PurchaseOrderLine,
+	SalesOrder,
+	SalesOrderLine,
+	ScanMatch,
+	StockRow,
+	Warehouse,
+	WorkOrder,
+	WorkOrderLine,
+} from "./types";
 
 interface DemoItem extends ItemInfo {
 	barcode: string;
@@ -143,9 +161,170 @@ function adjust(itemCode: string, warehouse: string, delta: number, context: str
 	stock.set(stockKey(itemCode, warehouse), next);
 }
 
+/** Two open purchase orders, so the receiving task has something real to receive. */
+const PURCHASE_ORDERS: Array<PurchaseOrder & { lines: PurchaseOrderLine[] }> = [
+	{
+		name: "PO-DEMO-0001",
+		supplier: "Kedai Kopi Supplies",
+		company: "Demo Company",
+		transaction_date: "2026-10-28",
+		per_received: 0,
+		status: "To Receive and Bill",
+		lines: [
+			{
+				name: "po1-row1",
+				item_code: "FG-1001",
+				item_name: "Arabica Beans 1kg",
+				qty: 40,
+				received_qty: 0,
+				uom: "Kg",
+				stock_uom: "Kg",
+				conversion_factor: 1,
+				warehouse: "Stores - DEMO",
+				rate: 32,
+			},
+			{
+				name: "po1-row2",
+				item_code: "FG-1002",
+				item_name: "Cold Brew Bottle 330ml",
+				qty: 120,
+				received_qty: 0,
+				uom: "Nos",
+				stock_uom: "Nos",
+				conversion_factor: 1,
+				warehouse: "Cold Room - DEMO",
+				rate: 3.2,
+			},
+		],
+	},
+	{
+		name: "PO-DEMO-0002",
+		supplier: "Sin Heng Hardware",
+		company: "Demo Company",
+		transaction_date: "2026-10-30",
+		per_received: 0,
+		status: "To Receive and Bill",
+		lines: [
+			{
+				name: "po2-row1",
+				item_code: "ACC-3001",
+				item_name: "Paper Cup 8oz (sleeve)",
+				qty: 24,
+				received_qty: 0,
+				uom: "Nos",
+				stock_uom: "Nos",
+				conversion_factor: 1,
+				warehouse: "Stores - DEMO",
+				rate: 4.5,
+			},
+		],
+	},
+];
+
+/** How much of each order line has already been received on this device's demo site. */
+const poReceived = new Map<string, number>();
+
+/** A work order whose milk powder has not been issued yet. */
+const WORK_ORDERS: Array<WorkOrder & { lines: WorkOrderLine[] }> = [
+	{
+		name: "WO-DEMO-0001",
+		production_item: "FG-1002",
+		qty: 60,
+		produced_qty: 0,
+		status: "Not Started",
+		company: "Demo Company",
+		wip_warehouse: "Transit - DEMO",
+		source_warehouse: "Stores - DEMO",
+		planned_start_date: "2026-11-03 08:00:00",
+		lines: [
+			{
+				name: "wo1-row1",
+				item_code: "RM-2001",
+				item_name: "Milk Powder 25kg",
+				required_qty: 4,
+				transferred_qty: 1,
+				source_warehouse: "Stores - DEMO",
+				stock_uom: "Bag",
+			},
+			{
+				name: "wo1-row2",
+				item_code: "RM-2002",
+				item_name: "Sugar Syrup 20L",
+				required_qty: 6,
+				transferred_qty: 0,
+				source_warehouse: "Stores - DEMO",
+				stock_uom: "Can",
+			},
+		],
+	},
+];
+
+/** A sales order due out today. */
+const SALES_ORDERS: Array<SalesOrder & { lines: SalesOrderLine[] }> = [
+	{
+		name: "SO-DEMO-0001",
+		customer: "Kedai Kopi Jalan Ampang",
+		company: "Demo Company",
+		transaction_date: "2026-10-30",
+		delivery_date: "2026-11-03",
+		per_delivered: 0,
+		status: "To Deliver and Bill",
+		lines: [
+			{
+				name: "so1-row1",
+				item_code: "FG-1002",
+				item_name: "Cold Brew Bottle 330ml",
+				qty: 24,
+				delivered_qty: 0,
+				uom: "Nos",
+				stock_uom: "Nos",
+				conversion_factor: 1,
+				warehouse: "Stores - DEMO",
+			},
+			{
+				name: "so1-row2",
+				item_code: "ACC-3001",
+				item_name: "Paper Cup 12oz",
+				qty: 100,
+				delivered_qty: 20,
+				uom: "Nos",
+				stock_uom: "Nos",
+				conversion_factor: 1,
+				warehouse: "Stores - DEMO",
+			},
+		],
+	},
+];
+
+const woTransferred = new Map<string, number>();
+const soDelivered = new Map<string, number>();
+
 function applyDocument(doc: Record<string, unknown>): void {
 	const rows = Array.isArray(doc.items) ? (doc.items as Record<string, any>[]) : [];
 	if (!rows.length) throw new ApiError("The document has no items", "validation", 417);
+
+	if (doc.doctype === "Purchase Receipt") {
+		for (const row of rows) {
+			const item = itemFor(String(row.item_code));
+			const factor = Number(row.conversion_factor) || 1;
+			const qty = Number(row.stock_qty ?? Number(row.qty) * factor) || 0;
+			const rejected = (Number(row.rejected_qty) || 0) * factor;
+			if (qty <= 0)
+				throw new ApiError("Received quantity must be greater than zero", "validation", 417);
+			if (rejected > qty)
+				throw new ApiError("Rejected quantity cannot exceed the quantity", "validation", 417);
+			if (rejected > 0) {
+				if (!row.rejected_warehouse) {
+					throw new ApiError("Rejected stock needs a warehouse", "validation", 417);
+				}
+				adjust(item.item_code, String(row.rejected_warehouse), rejected, "this receipt");
+			}
+			const lineKey = `${row.purchase_order}:${row.purchase_order_item}`;
+			poReceived.set(lineKey, (poReceived.get(lineKey) ?? 0) + qty);
+			adjust(item.item_code, String(row.warehouse), qty - rejected, "this receipt");
+		}
+		return;
+	}
 
 	if (doc.doctype === "Stock Reconciliation") {
 		for (const row of rows) {
@@ -166,7 +345,7 @@ function applyDocument(doc: Record<string, unknown>): void {
 			adjust(item.item_code, String(row.t_warehouse), qty, "this receipt");
 		} else if (type === "Material Issue") {
 			adjust(item.item_code, String(row.s_warehouse), -qty, "this issue");
-		} else if (type === "Material Transfer") {
+		} else if (type === "Material Transfer" || type === "Material Transfer for Manufacture") {
 			adjust(item.item_code, String(row.s_warehouse), -qty, "this transfer");
 			adjust(item.item_code, String(row.t_warehouse), qty, "this transfer");
 		} else {
@@ -270,11 +449,125 @@ export class DemoClient implements InventoryClient {
 		return this.delay({ name }, 200);
 	}
 
-	async findByReference(reference: string): Promise<string | null> {
+	async findDocument(doctype: string, reference: string): Promise<ExistingDoc | null> {
+		let match: ExistingDoc | null = null;
 		for (const [name, doc] of documents) {
+			if (String(doc.doctype ?? "") !== doctype) continue;
 			const remarks = typeof doc.remarks === "string" ? doc.remarks : "";
-			if (remarks.includes(reference)) return this.delay(name, 60);
+			if (!remarks.includes(reference)) continue;
+			const docstatus = Number(doc.docstatus) || 0;
+			// A submitted document wins over a draft left behind by an earlier failure.
+			if (!match || docstatus > match.docstatus) match = { name, docstatus };
 		}
-		return this.delay(null, 60);
+		return this.delay(match, 60);
+	}
+
+	async openPurchaseOrders(): Promise<PurchaseOrder[]> {
+		const open = PURCHASE_ORDERS.filter((order) => {
+			const received = order.lines.every(
+				(line) => (poReceived.get(`${order.name}:${line.name}`) ?? 0) >= line.qty
+			);
+			return !received;
+		}).map(({ lines: _lines, ...header }) => header);
+		return this.delay(open, 120);
+	}
+
+	async availableBatches(itemCode: string, warehouse: string): Promise<BatchOption[]> {
+		// Two batches per batch-tracked demo item, oldest expiry first — the order a picker should use.
+		const catalogue: Record<string, BatchOption[]> = {
+			"FG-1001": [
+				{ batch_no: "LOT-2601-A", qty: Math.min(18, qtyOf("FG-1001", warehouse) || 18), expiry_date: "2026-12-31" },
+				{ batch_no: "LOT-2603-B", qty: 24, expiry_date: "2027-03-31" },
+			],
+			"RM-2001": [
+				{ batch_no: "MP-2411", qty: 6, expiry_date: "2027-05-30" },
+				{ batch_no: "MP-2502", qty: 9, expiry_date: "2027-11-30" },
+			],
+		};
+		return this.delay(catalogue[itemCode] ?? [], 90);
+	}
+
+	async createBatch(itemCode: string, batchId?: string): Promise<CreatedBatch> {
+		itemFor(itemCode);
+		const lot = batchId?.trim() || `LOT-${++sequence}`;
+		return this.delay({ name: `BATCH-DEMO-${sequence}`, batch_id: lot }, 140);
+	}
+
+	async runDiagnostics(): Promise<DiagnosticCheck[]> {
+		return this.delay(
+			[
+				{ id: "auth", label: "Sign-in works", ok: true, detail: "Demo mode — no site, no sign-in." },
+				{
+					id: "dimensions",
+					label: "Stock locations (Inventory Dimension)",
+					ok: true,
+					detail: "Dimension “Location” (location) — shelves are recorded.",
+				},
+				{
+					id: "batches",
+					label: "Batches, oldest first",
+					ok: true,
+					detail: "FG-1001: 2 batches returned by the site.",
+				},
+				{
+					id: "serial-batch",
+					label: "Serial & batch fields on Stock Entry",
+					ok: true,
+					detail: "On — batches go on the document rows.",
+				},
+			],
+			260
+		);
+	}
+
+	async inventoryDimensions(): Promise<InventoryDimension[]> {
+		return this.delay(
+			[{ dimension_name: "Location", fieldname: "location", doctype: "Warehouse" }],
+			80
+		);
+	}
+
+	async openWorkOrders(): Promise<WorkOrder[]> {
+		const open = WORK_ORDERS.map(({ lines: _lines, ...header }) => header);
+		return this.delay(open, 120);
+	}
+
+	async workOrderLines(workOrder: string): Promise<WorkOrderLine[]> {
+		const found = WORK_ORDERS.find((row) => row.name === workOrder);
+		if (!found) throw new ApiError(`Work order ${workOrder} was not found`, "validation", 404);
+		return this.delay(
+			found.lines.map((line) => ({
+				...line,
+				transferred_qty: (line.transferred_qty ?? 0) + (woTransferred.get(`${found.name}:${line.name}`) ?? 0),
+			})),
+			120
+		);
+	}
+
+	async openSalesOrders(): Promise<SalesOrder[]> {
+		const open = SALES_ORDERS.map(({ lines: _lines, ...header }) => header);
+		return this.delay(open, 120);
+	}
+
+	async salesOrderLines(salesOrder: string): Promise<SalesOrderLine[]> {
+		const found = SALES_ORDERS.find((row) => row.name === salesOrder);
+		if (!found) throw new ApiError(`Sales order ${salesOrder} was not found`, "validation", 404);
+		return this.delay(
+			found.lines.map((line) => ({
+				...line,
+				delivered_qty: (line.delivered_qty ?? 0) + (soDelivered.get(`${found.name}:${line.name}`) ?? 0),
+			})),
+			120
+		);
+	}
+
+	async purchaseOrderLines(order: string): Promise<PurchaseOrderLine[]> {
+		const found = PURCHASE_ORDERS.find((row) => row.name === order);
+		if (!found) throw new ApiError(`Purchase order ${order} was not found`, "validation", 404);
+		const lines = found.lines.map((line) => ({
+			...line,
+			received_qty: poReceived.get(`${found.name}:${line.name}`) ?? 0,
+		}));
+		return this.delay(lines, 120);
 	}
 }

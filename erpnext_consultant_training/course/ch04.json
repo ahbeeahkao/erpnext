@@ -389,5 +389,49 @@
 			"why": "Invoice numbers are a client and auditor contract. Changing the format later leaves a mixed series and questions about the gap."
 		}
 	],
+	"memory": {
+		"spine": "Master data comes before permissions, because a wrong UOM or warehouse produces a balance that looks right and is not.",
+		"device": {
+			"kind": "rule",
+			"label": "Master data before permissions",
+			"expansion": [
+				"UOM and warehouses are masters: a typo becomes a plausible wrong balance",
+				"A user is a login, a role is a bundle of DocType permissions, a role profile bundles roles",
+				"Role permissions say what you may do, user permissions say which rows you may see",
+				"Naming series and valuation method are chosen once and changed only by reposting"
+			]
+		},
+		"cards": [
+			{
+				"q": "One box equals twelve pieces. What does a receipt of 1 Box post?",
+				"a": "A stock balance of 12 Nos, because every stock row and valuation runs in the stock UOM.",
+				"hint": "Convert before you count"
+			},
+			{
+				"q": "What must every warehouse point at?",
+				"a": "A stock account through the company defaults, so valuation has somewhere to post.",
+				"hint": "A location with a ledger"
+			},
+			{
+				"q": "Role permission or user permission, which one wins?",
+				"a": "The narrower of the two: the role grants the action, the user permission filters the rows.",
+				"hint": "Do versus see"
+			},
+			{
+				"q": "The valuation method was wrong since go live. What is the honest fix?",
+				"a": "Repost Item Valuation, not an edit. The method itself is set per company and is not a per document choice.",
+				"hint": "Repost, do not retype"
+			},
+			{
+				"q": "Which three things are verified before anyone is allowed to transact?",
+				"a": "Company and abbreviation against registration documents, currency and fiscal year, then the chart of accounts.",
+				"hint": "Paper first"
+			}
+		],
+		"trap": {
+			"what": "The storekeeper is given the Stock Manager role just to be safe.",
+			"why": "That role also opens Accounts and Buying, and the user permissions then look broken when the real problem was the grant nobody needed."
+		}
+	},
 	"narration": "Volume zero, second half: making the system usable. Start with units. A unit is master data, and a conversion factor is the contract between buying and selling. If the client buys boxes of twelve and sells pieces, you need both units and the factor of twelve before the first receipt, because stock is valued in the stock unit and history cannot be rewritten afterwards. Test it: one box must post twelve pieces, and half a box must be refused. Next, warehouses. Each location points at a stock account, so main stock, retail counter, assembly floor and returns quarantine are four warehouses with one default. Transfer five units and the company total must not move. Then users. A user is a login, a role is a bundle of permissions, and a role profile is a reusable bundle of roles. Create named users, because shared logins destroy the audit trail, and always demonstrate the restricted login rather than the administrator, who bypasses everything. Permissions have two layers: roles decide verbs such as create, submit and cancel, while user permissions decide rows, for example a storekeeper seeing only the main warehouse. Naming series are a contract with the auditor, so agree the format, then test it on a draft. Finally settings: FIFO valuation, negative stock off, credit limit on, default warehouse and price list. Volume zero ends with a ten point handover sheet signed by the client, because a foundation nobody approved is an argument waiting to happen."
 }

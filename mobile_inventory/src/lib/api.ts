@@ -10,9 +10,41 @@
 //
 // Reads use GET (whitelisted methods accept GET and query params) so they work in both modes
 // without a CSRF token; writes always POST.
+import {
+	cachedBatches,
+	cachedItem,
+	cachedScan,
+	cachedStock,
+	rememberBatches,
+	rememberItem,
+	rememberItems,
+	rememberScan,
+	rememberStock,
+	searchCachedItems,
+} from "./catalogue";
 import { ApiError, toApiError } from "./errors";
+import { warehousesForCompany } from "./warehouses";
 import { parseScanResponse } from "./payloads";
-import type { Connection, InventoryClient, ItemInfo, ScanMatch, Session, StockRow, Warehouse } from "./types";
+import type {
+	BatchOption,
+	Connection,
+	CreatedBatch,
+	DiagnosticCheck,
+	ExistingDoc,
+	InventoryClient,
+	InventoryDimension,
+	ItemInfo,
+	PurchaseOrder,
+	PurchaseOrderLine,
+	SalesOrder,
+	SalesOrderLine,
+	ScanMatch,
+	Session,
+	StockRow,
+	Warehouse,
+	WorkOrder,
+	WorkOrderLine,
+} from "./types";
 
 const TIMEOUT_MS = 20_000;
 
@@ -62,7 +94,7 @@ export class FrappeClient implements InventoryClient {
 	// ---------------------------------------------------------------- transport
 
 	private buildUrl(path: string, query?: Query): string {
-		const base = this.mode === "token" ? this.session.baseUrl ?? "" : "";
+		const base = this.mode === "token" ? (this.session.baseUrl ?? "") : "";
 		const raw = `${base}${path}`;
 		const url = /^https?:\/\//i.test(raw) ? new URL(raw) : new URL(raw, window.location.origin);
 		for (const [key, value] of Object.entries(query ?? {})) {
@@ -158,7 +190,8 @@ export class FrappeClient implements InventoryClient {
 			// Global Defaults may not be readable by every role; the first company is fine.
 		}
 
-		return { user, company, warehouses };
+		// Only this company's stores: another company's warehouse is not a place to put stock.
+		return { user, company, warehouses: warehousesForCompany(warehouses, company) };
 	}
 
 	async listWarehouses(): Promise<Warehouse[]> {
@@ -190,21 +223,32 @@ export class FrappeClient implements InventoryClient {
 	}
 
 	async itemInfo(itemCode: string): Promise<ItemInfo> {
-		const data = unwrap<ItemInfo>(
-			await this.request(`/api/resource/Item/${encodeURIComponent(itemCode)}`, {
-				query: { fields: JSON.stringify(ITEM_FIELDS) },
-			}),
-			"data"
-		);
-		if (!data?.item_code) throw new ApiError(`Item ${itemCode} was not found`, "validation", 404);
-		return data;
+		try {
+			const data = unwrap<ItemInfo>(
+				await this.request(`/api/resource/Item/${encodeURIComponent(itemCode)}`, {
+					query: { fields: JSON.stringify(ITEM_FIELDS) },
+				}),
+				"data"
+			);
+			if (!data?.item_code) throw new ApiError(`Item ${itemCode} was not found`, "validation", 404);
+			void rememberItem(data);
+			return data;
+		} catch (error) {
+			// No signal: an item seen on this device before is still an item.
+			if (isOffline(error)) {
+				const cached = await cachedItem(itemCode);
+				if (cached) return cached;
+			}
+			throw error;
+		}
 	}
 
 	async searchItems(query: string): Promise<ItemInfo[]> {
 		const term = query.trim();
 		if (term.length < 2) return [];
 		const like = `%${term}%`;
-		const rows = unwrap<ItemInfo[]>(
+		try {
+			const rows = unwrap<ItemInfo[]>(
 			await this.request("/api/resource/Item", {
 				query: {
 					fields: JSON.stringify(ITEM_FIELDS),
@@ -220,36 +264,68 @@ export class FrappeClient implements InventoryClient {
 					limit_page_length: 25,
 				},
 			}),
-			"data"
-		);
-		return rows ?? [];
+				"data"
+			);
+			void rememberItems(rows ?? []);
+			return rows ?? [];
+		} catch (error) {
+			if (isOffline(error)) return searchCachedItems(term);
+			throw error;
+		}
 	}
 
 	async scan(value: string): Promise<ScanMatch> {
 		const trimmed = value.trim();
 		if (!trimmed) throw new ApiError("Nothing to look up", "validation");
-		const message = unwrap<unknown>(
-			await this.request("/api/method/erpnext.stock.utils.scan_barcode", {
-				query: { search_value: trimmed },
-			}),
-			"message"
-		);
-		return parseScanResponse(message, trimmed);
+		try {
+			const message = unwrap<unknown>(
+				await this.request("/api/method/erpnext.stock.utils.scan_barcode", {
+					query: { search_value: trimmed },
+				}),
+				"message"
+			);
+			const match = parseScanResponse(message, trimmed);
+			// Remember the label: the next scan of this barcode works with no signal.
+			if (match.kind === "item" && match.item_code) void rememberItemScan(trimmed, match.item_code);
+			return match;
+		} catch (error) {
+			if (isOffline(error)) {
+				const item = await cachedScan(trimmed);
+				if (item) {
+					return {
+						kind: "item",
+						item_code: item.item_code,
+						uom: item.stock_uom,
+						has_batch_no: item.has_batch_no,
+						has_serial_no: item.has_serial_no,
+						raw: trimmed,
+					};
+				}
+			}
+			throw error;
+		}
 	}
 
 	async stockFor(itemCode: string): Promise<StockRow[]> {
-		const rows = unwrap<StockRow[]>(
-			await this.request("/api/resource/Bin", {
-				query: {
-					fields: JSON.stringify(["warehouse", "actual_qty", "stock_uom", "valuation_rate"]),
-					filters: JSON.stringify([["item_code", "=", itemCode]]),
-					order_by: "actual_qty desc",
-					limit_page_length: 200,
-				},
-			}),
-			"data"
-		);
-		return rows ?? [];
+		try {
+			const rows = unwrap<StockRow[]>(
+				await this.request("/api/resource/Bin", {
+					query: {
+						fields: JSON.stringify(["warehouse", "actual_qty", "stock_uom", "valuation_rate"]),
+						filters: JSON.stringify([["item_code", "=", itemCode]]),
+						order_by: "actual_qty desc",
+						limit_page_length: 200,
+					},
+				}),
+				"data"
+			);
+			void rememberStock(itemCode, rows ?? []);
+			return rows ?? [];
+		} catch (error) {
+			// Balances served offline are flagged stale by the catalogue; no screen can mistake them.
+			if (isOffline(error)) return cachedStock(itemCode);
+			throw error;
+		}
 	}
 
 	async createDoc(doc: Record<string, unknown>): Promise<{ name: string }> {
@@ -280,17 +356,328 @@ export class FrappeClient implements InventoryClient {
 		return { name };
 	}
 
-	async findByReference(reference: string): Promise<string | null> {
-		const rows = unwrap<{ name: string }[]>(
-			await this.request("/api/resource/Stock Entry", {
+	async findDocument(doctype: string, reference: string): Promise<ExistingDoc | null> {
+		const rows = unwrap<Array<{ name: string; docstatus: number }>>(
+			await this.request(`/api/resource/${encodeURIComponent(doctype)}`, {
 				query: {
-					fields: JSON.stringify(["name"]),
+					fields: JSON.stringify(["name", "docstatus"]),
 					filters: JSON.stringify([["remarks", "like", `%${reference}%`]]),
+					order_by: "docstatus desc",
 					limit_page_length: 1,
 				},
 			}),
 			"data"
 		);
-		return rows?.[0]?.name ?? null;
+		const row = rows?.[0];
+		return row ? { name: row.name, docstatus: Number(row.docstatus) || 0 } : null;
 	}
+
+	async runDiagnostics(): Promise<DiagnosticCheck[]> {
+		const checks: DiagnosticCheck[] = [];
+		const run = async (id: string, label: string, fn: () => Promise<string>) => {
+			try {
+				checks.push({ id, label, ok: true, detail: await fn() });
+			} catch (error) {
+				checks.push({
+					id,
+					label,
+					ok: false,
+					detail: error instanceof ApiError ? error.message : "The site did not answer.",
+				});
+			}
+		};
+
+		await run("auth", "Sign-in works", async () => {
+			const user = unwrap<string>(
+				await this.request("/api/method/frappe.auth.get_logged_user"),
+				"message"
+			);
+			return `Signed in as ${user || "an unknown user"}.`;
+		});
+
+		await run("company", "Company and warehouses", async () => {
+			const rows = unwrap<Array<{ name: string }>>(
+				await this.request("/api/resource/Company", {
+					query: { fields: JSON.stringify(["name"]), limit_page_length: 5 },
+				}),
+				"data"
+			);
+			if (!rows?.length) throw new ApiError("This user cannot see any company", "server");
+			return `${rows.length} compan${rows.length === 1 ? "y" : "ies"}: ${rows
+				.map((row) => row.name)
+				.slice(0, 3)
+				.join(", ")}.`;
+		});
+
+		await run("warehouse", "Warehouses readable", async () => {
+			const rows = unwrap<Array<{ name: string }>>(
+				await this.request("/api/resource/Warehouse", {
+					query: { fields: JSON.stringify(["name"]), limit_page_length: 200 },
+				}),
+				"data"
+			);
+			if (!rows?.length) throw new ApiError("No warehouses are visible to this user", "server");
+			return `${rows.length} warehouse${rows.length === 1 ? "" : "s"} visible.`;
+		});
+
+		await run("dimensions", "Stock locations (Inventory Dimension)", async () => {
+			const rows = await this.inventoryDimensions();
+			if (!rows.length) {
+				return "No inventory dimension — put-away will name the warehouse only. Add a Location dimension to place stock on a shelf.";
+			}
+			return `Dimension “${rows[0].dimension_name}” (${rows[0].fieldname}) — shelves are recorded.`;
+		});
+
+		await run("batches", "Batches, oldest first", async () => {
+			const items = unwrap<Array<{ name: string }>>(
+				await this.request("/api/resource/Item", {
+					query: {
+						filters: JSON.stringify([["has_batch_no", "=", 1]]),
+						fields: JSON.stringify(["name"]),
+						limit_page_length: 1,
+					},
+				}),
+				"data"
+			);
+			if (!items?.length) return "No batch-tracked items yet — the batch picker stays hidden.";
+			const item = items[0].name;
+			const rows = await this.availableBatches(item, "");
+			return `${item}: ${rows.length} batch${rows.length === 1 ? "" : "es"} returned by the site.`;
+		});
+
+		await run("serial-batch", "Serial & batch fields on Stock Entry", async () => {
+			const rows = unwrap<Array<{ use_serial_batch_fields?: number }>>(
+				await this.request("/api/resource/Stock Settings", {
+					query: { fields: JSON.stringify(["use_serial_batch_fields"]) },
+				}),
+				"data"
+			);
+			const on = Number(rows?.[0]?.use_serial_batch_fields ?? 0) === 1;
+			return on
+				? "On — batches go on the document rows, which is what this app posts."
+				: "Off — this site puts batches in the Serial and Batch Bundle instead. Post one document by hand and check the batch landed before a pilot.";
+		});
+
+		return checks;
+	}
+
+	async inventoryDimensions(): Promise<InventoryDimension[]> {
+		// Whitelisted and request-cached on the server, so this is cheap to ask on every task start.
+		try {
+			const rows = unwrap<InventoryDimension[]>(
+				await this.request(
+					"/api/method/erpnext.stock.doctype.inventory_dimension.inventory_dimension.get_inventory_dimensions"
+				),
+				"message"
+			);
+			return (rows ?? []).filter((row) => Boolean(row?.fieldname));
+		} catch {
+			// A site that does not expose it (or a role that cannot read it) simply has no locations.
+			return [];
+		}
+	}
+
+	async availableBatches(itemCode: string, warehouse: string): Promise<BatchOption[]> {
+		try {
+			// The server's own FEFO ordering: oldest expiry first, batches with no expiry last.
+			const rows = unwrap<Array<[Record<string, unknown>, string | null]>>(
+				await this.request("/api/method/erpnext.stock.doctype.batch.batch.get_batches_by_oldest", {
+					query: { item_code: itemCode, warehouse },
+				}),
+				"message"
+			);
+			const batches = (rows ?? [])
+				.map(([batch, expiry]) => ({
+					batch_no: String(batch?.name ?? ""),
+					qty: Number(batch?.batch_qty ?? 0),
+					expiry_date: expiry ?? null,
+				}))
+				.filter((row) => row.batch_no);
+			void rememberBatches(itemCode, warehouse, batches);
+			return batches;
+		} catch (error) {
+			if (isOffline(error)) return cachedBatches(itemCode, warehouse);
+			throw error;
+		}
+	}
+
+	async createBatch(itemCode: string, batchId?: string): Promise<CreatedBatch> {
+		const body: Record<string, unknown> = { doctype: "Batch", item: itemCode };
+		if (batchId?.trim()) body.batch_id = batchId.trim();
+		const data = unwrap<{ name?: string; batch_id?: string }>(
+			await this.request("/api/resource/Batch", { method: "POST", body }),
+			"data"
+		);
+		if (!data?.name) throw new ApiError("The site did not return the new batch", "server");
+		// Post the document name, not the lot number: `batch_no` is a link on a real site.
+		return { name: data.name, batch_id: data.batch_id || data.name };
+	}
+
+	// ------------------------------------------------------------ work + sales
+
+	async openWorkOrders(): Promise<WorkOrder[]> {
+		const rows = unwrap<WorkOrder[]>(
+			await this.request("/api/resource/Work Order", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"production_item",
+						"qty",
+						"produced_qty",
+						"status",
+						"company",
+						"wip_warehouse",
+						"source_warehouse",
+						"planned_start_date",
+					]),
+					filters: JSON.stringify([
+						["docstatus", "=", 1],
+						["status", "in", ["Not Started", "In Process"]],
+					]),
+					order_by: "planned_start_date asc",
+					limit_page_length: 20,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	async workOrderLines(workOrder: string): Promise<WorkOrderLine[]> {
+		const rows = unwrap<WorkOrderLine[]>(
+			await this.request("/api/resource/Work Order Item", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"item_code",
+						"item_name",
+						"required_qty",
+						"transferred_qty",
+						"source_warehouse",
+						"stock_uom",
+					]),
+					filters: JSON.stringify([["parent", "=", workOrder]]),
+					order_by: "idx asc",
+					limit_page_length: 500,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	async openSalesOrders(): Promise<SalesOrder[]> {
+		const rows = unwrap<SalesOrder[]>(
+			await this.request("/api/resource/Sales Order", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"customer",
+						"company",
+						"transaction_date",
+						"delivery_date",
+						"per_delivered",
+						"status",
+					]),
+					filters: JSON.stringify([
+						["docstatus", "=", 1],
+						["per_delivered", "<", 100],
+						["status", "not in", ["Closed", "Cancelled"]],
+					]),
+					order_by: "delivery_date asc",
+					limit_page_length: 20,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	async salesOrderLines(salesOrder: string): Promise<SalesOrderLine[]> {
+		const rows = unwrap<SalesOrderLine[]>(
+			await this.request("/api/resource/Sales Order Item", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"item_code",
+						"item_name",
+						"qty",
+						"delivered_qty",
+						"uom",
+						"stock_uom",
+						"conversion_factor",
+						"warehouse",
+					]),
+					filters: JSON.stringify([["parent", "=", salesOrder]]),
+					order_by: "idx asc",
+					limit_page_length: 500,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	// ------------------------------------------------------------------ buying
+
+	async openPurchaseOrders(): Promise<PurchaseOrder[]> {
+		const rows = unwrap<PurchaseOrder[]>(
+			await this.request("/api/resource/Purchase Order", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"supplier",
+						"company",
+						"transaction_date",
+						"per_received",
+						"status",
+					]),
+					filters: JSON.stringify([
+						["docstatus", "=", 1],
+						["per_received", "<", 100],
+						["status", "not in", ["Closed", "Cancelled"]],
+					]),
+					order_by: "transaction_date asc",
+					limit_page_length: 20,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+
+	async purchaseOrderLines(order: string): Promise<PurchaseOrderLine[]> {
+		const rows = unwrap<PurchaseOrderLine[]>(
+			await this.request("/api/resource/Purchase Order Item", {
+				query: {
+					fields: JSON.stringify([
+						"name",
+						"item_code",
+						"item_name",
+						"qty",
+						"received_qty",
+						"uom",
+						"stock_uom",
+						"conversion_factor",
+						"warehouse",
+						"rate",
+					]),
+					filters: JSON.stringify([["parent", "=", order]]),
+					order_by: "idx asc",
+					limit_page_length: 500,
+				},
+			}),
+			"data"
+		);
+		return rows ?? [];
+	}
+}
+
+/** A network failure is the only reason to read from the device's own catalogue. */
+function isOffline(error: unknown): boolean {
+	return error instanceof ApiError && error.kind === "network";
+}
+
+async function rememberItemScan(value: string, itemCode: string): Promise<void> {
+	await rememberScan(value, itemCode);
 }

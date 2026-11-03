@@ -438,5 +438,50 @@
 			"why": "GMROI compares gross margin earned with the average stock investment, answering whether the working capital tied up in inventory is earning its keep."
 		}
 	],
+	"memory": {
+		"spine": "Distribution is three flows, goods, money and information, and every ERPNext document moves exactly one of them at a time.",
+		"device": {
+			"kind": "acronym",
+			"label": "TRIC",
+			"expansion": [
+				"Transfer: warehouse to warehouse, ownership unchanged",
+				"Receipt: goods in from a supplier or a return from a customer",
+				"Issue: goods out with no customer, such as scrap or internal use",
+				"Count: Stock Reconciliation posts the difference between shelf and system",
+				"Only a submitted document moves stock; a draft moves nothing"
+			]
+		},
+		"cards": [
+			{
+				"q": "Which documents change stock quantity?",
+				"a": "Purchase Receipt, Delivery Note, Stock Entry and Stock Reconciliation, and only once submitted.",
+				"hint": "Not invoices, not payments"
+			},
+			{
+				"q": "Why does one product have four prices?",
+				"a": "Four channels with different economics: each channel is a price list plus its own rules, not a reporting label.",
+				"hint": "A channel is economics"
+			},
+			{
+				"q": "How is a reorder point calculated?",
+				"a": "Average daily demand times lead time, plus safety stock for demand and supply variability.",
+				"hint": "Demand times wait, plus buffer"
+			},
+			{
+				"q": "Gross margin or net margin, what is the difference?",
+				"a": "Gross is selling price less landed cost; net also absorbs discounts, freight out and overheads.",
+				"hint": "Landed cost first, then everything"
+			},
+			{
+				"q": "What breaks when a partial delivery becomes a second order?",
+				"a": "The order book doubles, fill rate collapses and the same stock is promised twice.",
+				"hint": "One order, many deliveries"
+			}
+		],
+		"trap": {
+			"what": "Freight is booked as an expense line instead of being allocated into stock.",
+			"why": "The cost hits the profit and loss once, every later sale reports a margin that is too high, and the margin stack can never be reconciled."
+		}
+	},
 	"narration": "The second primer is distribution, because a distributor earns margin by holding stock and taking risk. Think in three flows. Goods move from supplier to warehouse to customer and sometimes back. Money moves the other way, delayed by the terms you agree. Information, promises and availability, is the flow ERPNext owns. Channels explain why one product has four prices: retail pays list, dealers expect a discount, distributors buy lowest and take stock, exports add currency and freight. Each channel becomes a price list, a customer group and often a warehouse rule. Then margins: selling price less landed cost, where landed cost includes freight and duty. A blender at two hundred forty with a landed cost of one hundred twenty six earns one hundred fourteen, and a ten percent discount takes that to ninety. Positioning is the arithmetic that keeps the business running: demand during lead time plus safety stock. Two units a day for seven days, plus ten, is twenty four, not a round twenty. Fulfilment runs order, availability, pick, ship, invoice, collect, and the delivery note is where stock and cost of goods move. Exceptions are normal: partial shipments, backorders, substitutions, over-deliveries. A commitment is history once submitted, so reduce quantities or raise documents, never edit. Returns need a quarantine policy. The five KPIs are fill rate, on time in full, inventory turns, GMROI and days sales outstanding. In the lab you compute them."
 }
