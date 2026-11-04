@@ -1,391 +1,448 @@
 {
 	"id": "ch24",
 	"number": 24,
-	"title": "Volume 9 · e-Invoice (MyInvois) End to End",
-	"subtitle": "Lessons 5–8: master data that passes validation, submission and status reading, the 72 hour cancellation window, consolidated and self-billed documents",
+	"title": "Volume 8 · Customise Without Code: Property Setters, Custom Fields and Custom DocTypes",
+	"subtitle": "Lessons 1–10: what a functional consultant may change in the browser, what survives an upgrade, and how to say no to code",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 70,
 	"outcomes": [
-		"Prepare company and customer data so submission does not fail validation",
-		"Submit an invoice and interpret accepted, rejected and validated responses",
-		"Cancel or reject inside the 72 hour window and know when it is refused",
-		"Decide what to consolidate and when to self-bill"
+		"Draw the line between configuration in the browser and customisation that needs a developer",
+		"Rename, hide, reorder and enforce fields with property setters that survive an upgrade",
+		"Add custom fields and a custom DocType with a child table without touching a file",
+		"Prove a customisation survives a migration, and keep a change register a successor can read"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Master data",
-			"title": "Prepare the data MyInvois checks first",
+			"kicker": "Lesson 1 · Where the line is",
+			"title": "Configuration ends where a file begins",
 			"bullets": [
-				"TIN, registration number, MSIC code and SST number are validated before anything else",
-				"A customer without a TIN is a general public sale, not a business invoice",
-				"Address and phone format matter, because the portal rejects malformed fields",
-				"Clean masters before the first submission, not after the first rejection"
+				"Everything in Customize Form, a property setter, a custom field or the DocType editor is configuration and belongs to you",
+				"Anything that needs a file in an app, a hook or a script is development and belongs to somebody else",
+				"The line is not about difficulty, it is about who can reverse the change without a deployment",
+				"Say the line out loud in the first workshop, so a requirement does not drift into code by accident",
+				"Every configuration change is recorded in a register, because it is invisible until it breaks something"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Configuration scope agreed in writing",
+						"List of allowed changes",
+						"Project scope document"
+					],
+					[
+						"Code requests routed elsewhere",
+						"Named developer or vendor",
+						"Scope document, exclusions"
+					],
+					["Reversal path understood", "Undo in the browser, not a deploy", "Change register"],
+					["Register started on day one", "Row per change, dated", "Change register sheet"],
+					["Client told which is which", "Session notes signed", "Workshop minutes"]
+				]
+			},
+			"notes": "The most expensive sentence in a project is 'it's only a small change'. Small changes that need a file still need a deployment, a test and a rollback, and nobody budgeted for that. Draw the line in the first workshop, in writing, while everyone is still friendly."
+		},
+		{
+			"kicker": "Lesson 2 · Property setters",
+			"title": "Change the form without changing the DocType",
+			"bullets": [
+				"A property setter records an override on top of the standard definition, so the standard stays intact underneath",
+				"Rename a label, make a field mandatory or read-only, hide it, or move it within its section",
+				"Setters survive a migration, which is why they are the consultant's tool and hand-edited DocTypes are not",
+				"Keep the list short and justified, because twenty setters is a design problem wearing a configuration hat",
+				"Every setter goes in the register with the reason the client asked for it"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Company record",
-						"TIN C2584563200, registration 202301234567, MSIC 46510",
-						"Company e-Invoice fields complete"
+						"Open Customize Form for the DocType",
+						"Sales Invoice",
+						"Form editor with the standard layout"
 					],
 					[
 						"2",
-						"Customer record",
-						"Aeon Big TIN and BRN, address with postcode and state",
-						"Customer validated data stored"
+						"Rename a label the client dislikes",
+						"Customer PO No",
+						"Label changes on every form"
 					],
-					[
-						"3",
-						"Check contact",
-						"Phone with country code, email on the customer",
-						"Required fields present"
-					],
-					["4", "Validate the TIN", "Portal taxpayer validation for the TIN", "TIN valid response"],
+					["3", "Make a field mandatory", "Customer PO No required", "Save refused without it"],
+					["4", "Make a field read-only", "Territory", "Field visible, not editable"],
 					[
 						"5",
-						"Create a draft invoice",
-						"One line, 2,400.00 plus 240.00",
-						"Invoice ready to submit"
+						"Hide a field the business never uses",
+						"Ignore Pricing Rule",
+						"Field gone from the form"
 					],
-					["6", "Run the pre-check", "Missing-field validation", "No blocking errors"]
+					["6", "Record each change in the register", "(write)", "Six rows, dated and justified"]
 				]
 			},
-			"notes": "Validation failures are almost always master data, not software, and they arrive as a rejection notice that the finance team reads as a system failure. Run a pre-check across the customer list before go-live: every business customer needs a TIN, a registration number and a complete address. Half a day of cleaning saves a week of rejected submissions."
+			"notes": "Property setters are the highest-leverage tool a functional consultant has, and the most abused. Each one is a small divergence from standard behaviour that the next consultant has to discover. Keep them few, documented, and named after the client's own language."
 		},
 		{
-			"kicker": "Lesson 6 · Submission",
-			"title": "Submit an invoice and read the response",
+			"kicker": "Lesson 3 · Custom fields",
+			"title": "Add what the business needs and nothing else",
 			"bullets": [
-				"Submission returns a submission ID, then accepted and rejected lists",
-				"Accepted means received; validated is a later state with a UUID and a QR code",
-				"A rejected document comes back with an error list, and it is not a tax invoice",
-				"Store the UUID and the long ID against the invoice, because the portal is the source of truth"
+				"A custom field is a real column with a real type, so choose the type carefully the first time",
+				"Place it deliberately: after which field, in which section, and whether it shows in the list view",
+				"A field nobody filters or reports on is a field nobody needed",
+				"Defaults and options are configuration; conditional mandatory rules generally are not",
+				"Name fields for the business, not the database, because the label is what the client reads"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open the sales invoice",
-						"SINV-SM-2026-0010, submitted",
-						"e-Invoice action available"
+						"Create a custom field on Sales Invoice",
+						"Deliver To Site",
+						"New field in the form editor"
 					],
-					["2", "Submit to MyInvois", "Document type 01 Invoice", "Submission UID returned"],
-					["3", "Read the response", "Accepted documents list with one entry", "Status accepted"],
+					["2", "Choose the type", "Data", "Single-line text field"],
 					[
-						"4",
-						"Wait for validation",
-						"Poll the submission status",
-						"Validated with UUID and long ID"
+						"3",
+						"Place it after the customer address",
+						"Insert After",
+						"Field appears where expected"
 					],
-					["5", "Store identifiers", "UUID written to the invoice record", "Traceable for audits"],
+					["4", "Show it in the list view", "In List View", "Column available in the list"],
 					[
-						"6",
-						"Print or send",
-						"QR code and validation link on the invoice",
-						"Customer can verify"
-					]
+						"5",
+						"Save, then open an existing invoice",
+						"(open)",
+						"Field present on old records too"
+					],
+					["6", "Add a report column using it", "(report builder)", "Field selectable as a column"]
 				]
 			},
-			"notes": "Two states matter and clients confuse them: accepted, which means the portal has the file, and validated, which means it is a legal tax invoice with a UUID. Show both on screen, because a finance team that treats accepted as final will print invoices that cannot be verified. The QR code is what the customer scans, so test it once end to end."
+			"notes": "The test for a custom field is not whether the client asked for it, but whether anyone filters, prints or reports on it. If the answer is no, it becomes an empty box that someone will eventually fill with the wrong thing. Ask the reporting question before you create the column."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the submission",
-			"title": "Accepted versus validated, on one screen",
+			"kicker": "Lesson 4 · Verify the field",
+			"title": "One field, three audiences",
 			"bullets": [
-				"Submission ID, accepted count and validated UUID are three different facts",
-				"A rejected document is not a tax invoice, so the sale is unsubstantiated until it is fixed",
-				"The QR code and validation link are what the customer uses to check the document",
-				"Record identifiers on the invoice so a later audit can trace the exact document"
+				"The field must be visible where the work happens, which is usually the form and the list, not a report nobody opens",
+				"It must be hidden or read-only where it would mislead, which means checking it under a second role",
+				"It must survive a migration: refresh the form and confirm the field is still placed correctly",
+				"Old records must still open, because a custom field added today appears on documents from last year",
+				"If the field feeds a report, check the report returns rows before you call it done"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Submission identifier", "returned and stored", "Submission log"],
-					["Accepted documents", "1 of 1 for this invoice", "Portal response"],
-					["Validated state", "UUID and long ID present", "Invoice e-Invoice panel"],
-					["Document total", "2,640.00 matches the invoice", "Portal document details"],
-					["QR code", "prints and resolves", "Printed invoice"]
+					["Visible on the form", "Field in the expected section", "Open a new Sales Invoice"],
+					["Visible in the list view", "Column shows and sorts", "Invoice list"],
+					[
+						"Correct under a second role",
+						"Same field, correct editability",
+						"Log in as a normal user"
+					],
+					["Survives a form reload", "Placement unchanged", "Customize Form after refresh"],
+					["Report returns rows", "Non-zero results using the field", "Report Builder"]
 				]
 			},
-			"notes": "The distinction between accepted and validated is the single most useful thing to teach a finance team, because it decides whether they can post the invoice to the customer. Scroll the printed page and scan the QR code once in front of them; the moment it resolves to the portal, the process becomes real rather than theoretical."
+			"notes": "Customisation without verification is decoration. The second-role check catches the commonest failure, which is a field that a sales user can edit when finance assumed it was locked down."
 		},
 		{
-			"kicker": "Lesson 7 · Cancellation",
-			"title": "Reject or cancel inside 72 hours",
+			"kicker": "Lesson 5 · Custom DocTypes",
+			"title": "A new document you build in the browser",
 			"bullets": [
-				"Cancellation is limited to 72 hours after validation, and the limit is enforced by the portal",
-				"A cancellation needs a reason of up to 300 characters, so write it carefully",
-				"After the window, the remedy is a credit note or debit note, not a cancellation",
-				"Documents referenced by another document cannot be cancelled while that reference lives"
+				"The DocType editor creates a real table, so the naming and the fields are decisions with consequences",
+				"Choose the naming series before the first record exists, because changing it later breaks links",
+				"Submittable suits anything with a lifecycle and a freeze; keep it simple unless the lifecycle is real",
+				"Permissions come next, or the new document is visible to everyone or nobody",
+				"A custom DocType is a commitment: it becomes something the client supports after you leave"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Open the validated invoice", "UUID recorded earlier", "e-Invoice status panel"],
 					[
-						"2",
-						"Choose cancel",
-						"Reason: wrong customer TIN, reissued",
-						"Reason under 300 characters"
+						"1",
+						"Create a DocType from the DocType list",
+						"Site Survey",
+						"New DocType, draft state"
 					],
-					["3", "Submit the cancellation", "Confirm", "Status cancelled on the portal"],
+					["2", "Set the naming series", "SURV-.YYYY.-", "Records named SURV-2026-0001"],
+					["3", "Add the business fields", "Site, Contact, Findings", "Three fields on the form"],
+					["4", "Decide submittable", "Not submittable", "Save only, no submit button"],
+					[
+						"5",
+						"Set permissions per role",
+						"Technician create, Manager delete",
+						"Roles listed with rights"
+					],
+					["6", "Create one record to prove it", "SURV-2026-0001", "Document saves and lists"]
+				]
+			},
+			"notes": "The naming decision is the one people regret. A DocType created with a hash or a plain number cannot be renumbered once records exist, and every link to it depends on those names. Decide the series before the first save, and write the decision in the register."
+		},
+		{
+			"kicker": "Lesson 6 · Child tables",
+			"title": "Lines inside a document you built",
+			"bullets": [
+				"A child table turns one survey into many findings without creating a document per finding",
+				"The child DocType carries the fields; the parent decides how many rows and what order",
+				"Grid columns and their widths are a usability decision, not decoration",
+				"Anything the client will sum, count or report per row belongs in the table, not in a long text field",
+				"Child tables are edited in the browser like any other, and they survive migrations the same way"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create a child DocType for findings",
+						"Survey Finding",
+						"Check the child table flag"
+					],
+					["2", "Add the row fields", "Area, Severity, Action", "Three columns per finding"],
+					["3", "Add a table field on the parent DocType", "Findings", "Grid on the survey form"],
 					[
 						"4",
-						"Try after 72 hours",
-						"Same action on an older document",
-						"Error: operation period over"
+						"Set the child DocType on that field",
+						"Survey Finding",
+						"Rows editable in the grid"
 					],
 					[
 						"5",
-						"Try a referenced document",
-						"Invoice already referenced by a credit note",
-						"Error: active referencing documents"
+						"Set column widths and in-list visibility",
+						"Action visible in list",
+						"Readable grid"
 					],
-					["6", "Use the correct remedy", "Credit note and reissue", "New validated document"]
+					["6", "Enter three findings and save", "(save)", "One survey, three rows stored"]
 				]
 			},
-			"notes": "The 72 hour rule is a business deadline, so put it in the finance team's daily routine rather than a document. One person checks the e-Invoice dashboard each morning and cancels what needs cancelling; after that, the credit note route applies. Explain both error messages by name, so nobody spends an afternoon retrying a cancellation that can never succeed."
+			"notes": "The distinction between a child table and a text field decides whether the client can ever report on the data. If the answer to a question needs a count of findings by severity, it has to be rows. Ask the reporting question again, at design time."
 		},
 		{
-			"kicker": "Lesson 7 · Verify the cancellation",
-			"title": "What the portal will and will not allow",
+			"kicker": "Lesson 7 · Layout and usability",
+			"title": "Sections, columns and the three-second form",
 			"bullets": [
-				"Cancellation is possible inside 72 hours with a reason, and refused after it",
-				"A document referenced by a credit note cannot be cancelled while that reference exists",
-				"The refused case must route to a credit note, not to a retry loop",
-				"Log every cancellation with the reason, because the portal keeps its own record"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Cancelled document status", "cancelled on the portal", "Portal document details"],
-					["Reason recorded", "under 300 characters, meaningful", "Cancellation log"],
-					["Late cancellation attempt", "OperationPeriodOver", "Portal error response"],
-					["Referenced document attempt", "ActiveReferencingDocuments", "Portal error response"],
-					["Replacement document", "new validated invoice issued", "Invoice list"]
-				]
-			},
-			"notes": "Two error names cover almost every failed cancellation, and knowing them saves a support call: OperationPeriodOver means the window has passed, ActiveReferencingDocuments means another document depends on this one. Teach the finance team to read the name and pick the remedy, because the portal will not offer an alternative."
-		},
-		{
-			"kicker": "Lesson 8 · Consolidation",
-			"title": "Consolidate small sales and self-bill correctly",
-			"bullets": [
-				"Consolidation groups many small receipts into one monthly e-Invoice for the general public",
-				"It is allowed for B2C within the rules, but not for business customers who need their own document",
-				"Self-billed invoices are issued by the buyer, typically for imports or agent sales",
-				"Both need a policy decision, because they change who is responsible for the submission"
+				"A form that a new user can complete in three seconds is the goal, and layout is most of it",
+				"Group related fields into sections and name the section the way the business talks",
+				"Two columns is usually right; three becomes a scanning problem on a laptop screen",
+				"Move the fields the client types first to the top, because order is a form of training",
+				"Test the layout with a real user on a real screen before calling it finished"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Identify B2C receipts",
-						"Counter sales without a TIN",
-						"List of individual receipts"
+						"Split the form into business sections",
+						"Delivery, Billing, Findings",
+						"Three labelled sections"
 					],
-					[
-						"2",
-						"Consolidate",
-						"One monthly document for the period",
-						"Consolidated e-Invoice created"
-					],
+					["2", "Set two columns per section", "(layout)", "Fields paired, readable"],
 					[
 						"3",
-						"Check the total",
-						"Sum of the receipts in the month",
-						"Total matches the sales report"
+						"Move the typed-first fields to the top",
+						"Customer, Site",
+						"First tab stops in the right order"
 					],
-					[
-						"4",
-						"Set a self-billing case",
-						"Import purchase from an overseas supplier",
-						"Self-billed document prepared"
-					],
-					["5", "Submit as buyer", "Self-billed invoice type", "Accepted with buyer as issuer"],
-					[
-						"6",
-						"Record the policy",
-						"Which customers are consolidated and why",
-						"Written in the compliance file"
-					]
+					["4", "Collapse the rarely used section", "Internal", "Hidden until expanded"],
+					["5", "Ask a real user to complete it", "(user test)", "Completed without help"],
+					["6", "Record the layout decision", "(write)", "Register row with the reason"]
 				]
 			},
-			"notes": "Consolidation is a legitimate relief for counter sales and a serious problem if applied to business customers, because they cannot claim input tax without their own validated document. Write the policy per customer type, get it signed, and check the monthly consolidated total against the sales report before submitting. Self-billing needs the same clarity, since the buyer becomes the issuer."
+			"notes": "Layout work looks cosmetic and is not: it is the difference between a form people use correctly and a form they fill with guesses. Time a real user on a real task, and treat any hesitation as a design defect rather than a training gap."
 		},
 		{
-			"kicker": "Volume 9 · Reference",
-			"title": "e-Invoice document types and tax codes",
+			"kicker": "Lesson 8 · What survives",
+			"title": "Prove the customisation survives an upgrade",
 			"bullets": [
-				"Document type tells the portal what the document is, and the wrong type invalidates it",
-				"Tax type codes map to sales tax, service tax, tourism and the exemption code",
-				"Classification codes describe the product and drive reporting",
-				"Every invoice line needs both a classification and a tax type, not just a rate"
-			],
-			"table": {
-				"headers": ["Element", "Typical value", "Where it comes from", "What breaks if wrong"],
-				"rows": [
-					[
-						"Document type",
-						"01 Invoice, 02 Credit Note, 03 Debit Note, 04 Refund Note",
-						"Document type field",
-						"Portal rejects or misclassifies"
-					],
-					[
-						"Tax type",
-						"01 Sales Tax, 02 Service Tax, E Exemption",
-						"Invoice tax row",
-						"Return and e-Invoice disagree"
-					],
-					[
-						"Classification code",
-						"product classification from the portal list",
-						"Item record",
-						"Validation rejection"
-					],
-					["Unit code", "Nos, KGM, LTR", "UOM mapping", "Line rejected"],
-					[
-						"Tax rate and amount",
-						"10 % or 8 % with the computed amount",
-						"Tax template",
-						"Amount mismatch against invoice"
-					]
-				]
-			},
-			"notes": "This table is the reference sheet to leave with the finance team, because most rejections trace to one of these five rows. Classification codes need mapping for every item sold, which is a morning's work with the portal list open, and the unit code mapping catches people who sell in cartons but invoice in pieces."
-		},
-		{
-			"kicker": "Volume 9 · Reference",
-			"title": "Status board for the finance team",
-			"bullets": [
-				"Finance needs one screen that shows what is pending, rejected or cancelled",
-				"Rejected documents need an owner and a same-day fix, or the tax invoice does not exist",
-				"Weekly reconciliation of e-Invoice totals against the sales ledger catches drift early",
-				"Keep the evidence, because the portal keeps its own copy and yours must match"
+				"Property setters, custom fields and custom DocTypes live in the database, so they survive a migration",
+				"Hand-edited standard DocTypes and doctored core files do not, which is why the line matters",
+				"A migration can still rename a standard field underneath your setter, so verify after each upgrade",
+				"Test on staging first, with production data, then repeat the checks on production",
+				"Keep the register portable: a list a successor can read without opening the system"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Pending submissions", "0 at the end of each day", "e-Invoice dashboard"],
-					["Rejected documents", "0, or listed with an owner", "e-Invoice status list"],
-					["Validated this month", "matches submitted invoices", "Sales invoice register"],
-					["Difference against ledger", "0.00", "Your own reconciliation"],
-					["Cancellations", "within 72 hours, reason recorded", "Portal cancellation log"]
+					[
+						"Setters still applied",
+						"Labels, mandatory and read-only intact",
+						"Customize Form after migrate"
+					],
+					["Custom fields still placed", "Correct section and list visibility", "Open a document"],
+					["Custom DocType still saves", "New record created", "The DocType list"],
+					["Child table renders", "Rows editable", "Parent form"],
+					[
+						"Register matches reality",
+						"Every setter accounted for",
+						"Register versus Customize Form"
+					]
 				]
 			},
-			"notes": "Give the client a daily ten-minute routine: open the dashboard, fix rejections, cancel what must be cancelled, and confirm nothing is pending overnight. Then a monthly check that validated totals equal the sales ledger. That rhythm is what keeps an e-Invoice project out of trouble, because the portal does not wait and neither does the deadline."
+			"notes": "The upgrade test is what separates a configuration from a hack. Run it on staging, with production data, and compare the register against what the system actually does. Anything that no longer matches is either a broken setter or an undocumented change."
+		},
+		{
+			"kicker": "Lesson 9 · The change register",
+			"title": "Six columns that save a successor",
+			"bullets": [
+				"Date, DocType, what changed, why, who asked and how to reverse it: six columns, nothing else",
+				"The reason matters more than the change, because it is the part nobody can reconstruct",
+				"Keep it outside the system as well, so it survives an outage and a handover",
+				"Review it with the client quarterly and delete what nobody uses, deliberately",
+				"A register that is a work of fiction is worse than none, so write the row when you make the change"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Every change has a row", "Count matches Customize Form", "Register versus settings"],
+					["Reason recorded", "One sentence per row", "Register, why column"],
+					["Reversal documented", "Steps to undo", "Register, reversal column"],
+					["Held outside the system", "Exported copy dated", "Project folder"],
+					["Reviewed quarterly", "Dated review note", "Review minutes"]
+				]
+			},
+			"notes": "The register is the cheapest insurance in a customisation-heavy project. Without it, the next consultant spends a week discovering twenty setters, and the client pays for that week. Write the row in the moment, not at the end of the project."
+		},
+		{
+			"kicker": "Lesson 10 · Saying no",
+			"title": "The conversation that keeps the project supportable",
+			"bullets": [
+				"When a requirement needs code, say so plainly and price it as development with its own testing and rollback",
+				"Offer the configuration alternative first: often field, workflow or report changes solve eighty per cent",
+				"Write the accepted gap into the scope document so it is a decision rather than an omission",
+				"A consultant who promises code and cannot deliver it damages the whole system's credibility",
+				"The client respects a clear boundary far more than a vague yes"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Configuration alternative explored", "Options listed with effort", "Scope document"],
+					["Code request routed", "Named owner and estimate", "Change request"],
+					[
+						"Gap recorded as a decision",
+						"Accepted, deferred or rejected",
+						"Scope document, decisions log"
+					],
+					["Client informed in writing", "Email or minutes", "Project folder"],
+					["No promise made outside scope", "Nothing verbal left open", "Meeting minutes"]
+				]
+			},
+			"notes": "The boundary conversation is a consultant skill, not an admin task. A vague yes buys a week of goodwill and costs a year of support. Offer the configuration path, name what code would cost, and record the decision — then the client owns it with you rather than blaming you for it."
 		}
 	],
 	"lab": {
-		"title": "Lab · Prepare, submit, validate and cancel an e-Invoice",
-		"minutes": 45,
+		"title": "Lab · Customise a sales invoice and a site survey without code",
+		"minutes": 70,
 		"steps": [
-			"Complete the company TIN, registration, MSIC and SST fields",
-			"Complete the customer TIN, registration, address and contact",
-			"Validate the customer TIN against the portal before invoicing",
-			"Submit a 2,640.00 invoice as document type 01 and record the submission UID",
-			"Confirm the validated state and store the UUID and long ID",
-			"Cancel the document with a reason and confirm the status",
-			"Attempt a cancellation past 72 hours and record the error name",
-			"Consolidate a month of counter sales and check the total against the sales report"
+			"Draw up the configuration scope with the client and write the code boundary into it",
+			"Rename one label, make one field mandatory, and hide one field the business never uses",
+			"Create a custom field for the delivery site, place it correctly and show it in the list view",
+			"Verify the field as a normal sales user and confirm what it may and may not edit",
+			"Build a site survey DocType with its own naming series and one record",
+			"Add a findings child table with three columns and enter three findings on the survey",
+			"Reorganise the invoice form into two named sections and time a real user completing it",
+			"Run the upgrade checks, complete the change register and list every reversal step"
 		],
-		"done": "Done when the invoice is validated with a stored UUID, the cancellation succeeded inside the window, the expired attempt returned its named error, and the consolidated total matches the sales report."
+		"done": "A documented set of browser-only customisations that a second role can use correctly, a custom DocType with a child table holding real data, and a six-column register with a reversal step for every change."
 	},
 	"quiz": [
 		{
-			"question": "What does an accepted submission mean?",
+			"question": "What actually separates configuration from development for a functional consultant?",
 			"options": [
-				"The invoice is legally validated",
-				"The portal received the document",
-				"The customer has paid",
-				"The tax is filed"
+				"The difficulty of the change",
+				"Whether the change needs a file, a deployment and a developer to reverse it",
+				"Whether the client has budget",
+				"Whether the field is custom or standard"
 			],
 			"answer": 1,
-			"why": "Accepted means the portal received the submission. Validation, with a UUID, is the later state that makes it a legal tax invoice."
+			"why": "Configuration is reversible in the browser and survives a migration; a file-based change needs a deployment and a rollback. That boundary is what decides whether you may promise it."
 		},
 		{
-			"question": "How long does the portal allow a validated document to be cancelled?",
-			"options": ["24 hours", "48 hours", "72 hours", "7 days"],
-			"answer": 2,
-			"why": "Cancellation is limited to 72 hours after validation, after which the remedy is a credit note or debit note."
-		},
-		{
-			"question": "Which customers should not be consolidated into a monthly e-Invoice?",
+			"question": "Why are property setters safer than editing the standard DocType directly?",
 			"options": [
-				"Cash customers",
-				"Business customers needing their own document",
-				"Online orders",
-				"Walk-in buyers"
+				"They are faster to enter",
+				"The standard definition stays intact underneath and the override survives a migration",
+				"They require fewer permissions",
+				"They avoid the change register"
 			],
 			"answer": 1,
-			"why": "Business customers need their own validated document to claim input tax, so consolidation is limited to B2C within the rules."
+			"why": "A setter is an override stored on top of the standard definition, so an upgrade overwrites the standard, not your change, and the original behaviour remains recoverable."
 		},
 		{
-			"question": "What does a self-billed invoice mean?",
+			"question": "What is the first decision that becomes hard to reverse on a custom DocType?",
 			"options": [
-				"The seller issues it",
-				"The buyer issues it",
-				"The portal issues it",
-				"Nobody issues it"
+				"The permission list",
+				"The naming series, because every link depends on the names it produces",
+				"The field order in the form",
+				"Whether it is submittable"
 			],
 			"answer": 1,
-			"why": "In self-billing the buyer issues the document, typically for imports or agent arrangements, which shifts responsibility for submission."
+			"why": "Once records exist under a series, renumbering them breaks every reference. Choose the series before the first save, and record why."
 		},
 		{
-			"question": "Which portal error appears when you cancel too late?",
-			"options": ["IncorrectState", "OperationPeriodOver", "ActiveReferencingDocuments", "InvalidTIN"],
+			"question": "When does a custom field earn its place?",
+			"options": [
+				"When the client asks for it",
+				"When someone filters, prints or reports on it",
+				"When the form has room for it",
+				"When it duplicates an existing field"
+			],
 			"answer": 1,
-			"why": "OperationPeriodOver indicates the 72 hour window has passed, so the correction must be a credit note rather than a cancellation."
+			"why": "A field nobody queries is an empty box waiting to be filled wrongly. Ask the reporting question before creating the column."
+		},
+		{
+			"question": "What belongs in a change register, beyond what changed?",
+			"options": [
+				"The consultant's hours",
+				"Why it changed, who asked, and how to reverse it",
+				"The database table name",
+				"The stack trace of any error"
+			],
+			"answer": 1,
+			"why": "The reason and the reversal are the parts a successor cannot reconstruct. Without them the register records facts but cannot restore behaviour."
 		}
 	],
 	"memory": {
-		"spine": "Master data validates before anything is submitted, a submission returns two lists, and cancellation lives inside 72 hours only.",
+		"spine": "Configuration is what you can reverse in the browser; everything else is development, and it is somebody else's promise.",
 		"device": {
-			"kind": "phrase",
-			"label": "Validate, submit, read, cancel inside 72",
+			"kind": "rule",
+			"label": "Setters first, code last",
 			"expansion": [
-				"Validate the masters first: TIN, registration number, MSIC code and SST number",
-				"Submit and read the answer: a submission ID, then accepted and rejected lists",
-				"Accepted, validated and cancelled are three different states, not one",
-				"Cancellation inside 72 hours with a reason, refused afterwards",
-				"Consolidate many small sales to the public, and self bill when you invoice yourself"
+				"Property setters change labels, mandatory and read-only without touching the standard",
+				"Custom fields need a reporting question before they need a type",
+				"A custom DocType needs its naming series decided before the first record",
+				"Child tables are for anything the client will count, sum or report per row",
+				"Every change gets a register row with its reason and its reversal"
 			]
 		},
 		"cards": [
 			{
-				"q": "What does a submission return?",
-				"a": "A submission ID, an accepted list carrying validation identifiers, and a rejected list with reasons.",
-				"hint": "One ID and two lists"
+				"q": "How do you tell whether a request is configuration or development?",
+				"a": "If it can be made and reversed in the browser without a file or a deployment, it is configuration and it is yours. Otherwise it belongs to a developer.",
+				"hint": "Reversible without a deploy"
 			},
 			{
-				"q": "How long is the cancellation window?",
-				"a": "72 hours after validation, after which only a credit or debit note can correct the document.",
-				"hint": "72, not 24"
+				"q": "What does a property setter leave untouched underneath?",
+				"a": "The standard DocType definition. The override sits on top, so a migration replaces the standard and keeps the setter.",
+				"hint": "Override, not edit"
 			},
 			{
-				"q": "What are document types 01 to 04?",
-				"a": "Invoice, credit note, debit note and refund note.",
-				"hint": "Four types"
+				"q": "Which custom DocType decision is hardest to undo and why?",
+				"a": "The naming series. Every record name is referenced by links, so renumbering later breaks them. Decide before the first save.",
+				"hint": "Names are forever"
 			},
 			{
-				"q": "When is consolidation allowed?",
-				"a": "For many small sales to the general public grouped into one monthly e-Invoice, not for business buyers.",
-				"hint": "Consumer sales only"
+				"q": "When does a table field beat a long text field?",
+				"a": "When somebody will count, sum or report per line, such as findings by severity. Rows can be reported; prose cannot.",
+				"hint": "Count it or drop it"
 			},
 			{
-				"q": "What must the finance team be able to see?",
-				"a": "One board showing pending, accepted, rejected and cancelled documents, with the reason for each rejection.",
-				"hint": "Status board"
+				"q": "What must the change register carry besides the change itself?",
+				"a": "The reason it was made, who asked for it, the date, and how to reverse it — plus a copy held outside the system.",
+				"hint": "Why and how to undo"
 			}
 		],
 		"trap": {
-			"what": "A rejected document is resubmitted unchanged.",
-			"why": "The validator rejects it for exactly the same reason while the 72 hour clock keeps running, so the master data or tax code must be fixed first."
+			"what": "A promising sales demo ends with 'we can make it do anything', so three code changes are promised, none are priced, and go-live slips.",
+			"why": "Anything needing a file is development with its own testing and rollback. Offer the configuration path, price the code path, and record the gap as a decision the client owns."
 		}
 	},
-	"narration": "e-Invoice is a deadline, not a feature. Everything starts with master data: company and customer TIN, registration, MSIC, address, and a validated TIN before the first submission. When you submit, you get a submission identifier and an accepted list, but accepted only means the portal has the file. Validated is the state that matters, because that is where the UUID and the QR code come from, and that is the legal tax invoice. Cancellation lives inside seventy two hours with a reason, and after that the remedy is a credit note, which the portal enforces with named errors. Consolidate only consumer sales, self-bill only where the rules allow, and give the finance team a daily dashboard routine: clear rejections, cancel what must be cancelled, and confirm nothing is left pending overnight. A monthly tie-out between validated totals and the sales ledger is the check that keeps the project out of trouble."
+	"narration": "Most requirements a consultant hears can be met in the browser, and the value of knowing where that stops is what this chapter is for. Configuration is anything you can change and reverse in Customize Form: a property setter that renames a label, makes a field mandatory, hides it or makes it read-only, without touching the standard definition underneath. Custom fields come next, but only when somebody will filter, print or report on them, because a field nobody queries is an empty box. Then the DocType editor, where a functional consultant can build a new document with its own naming series and a child table for lines, provided the series is decided before the first record exists. Verify every change the same way: on the form, in the list, under a second role, and again after a migration on staging. Keep a six-column register, with the reason and the reversal, because that is the part the next consultant cannot reconstruct. And when a requirement genuinely needs code, say so plainly, price it, and write the gap down as a decision rather than letting a vague yes carry the project."
 }

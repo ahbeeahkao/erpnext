@@ -1,400 +1,465 @@
 {
 	"id": "ch15",
 	"number": 15,
-	"title": "Volume 5 · Journals, Accruals and the Bank",
-	"subtitle": "Lessons 1–4: the four journal situations a consultant meets every month, and a bank reconciliation that closes to zero",
+	"title": "Volume 4 · Scanning on the Floor: Barcode Capture and Mobile Counting",
+	"subtitle": "Lessons 1–10: barcode data, scanning on documents, offline counting, recount discipline and what the floor actually needs",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 70,
 	"outcomes": [
-		"Post accruals and prepayments that reverse cleanly in the next period",
-		"Read any journal entry and say which reports it will move",
-		"Reconcile a bank statement to the ledger without a plug figure",
-		"Correct a misposting with a reversal or amendment rather than an edit"
+		"Record barcode data so one item can carry several codes and units",
+		"Scan on Stock Entry and Stock Reconciliation without breaking valuation",
+		"Run a blind count with a handheld and reconcile it to the ledger",
+		"Design recount thresholds that catch errors without stalling the warehouse",
+		"Specify what a device must do offline, and how to prove nothing was posted twice"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Journal entry",
-			"title": "Post an accrual that survives the close",
+			"kicker": "Lesson 1 · Why scanning",
+			"title": "Where the floor's time actually goes",
 			"bullets": [
-				"An accrual records a cost in the month it was incurred, before the invoice arrives",
-				"The journal must name the same cost centre and cost type the invoice will later use",
-				"Use a dedicated accrued liabilities account, never the creditor control account",
-				"Every accrual needs a reversal date, or last month's cost is counted twice"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Accounts → Journal Entry → New",
-						"Entry type Journal Entry, date 31-01-2026",
-						"Empty double-entry grid"
-					],
-					[
-						"2",
-						"First row",
-						"Electricity - SM, debit 800.00, cost centre Main - SM",
-						"Debit row accepted"
-					],
-					["3", "Second row", "Accrued Expenses - SM, credit 800.00", "Difference shows 0.00"],
-					["4", "Reference", "TNB January bill not yet received", "Remark stored for the auditor"],
-					["5", "Save and Submit", "Confirm", "Journal JE-SM-2026-0001 submitted"],
-					[
-						"6",
-						"Read the GL",
-						"Filter the journal voucher",
-						"Dr Electricity 800.00, Cr Accrued Expenses 800.00"
-					]
-				]
-			},
-			"notes": "The accrual is not the hard part; the reversal is. Teach the learner to write the reversal date in the remark before submitting, because the person who reverses it in February is usually someone else. A dedicated accrued liabilities account also keeps the creditor control account honest, which matters the moment the client runs an ageing report and finds a supplier they never bought from."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the journal",
-			"title": "Read a journal the way an auditor does",
-			"bullets": [
-				"A journal touches only the accounts you name, so nothing is hidden by a document type",
-				"Debits must equal credits before you look at any report",
-				"If a party is named, the entry moves the party ledger as well as the account",
-				"A journal that adjusts debtors directly is usually a workaround, not a correction"
+				"Counting and keying are two different jobs, and keying is where the errors enter",
+				"A scan removes transcription, not judgement: somebody still decides what a discrepancy means",
+				"The measurable win is variance, not speed, because a clean count removes the stock write-offs that nobody budgets",
+				"Scanning pays for itself on the items with the highest movement, not on everything",
+				"Insist on a baseline before the project: count time, variance value and write-offs per month"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Debit total equals credit total", "800.00 = 800.00", "Journal Entry footer"],
-					["Profit and loss effect", "expense up 800.00", "Profit and Loss Statement, January"],
-					["Balance sheet effect", "accrued liabilities up 800.00", "Balance Sheet, 31-01-2026"],
-					["Party ledger rows", "none, no party named", "Accounts → Party Ledger"],
-					["Cost centre split", "Main - SM 800.00", "Cost Center-wise P&L"]
+					[
+						"Baseline count time recorded",
+						"Minutes per aisle, measured",
+						"Warehouse log before the change"
+					],
+					["Monthly write-off value known", "A number, not a feeling", "Stock and account ledger"],
+					[
+						"Variance rate known",
+						"Counted versus system, per cent",
+						"Stock Reconciliation history"
+					],
+					[
+						"High-movement items identified",
+						"Top twenty by quantity moved",
+						"Stock Ledger summary"
+					],
+					["Owner named", "One person accountable for accuracy", "Warehouse org chart"]
 				]
 			},
-			"notes": "The fastest way to teach this is to ask which two reports move before the entry is submitted, then check. Expense up, liability up, profit down, cash untouched. A learner who can recite that for any journal is ready to sit in front of an accountant, because the accountant's first question is always which line changes."
+			"notes": "Sell the project on variance, not on the romance of technology. A distributor that stops writing off stock every month has a number a finance director will defend. Take the baseline before anything is installed, because after the change nobody can reconstruct what counting used to cost."
 		},
 		{
-			"kicker": "Lesson 3 · Prepayment",
-			"title": "Release a prepayment month by month",
+			"kicker": "Lesson 2 · Barcode data",
+			"title": "One item, many codes, one authority",
 			"bullets": [
-				"A prepayment is an asset until the cover it buys is consumed",
-				"One twelfth per month is the discipline that keeps the balance sheet believable",
-				"Post the release as a journal, not by editing the original payment",
-				"Keep a schedule with twelve dates, because a spreadsheet is the audit evidence"
+				"ERPNext keeps barcodes as their own records, so an item can carry a supplier code and an internal code at once",
+				"A barcode can be tied to a unit of measure, which is how a carton scan becomes twelve units",
+				"Supplier codes change without warning, so the item record is the authority and the label is a convenience",
+				"Never let the same code point at two items; the scan will resolve to whichever record wins, silently",
+				"Print the internal code on the shelf label and keep the supplier code as an alias"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					[
-						"1",
-						"Purchase invoice",
-						"Insurance Premium 1,200.00 paid for twelve months",
-						"Expense posted on payment"
-					],
+					["1", "Open the item and add a barcode", "SM-BL200", "Item Barcodes table gains a row"],
 					[
 						"2",
-						"Reclassify",
-						"Journal: Dr Prepaid Insurance 1,200.00, Cr Insurance Expense 1,200.00",
-						"Balance moved to the asset"
+						"Add the supplier's own code as a second row",
+						"9551234567890",
+						"Two codes, one item"
 					],
 					[
 						"3",
-						"Monthly release",
-						"Journal: Dr Insurance Expense 100.00, Cr Prepaid Insurance 100.00",
-						"One month consumed"
+						"Set the unit of measure on the carton code",
+						"Carton = 12 Nos",
+						"Scan of the carton asks for twelve"
 					],
+					["4", "Search the barcode list for duplicates", "(read)", "Each code appears once only"],
 					[
-						"4",
-						"Repeat",
-						"Same journal on the last day of each month",
-						"Eleven remaining, if starting in February"
+						"5",
+						"Print a shelf label carrying the internal code",
+						"(print)",
+						"Label scans into any document"
 					],
-					["5", "Check the balance", "Prepaid Insurance account", "1,100.00 after one release"],
 					[
 						"6",
-						"Attach the schedule",
-						"Twelve dated rows in the worksheet",
-						"Evidence for the auditor"
+						"Record the mapping in the data pack",
+						"(write)",
+						"Supplier code to item, one row each"
 					]
 				]
 			},
-			"notes": "Clients rarely object to the reclass, but they do object to eleven manual journals appearing every year. Show them the schedule first and agree who posts it, finance or the consultant, because an unposted release is the most common cause of a prepaid balance that never clears. If the amount is below the client's capitalisation threshold, say so and skip it."
+			"notes": "The duplicate check is the lesson that saves a client weeks. Two items sharing a code produces a count that is wrong in both directions and a report nobody can explain. Make the alias list an explicit deliverable, because supplier codes are exactly the field that drifts."
 		},
 		{
-			"kicker": "Lesson 4 · Verify the prepayment",
-			"title": "The prepaid schedule balances",
+			"kicker": "Lesson 3 · Scanning on documents",
+			"title": "A scan is a quantity entry with a twist",
 			"bullets": [
-				"The prepaid balance must equal the unexpired months multiplied by the monthly amount",
-				"Expense recognised so far plus remaining prepayment equals the original invoice",
-				"A prepayment with no schedule is a suspense account in disguise",
-				"Check the cost centre, because prepaid insurance is often split across branches"
+				"Scanning does not create a new kind of transaction; it fills the same rows faster and more accurately",
+				"On a Stock Entry the scan resolves the item, and the batch or serial asks for the same discipline as typed entry",
+				"Carton and unit codes must convert before the quantity lands, or the ledger gains twelve times too much stock",
+				"Scan into a draft first, read the totals, then submit, because a submitted movement needs a reversal",
+				"Teach the negative test once: scan the wrong code and watch the error, so nobody invents a workaround"
 			],
 			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["Original prepayment", "1,200.00", "Purchase Invoice for the premium"],
-					["Months released", "1 of 12", "Journal entries this period"],
-					["Prepaid Insurance balance", "1,100.00", "Balance Sheet, 31-01-2026"],
-					["Insurance expense this month", "100.00", "Profit and Loss Statement"],
-					["Expense plus prepaid", "100.00 plus 1,100.00 equals 1,200.00", "Your own arithmetic"]
+					["1", "Open a Material Transfer to the floor", "(new)", "Draft transfer, empty rows"],
+					[
+						"2",
+						"Scan the shelf label into the item field",
+						"SM-BL200",
+						"Item resolves with its unit"
+					],
+					["3", "Scan the carton code instead", "9551234567890", "Quantity defaults to twelve"],
+					["4", "Scan a batch-labelled item", "BATCH-2026-014", "Batch row fills; expiry appears"],
+					["5", "Read the totals before submitting", "12 Nos", "Quantity and value as expected"],
+					["6", "Scan a code that belongs to no item", "0000000000000", "Refusal, no row added"]
 				]
 			},
-			"notes": "The identity here is the same shape as the stock identity, and that repetition is useful: whatever the topic, the proof is that the parts add to the whole. When a client's prepaid balance does not divide neatly into twelve, either the cover period is wrong or a month was posted twice, and both are five-minute fixes if caught in the same period."
+			"notes": "The last step matters more than the first five. When a scan fails, warehouse staff improvise, and improvisation is how a carton gets entered as one unit. Demonstrate the refusal while the trainer is still in the building, then write the exception path on the wall next to the scanner."
 		},
 		{
-			"kicker": "Lesson 5 · Bank reconciliation",
-			"title": "Reconcile the statement to the ledger, not to a plug",
+			"kicker": "Lesson 4 · Counting with a device",
+			"title": "Blind counts and the sheet that proves them",
 			"bullets": [
-				"Reconciliation proves every line on the statement exists in the ledger, and vice versa",
-				"Unreconciled payments are usually timing, but two in a row means a real error",
-				"Use the bank reconciliation tool so the evidence is stored against each voucher",
-				"Agree the closing balance first, then work backwards through unmatched lines"
+				"A blind count hides the expected quantity, which is the only way to find out whether the count is honest",
+				"The device holds the count locally and syncs once, so a dead spot in the warehouse does not stop the aisle",
+				"Every scan carries a timestamp, a user and a location, which is what makes the count auditable afterwards",
+				"Two people on the same shelf produce two counts; the reconciliation decides, not the loudest voice",
+				"The count sheet is a draft until somebody with authority posts the difference"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Accounts → Bank Reconciliation",
-						"Bank - SM, 31-01-2026",
-						"Statement and ledger side by side"
+						"Create a Stock Reconciliation for the warehouse",
+						"(new)",
+						"Draft with no quantities"
 					],
 					[
 						"2",
-						"Enter the statement closing balance",
-						"18,450.00",
-						"Difference against the ledger shown"
+						"Hand the aisle to the counter with expected quantity hidden",
+						"(device)",
+						"Count screen only"
 					],
 					[
 						"3",
-						"Match the 1,320.00 receipt",
-						"Aeon Big payment PE-SM-2026-0002",
-						"Row ticked, difference falls"
+						"Scan each shelf label and key the physical quantity",
+						"48 Nos",
+						"Line captured locally"
 					],
 					[
 						"4",
-						"Match the 1,320.00 supplier payment",
-						"Sunrise Components payment",
-						"Second row ticked"
+						"Sync the device at the end of the aisle",
+						"(sync)",
+						"Lines appear once, timestamped"
 					],
 					[
 						"5",
-						"Review unmatched lines",
-						"Bank charges 35.00 not in ledger",
-						"Create the charge entry"
+						"Compare counted against system",
+						"52 system, 48 counted",
+						"Difference of four, visible"
 					],
-					["6", "Finish", "Difference 0.00", "Reconciliation dated and saved"]
+					[
+						"6",
+						"Leave the difference unposted until reviewed",
+						"(hold)",
+						"Draft still holds the variance"
+					]
 				]
 			},
-			"notes": "Bank charges are the classic missing entry: the statement knows about them and the ledger does not, so the difference never clears by matching. Guide the learner to create the small entry rather than leaving a 35.00 variance, because a reconciliation with a plug figure teaches the client that the tool is decorative."
+			"notes": "Blind counting is a cultural decision as much as a configuration one, and it is worth the argument. A counter who can see the expected number will produce it. Say this to the warehouse manager in front of the finance lead, because it is finance who carries the cost of a fabricated count."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the reconciliation",
-			"title": "What a clean reconciliation actually proves",
+			"kicker": "Lesson 5 · Verify the count",
+			"title": "What the difference does to the books",
 			"bullets": [
-				"Every statement line matched means cash is fully explained for the period",
-				"The reconciled ledger balance equals the statement balance at the cut-off date",
-				"Unpresented cheques and deposits in transit remain as timing differences, and they must be listed",
-				"A zero difference with matched lines is evidence, whereas a zero difference typed by hand is not"
+				"Posting a count difference writes a stock ledger row and a matching accounting adjustment, never a deletion",
+				"The valuation of the difference uses the item's costing method, which is why a count on FIFO items needs care",
+				"A large negative difference is either theft, misplacement or a process error, and each has a different owner",
+				"Check the difference in value, not just in quantity, because a four-unit gap on a cheap item is not the same as on a van part",
+				"Attach the signed count sheet to the reconciliation so the number has a witness"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Statement closing balance", "18,450.00", "Bank statement"],
-					["Ledger balance at the same date", "18,450.00", "General Ledger, Bank - SM"],
-					["Matched lines", "all except listed timing items", "Bank Reconciliation screen"],
-					["Unpresented cheques", "listed with numbers and dates", "Reconciliation worksheet"],
-					["Difference", "0.00", "Reconciliation footer"]
+					[
+						"Difference posted as an adjustment",
+						"One reconciliation voucher",
+						"Stock Ledger, voucher type"
+					],
+					[
+						"Quantity agrees with the count sheet",
+						"48 Nos on hand afterwards",
+						"Stock Balance for the item"
+					],
+					[
+						"Value of the difference known",
+						"4 x cost per unit",
+						"Stock Ledger with valuation rate"
+					],
+					[
+						"Accounting entry present",
+						"Stock Adjustment against the expense account",
+						"General Ledger, same voucher"
+					],
+					["Evidence attached", "Signed sheet and device export", "Reconciliation attachments"]
 				]
 			},
-			"notes": "This is the one reconciliation a client will sign without argument, because the bank is the independent third party. Use it as the pattern for the others: start from the external document, prove every line, and list the timing differences rather than absorbing them. A consultant who can close a bank reconciliation in ten minutes is trusted with the rest of the close."
+			"notes": "A reconciliation without its sheet is a number with no story. Insist on the attachment, because six months later the only question anyone asks about a write-off is who counted it and when."
 		},
 		{
-			"kicker": "Lesson 7 · Corrections",
-			"title": "Correct a mistake with a reversal, not an edit",
+			"kicker": "Lesson 6 · Serials and batches",
+			"title": "Scanning where the identifier is the stock",
 			"bullets": [
-				"Submitted entries are history, so the remedy is a reversal or an amendment with a trail",
-				"Cancelling a journal removes its ledger effect and leaves the document visible as cancelled",
-				"Amending keeps a link between versions, which is what an auditor reads",
-				"Never delete a document to fix a number, and never journal against a control account"
+				"For a serialised item the scan is the record: scanning the same serial twice is a duplicate, not a second unit",
+				"Batch scanning needs the expiry read back, because the wrong batch is a compliance problem, not a clerical one",
+				"Turn on the setting that lets serial and batch fields be typed or scanned on stock documents, and teach it as the default",
+				"Scanning a serial that is not in stock must fail loudly rather than create it",
+				"For a distributor of regulated goods, the scan trail is the recall trail"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open the wrong journal",
-						"JE-SM-2026-0001, posted to the wrong cost centre",
-						"Submitted document"
+						"Confirm serial and batch entry is enabled for stock documents",
+						"(settings)",
+						"Fields visible on Stock Entry"
 					],
-					[
-						"2",
-						"Choose the remedy",
-						"Amend, because the document is in an open period",
-						"New version marked amended"
-					],
-					["3", "Change the cost centre", "From Retail Counter to Main - SM", "Amounts unchanged"],
-					["4", "Save and Submit", "Confirm", "Amendment recorded with a version history"],
+					["2", "Create a delivery for a serialised item", "(new)", "Serial field on the row"],
+					["3", "Scan the serial", "SN-2026-00418", "Serial matched to the row"],
+					["4", "Scan the same serial again", "SN-2026-00418", "Refused as a duplicate"],
 					[
 						"5",
-						"Alternative remedy",
-						"Cancel and create a reversing journal",
-						"Original shown as cancelled"
+						"Scan a batch and read the expiry back",
+						"BATCH-2026-014",
+						"Expiry 2027-03-31 shown"
 					],
-					["6", "Check both accounts", "Cost centre-wise P&L", "Only Main carries the 800.00"]
+					[
+						"6",
+						"Attempt a serial that is not in stock",
+						"SN-9999-00001",
+						"Refusal, no phantom stock"
+					]
 				]
 			},
-			"notes": "Give the learner both remedies and the rule that chooses between them: amend inside the open period, reverse once the period is closed or reported. What is never acceptable is deleting the document, because the gap it leaves is exactly what an auditor looks for. Say that sentence in the workshop and the client's finance team will repeat it."
+			"notes": "The refusal cases are the whole value of serialisation. A system that quietly accepts a serial it has never received gives a client false confidence in a recall. Walk the floor manager through both refusals, then write them into the SOP as expected behaviour rather than errors."
 		},
 		{
-			"kicker": "Volume 5 · Reference",
-			"title": "When a journal is the right document",
+			"kicker": "Lesson 7 · Labels",
+			"title": "The label is part of the system",
 			"bullets": [
-				"Journals belong to adjustments, not to transactions that have their own document",
-				"If a purchase or sale happened, use the invoice; a journal hides the tax and the party",
-				"Accruals, prepayments, depreciation and corrections are the natural journal cases",
-				"Every journal needs a reason in the remark, because the next reader has no context"
+				"A shelf label that will not scan is a stock error waiting for a busy week",
+				"Label stock, print density and laminate all change whether a scan works at arm's length in poor light",
+				"Reprinting a label must be a normal, logged action rather than a reason to key the code by hand",
+				"Test with the actual device the floor will use, not a phone in a bright office",
+				"Record label sizes and the printer model in the handover pack, because reordering stock is a weekly task"
 			],
 			"table": {
-				"headers": ["Situation", "Right document", "Why", "Never do this"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
 					[
-						"Goods bought on credit",
-						"Purchase Invoice",
-						"Creates creditor and input tax",
-						"Journal to stock and creditors"
+						"Label prints at the right size",
+						"Measured against the label stock",
+						"First printed sheet"
 					],
-					[
-						"Cost incurred, invoice not received",
-						"Journal Entry",
-						"Accrual with a reversal date",
-						"Leave it unrecorded until the bill"
-					],
-					[
-						"Insurance paid for a year",
-						"Invoice plus journals",
-						"Reclassify, then release monthly",
-						"Expense it all in month one"
-					],
-					[
-						"Depreciation",
-						"Journal Entry",
-						"Asset and accumulated depreciation",
-						"Adjust the asset value directly"
-					],
-					["Wrong cost centre", "Amend or reverse", "Keeps the audit trail", "Delete and re-enter"]
+					["Scan distance acceptable", "Read at the working distance", "Test on the aisle"],
+					["Poor light still scans", "Read under warehouse lighting", "Same test, lights dimmed"],
+					["Reprint is logged", "User and timestamp recorded", "Print log or document history"],
+					["Stock and model documented", "Part number and printer", "Handover pack, floor kit list"]
 				]
 			},
-			"notes": "Consultants are tempted to solve awkward data with a journal because it is quick, and that is how control accounts end up with unexplained balances. This table gives the learner a defensible answer in the meeting: if the transaction happened, use its document; if only the timing happened, use a journal. The remark field is not optional either, since the next reader is usually the client's auditor."
+			"notes": "Most scanning projects fail at the label, not the software. The technical configuration is easy; the durable part is knowing which label stock, which density and which printer, written down so a reorder does not become a project."
+		},
+		{
+			"kicker": "Lesson 8 · The human layer",
+			"title": "Thresholds, recounts and who signs",
+			"bullets": [
+				"Set a variance threshold in money, not in units, because a thousand washers matter less than one pump",
+				"Above the threshold, a second counter recounts before anything is posted",
+				"Below the threshold, the count posts automatically and the monthly report samples it",
+				"Name the person who may approve a large write-off, and the person who may not",
+				"Publish the monthly accuracy figure so the floor can see whether the discipline is working"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Threshold defined in money", "For example 200.00 per line", "Warehouse SOP"],
+					["Recount rule written", "Above threshold, second counter", "Same SOP"],
+					["Approver named", "One role, one name", "Authorisation matrix"],
+					["Accuracy reported monthly", "Percentage, trended", "Stock accuracy report"],
+					["Sampling done", "Twenty lines a month", "Count log with samples"]
+				]
+			},
+			"notes": "Thresholds turn an all-or-nothing control into a workable one. If every difference needs a manager, the floor eventually stops reporting differences, which is worse than a small write-off. Pair the threshold with published accuracy so the shortcut is visible."
+		},
+		{
+			"kicker": "Lesson 9 · Offline and duplicates",
+			"title": "Prove nothing was posted twice",
+			"bullets": [
+				"A device that queues scans offline will eventually send the same batch twice, so the design must assume it",
+				"Give every count or transfer a client-generated reference that the server rejects when repeated",
+				"After a sync, reconcile the device total against the voucher total before submitting anything",
+				"Never let two people hold the same aisle at once, because merging two counts is guesswork",
+				"Show the user the queue: what is pending, what failed and what was already posted"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Voucher total equals device total",
+						"Line count and quantity",
+						"Device export beside the draft"
+					],
+					["Duplicate sync rejected", "Second send refused", "Sync log with the reference"],
+					["Pending queue visible", "Items awaiting sync listed", "Device queue screen"],
+					["Failed lines explained", "Reason shown per line", "Same screen"],
+					["Aisle lock recorded", "One holder per aisle", "Count assignment sheet"]
+				]
+			},
+			"notes": "This is the one technical-adjacent idea a functional consultant must still own, because the failure is a doubled stock movement that nobody notices until the ledger stops reconciling. Insist on the visible queue and the duplicate refusal as acceptance criteria for any device, ours or a vendor's."
+		},
+		{
+			"kicker": "Lesson 10 · Handover",
+			"title": "The floor kit list and the SOP",
+			"bullets": [
+				"Hand over a kit list: device, charger, spare battery, label stock, printer, and who replaces each",
+				"The SOP has four pages at most: label a shelf, count an aisle, fix a refusal, escalate a variance",
+				"Train two people per shift, because one trained person is a single point of failure",
+				"Record the accuracy baseline and the target so the improvement is visible in three months",
+				"Leave the exception register: every refusal, why it happened and what was done"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Kit list complete", "Every item with an owner", "Handover pack"],
+					["SOP under four pages", "Counted pages", "Printed, pinned at the station"],
+					["Two trained per shift", "Names on the training record", "Training log"],
+					["Baseline and target stated", "Variance per cent, before and after", "Accuracy report"],
+					["Exception register started", "Refusals with reasons", "Same register"]
+				]
+			},
+			"notes": "The kit list is what separates a pilot from a working system. Spare batteries and label stock run out on a Friday, and if nobody owns the reorder, the scanner goes back in the drawer and the paper list returns. Leave the register too, so the next person inherits the exceptions rather than rediscovering them."
 		}
 	],
 	"lab": {
-		"title": "Lab · Accrue, prepay, reconcile the bank and correct a posting",
-		"minutes": 45,
+		"title": "Lab · Scan, count and prove a shelf at Seri Murni",
+		"minutes": 70,
 		"steps": [
-			"Post the 800.00 electricity accrual dated 31-01-2026 with a cost centre",
-			"Confirm profit falls by 800.00 and accrued liabilities rise by the same amount",
-			"Reclassify the 1,200.00 insurance premium to prepaid and release one month",
-			"Prove expense plus prepaid equals the original 1,200.00",
-			"Reconcile Bank - SM to a statement closing balance of 18,450.00",
-			"Create the 35.00 bank charge that the statement shows and the ledger does not",
-			"Take the reconciliation difference to 0.00 and save the evidence",
-			"Amend the misposted journal and confirm only the correct cost centre carries it"
+			"Add the supplier code as a second barcode on SM-BL200 and set the carton code to twelve units",
+			"Search the barcode list for duplicates and record any collision in the exception register",
+			"Scan the shelf label and the carton into a draft Material Transfer and read both quantities",
+			"Scan a serial that is not in stock and record the exact refusal message",
+			"Run a blind count on one aisle with expected quantities hidden and sync at the end",
+			"Post the difference only after checking it against the signed sheet and the stock ledger row",
+			"Test one deliberate duplicate sync and confirm the second send is refused with the same reference",
+			"Write the four-page SOP, the kit list and the accuracy baseline into the handover pack"
 		],
-		"done": "Done when the accrual and the prepayment both reconcile to their identities, the bank reconciliation shows 0.00 difference with every line matched or listed, and the corrected journal has a version trail."
+		"done": "A scanning pilot with a counted aisle, a posted and evidenced difference, a duplicate sync refused, and a four-page SOP the warehouse can run without the consultant present."
 	},
 	"quiz": [
 		{
-			"question": "Why must an accrual carry a reversal date?",
+			"question": "Why is a duplicate barcode the most dangerous configuration error in a scanning project?",
 			"options": [
-				"So the tax can be claimed",
-				"So the cost is not counted twice when the invoice arrives",
-				"So the party ledger stays clean",
-				"So the bank reconciles"
+				"It slows the scanner down",
+				"A scan of that code resolves to one item silently, so both items count wrong",
+				"It prevents label printing",
+				"It blocks stock reconciliation"
 			],
 			"answer": 1,
-			"why": "The invoice will post the same cost when it arrives, so the accrual must reverse in the following period to avoid double counting."
+			"why": "Two items sharing a code means the scan resolves to whichever record wins, with no error. Quantity is then wrong in both directions and the report cannot explain why."
 		},
 		{
-			"question": "A 1,200.00 annual insurance premium is released monthly. What is the prepaid balance after one month?",
-			"options": ["1,200.00", "1,100.00", "100.00", "1,000.00"],
-			"answer": 1,
-			"why": "One month of 100.00 is released, leaving 1,100.00 unexpired and sitting as an asset on the balance sheet."
-		},
-		{
-			"question": "The bank reconciliation shows a 35.00 difference caused by a bank charge. What is correct?",
+			"question": "What makes a count auditable six months later?",
 			"options": [
-				"Ignore it as immaterial",
-				"Create the bank charge entry in the ledger",
-				"Adjust the statement balance",
-				"Post it to accrued liabilities"
+				"The reconciliation voucher number",
+				"The signed count sheet, device export and the user and timestamp on each line",
+				"The valuation rate used",
+				"The approval of the warehouse manager only"
 			],
 			"answer": 1,
-			"why": "The statement is the external evidence, so the missing bank charge belongs in the ledger. A plug figure destroys the value of the reconciliation."
+			"why": "The voucher proves a number was posted; the sheet, export and per-line identity prove who counted what, which is the question actually asked about a write-off."
 		},
 		{
-			"question": "A journal posted to the wrong cost centre in an open period. Best remedy?",
+			"question": "Why does a blind count produce a more honest result?",
 			"options": [
-				"Delete the journal",
-				"Amend the document and resubmit",
-				"Post a second journal to the opposite cost centre",
-				"Cancel the fiscal year"
+				"It is faster than a visible count",
+				"A counter who can see the expected quantity tends to reproduce it",
+				"It removes the need for reconciliation",
+				"It hides the item's cost"
 			],
 			"answer": 1,
-			"why": "Amending inside an open period keeps a version trail. Deleting destroys history, and a second journal leaves two wrong rows instead of one."
+			"why": "Showing the expected figure converts a measurement into a confirmation. Hiding it is the only way to learn whether the shelf matches the ledger."
 		},
 		{
-			"question": "Which situation genuinely needs a journal rather than a document?",
+			"question": "What should always be verified after a device syncs a count?",
 			"options": [
-				"A credit sale",
-				"A stock purchase",
-				"Depreciation for the month",
-				"A customer payment"
+				"That the device battery is full",
+				"That the voucher total equals the device total before submitting anything",
+				"That the label printer is online",
+				"That the count used the internal code"
 			],
-			"answer": 2,
-			"why": "Depreciation has no external document, so a journal is its natural form. Sales, purchases and payments all have dedicated documents that also handle tax and parties."
+			"answer": 1,
+			"why": "The line count and quantity must match the device export exactly. A short sync produces a reconciliation that posts a difference nobody counted."
+		},
+		{
+			"question": "Why set the recount threshold in money rather than in units?",
+			"options": [
+				"Because units are hard to count",
+				"Because a thousand cheap parts matter less than one expensive component",
+				"Because valuation changes daily",
+				"Because the ledger is in money"
+			],
+			"answer": 1,
+			"why": "Value is what the write-off costs. A unit threshold puts the same weight on a washer and a pump, and burns management attention on the wrong line."
 		}
 	],
 	"memory": {
-		"spine": "Four journal situations recur every month, and each one has a reversal date that decides whether the next period is clean.",
+		"spine": "A scan is only evidence when the label, the count and the voucher agree, and the difference has a signature.",
 		"device": {
-			"kind": "rule",
-			"label": "Accrue, prepay, reconcile, reverse",
+			"kind": "phrase",
+			"label": "Scan, confirm, recount, sign",
 			"expansion": [
-				"Accrual: the cost belongs to this month, the invoice arrives next month, and a reversal is set now",
-				"Prepayment: an asset until the cover it buys is consumed, released month by month",
-				"Reconciliation proves every statement line exists in the ledger and every ledger line on the statement",
-				"Corrections are reversals or amendments with a trail, never edits to a submitted entry"
+				"Scan to capture, but read the totals back before anything is submitted",
+				"Confirm the barcode is unique to one item and converts the carton correctly",
+				"Recount above the money threshold before a difference is posted",
+				"Sign the sheet, attach it to the reconciliation, and keep the device export",
+				"Prove the sync once by sending it twice, and confirm the duplicate is refused"
 			]
 		},
 		"cards": [
 			{
-				"q": "When does an accrual reverse?",
-				"a": "On the reversal date set when it was posted, so the actual invoice lands cleanly in the next period.",
-				"hint": "Decide the date at posting time"
+				"q": "What is the measurable business case for scanning on the warehouse floor?",
+				"a": "Variance and write-off value, measured before and after. Speed is nice; a distributor that stops writing off stock has a number finance will defend.",
+				"hint": "Variance, not romance"
 			},
 			{
-				"q": "What is a prepayment before it is consumed?",
-				"a": "An asset: cover that has been paid for but not yet used.",
-				"hint": "Asset until used"
+				"q": "Why must the barcode list be checked for duplicates before go-live?",
+				"a": "A code pointing at two items resolves silently to one of them, so both count wrong and no error is raised at the scanner.",
+				"hint": "One code, one item"
 			},
 			{
-				"q": "What does a clean bank reconciliation prove?",
-				"a": "That every statement line is matched to the ledger, so cash for the period is fully explained with no plug.",
-				"hint": "No suspense account"
+				"q": "What turns a count difference into an auditable event?",
+				"a": "The signed count sheet, the device export with user and timestamp, and the reconciliation voucher that carries both as attachments.",
+				"hint": "Sheet, export, voucher"
 			},
 			{
-				"q": "How is a submitted journal corrected?",
-				"a": "Reverse it, or cancel and amend, because the trail is the whole point.",
-				"hint": "History is append only"
+				"q": "What must be proved about a device that queues scans offline?",
+				"a": "That the voucher total equals the device total, and that a repeated sync with the same reference is refused rather than posted twice.",
+				"hint": "Send it twice"
 			},
 			{
-				"q": "Which four journal situations recur monthly?",
-				"a": "Accrual, prepayment release, depreciation and correction.",
-				"hint": "The monthly four"
+				"q": "How is a recount threshold best expressed?",
+				"a": "In money per line, with a second counter above it and a named approver, because value is what the write-off costs.",
+				"hint": "Money, not units"
 			}
 		],
 		"trap": {
-			"what": "A suspense account absorbs whatever the bank reconciliation cannot explain.",
-			"why": "Cash is then explained by an account nobody owns, and the balance grows every month until the close cannot be defended."
+			"what": "The pilot scans beautifully in the meeting room, so go-live is declared and the SOP is never written.",
+			"why": "Label stock runs out, a batch refuses to scan and one trained person is on leave, so the floor reverts to paper. Hand over a kit list, a four-page SOP, two trained people per shift and an exception register."
 		}
 	},
-	"narration": "Journals are where the accounting primer becomes a daily tool. An accrual records a cost before the invoice arrives, and it must reverse, or February carries January's electricity twice. A prepayment is an asset until the cover is used, so one thousand two hundred of insurance becomes one hundred a month, leaving one thousand one hundred on the balance sheet after the first release. Then the bank. Match every statement line, create the bank charge the ledger is missing, and drive the difference to zero with evidence rather than a plug. And when something was posted to the wrong place, amend it inside the open period or reverse it afterwards. Never delete, because the gap is exactly what an auditor looks for first. Practise the four situations until they are reflexes: accrual, prepayment, bank charge, wrong cost centre. Each one has a canonical remedy, and each remedy leaves a document behind, which is what turns a bookkeeping task into a consulting deliverable."
+	"narration": "Scanning is the part of stock accuracy that a consultant is asked about most and prepares for least. Start with the barcode data, because one item can carry several codes, including the supplier's own, and a carton code that resolves to twelve units. Then check for duplicates, since two items sharing a code will count wrong in both directions without ever raising an error. Scanning on documents does not create a new kind of transaction: it fills the same rows, so read the totals back before submitting, and demonstrate a refusal rather than letting the floor invent a workaround. Counting is where the money is. Run a blind count so the counter cannot reproduce the expected figure, let the device queue offline, and prove after the sync that the voucher total matches the device total, and that a repeated send is refused. Set the recount threshold in money, name the approver, attach the signed sheet with the device export, and publish a monthly accuracy figure. Finish with the unglamorous part that decides whether any of it survives: label stock, a spare battery, two trained people per shift and a four-page SOP."
 }

@@ -4,7 +4,7 @@
 	"title": "Volume 4 · Warehouses, Transfers and Stock Counts",
 	"subtitle": "Lessons 1–4: a warehouse tree that matches how the business moves goods, transfers that keep stock whole, and counts that post the truth",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 65,
 	"outcomes": [
 		"Lay out a warehouse tree that operations and finance both accept",
 		"Transfer stock between warehouses without changing total quantity or value",
@@ -313,6 +313,54 @@
 				]
 			},
 			"notes": "Consultants are asked to fix stock with a stock entry roughly once a week, and the honest answer is usually no. Show the client this table and ask which row their situation belongs to. If the answer is none, the real fix is in the process or the master data, and a stock entry would only hide the problem in a ledger account that nobody reads."
+		},
+		{
+			"kicker": "Lesson 7 · Transit",
+			"title": "Goods that are neither here nor there",
+			"bullets": [
+				"A transfer between warehouses in one company keeps the value, but a transfer between companies does not",
+				"An in-transit warehouse exists so goods in a lorry are visible rather than parked on a shelf they left",
+				"Inter-company movement needs a sale and a purchase, because each company keeps its own books",
+				"Stock in transit is a real balance, and a month-end count must exclude it deliberately",
+				"Price the inter-company transfer at a stated basis, because the tax treatment follows it"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Transit warehouse exists", "One per route, not one per trip", "Warehouse tree"],
+					[
+						"Goods in transit visible",
+						"Balance sits in transit, not the source",
+						"Stock Balance by warehouse"
+					],
+					["Inter-company documents exist", "Sales and purchase, matched", "Both companies' lists"],
+					["Transfer price stated", "Cost plus a stated mark-up", "Inter-company agreement"],
+					["Month-end exclusion", "Transit counted or aged separately", "Closing checklist"]
+				]
+			},
+			"notes": "In-transit stock is where a month-end count goes wrong quietly, because the goods are in a lorry and therefore in nobody's warehouse. Give transit its own warehouse, age the balance, and put the exclusion in the closing checklist so the count is deliberate rather than accidental."
+		},
+		{
+			"kicker": "Lesson 8 · Verify two companies",
+			"title": "The same goods counted twice or not at all",
+			"bullets": [
+				"Inter-company stock must appear in exactly one company at a time, and the report must prove it",
+				"The receivables and payables between the two companies must mirror each other to the cent",
+				"A mismatch is usually a missing document rather than a wrong price, so look for the gap first",
+				"Consolidation is only as good as the mirror, so check the mirror before the group report",
+				"Write the transfer basis down, because the auditor will ask who set the price and why"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Stock in one company only", "Transit zero after receipt", "Stock Balance by company"],
+					["Mirrored balances", "Receivable equals payable", "Both trial balances"],
+					["Group stock equals sum of parts", "No double count", "Consolidated stock report"],
+					["Transfer basis documented", "Cost plus mark-up, dated", "Inter-company agreement"],
+					["Gaps explained", "Missing document or timing", "Reconciliation sheet"]
+				]
+			},
+			"notes": "If the client runs two companies and one warehouse, this is the pair of lessons that stops the group stock report lying. Check the mirror first: a difference of one document is a timing issue, a difference of a price is a policy issue, and they need different conversations."
 		}
 	],
 	"lab": {

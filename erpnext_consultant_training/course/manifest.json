@@ -1,6 +1,6 @@
 {
 	"title": "ERPNext Functional Consultant",
-	"subtitle": "The complete eleven-volume consultant track: concept primers, setup, quote-to-cash, procure-to-pay, stock, close, manufacturing, projects, automation, Malaysia compliance, go-live and continuity",
+	"subtitle": "The complete eleven-volume consultant track: concept primers, setup, quote-to-cash, procure-to-pay, stock and scanning, close, manufacturing, projects, service, automation and front-end customisation, Malaysia compliance, go-live, continuity, security and handover",
 	"version": "1.0.0",
 	"audience": "Functional consultants, implementation leads and key users who configure and demonstrate ERPNext",
 	"sample_company": "Seri Murni Sdn Bhd — a Malaysian distributor with a small assembly operation",
@@ -45,43 +45,43 @@
 			"id": "v4",
 			"title": "Volume 4 · Stock Accuracy and Valuation",
 			"status": "built",
-			"chapters": ["ch13", "ch14"]
+			"chapters": ["ch13", "ch14", "ch15"]
 		},
 		{
 			"id": "v5",
 			"title": "Volume 5 · Accounting and the Close",
 			"status": "built",
-			"chapters": ["ch15", "ch16"]
+			"chapters": ["ch16", "ch17"]
 		},
 		{
 			"id": "v6",
 			"title": "Volume 6 · Manufacturing",
 			"status": "built",
-			"chapters": ["ch17", "ch18"]
+			"chapters": ["ch18", "ch19"]
 		},
 		{
 			"id": "v7",
 			"title": "Volume 7 · Projects, Assets, Quality and CRM",
 			"status": "built",
-			"chapters": ["ch19", "ch20"]
+			"chapters": ["ch20", "ch21", "ch22"]
 		},
 		{
 			"id": "v8",
-			"title": "Volume 8 · Automation, Print and Permissions",
+			"title": "Volume 8 · Automation, Print, Permissions and Customisation",
 			"status": "built",
-			"chapters": ["ch21", "ch22"]
+			"chapters": ["ch23", "ch24", "ch25"]
 		},
 		{
 			"id": "v9",
 			"title": "Volume 9 · Malaysia Compliance",
 			"status": "built",
-			"chapters": ["ch23", "ch24"]
+			"chapters": ["ch26", "ch27"]
 		},
 		{
 			"id": "v10",
-			"title": "Volume 10 · Migration, UAT and Go-Live",
+			"title": "Volume 10 · Migration, Go-Live, Continuity and Handover",
 			"status": "built",
-			"chapters": ["ch25", "ch26", "ch27"]
+			"chapters": ["ch28", "ch29", "ch30", "ch31", "ch32"]
 		}
 	],
 	"chapters": [
@@ -192,6 +192,26 @@
 		{
 			"id": "ch27",
 			"file": "ch27.json"
+		},
+		{
+			"id": "ch28",
+			"file": "ch28.json"
+		},
+		{
+			"id": "ch29",
+			"file": "ch29.json"
+		},
+		{
+			"id": "ch30",
+			"file": "ch30.json"
+		},
+		{
+			"id": "ch31",
+			"file": "ch31.json"
+		},
+		{
+			"id": "ch32",
+			"file": "ch32.json"
 		}
 	]
 }

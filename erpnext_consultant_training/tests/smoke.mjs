@@ -74,19 +74,21 @@ await app.boot({ fetch: fetchFromDisk });
 
 const chapterOne = app.state.chapters[0];
 
-check("boot loads all twenty-seven chapters", () => {
-	assert.equal(app.state.chapters.length, 27);
-	assert.equal(app.state.chapters[26].id, "ch27");
+check("boot loads all thirty-two chapters", () => {
+	assert.equal(app.state.chapters.length, 32);
+	assert.equal(app.state.chapters[31].id, "ch32");
 	assert.match(app.state.manifest.title, /Consultant/);
 });
 
 check("sidebar lists every chapter with its number", () => {
 	const items = $$(".chapter-item");
-	assert.equal(items.length, 27);
+	assert.equal(items.length, 32);
 	assert.match(items[0].textContent, /01/);
 	assert.match(items[7].textContent, /Parties and Pricing|Volume 1/);
-	assert.match(items[23].textContent, /e-Invoice|Volume 9/);
-	assert.match(items[26].textContent, /Continuity|Volume 10/);
+	assert.match(items[23].textContent, /Customise|Volume 8/);
+	assert.match(items[26].textContent, /e-Invoice|Volume 9/);
+	assert.match(items[29].textContent, /Continuity|Volume 10/);
+	assert.match(items[31].textContent, /Ninety Days|Volume 10/);
 });
 
 check("the first slide is the chapter intro", () => {
@@ -171,7 +173,7 @@ check("marking a card known persists and counts up", () => {
 	assert.equal(app.state.recall[chapter.id].known.length, 1);
 	assert.ok($$("#slide .recall-card")[1].classList.contains("is-known"));
 	assert.match($("#slide .memory-bar").textContent, /1 of 5/);
-	assert.equal(app.recallProgress().total, 135);
+	assert.equal(app.recallProgress().total, 160);
 	const stored = JSON.parse(dom.window.localStorage.getItem("erpnext-consultant/v1"));
 	assert.equal(stored.recall[chapter.id].known.length, 1);
 });
@@ -186,7 +188,7 @@ check("the recall sheet lists the ten laws and every device", () => {
 	app.openOverlay("cheatsheet");
 	assert.match($("#overlay-title").textContent, /Recall sheet/);
 	assert.equal($$("#overlay .law").length, 10);
-	assert.equal($$("#overlay .device-row").length, 27);
+	assert.equal($$("#overlay .device-row").length, 32);
 	assert.match($("#overlay-body").textContent, /Nothing exists until it is submitted/);
 	assert.match(
 		$$("#overlay .device-row")[0].textContent,
@@ -305,7 +307,7 @@ check("the print view contains every chapter, lab and quiz answer", () => {
 	app.buildPrintView();
 	const view = $("#print-view");
 	// one page of laws plus one page per chapter
-	assert.equal(view.querySelectorAll(".print-chapter").length, 28);
+	assert.equal(view.querySelectorAll(".print-chapter").length, 33);
 	assert.match(view.textContent, /Quiz with answers/);
 	assert.match(view.textContent, /Answer:/);
 	assert.match(view.textContent, /The ten laws of ERPNext/);

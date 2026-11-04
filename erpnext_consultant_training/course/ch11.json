@@ -4,7 +4,7 @@
 	"title": "Volume 3 · Buying, Step by Step",
 	"subtitle": "Lessons 1–4: the purchase cycle from order to payment, with the three quantities and three amounts that must match",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 65,
 	"outcomes": [
 		"Raise a purchase order that purchasing and finance both accept",
 		"Receive goods so that stock and the stock-received account move together",
@@ -282,6 +282,66 @@
 				]
 			},
 			"notes": "This table is the one-page answer to the question every client accountant asks in week one. Print it, put it next to the purchase desk, and mark the receipt line, because that is the document operations forget. When a client claims the stock value is wrong, walk this chain in order and the error is always in one of the four rows."
+		},
+		{
+			"kicker": "Lesson 8 · Quotations",
+			"title": "Compete the suppliers before you commit",
+			"bullets": [
+				"A request for quotation sends the same requirement to several suppliers so the comparison is honest",
+				"The comparison only works if every supplier quotes against the same specification and the same unit",
+				"Record validity dates, because a quotation that has expired is not a price",
+				"Award with a reason: price, lead time, quality history or terms, written next to the winner",
+				"Convert the winning quotation into the purchase order, so the price on the order has a source"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Raise a request for quotation for twelve units",
+						"SM-BL200 x 12",
+						"RFQ draft with the requirement"
+					],
+					["2", "Add three suppliers to the same RFQ", "(suppliers)", "Three supplier rows"],
+					["3", "Submit and send the RFQ", "(send)", "Suppliers receive the same specification"],
+					[
+						"4",
+						"Enter three quotations with prices and lead times",
+						"12.50/5d, 12.10/9d, 12.90/3d",
+						"Three quotations recorded"
+					],
+					["5", "Compare in one view, including validity", "(compare)", "Side-by-side table"],
+					[
+						"6",
+						"Award and state the reason",
+						"12.10, 9 days, best landed cost",
+						"Decision recorded on the RFQ"
+					]
+				]
+			},
+			"notes": "The comparison view is the deliverable a purchasing manager shows their boss. Without validity dates and a stated reason, the award looks arbitrary and the next negotiation starts from nothing. Write the reason on the record, not in an email."
+		},
+		{
+			"kicker": "Lesson 9 · Verify the award",
+			"title": "What proves the cheapest was not chosen blindly",
+			"bullets": [
+				"Landed cost decides the winner more often than unit price, so compare delivered, not ex-works",
+				"Lead time is a cost when the shelf is empty, and it belongs in the comparison rather than in a conversation",
+				"The purchase order must carry the awarded price, supplier and terms without retyping",
+				"Keep the losing quotations, because the next order will start from them",
+				"If the award went against the lowest price, the written reason is what protects the buyer"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Landed cost compared", "Unit price plus freight per unit", "RFQ comparison view"],
+					["Lead time in the decision", "Days stated per supplier", "Same view"],
+					["Order carries the awarded price", "12.10 on the purchase order", "Purchase Order line"],
+					["Losing quotations retained", "Three quotations listed", "RFQ history"],
+					["Reason recorded", "One sentence, dated", "RFQ award note"]
+				]
+			},
+			"notes": "The check that matters to an auditor is the reason. Lowest price is easy to defend, but choosing the second cheapest on lead time needs a sentence written at the time, not reconstructed six months later when the goods ran late anyway."
 		}
 	],
 	"lab": {

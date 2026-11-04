@@ -1,345 +1,354 @@
 {
 	"id": "ch25",
 	"number": 25,
-	"title": "Volume 10 · Migration: Mapping, Opening Balances and Import",
-	"subtitle": "Lessons 1–4: a mapping workbook the client signs, masters imported in dependency order, and an opening trial balance that balances to the cent",
-	"level": "Capstone",
+	"title": "Volume 8 · Permissions, Workflows and Automation",
+	"subtitle": "Lessons 5–8: roles that match the org chart, restrictions that hold, a discount workflow, and automation that does not run away",
+	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Build a mapping workbook before anything is imported",
-		"Import masters in the order the system demands, not the order of the spreadsheet",
-		"Load opening balances so the trial balance balances first time",
-		"Freeze the opening and prove it with evidence the auditor accepts"
+		"Build roles and permissions that match who does what",
+		"Restrict a user to their own warehouse or branch without custom code",
+		"Add an approval workflow for discounts and prove it blocks what it should",
+		"Automate recurring documents safely and know what to leave manual"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Mapping",
-			"title": "Build the mapping workbook before you touch the system",
+			"kicker": "Lesson 5 · Roles",
+			"title": "Roles that match the org chart, not the software",
 			"bullets": [
-				"Mapping is a written agreement: old value, new value, owner, decision date",
-				"Chart of accounts mapping is the hardest part, because old codes carry history and habit",
-				"Every unmapped value is a future support ticket, so count them down to zero",
-				"The client signs the workbook, which is what ends the argument in month two"
+				"A role is a job function, so name it after the job and not after a person",
+				"Permission levels control what can be created, read, amended or deleted",
+				"Start restrictive and add, because removing access later is a political fight",
+				"Every role needs an owner who reviews membership quarterly"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					[
-						"1",
-						"Export old masters",
-						"Chart of accounts, customers, suppliers, items",
-						"Four spreadsheets"
-					],
-					["2", "Create the workbook", "Sheet per entity with old and new columns", "Workbook v1"],
+					["1", "Users and Permissions → Role → New", "Sales Executive, desk user", "Role created"],
+					["2", "Open Role Permissions Manager", "Sales Order for that role", "Permission matrix"],
 					[
 						"3",
-						"Map the chart",
-						"Old 1100 Debtors to Debtors - SM, and so on",
-						"Every code has a target"
+						"Set levels",
+						"Read, Write, Create, Submit; no Delete or Cancel",
+						"Four ticks, two blanks"
 					],
-					[
-						"4",
-						"Mark the exceptions",
-						"Codes with no obvious target flagged in red",
-						"Exception list"
-					],
-					["5", "Review with finance", "Walk the red rows only", "Decisions recorded"],
-					["6", "Sign the version", "Workbook v1 approved on a date", "Signed PDF on file"]
-				]
-			},
-			"notes": "The workbook is the deliverable that separates a migration from an improvisation, and its most valuable column is the owner. Every red row needs a name beside it, because the client's finance manager will otherwise assume you decided. Sign one version, date it, and treat later changes as change requests with a cost."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the mapping",
-			"title": "Prove the workbook is complete before import",
-			"bullets": [
-				"Completeness means every old value has a target, including the ones nobody uses",
-				"Duplicates must be merged before import, not after, because merged history is messy",
-				"Tax categories, territories and price lists are the fields people forget",
-				"A trial import into a test company is cheaper than a second migration"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Old accounts mapped", "38 of 38", "Mapping workbook, chart sheet"],
-					["Unmapped exceptions", "0 before go-live", "Red rows in the workbook"],
-					["Duplicate customers", "merged and documented", "Customer sheet with merge notes"],
-					["Tax categories assigned", "every customer and supplier", "Workbook column"],
-					["Trial import errors", "0 in the test company", "Data Import log"]
-				]
-			},
-			"notes": "Thirty eight of thirty eight sounds trivial until the client's chart has one dormant account used once in 2019, and that is exactly the row an auditor finds. Run the trial import into a test company, fix errors there, and keep the log as evidence. The test company costs an hour; a re-migration costs a weekend and the client's confidence."
-		},
-		{
-			"kicker": "Lesson 3 · Import masters",
-			"title": "Import in dependency order, not spreadsheet order",
-			"bullets": [
-				"ERPNext needs parents before children: item groups before items, territories before customers",
-				"Import small batches and check the log after each, rather than one giant file",
-				"Use the template download for each doctype, because column names must match exactly",
-				"Never import a field the business does not use, because unused data becomes noise"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Data Import → New",
-						"DocType Item Group, download template",
-						"Template with exact columns"
-					],
-					["2", "Import item groups", "Four groups, one child", "4 plus 1 created"],
-					["3", "Import items", "12 items with UOM and valuation", "12 created, 0 errors"],
-					["4", "Import customers", "5 customers with credit limits and tax category", "5 created"],
-					["5", "Import suppliers", "3 suppliers with payment terms", "3 created"],
-					["6", "Import price lists", "Retail 240.00 and Dealer 216.00 rows", "Price rows visible"]
-				]
-			},
-			"notes": "Dependency order is the rule people break first, usually by importing items before item groups and then wondering why every row fails. Import five records, read the log, then continue. That rhythm feels slow for the first ten minutes and saves hours later, because the first error tells you the column name is wrong before five hundred rows are queued."
-		},
-		{
-			"kicker": "Lesson 4 · Verify the import",
-			"title": "Rows, errors and duplicates, counted",
-			"bullets": [
-				"The import log is the evidence: rows attempted, created, updated and failed",
-				"A successful import of the wrong data is worse than a failed one, so spot-check content",
-				"Duplicates usually come from trailing spaces in names, which the system treats as distinct",
-				"Re-run the import after fixing errors, using update mode rather than creating again"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Item groups created", "5", "Item Group list"],
-					["Items created", "12, zero errors", "Item list and import log"],
-					["Customers and suppliers", "5 and 3", "Party lists"],
-					["Duplicates", "0", "Search by name and by abbreviation"],
-					["Spot check", "SM-BL200 valuation 120.00, UOM Nos", "Item record"]
-				]
-			},
-			"notes": "Counting rows is the easy half; spot-checking content is the half that matters. Open three records at random and read the fields the business depends on: valuation, tax template, warehouse. If those are right, the rest of the row probably is too. If they are wrong, the column mapping is off by one and the whole file needs re-running."
-		},
-		{
-			"kicker": "Lesson 5 · Opening balances",
-			"title": "Load an opening trial balance that balances",
-			"bullets": [
-				"Opening balances are a journal dated the day before go-live, not a set of typed invoices",
-				"Debtors and creditors open as party balances so ageing starts on day one",
-				"Stock opens at valuation through a stock reconciliation, not through the journal",
-				"Equity is the plug that makes it balance, and the client must agree the figure"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Stock opening",
-						"Stock Reconciliation at 120.00 for 47 units",
-						"5,640.00 of stock"
-					],
-					[
-						"2",
-						"Debtors opening",
-						"Journal to Debtors - SM with party rows, 13,200.00",
-						"Ageing populated"
-					],
-					[
-						"3",
-						"Creditors opening",
-						"Journal to Creditors - SM, 1,188.00",
-						"Supplier balances visible"
-					],
-					["4", "Bank opening", "Journal to Bank - SM, 18,450.00", "Bank balance set"],
-					["5", "Tax and accruals", "SST payable 1,080.00, accrued 800.00", "Liabilities recorded"],
+					["4", "Set user permissions", "Customer and territory restrictions", "Restriction rows"],
+					["5", "Assign to a user", "Aina as Sales Executive", "One role on the user"],
 					[
 						"6",
-						"Equity",
-						"Share capital 50,000.00 and retained 43,222.00",
-						"Journal balances to 0.00"
+						"Log in as the user",
+						"Open a sales order",
+						"Create and submit buttons present, delete absent"
 					]
 				]
 			},
-			"notes": "The arithmetic is the deliverable: 5,640 plus 13,200 plus 18,450 plus 59,000 of fixed assets is 96,290 of assets, against 1,188 plus 1,080 plus 800 of liabilities and 93,222 of equity. Make the learner write both sides before saving the journal, because an opening that balances by accident is not balanced at all."
+			"notes": "The instinct is to grant everything because the demo is easier, and the consequence arrives six months later when a salesperson deletes a submitted order. Start with read, write, create and submit; add cancel only for supervisors, and delete for nobody in a transaction doctype. A functional consultant who can explain that sentence has already delivered value."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the opening",
-			"title": "The five checks before you let anyone transact",
+			"kicker": "Lesson 6 · User permissions",
+			"title": "Restrict a user to their own warehouse",
 			"bullets": [
-				"Assets equal liabilities plus equity, and the trial balance proves it",
-				"Party balances must equal their control accounts, or ageing is wrong from day one",
-				"Stock quantity and value must match the count sheet, not the old system's report",
-				"The opening journal must be the last document dated before go-live"
+				"User permissions filter the data a role can see, and they outweigh role permissions",
+				"A warehouse restriction is the standard way to keep branches apart without separate companies",
+				"Test as the restricted user, because administrators bypass these filters",
+				"Restrictions apply to reports too, which is what makes them trustworthy"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open the user", "Warehouse supervisor", "User form"],
+					[
+						"2",
+						"Add user permission",
+						"Allow Warehouse: Retail Counter - SM",
+						"Restriction row added"
+					],
+					["3", "Set apply to all doctypes", "Yes, for stock doctypes", "Scope defined"],
+					["4", "Log in as that user", "Open Stock Balance", "Only Retail Counter shown"],
+					["5", "Try a transfer to Main", "Create a stock entry", "Main not selectable"],
+					["6", "Log back in as administrator", "Same report", "All warehouses visible"]
+				]
+			},
+			"notes": "This is the single most requested control in multi-branch distribution, and it is pure configuration. Show the client the same report from two logins, because seeing the difference is what sells the control. Remind them that administrators bypass it, so the discipline depends on limiting administrator accounts to two named people."
+		},
+		{
+			"kicker": "Lesson 7 · Workflow",
+			"title": "Put an approval on discounts above ten per cent",
+			"bullets": [
+				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
+				"Conditions belong in transition rules, which keeps the workflow honest",
+				"Approvers need a role, not a person, so absence does not block the business",
+				"Every workflow needs an escape path, or urgent orders stall at month end"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Settings → Workflow → New",
+						"Document Sales Order, state Draft",
+						"Workflow editor"
+					],
+					["2", "Add states", "Pending Approval, Approved, Rejected", "Three states defined"],
+					[
+						"3",
+						"Add a transition",
+						"Draft to Approved when discount is zero",
+						"Auto-approval path"
+					],
+					[
+						"4",
+						"Add a second transition",
+						"Draft to Pending Approval when discount above 10",
+						"Approval path"
+					],
+					["5", "Assign approver role", "Sales Manager", "Role attached to the state"],
+					[
+						"6",
+						"Test both paths",
+						"One order at 5 per cent, one at 15 per cent",
+						"First submits, second waits"
+					]
+				]
+			},
+			"notes": "The workflow is only useful if the client's approver role is filled by more than one person, so ask that question before building it. A fifteen per cent discount order that sits unapproved for three days costs more than the discount saved. Build the escape path deliberately and document who may use it."
+		},
+		{
+			"kicker": "Lesson 8 · Automation",
+			"title": "Automate recurring documents, carefully",
+			"bullets": [
+				"Auto repeat creates a copy of a document on a schedule, which suits subscriptions and retainers",
+				"Test one cycle before enabling, because a wrong template repeats the error monthly",
+				"Automation never replaces the control, so someone still reviews the output",
+				"Start with one low-risk document and add others only after a clean month"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open the source document",
+						"Sales Invoice for the monthly retainer",
+						"Submitted invoice"
+					],
+					["2", "Create auto repeat", "Monthly on the first, 12 occurrences", "Schedule stored"],
+					["3", "Set the template", "Same items, customer and tax", "Template reviewed"],
+					["4", "Enable and wait", "First cycle on 01-03-2026", "New draft invoice created"],
+					["5", "Review the draft", "Amounts and dates correct", "Submit or amend"],
+					["6", "Check the log", "Auto Repeat list", "Next occurrence scheduled"]
+				]
+			},
+			"notes": "Automation is where a small configuration error compounds twelve times a year, so the first cycle must be reviewed by a person. A retainer invoice that repeats the wrong tax template creates a filing problem every month. Enable one document, watch one cycle, then expand, and write that rule into the handover note."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the restriction",
+			"title": "Same report, two logins",
+			"bullets": [
+				"The test is not what the administrator sees but what the restricted role sees",
+				"Reports, lists and link fields must all respect the filter, not only forms",
+				"A restriction that silently does not apply is worse than no restriction at all",
+				"Record the test result, because the client will ask for evidence"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Total assets", "96,290.00", "Trial Balance at opening date"],
-					["Liabilities plus equity", "3,068.00 plus 93,222.00", "Trial Balance at opening date"],
 					[
-						"Debtors control",
-						"13,200.00 equals party ledger",
-						"Accounts Receivable and control account"
+						"Warehouses visible to the supervisor",
+						"Retail Counter only",
+						"Stock Balance as that user"
 					],
-					["Stock", "47 units, 5,640.00", "Stock Balance report"],
-					["Opening journal difference", "0.00", "Journal Entry footer"]
+					["Transfer target options", "Main not selectable", "New stock entry as that user"],
+					["Report totals", "retail-only quantity and value", "Stock Balance as that user"],
+					["Administrator view", "all four warehouses", "Same report as administrator"],
+					["Evidence", "screenshot or note in the handover file", "Project documentation"]
 				]
 			},
-			"notes": "Two numbers to say out loud in the sign-off meeting: ninety six thousand two hundred ninety of assets, and the same figure on the other side. If the difference is not zero, do not open the doors, because every later correction will be harder once documents exist. This is the moment to be slow rather than helpful."
+			"notes": "Two logins, one report, a visible difference: that is the demonstration clients remember. Write the result down, because when the first complaint arrives about missing data the answer is already documented. If both logins look identical, the user permission was saved against the wrong field."
 		},
 		{
-			"kicker": "Volume 10 · Reference",
-			"title": "Migration order and what depends on what",
+			"kicker": "Lesson 7 · Verify the workflow",
+			"title": "States, roles and the escape path",
 			"bullets": [
-				"Each row depends on the rows above it, which is why the order is not negotiable",
-				"Opening balances come last, because they reference every master",
-				"Users and permissions usually precede training, not go-live",
-				"Every step leaves an artefact, and the artefacts become the client's audit file"
+				"A workflow is correct when a low-discount order flows and a high-discount order waits",
+				"Approvers must see the document in their queue, not hunt for it by number",
+				"The escape path is documented and named, so emergencies do not become policy",
+				"Rejection is a state, not a deletion, so the history survives"
 			],
 			"table": {
-				"headers": ["Order", "Step", "Depends on", "Artefact"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["1", "Company, currency, fiscal year", "Nothing", "Company record screenshot"],
-					["2", "Chart of accounts and cost centres", "Company", "Signed chart mapping"],
-					["3", "Warehouses, UOM and item groups", "Company", "Master file"],
-					["4", "Items, parties, price lists", "Groups and territories", "Import log"],
-					["5", "Users, roles and permissions", "Company", "Access matrix"],
-					["6", "Opening balances", "Everything above", "Opening trial balance"]
+					["5 per cent order", "submits without approval", "Sales Order list"],
+					["15 per cent order", "status Pending Approval", "Sales Order header"],
+					["Approver queue", "the pending order appears", "Workflow action list"],
+					[
+						"Rejected order",
+						"status Rejected, retained in the list",
+						"Sales Order list filtered by state"
+					],
+					["Escape path", "named user documented", "Workflow notes in the handover file"]
 				]
 			},
-			"notes": "Print this order and stick it on the wall of the project room, because every delay in a migration traces to somebody working out of sequence. When the client asks to import invoices before opening balances, this table is the answer that ends the conversation politely."
+			"notes": "The failure mode is a workflow with no queue, where the approver only learns about the order when the customer calls. Configure the queue view as part of the build, not afterwards, and teach the approver to work from it. A rejection that deletes the document would destroy the audit trail, which is why the state is retained."
 		},
 		{
-			"kicker": "Volume 10 · Reference",
-			"title": "What makes an opening balance auditable",
+			"kicker": "Volume 8 · Reference",
+			"title": "Automation options ranked by risk",
 			"bullets": [
-				"The auditor wants a source document for every opening figure",
-				"The count sheet supports stock, the ageing report supports debtors and creditors",
-				"The bank statement supports cash, and the fixed asset register supports assets",
-				"The equity figure is the only one that is derived, and it must be explained in words"
+				"Permissions are the highest-value change and the lowest risk, so start there",
+				"Notifications are cheap and reversible; workflows change behaviour and need agreement",
+				"Auto repeat touches money documents, so it needs the tightest review",
+				"Every option here is configuration, and every one needs an owner"
 			],
 			"table": {
-				"headers": ["Opening figure", "Value", "Supporting evidence", "Owner"],
+				"headers": ["Option", "Risk", "First control", "Owner"],
 				"rows": [
-					["Stock", "5,640.00", "Signed count sheet at 47 units", "Warehouse"],
-					["Debtors", "13,200.00", "Ageing report from the old system", "Finance"],
-					["Creditors", "1,188.00", "Supplier statements", "Purchasing"],
-					["Bank", "18,450.00", "Bank statement at cut-off", "Finance"],
-					["Fixed assets", "59,000.00", "Asset register with dates", "Finance"]
+					["Roles and permissions", "Low, reversible", "Quarterly access review", "HR or admin"],
+					["User permissions", "Low, reversible", "Test with a restricted login", "Admin"],
+					[
+						"Notifications",
+						"Low, noisy if overused",
+						"One message per exception",
+						"Department head"
+					],
+					[
+						"Workflow",
+						"Medium, blocks work",
+						"Named approver role and escape path",
+						"Operations manager"
+					],
+					["Auto repeat", "High, repeats money", "Review the first cycle", "Finance manager"]
 				]
 			},
-			"notes": "Every row here has a paper source except equity, and that is the row to explain in the file note. When the audit comes, the client produces this page rather than reconstructing a number from memory. A consultant who builds the evidence table at migration time is remembered as the one who made the audit easy."
+			"notes": "Ranking by risk is what stops a client asking for everything at once. Permissions first, notifications second, workflow once the approver role exists, and auto repeat only for documents that are genuinely identical every period. Say the order out loud in the proposal and the delivery becomes predictable."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "The access review a consultant should leave behind",
+			"bullets": [
+				"Access reviews are a quarterly ritual, not a one-off configuration task",
+				"List every user, their roles and any user permissions, and get a signature",
+				"Remove leavers on the day they leave, which is the only control auditors test hard",
+				"Keep two administrators, named, and no shared logins"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Active users", "matches the HR list", "User list"],
+					["Administrators", "exactly two named people", "Role list for System Manager"],
+					["Restricted users", "each has a user permission row", "User permissions"],
+					["Leavers", "disabled on their last day", "User list, enabled column"],
+					["Review evidence", "signed quarterly sheet", "Client's audit file"]
+				]
+			},
+			"notes": "This sheet takes twenty minutes a quarter and prevents the finding that audits always produce: a leaver with live access. Hand it to the client as a template rather than a lecture, and put the first review date in the handover document. Consulting value often looks like a checklist somebody actually uses."
 		}
 	],
 	"lab": {
-		"title": "Lab · Map, import, load the opening and prove it balances",
+		"title": "Lab · Roles, a warehouse restriction, a discount workflow and an auto repeat",
 		"minutes": 45,
 		"steps": [
-			"Create the mapping workbook with old and new columns for accounts, parties and items",
-			"Confirm every old account has a target and no exceptions remain",
-			"Import item groups, then items, then customers, suppliers and price lists",
-			"Check each import log for errors and spot-check three item records",
-			"Post the stock opening of 47 units at 120.00 through stock reconciliation",
-			"Load debtors 13,200.00, creditors 1,188.00, bank 18,450.00 and fixed assets 59,000.00",
-			"Balance the opening with equity and confirm the journal difference is 0.00",
-			"Print the opening trial balance and confirm assets equal liabilities plus equity"
+			"Create the Sales Executive role with read, write, create and submit but no delete",
+			"Restrict a warehouse supervisor to Retail Counter with a user permission",
+			"Log in as that user and confirm only their warehouse appears in reports",
+			"Build a sales order workflow with an approval state above 10 per cent discount",
+			"Test a 5 per cent order and confirm it submits without approval",
+			"Test a 15 per cent order and confirm it waits in Pending Approval",
+			"Set an auto repeat for a monthly retainer invoice",
+			"Review the first generated draft and confirm amounts and tax"
 		],
-		"done": "Done when the opening trial balance shows 96,290.00 on both sides, party balances equal their control accounts, and the evidence table is complete for every opening figure."
+		"done": "Done when the restricted user sees one warehouse only, the 15 per cent order cannot submit without approval, and the auto repeat produced a correct draft for review."
 	},
 	"quiz": [
 		{
-			"question": "Why must masters be imported in dependency order?",
-			"options": [
-				"To save disk space",
-				"Because children reference parents like item groups and territories",
-				"To avoid tax",
-				"To speed the import"
-			],
-			"answer": 1,
-			"why": "ERPNext links records, so an item needs its group and a customer needs its territory before either can be created."
+			"question": "Which permission should a sales role normally lack on submitted documents?",
+			"options": ["Read", "Create", "Delete", "Submit"],
+			"answer": 2,
+			"why": "Delete on transaction doctypes destroys the audit trail. Sales roles normally read, create, write and submit, with cancel reserved for supervisors."
 		},
 		{
-			"question": "How should stock opening balances be loaded?",
+			"question": "What does a user permission do?",
 			"options": [
-				"A journal to the stock account",
-				"A stock reconciliation at valuation",
-				"A purchase invoice",
-				"A sales return"
+				"Changes the role",
+				"Filters the records a user can see",
+				"Adds a new user",
+				"Disables the workflow"
 			],
 			"answer": 1,
-			"why": "Stock reconciliation sets both quantity and valuation, whereas a journal would create value with no quantity behind it."
+			"why": "User permissions restrict data, such as one warehouse or territory, and they apply to reports as well as forms."
 		},
 		{
-			"question": "Opening assets of 96,290.00 with liabilities of 3,068.00 require equity of what?",
-			"options": ["96,290.00", "93,222.00", "3,068.00", "99,358.00"],
-			"answer": 1,
-			"why": "Assets equal liabilities plus equity, so equity is 96,290.00 − 3,068.00 = 93,222.00."
-		},
-		{
-			"question": "What evidence supports the debtors opening balance?",
+			"question": "Why should an approver be a role rather than a named person?",
 			"options": [
-				"The count sheet",
-				"The ageing report from the old system",
-				"The bank statement",
-				"The asset register"
+				"Roles are cheaper",
+				"So the process continues when someone is away",
+				"Roles bypass permissions",
+				"It simplifies printing"
 			],
 			"answer": 1,
-			"why": "Debtors are supported by an ageing report or customer statements, while stock uses the count sheet and cash uses the bank statement."
+			"why": "A role keeps the workflow moving during leave, whereas a named approver blocks the business whenever they are unavailable."
 		},
 		{
-			"question": "An opening journal shows a difference of 250.00. What should happen?",
+			"question": "What is the main risk of auto repeat?",
 			"options": [
-				"Post it to a suspense account",
-				"Stop and find the cause before go-live",
-				"Ignore it as immaterial",
-				"Adjust the stock value"
+				"It deletes documents",
+				"An error repeats every cycle",
+				"It changes permissions",
+				"It stops notifications"
 			],
 			"answer": 1,
-			"why": "An opening that does not balance will corrupt every later comparison, and a suspense account merely moves the problem into a new line."
+			"why": "Auto repeat copies a document on a schedule, so a wrong tax template or price repeats monthly until somebody reviews the draft."
+		},
+		{
+			"question": "Which automation should a consultant configure first?",
+			"options": ["Auto repeat", "Workflow", "Roles and permissions", "Notifications"],
+			"answer": 2,
+			"why": "Permissions deliver the highest control value with the lowest risk and are fully reversible, which is why they come first."
 		}
 	],
 	"memory": {
-		"spine": "Agree the mapping on paper, then import parents before children, and let one dated journal carry every opening balance.",
+		"spine": "A role says what a job may do, a user permission says which rows it may see, and the only test that counts is the restricted login.",
 		"device": {
-			"kind": "phrase",
-			"label": "Agree, then parents before children",
+			"kind": "rule",
+			"label": "Roles do, permissions see",
 			"expansion": [
-				"The mapping workbook holds old value, new value, owner and decision date, signed before any import",
-				"Completeness means every old value has a target, including the ones nobody uses",
-				"Dependency order, not spreadsheet order: item groups before items, territories before customers",
-				"Opening balances are one journal dated the day before go live, not typed invoices",
-				"The import log is the evidence: attempted, created, updated and failed"
+				"Name roles after the job function, never after a person",
+				"User permissions filter rows and outweigh what the role would otherwise show",
+				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
+				"Auto repeat copies a document on a schedule, which suits subscriptions and retainers only",
+				"Test the restricted login, not the administrator"
 			]
 		},
 		"cards": [
 			{
-				"q": "What must the mapping workbook contain?",
-				"a": "Every old value with a new target, an owner and a decision date, signed before the import starts.",
-				"hint": "A written agreement"
+				"q": "Role permission or user permission, what is the difference?",
+				"a": "A role grants actions on a DocType, a user permission filters the records, and the narrower wins.",
+				"hint": "Do versus see"
 			},
 			{
-				"q": "Why import in dependency order?",
-				"a": "ERPNext refuses children without parents, so the order is the data model rather than a preference.",
-				"hint": "Parents first"
+				"q": "How is a user kept to one warehouse?",
+				"a": "With a user permission on Warehouse for that user, not with a new role.",
+				"hint": "Row filter"
 			},
 			{
-				"q": "How are opening balances loaded?",
-				"a": "As a single journal dated the day before go live, with a source document behind every figure.",
-				"hint": "One journal"
+				"q": "What makes a discount workflow correct?",
+				"a": "A low discount flows straight to submitted while a high one waits at pending approval for the right role.",
+				"hint": "States and transitions"
 			},
 			{
-				"q": "What proves an import is complete?",
-				"a": "The log: rows attempted, created, updated and failed, plus a duplicate count.",
-				"hint": "The log is the evidence"
+				"q": "When is auto repeat safe?",
+				"a": "For genuinely recurring documents with a fixed shape, never for ones a human must judge.",
+				"hint": "Rhythm, not judgement"
 			},
 			{
-				"q": "Which five checks come before anyone is allowed to transact?",
-				"a": "Assets equal liabilities plus equity, the trial balance balances, stock ties to the count, debtors to statements, tax to returns.",
-				"hint": "Paper, then access"
+				"q": "What does an access review check?",
+				"a": "That every active login still matches a job, quarterly, including the ones nobody uses.",
+				"hint": "Quarterly ritual"
 			}
 		],
 		"trap": {
-			"what": "Opening balances are entered as dummy invoices so that ageing looks right.",
-			"why": "Revenue and tax are then overstated in the go live month and the auditor cannot separate history from opening figures."
+			"what": "A user permission is added to fix a report that looks wrong.",
+			"why": "The report was the symptom of an over broad role, so filtering rows hides the grant and the next report breaks differently."
 		}
 	},
-	"narration": "Migration is where a project is won or lost, and it starts on paper. A mapping workbook with old values, new values and a named owner for every exception is the document the client signs, and it is what ends arguments in month two. Import in dependency order: company, chart of accounts, warehouses and groups, then items, parties and price lists, then users, and only then opening balances. The opening is a journal dated the day before go-live plus a stock reconciliation, and it must balance: ninety six thousand two hundred ninety of assets against three thousand and sixty eight of liabilities and ninety three thousand two hundred twenty two of equity. If it does not balance, the doors stay closed, because every later correction is harder once documents exist. Map on paper, import in order, prove the opening, and only then open the doors to users, with the evidence table signed so the first audit is a page rather than a reconstruction."
+	"narration": "Permissions are the least glamorous part of a project and the part that determines whether it survives an audit. Roles follow the org chart, not the software, and the safe default is read, write, create and submit without delete. User permissions restrict a person to their warehouse or territory, and you prove it by logging in as them, because administrators bypass the filter. Then workflow: a discount above ten per cent waits for the sales manager, and the approver is a role so leave does not stop the business. Finally automation, where one wrong template repeats twelve times a year, so review the first cycle. Configure in that order and the client gets control before convenience, and finish with a quarterly access review that the client signs, because a leaver with live access is the finding every audit produces when nobody owns the list, and when nobody has written down who is allowed to do what."
 }

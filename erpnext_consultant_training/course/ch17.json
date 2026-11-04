@@ -1,395 +1,419 @@
 {
 	"id": "ch17",
 	"number": 17,
-	"title": "Volume 6 · Bills of Materials and Work Orders",
-	"subtitle": "Lessons 1–4: a bill of materials the floor will follow, a work order that reserves the right stock, and a completion that leaves a sane valuation",
+	"title": "Volume 5 · Month-End and Year-End Close",
+	"subtitle": "Lessons 5–8: the pre-close checks, the closing voucher, the month-end pack and the move from FY2026 into FY2027",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Build a bill of materials with materials, operations and a defensible cost",
-		"Plan a work order from real demand and read what it reserves",
-		"Issue components to the floor without losing the valuation trail",
-		"Complete production so finished goods carry materials plus capacity cost"
+		"Run five pre-close checks that catch ninety per cent of month-end problems",
+		"Close a period with the closing voucher and explain what it locks",
+		"Assemble a month-end pack a business owner can read in five minutes",
+		"Carry balances into a new fiscal year without losing an opening entry"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Bill of materials",
-			"title": "Write a bill of materials the floor will follow",
+			"kicker": "Lesson 5 · Pre-close checks",
+			"title": "Five checks before anyone closes anything",
 			"bullets": [
-				"A BOM is a recipe: quantities, operations and the cost of both",
-				"Quantities must be per single finished unit, or every work order multiplies the error",
-				"Operations carry time and rate, which is how labour enters the finished cost",
-				"Include only what the floor actually consumes, not what the drawing says in theory"
+				"Closing a period with unposted documents is the single most common month-end failure",
+				"Control accounts must agree with their subledgers before the trial balance is printed",
+				"Stock value, bank reconciliation and SST liability each have one owner and one proof",
+				"Run the checks on the last working day, not after the close, or the fixes cost a week"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					[
-						"1",
-						"Manufacturing → Bill of Materials → New",
-						"Item SM-ASM, quantity 1, company SM",
-						"Empty BOM form"
-					],
+					["1", "Accounts → Trial Balance", "01-01-2026 to 31-01-2026", "Debits equal credits"],
 					[
 						"2",
-						"Add components",
-						"SM-MTR 2 Nos at 80.00, SM-HSG 1 Nos at 40.00",
-						"Material cost 200.00"
+						"Check draft documents",
+						"Filter status Draft on sales and purchase documents",
+						"List is empty or explained"
 					],
 					[
 						"3",
-						"Add operation",
-						"Assembly, workstation Assembly Line, 30 minutes",
-						"Operation row accepted"
+						"Party reconciliation",
+						"Debtors and Creditors against the control accounts",
+						"Difference 0.00 on both"
 					],
-					["4", "Set the rate", "60.00 per hour on the operation", "Operating cost 30.00"],
-					["5", "Save and Submit", "Confirm", "BOM-SM-ASM-001, total cost 230.00"],
-					["6", "Check the tree", "Manufacturing → BOM Tree", "One level, two components"]
-				]
-			},
-			"notes": "Two motors at eighty and one housing at forty is two hundred of material, and half an hour at sixty adds thirty of capacity, so the assembly costs two hundred thirty to make. If the learner cannot predict that number before saving, they will not notice when a supplier price change silently makes every finished unit wrong. The BOM is the only place where a costing error is cheap to fix."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the BOM",
-			"title": "The cost roll-up, proved line by line",
-			"bullets": [
-				"Material cost, operating cost and total must each be visible and explainable",
-				"A BOM without operations still works, but labour then never reaches inventory",
-				"Quantity per unit of one keeps the work order arithmetic trivial",
-				"Every BOM needs an owner, because prices and routings both change"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Material cost", "200.00", "BOM → Costing section"],
-					["Operating cost", "30.00", "BOM → Operations table"],
-					["Total cost per unit", "230.00", "BOM total"],
-					["Selling price assumption", "350.00", "Item price for SM-ASM"],
-					["Gross margin per unit", "120.00, about 34 per cent", "Your own arithmetic"]
-				]
-			},
-			"notes": "A three hundred fifty selling price against two hundred thirty of cost gives one hundred twenty of margin, roughly thirty four per cent, and that single ratio is what the owner will ask about in the first production meeting. Teach the learner to state it before anyone asks, because a consultant who arrives with the margin already computed sets the tone for the whole engagement."
-		},
-		{
-			"kicker": "Lesson 3 · Work order",
-			"title": "Plan a work order from real demand",
-			"bullets": [
-				"A work order is a promise to the floor: this item, this quantity, this date",
-				"Required items are reserved against the warehouse you nominate, not against hope",
-				"The planned start date drives the material request, so set it honestly",
-				"Do not create work orders for stock you have not sold unless the client plans to stock"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Manufacturing → Work Order → New",
-						"Item SM-ASM, quantity 10, BOM-SM-ASM-001",
-						"Required items populated"
-					],
-					[
-						"2",
-						"Set the dates",
-						"Planned start 05-02-2026, planned end 07-02-2026",
-						"Schedule recorded"
-					],
-					["3", "Set source warehouse", "Main - SM for components", "Reserved quantities shown"],
-					["4", "Save and Submit", "Confirm", "WO-SM-2026-0001, status Not Started"],
-					["5", "Read required items", "SM-MTR 20, SM-HSG 10", "Reserved against Main"],
-					[
-						"6",
-						"Check availability",
-						"Stock Balance for both components",
-						"Enough or a shortage flagged"
-					]
-				]
-			},
-			"notes": "Ten assemblies need twenty motors and ten housings, and the work order says so before anything moves. That is the value of the document: it converts a sales promise into a material promise. If availability is short, the conversation happens on the planning screen rather than on the assembly floor, which is a day earlier and considerably cheaper."
-		},
-		{
-			"kicker": "Lesson 4 · Verify the reservation",
-			"title": "What the work order actually reserves",
-			"bullets": [
-				"Reserved quantity is a planning number and does not move the stock ledger",
-				"Stock only moves when material is transferred to the floor",
-				"A work order with no reservation means the item is not stock-tracked or the warehouse is wrong",
-				"Status changes are the audit trail of the production process"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Reserved SM-MTR", "20 units", "Work Order → Required Items"],
-					["Reserved SM-HSG", "10 units", "Work Order → Required Items"],
-					["Stock ledger effect", "none until material transfer", "Stock Ledger for SM-MTR"],
-					["Work order status", "Not Started", "Work Order header"],
-					["Projected quantity at Main", "reduced by the reservation", "Stock → Item dashboard"]
-				]
-			},
-			"notes": "This is where learners confuse planning with posting. Reserved quantities live in the work order and in availability reports, while the stock ledger stays untouched until the transfer. Say the sentence twice: a reservation is a promise, a transfer is a movement. The distinction prevents the classic panic when a client sees stock still in main after an issue was supposedly made."
-		},
-		{
-			"kicker": "Lesson 5 · Material issue",
-			"title": "Issue components to the floor",
-			"bullets": [
-				"Material transfer for manufacture moves components to the work-in-progress warehouse",
-				"The transfer is the moment cost leaves raw stock and joins the production order",
-				"Transfer exactly what the work order asks for, not the whole shelf",
-				"Partial transfers are normal for long builds, and the work order tracks the balance"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open WO-SM-2026-0001 → Create → Material Transfer",
-						"Nothing",
-						"Stock entry pre-filled with components"
-					],
-					[
-						"2",
-						"Set warehouses",
-						"From Main - SM to Assembly Floor - SM",
-						"Transfer type for manufacture"
-					],
-					[
-						"3",
-						"Confirm quantities",
-						"SM-MTR 20, SM-HSG 10",
-						"Transferred quantity equals required"
-					],
-					["4", "Save and Submit", "Confirm", "Stock entry STE-SM-2026-0010 submitted"],
-					[
-						"5",
-						"Check the bins",
-						"Main and Assembly Floor",
-						"Main falls by 20 and 10, floor rises"
-					],
-					[
-						"6",
-						"Check the work order",
-						"Transfer status",
-						"Material transferred, status In Process"
-					]
-				]
-			},
-			"notes": "Twenty motors and ten housings leave main and arrive on the floor, and the total value of the company has not changed. That is the point to make loudly, because the client's accountant will see two ledger rows and ask which one is the cost. Neither is: cost becomes expense only when the finished item is sold."
-		},
-		{
-			"kicker": "Lesson 6 · Verify the WIP",
-			"title": "Work in progress on the floor, in numbers",
-			"bullets": [
-				"Work in progress is the value of components consumed but not yet finished",
-				"The floor warehouse quantity is your visual WIP, and it must match the work order",
-				"No profit appears at this stage, however long the build takes",
-				"A floor balance that outlives the work order is scrap or theft, not WIP"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Components on the floor", "SM-MTR 20, SM-HSG 10", "Stock → Bin, Assembly Floor - SM"],
-					["Value on the floor", "2,000.00", "Stock Balance, Assembly Floor"],
-					[
-						"Main warehouse after issue",
-						"reduced by 20 motors and 10 housings",
-						"Stock → Bin, Main - SM"
-					],
-					["Work order status", "In Process", "Work Order header"],
-					["Profit and loss effect", "none", "Profit and Loss Statement"]
-				]
-			},
-			"notes": "Two thousand of components sitting on the floor is a number a client can see with their own eyes, and that is why the floor warehouse earns its place. When the count on the floor disagrees with the work order, the conversation is about physical control rather than accounting, and it is the warehouse supervisor who owns the answer."
-		},
-		{
-			"kicker": "Lesson 7 · Completion",
-			"title": "Complete the order and value the finished goods",
-			"bullets": [
-				"The manufacture entry consumes components and produces the finished item in one document",
-				"Valuation carries materials plus the operating cost you configured",
-				"A short completion leaves components on the floor, which the next transfer must explain",
-				"Scrap and rework belong in the same work order, not in a separate correction later"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open the work order → Create → Manufacture",
-						"Nothing",
-						"Entry with consumed and produced rows"
-					],
-					[
-						"2",
-						"Check the consumed rows",
-						"SM-MTR 20, SM-HSG 10 from Assembly Floor",
-						"Consumption pre-filled"
-					],
-					["3", "Check the produced row", "SM-ASM 10 units into Main - SM", "Finished quantity 10"],
 					[
 						"4",
-						"Confirm operating cost",
-						"0.50 hours × 10 units at 60.00 per hour",
-						"Operating cost 300.00"
-					],
-					["5", "Save and Submit", "Confirm", "Finished goods valued at 230.00 each"],
-					["6", "Read the stock ledger", "Filter SM-ASM", "Incoming 10 at 230.00, value 2,300.00"]
-				]
-			},
-			"notes": "Two thousand of materials plus three hundred of capacity gives two thousand three hundred, or two hundred thirty per assembly, which matches the BOM exactly. When the completion value differs from the BOM, the difference is always one of three things: a rate change on a component, an operation time recorded differently, or additional costs added on the entry."
-		},
-		{
-			"kicker": "Volume 6 · Reference",
-			"title": "Production documents in order",
-			"bullets": [
-				"Each document answers one question and hands the next one a number",
-				"Skipping the material transfer makes the completion consume stock that is not there",
-				"The work order is the only place where planned and actual quantities meet",
-				"Every document has a status that tells you where the build actually stands"
-			],
-			"table": {
-				"headers": ["Document", "When", "Purpose", "What to verify"],
-				"rows": [
-					[
-						"Bill of Materials",
-						"Once per product",
-						"Defines materials, operations and cost",
-						"Cost per unit matches the quote"
+						"Bank reconciliation",
+						"Bank - SM at 31-01-2026",
+						"Difference 0.00, timing items listed"
 					],
 					[
-						"Work Order",
-						"Per build",
-						"Reserves stock and schedules the floor",
-						"Required quantities are correct"
+						"5",
+						"Stock and SST",
+						"Stock Balance and SST liability account",
+						"5,640.00 stock, 1,200.00 payable"
 					],
 					[
-						"Material Transfer for Manufacture",
-						"At build start",
-						"Moves components to the floor",
-						"Floor quantity equals required"
-					],
-					[
-						"Manufacture entry",
-						"At completion",
-						"Consumes components, produces finished goods",
-						"Valuation equals materials plus operations"
-					],
-					[
-						"Stock Entry for scrap",
-						"When a unit fails",
-						"Removes the failed unit and its cost",
-						"Cost per good unit recalculated"
+						"6",
+						"Record the sign-off",
+						"Worksheet with five ticks and a name",
+						"Evidence for the file"
 					]
 				]
 			},
-			"notes": "Walk this table once with the client's production supervisor and once with their accountant, and you will hear two different questions: can I build it, and what did it cost. Answering both from the same five documents is what makes ERPNext usable on a shop floor rather than merely installed."
+			"notes": "Write these five on a card and give it to the client's finance lead, because the consultant will not be there every month. The order matters: draft documents first, then control accounts, then bank, then stock and tax. Each check has a named owner in the worksheet, and the close does not start until all five are ticked."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the checks",
+			"title": "What each pre-close check proves",
+			"bullets": [
+				"Each check answers one question, and a pass means the question is closed",
+				"A control account difference of even one cent blocks the close, because it compounds",
+				"Draft documents are not errors until they are explained, but unexplained they are",
+				"The SST liability must equal the output tax on submitted invoices, not on draft ones"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Trial balance", "debits 41,320.00 equal credits 41,320.00", "Trial Balance report"],
+					[
+						"Debtors control versus party ledger",
+						"13,200.00 both sides",
+						"Accounts Receivable and control account"
+					],
+					[
+						"Creditors control versus party ledger",
+						"1,188.00 both sides",
+						"Accounts Payable and control account"
+					],
+					["Stock value", "5,640.00", "Stack Balance report"],
+					["SST payable", "1,200.00", "General Ledger, SST Output - SM"]
+				]
+			},
+			"notes": "Two figures here deserve rehearsal: debtors of thirteen thousand two hundred, which is twelve thousand of sales plus one thousand two hundred of tax, and the SST payable of exactly one thousand two hundred. If either is off, the mistake is almost always a document without tax or a tax row with the wrong account, and both show up in the tax summary long before an auditor finds them."
+		},
+		{
+			"kicker": "Lesson 7 · Period close",
+			"title": "Close the period with the closing voucher",
+			"bullets": [
+				"The Period Closing Voucher is the document you create; it posts the closing entries and marks the period reported",
+				"Submitting it enqueues Process Period Closing Voucher jobs, one per chunk, and those do the actual posting",
+				"Watch GL Entry Processing Status move to Completed before you trust any figure in the pack",
+				"A failed chunk writes into Error Message, and Accounts Settings carries a legacy controller switch for that case",
+				"Close after the pack is produced and signed, never before, because closing restricts later changes"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Accounts → Period Closing Voucher → New",
+						"Company SM, fiscal year FY2026",
+						"Empty closing form"
+					],
+					[
+						"2",
+						"Set the period",
+						"Period start 01-01-2026, period end 31-01-2026",
+						"Dates inside the open period"
+					],
+					[
+						"3",
+						"Closing Account Head",
+						"Retained Earnings - SM",
+						"Account that receives the closing entries"
+					],
+					["4", "Save and Submit", "Confirm", "ACC-PCV-2026-00001 submitted"],
+					["5", "Watch processing", "GL Entry Processing Status", "In Progress, then Completed"],
+					[
+						"6",
+						"Inspect the job rows",
+						"Process Period Closing Voucher list",
+						"Process-PCV-001 with closing balances"
+					],
+					[
+						"7",
+						"Check retained earnings",
+						"Balance Sheet, 31-01-2026",
+						"Net profit 4,680.00 carried"
+					],
+					[
+						"8",
+						"Attempt a backdated entry",
+						"Journal dated 15-01-2026",
+						"Refused for the closed period"
+					]
+				]
+			},
+			"notes": "Net profit of four thousand six hundred eighty is sales of twelve thousand less cost of goods of six thousand, freight of sixty, accrual of eight hundred, insurance of one hundred and stock adjustment of three hundred sixty. Make the learner compute it before the close. Then teach the two documents properly: the Period Closing Voucher is yours to create, and the Process Period Closing Voucher rows are the background jobs that post it, so GL Entry Processing Status is the field you watch before anyone signs the pack."
+		},
+		{
+			"kicker": "Lesson 7 · Verify the close",
+			"title": "What the close does, and what it refuses",
+			"bullets": [
+				"The close zeroes income and expense accounts and leaves balance sheet accounts alone",
+				"It does not validate your arithmetic, so a wrong profit is simply transferred",
+				"It restricts later changes to the period, which is the point of closing at all",
+				"Stock value and party balances must be correct before the voucher, not after"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Income and expense balances", "0.00 after the close", "Trial Balance, 31-01-2026"],
+					["Retained earnings movement", "4,680.00", "Balance Sheet, equity section"],
+					["Stock value", "5,640.00 unchanged by the close", "Stock Balance report"],
+					[
+						"Backdated journal",
+						"refused with a period validation message",
+						"Journal entry dated 15-01-2026"
+					],
+					["Debtors balance", "13,200.00 carried forward", "Accounts Receivable report"]
+				]
+			},
+			"notes": "A learner who expects the close to catch their mistakes will close a wrong month and then argue with the auditor. Say it plainly: the close is a bookend, not a review. The review is the five checks that come before it, and the arithmetic of net profit of four thousand six hundred eighty is the test that the review worked."
+		},
+		{
+			"kicker": "Lesson 8 · Year end",
+			"title": "From FY2026 into FY2027 without losing a balance",
+			"bullets": [
+				"Year end closes the profit and loss, and every balance sheet account carries forward",
+				"The opening entry is generated by the close, not typed by hand",
+				"Lock the old year after the accounts are filed, and keep the audit trail intact",
+				"Confirm the opening balance sheet against the last reported one before you allow any entry"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Confirm the last period",
+						"December 2026 closed and reported",
+						"All twelve months closed"
+					],
+					[
+						"2",
+						"Create the fiscal year",
+						"FY2027, 01-01-2027 to 31-12-2027",
+						"New year available in dates"
+					],
+					[
+						"3",
+						"Run the year-end close",
+						"Closing voucher dated 31-12-2026",
+						"P and L accounts zeroed"
+					],
+					[
+						"4",
+						"Check opening balances",
+						"Balance Sheet, 01-01-2027",
+						"Assets and liabilities carried forward"
+					],
+					[
+						"5",
+						"Compare with the audited figures",
+						"Last reported balance sheet",
+						"Differences explained in writing"
+					],
+					["6", "Lock the year", "Set the accounts frozen date", "Backdated entries refused"]
+				]
+			},
+			"notes": "The year-end conversation is a governance conversation, so bring the freezing date and the audit trail rather than a checklist. The test is simple: can you produce the 31-12-2026 balance sheet a year later, unchanged? If a backdated entry can still post, the answer is no, and that is a finding the client's auditor will raise."
+		},
+		{
+			"kicker": "Volume 5 · Reference",
+			"title": "Month-end pack, one page per statement",
+			"bullets": [
+				"The pack must be readable by an owner who will not open the system",
+				"Every figure on the page has a report behind it, named in the same row",
+				"Variances are explained in words, not left for the reader to guess",
+				"The pack is signed and dated, because it is the evidence of the close"
+			],
+			"table": {
+				"headers": ["Document", "Figures", "Source report", "What the owner asks"],
+				"rows": [
+					[
+						"Profit and Loss",
+						"sales 12,000.00, COGS 6,000.00, net 4,680.00",
+						"Profit and Loss Statement",
+						"Why did margin move"
+					],
+					[
+						"Balance Sheet",
+						"stock 5,640.00, debtors 13,200.00",
+						"Balance Sheet",
+						"How much cash is tied up"
+					],
+					[
+						"SST summary",
+						"output 1,200.00, input 120.00",
+						"Tax summary by account",
+						"When is the return due"
+					],
+					[
+						"Ageing",
+						"debtors and creditors by bucket",
+						"Accounts Receivable and Payable",
+						"Who owes us and whom do we owe"
+					],
+					[
+						"Stock movement",
+						"received, issued, adjusted",
+						"Stock Ledger summary",
+						"Why did stock fall"
+					]
+				]
+			},
+			"notes": "Five pages, five owners, one signature: that is a month-end pack a client will actually use. Anything longer is a data dump, and anything shorter invites the question the consultant cannot answer in the meeting. Build it once as a template, then let the client's finance lead own it by month three, with the consultant reviewing rather than producing."
+		},
+		{
+			"kicker": "Volume 5 · Reference",
+			"title": "Close calendar with owners and evidence",
+			"bullets": [
+				"A close calendar is a contract, and every row needs a name and a proof",
+				"Working day three is the practical limit for a distributor of this size",
+				"The consultant's job is to build the calendar and then leave it behind",
+				"Every task produces one artefact, and the artefacts are the audit file"
+			],
+			"table": {
+				"headers": ["Working day", "Task", "Owner", "Evidence"],
+				"rows": [
+					[
+						"Day 1",
+						"Cut off sales, delivery notes and receipts",
+						"Operations lead",
+						"Last document number recorded"
+					],
+					[
+						"Day 1",
+						"Receive all supplier invoices into the system",
+						"Purchasing",
+						"Draft list empty"
+					],
+					[
+						"Day 2",
+						"Stock count and reconciliation",
+						"Warehouse",
+						"Signed count sheet and reconciliation"
+					],
+					[
+						"Day 2",
+						"Bank reconciliation",
+						"Finance executive",
+						"Reconciliation with 0.00 difference"
+					],
+					[
+						"Day 3",
+						"Close the period and produce the pack",
+						"Finance manager",
+						"Signed pack with five pages"
+					]
+				]
+			},
+			"notes": "Give the client this calendar before go-live, not in the first month end, because it forces the ownership conversation while everyone is still enthusiastic. If a task has no owner, the close will slip, and the consultant will end up producing the pack from memory at eleven at night. That is the pattern to design out."
 		}
 	],
 	"lab": {
-		"title": "Lab · Build a BOM, run a work order and value the output",
+		"title": "Lab · Run the checks, close January and produce the pack",
 		"minutes": 45,
 		"steps": [
-			"Create the SM-ASM bill of materials with two motors, one housing and a 30 minute operation",
-			"Confirm the cost roll-up of 200.00 materials and 30.00 operations",
-			"Create a work order for 10 units and confirm the 20 and 10 component requirement",
-			"Issue the components to the Assembly Floor and confirm main warehouse falls",
-			"Confirm the floor holds 2,000.00 of work in progress and no profit has moved",
-			"Complete the work order with 10 finished units and 300.00 of operating cost",
-			"Confirm finished goods valuation of 230.00 per unit and total 2,300.00",
-			"Compare the completion value with the BOM and explain any difference"
+			"Print the January trial balance and confirm debits equal credits",
+			"Reconcile debtors and creditors control accounts against their subledgers",
+			"Confirm the bank reconciliation difference is 0.00 and list timing items",
+			"Compute net profit for January from the five known adjustments",
+			"Close the period with a closing voucher dated 31-01-2026",
+			"Confirm retained earnings moves by 4,680.00 and the P and L resets",
+			"Attempt a backdated journal and record the validation message",
+			"Produce the five-page pack and name the source report for each figure"
 		],
-		"done": "Done when 10 assemblies sit in main at 230.00 each, the floor is empty of components for this order, and the completion value matches the BOM line for line."
+		"done": "Done when January is closed, net profit of 4,680.00 sits in retained earnings, a backdated entry is refused, and every figure in the pack names the report it came from."
 	},
 	"quiz": [
 		{
-			"question": "Two motors at 80.00, one housing at 40.00 and half an hour at 60.00 per hour give a unit cost of what?",
-			"options": ["200.00", "230.00", "260.00", "180.00"],
-			"answer": 1,
-			"why": "Materials are 2 × 80 + 40 = 200, and the operation is 0.5 × 60 = 30, so the BOM costs 230.00 per unit."
-		},
-		{
-			"question": "What does submitting a work order do to the stock ledger?",
+			"question": "What should happen before a period is closed?",
 			"options": [
-				"Moves components to the floor",
-				"Nothing, it only reserves",
-				"Produces finished goods",
-				"Creates a purchase order"
+				"Print the invoices",
+				"Run the five pre-close checks and sign them off",
+				"Delete draft documents",
+				"Lock the fiscal year"
 			],
 			"answer": 1,
-			"why": "A work order reserves quantities for planning. Stock moves only when material is transferred to the floor."
+			"why": "Draft documents, control accounts, bank, stock and tax must all be proved before closing, otherwise the reported figures are wrong from the start."
 		},
 		{
-			"question": "When does component cost become an expense?",
-			"options": [
-				"At the material transfer",
-				"At work order completion",
-				"When the finished item is sold",
-				"When the BOM is saved"
-			],
-			"answer": 2,
-			"why": "Component and labour cost accumulate in inventory until the finished item is sold, at which point cost of goods sold is recognised."
+			"question": "January sales are 12,000.00 with 10 % SST. What is the SST payable?",
+			"options": ["120.00", "1,200.00", "13,200.00", "12,120.00"],
+			"answer": 1,
+			"why": "Output tax is 10 % of the taxable sales of 12,000.00, giving 1,200.00, which is a liability rather than income."
 		},
 		{
-			"question": "What does the manufacture entry add to finished goods valuation?",
+			"question": "What does the closing voucher do?",
 			"options": [
-				"Only material cost",
-				"Materials plus operating cost",
-				"Selling price",
-				"Only operating cost"
+				"Locks the fiscal year",
+				"Transfers profit and loss balances to retained earnings",
+				"Deletes draft documents",
+				"Revalues stock"
 			],
 			"answer": 1,
-			"why": "The manufacture entry consumes components and adds the operating cost from the BOM, giving the full production cost per unit."
+			"why": "Closing transfers the period's income and expense balances to retained earnings and marks the period as reported."
 		},
 		{
-			"question": "10 assemblies cost 2,300.00 to build. Cost per unit is what?",
-			"options": ["230.00", "200.00", "255.56", "300.00"],
-			"answer": 0,
-			"why": "2,000 of materials plus 300 of operations is 2,300 across 10 good units, which is 230.00 each."
+			"question": "Sales 12,000.00 and costs of 6,000.00 plus 60.00 freight, 800.00 accrual, 100.00 insurance and 360.00 stock adjustment leave net profit of what?",
+			"options": ["6,000.00", "4,680.00", "5,040.00", "4,740.00"],
+			"answer": 1,
+			"why": "12,000 − 6,000 − 60 − 800 − 100 − 360 = 4,680.00."
+		},
+		{
+			"question": "Why set a frozen accounts date after filing?",
+			"options": [
+				"To speed up reports",
+				"To refuse backdated entries into a reported year",
+				"To delete old journals",
+				"To close the bank"
+			],
+			"answer": 1,
+			"why": "A frozen date prevents postings into a year whose statements are already reported and filed, preserving the audit trail."
 		}
 	],
 	"memory": {
-		"spine": "A recipe, a promise, a reservation, an issue and a completion: five steps from demand to finished goods, each with its own document.",
+		"spine": "Close in one order: fix what moves, then judge, then calculate, and only then lock the period so nobody can edit it.",
 		"device": {
 			"kind": "phrase",
-			"label": "Recipe, promise, reserve, issue, complete",
+			"label": "Move, judge, calculate, lock",
 			"expansion": [
-				"BOM: quantities and operations, with the cost of both, written so the floor can follow it",
-				"Work order: this item, this quantity, this date, a promise to the floor",
-				"Reservation: planning only, because quantities reserved never move the ledger",
-				"Material Transfer for Manufacture: components move to the work in progress warehouse",
-				"Manufacture: components consumed and finished goods produced in one document"
+				"Cash: reconcile the bank statement to the ledger before anything else",
+				"Count: reconcile stock and clear negative quantities",
+				"Judge: accruals and prepayments for costs incurred but not yet billed",
+				"Calculate: depreciation and any valuation repost",
+				"Lock: the Period Closing Voucher posts the closing entries and marks the period reported"
 			]
 		},
 		"cards": [
 			{
-				"q": "Does a work order move stock?",
-				"a": "No, it reserves. Only the transfer and the manufacture entry move quantity.",
-				"hint": "Promise versus movement"
+				"q": "What is the most common month end failure?",
+				"a": "Closing with unposted documents: drafts, unallocated payments and negative stock.",
+				"hint": "Check before you close"
 			},
 			{
-				"q": "What is work in progress?",
-				"a": "The value of components consumed but not yet finished, sitting in the work in progress warehouse.",
-				"hint": "Half made stock"
+				"q": "What does the Period Closing Voucher actually do?",
+				"a": "It zeroes income and expense accounts into the closing account and leaves balance sheet accounts alone.",
+				"hint": "Profit and loss to zero"
 			},
 			{
-				"q": "What does a BOM cost roll up contain?",
-				"a": "Material cost plus operating cost per unit, at the BOM's own rates and operations.",
-				"hint": "Material plus operations"
+				"q": "Can a document be edited in a closed period?",
+				"a": "Not without reopening or correcting in the next period. The close is a lock, not a label.",
+				"hint": "Lock, do not argue"
 			},
 			{
-				"q": "Where are components actually consumed?",
-				"a": "In the Manufacture stock entry, which also produces and values the finished item.",
-				"hint": "One document, two directions"
+				"q": "At year end, what carries forward?",
+				"a": "Every balance sheet balance, while the profit and loss closes into equity.",
+				"hint": "Balances yes, profit no"
 			},
 			{
-				"q": "Why must the finished valuation be explainable?",
-				"a": "It becomes the cost of every later sale, so an unexplainable BOM cost is an unexplainable margin.",
-				"hint": "Cost in, cost out"
+				"q": "Who signs a close off?",
+				"a": "Every row of the close calendar needs an owner and a proof, and the pack must read without the system.",
+				"hint": "Names and evidence"
 			}
 		],
 		"trap": {
-			"what": "Components are issued straight out of the main warehouse and the work in progress step is skipped.",
-			"why": "Nothing is ever in process, so a half finished order looks like a stock loss and the finished goods value cannot be rebuilt."
+			"what": "The period is closed to stop people posting, before anything is reconciled.",
+			"why": "The voucher locks in whatever was wrong and every later report inherits it, so the correction costs twice the work."
 		}
 	},
-	"narration": "Manufacturing scares functional consultants because it looks technical, and it is not. A bill of materials is a recipe: two motors at eighty, one housing at forty, half an hour of assembly at sixty an hour, which gives two hundred thirty per unit. A work order turns demand into a reservation: ten assemblies need twenty motors and ten housings, and nothing has moved yet. The material transfer moves components to the floor, where they are work in progress and still not an expense. Completion consumes the components, adds three hundred of operating cost, and produces ten assemblies at two hundred thirty each. Four documents, one cost, no mystery. If the completion differs from the BOM, check the rate, the time and any extra charges before blaming the system, and write the answer in the production worksheet. A client who can explain a cost per unit from four documents will trust the system with their quotations, and that trust is the whole point of the volume."
+	"narration": "Month end is a process, not an event, and the consultant who builds the process is the one who gets invited back. Five checks come first: the trial balance, the draft documents, the debtors and creditors control accounts, the bank reconciliation, and stock with tax. When all five are signed, the close can start. January carries twelve thousand of sales, six thousand of cost, and four thousand six hundred eighty of net profit once freight, accrual, insurance and the stock adjustment are counted. The closing voucher moves that to retained earnings and marks the period as reported. At year end the same discipline carries balances into the new year, and the frozen date stops anyone rewriting a year that has already been filed. A close calendar with a name against every task is what makes the process repeatable, and the signed five-page pack is what makes it auditable. Build both once, hand the ownership to the client's finance lead, and the consultant's job becomes review rather than rescue."
 }

@@ -1,395 +1,346 @@
 {
 	"id": "ch23",
 	"number": 23,
-	"title": "Volume 9 · Malaysian Tax and Statutory Setup",
-	"subtitle": "Lessons 1–4: SST templates that survive an audit, item tax categories that match the law, and an SST-02 return that reconciles",
+	"title": "Volume 8 · Print Formats, Naming and Notifications",
+	"subtitle": "Lessons 1–4: documents the customer can read, series numbers that survive an audit, and notifications that arrive once",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Build sales and purchase tax templates with separate liability accounts",
-		"Map items to tax categories so the right rate lands on the right line",
-		"Produce SST-02 figures that tie to the general ledger",
-		"Handle exempt and zero-rated lines with the evidence an auditor asks for"
+		"Build a print format from the builder without writing code",
+		"Set naming series per document type and branch so numbering stays gapless",
+		"Configure a notification that fires on the right event and only once",
+		"Standardise letterheads and terms so every document looks like one company"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Tax templates",
-			"title": "Build the SST templates an auditor expects",
+			"kicker": "Lesson 1 · Print format",
+			"title": "Design a print format the customer will read",
 			"bullets": [
-				"One template per rate per direction: sales tax out, service tax out, purchase tax in",
-				"Each template names an account, and those accounts become the return's source lines",
-				"Service tax on services is eight per cent, sales tax on goods is ten per cent in our sample",
-				"Never reuse one account for both output and input, or the return cannot be split"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Accounts → Tax Template → New", "Sales Tax 10 %, type Sales", "Template form"],
-					["2", "Add the row", "Rate 10, account SST Output - SM", "One tax row"],
-					[
-						"3",
-						"Create the service template",
-						"Service Tax 8 %, account Service Tax Output - SM",
-						"Second template"
-					],
-					[
-						"4",
-						"Create the purchase templates",
-						"Purchase tax 10 % and service tax 8 %, input accounts",
-						"Two more templates"
-					],
-					[
-						"5",
-						"Set tax categories",
-						"In-State, Out-of-State, Exempt",
-						"Three categories available"
-					],
-					[
-						"6",
-						"Attach to a customer",
-						"Aeon Big uses Sales Tax 10 %",
-						"Default template on the customer"
-					]
-				]
-			},
-			"notes": "Separate accounts are the whole trick: output tax is a liability, input tax is an asset, and the difference is what you file. Most Malaysian sites start with one combined account and then cannot produce SST-02 without a spreadsheet. Fix it at configuration time, because changing it later means remapping every historical posting."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the tax",
-			"title": "One invoice that proves the matrix",
-			"bullets": [
-				"Goods at ten per cent and services at eight per cent must sit on separate templates",
-				"The invoice total is net plus tax, and the tax amount is never income",
-				"Each tax row names its account, so the ledger carries the split automatically",
-				"An exempt line carries no tax but still needs a category for reporting"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Goods line", "2,400.00 at 10 % gives 240.00", "Sales Invoice, tax summary"],
-					["Service line", "500.00 at 8 % gives 40.00", "Sales Invoice, tax summary"],
-					["Invoice total", "2,940.00", "Invoice totals"],
-					["SST Output account", "240.00 credit", "General Ledger, SST Output - SM"],
-					["Service Tax Output account", "40.00 credit", "General Ledger, Service Tax Output - SM"]
-				]
-			},
-			"notes": "Two rates on one invoice is the case that breaks most first attempts, because a single template cannot carry both. Make the learner compute two thousand four hundred plus five hundred plus two hundred forty plus forty, and then read the same four numbers off the tax summary. When they agree, the tax configuration is defensible."
-		},
-		{
-			"kicker": "Lesson 3 · Item tax categories",
-			"title": "Map items so the rate follows the product",
-			"bullets": [
-				"Tax category on the item overrides the customer's default, and that precedence must be intended",
-				"A service item with sales tax creates an incorrect return even though the invoice looks right",
-				"Exempt goods need their own category and a reason code, not just a zero rate",
-				"Review the mapping once with the client's tax advisor and keep the email"
+				"The print format builder gives you sections, fields and totals without a line of code",
+				"Print only the fields the customer needs: prices, quantities, tax and terms",
+				"Test with a real document, because a short address or a long item name breaks layouts",
+				"Attach a letterhead, or every invoice leaves the building looking improvised"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open item SM-BL200",
-						"Tax section, item tax template Sales Tax 10 %",
-						"Template attached"
+						"Printing → Print Format → New",
+						"Document type Sales Invoice, standard format",
+						"Builder canvas with sections"
 					],
 					[
 						"2",
-						"Open item SM-DEL",
-						"Service item with Service Tax 8 %",
-						"Service template attached"
-					],
-					["3", "Open item SM-CTN", "Exempt packaging with the exempt category", "Exempt attached"],
-					[
-						"4",
-						"Create a mixed invoice",
-						"One line each of the three items",
-						"Three different tax rows"
-					],
-					["5", "Check the summary", "240.00, 40.00 and 0.00", "Totals 280.00 tax"],
-					["6", "Print the invoice", "Tax shown per line", "Customer sees the breakdown"]
-				]
-			},
-			"notes": "Precedence confuses everyone, so write it on the configuration worksheet: item template beats customer template beats company default. Test it with the three-line invoice above and the client can see the precedence rather than being told about it. When the tax advisor changes a rate, this is also the list you update."
-		},
-		{
-			"kicker": "Lesson 4 · SST return",
-			"title": "Produce SST-02 figures from the ledger",
-			"bullets": [
-				"The return is built from posted invoices, so drafts and cancelled documents must be excluded",
-				"Output tax total equals the credit balance on the output accounts for the period",
-				"Input tax is only claimable on invoices that are submitted and matched to a receipt",
-				"The payable figure is output minus input, and it must tie to the ledger to the cent"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open the tax summary",
-						"01-01-2026 to 31-01-2026, sales tax",
-						"Output tax by account"
-					],
-					["2", "Read the output figure", "1,200.00", "Tax summary report"],
-					["3", "Read the input figure", "120.00", "Tax summary, purchase side"],
-					["4", "Compute the payable", "1,200.00 minus 120.00", "1,080.00"],
-					["5", "Tie to the ledger", "SST Output and SST Input balances", "Same two numbers"],
-					[
-						"6",
-						"File and record",
-						"Return reference in the tax worksheet",
-						"Evidence for the auditor"
-					]
-				]
-			},
-			"notes": "Twelve hundred out, one hundred twenty in, one thousand eighty payable: three numbers that must appear in the report, in the ledger and on the return. If they do not, the usual causes are a draft invoice counted, a credit note not reversing tax, or a purchase invoice without the input template. All three are visible in the tax summary by account."
-		},
-		{
-			"kicker": "Lesson 4 · Verify the return",
-			"title": "Three numbers that must agree",
-			"bullets": [
-				"The return figure, the tax summary and the ledger balance are the same number seen three ways",
-				"A draft or cancelled document in the summary shifts the return and must be explained",
-				"Input tax is only claimable where the purchase invoice exists, so unbooked bills understate the claim",
-				"Sign the worksheet with the date filed, because that is the audit evidence"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Output tax", "1,200.00", "Tax summary and General Ledger"],
-					["Input tax", "120.00", "Tax summary and General Ledger"],
-					["Net payable", "1,080.00", "Your own arithmetic and the return"],
-					[
-						"Draft documents in the period",
-						"none contributing tax",
-						"Sales and purchase registers"
-					],
-					["Filed reference", "recorded with the date", "Tax worksheet"]
-				]
-			},
-			"notes": "The check takes four minutes and prevents the most common compliance finding: a return that disagrees with the ledger because a document was posted in a later period. Print the summary for the period, print the ledger for the same accounts, and staple them to the return. When an auditor asks, the answer is a page rather than an explanation."
-		},
-		{
-			"kicker": "Lesson 5 · Exemptions",
-			"title": "Exempt and zero-rated lines with evidence",
-			"bullets": [
-				"An exemption is a category plus a certificate, not a zero typed into a rate field",
-				"Schedule A and B exemptions must be referenced on the invoice or the claim fails",
-				"Exempt sales still appear in the return, in their own box",
-				"Keep the customer's exemption certificate with the customer record"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Create the exempt template",
-						"0 % with the Exempt - SM account mapping",
-						"Exempt template available"
-					],
-					[
-						"2",
-						"Attach to the customer",
-						"Exemption certificate number in the customer record",
-						"Evidence stored"
+						"Add header fields",
+						"Customer name, address, invoice number, date, due date",
+						"Header block defined"
 					],
 					[
 						"3",
-						"Invoice the exempt line",
-						"100 units at 12.00, no tax",
-						"Total 1,200.00 with zero tax"
+						"Add the items table",
+						"Item, quantity, rate, amount, tax",
+						"Table with five columns"
 					],
-					["4", "Check the return", "Exempt box populated", "Separate from taxable sales"],
+					["4", "Add totals", "Net total, tax, grand total", "Totals block"],
 					[
 						"5",
-						"Attempt a taxable line",
-						"Same customer, taxable item",
-						"Template override required"
+						"Attach letterhead",
+						"Seri Murni Sdn Bhd with registration and SST number",
+						"Branded footer and header"
 					],
-					["6", "Document the exception", "Reason in the tax worksheet", "Auditor can see why"]
+					["6", "Preview", "Invoice SINV-SM-2026-0010", "One page, totals 3,240.00 with tax 240.00"]
 				]
 			},
-			"notes": "Exemptions are where clients get enthusiastic and auditors get interested, so the rule is one certificate per customer, stored, with an expiry date. The system will happily apply a zero rate; it cannot judge whether the exemption is valid. Put that judgement in writing and attach it to the customer record before the first exempt invoice."
+			"notes": "A print format is the only part of ERPNext most customers ever see, and it is judged in five seconds. Two rules cover most of it: put the tax number and the amount due at the bottom where people look, and never print internal fields such as cost or margin. Preview with the longest item name and the shortest address you can find."
 		},
 		{
-			"kicker": "Volume 9 · Reference",
-			"title": "Malaysian configuration checklist",
+			"kicker": "Lesson 2 · Verify the print",
+			"title": "What a Malaysian invoice must show",
 			"bullets": [
-				"Tax rates, accounts and categories are configuration, and they must be evidenced",
-				"e-Invoice readiness depends on the same master data being clean",
-				"Every row below has an owner in the client's finance team",
-				"Revisit annually, because rates and thresholds change with each budget"
-			],
-			"table": {
-				"headers": ["Configuration", "Value in our sample", "Owner", "Evidence"],
-				"rows": [
-					[
-						"Sales tax on goods",
-						"10 per cent to SST Output - SM",
-						"Finance manager",
-						"Tax advisor email"
-					],
-					[
-						"Service tax",
-						"8 per cent to Service Tax Output - SM",
-						"Finance manager",
-						"Tax advisor email"
-					],
-					[
-						"Purchase tax",
-						"10 per cent and 8 per cent input accounts",
-						"Finance manager",
-						"Configuration worksheet"
-					],
-					[
-						"Tax categories",
-						"In-State, Out-of-State, Exempt",
-						"Finance manager",
-						"Worksheet signed"
-					],
-					[
-						"Exemption certificates",
-						"stored per customer with expiry",
-						"Sales admin",
-						"Certificate scans"
-					]
-				]
-			},
-			"notes": "This checklist is the deliverable that makes a compliance conversation concrete. Hand it over signed, with the tax advisor's email attached, and the client's auditor has a starting point that is not a memory of a phone call. It also protects the consultant when a rate changes and nobody told them."
-		},
-		{
-			"kicker": "Volume 9 · Reference",
-			"title": "Reading the tax summary by account",
-			"bullets": [
-				"Grouping by account is what makes the return auditable, because each account is one box",
-				"A single blended tax account hides the split between sales tax and service tax",
-				"Credit notes must reduce both the taxable amount and the tax in the same period",
-				"Compare the summary with the general ledger, not with a spreadsheet"
+				"Company name, registration and SST number are not optional on a tax invoice",
+				"Invoice number, date, customer details and item description must be legible",
+				"Tax must be shown as a separate amount, not folded into the rate",
+				"Terms and payment instructions reduce the number of calls to accounts"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Sales tax output", "1,200.00 for January", "Tax summary by account"],
-					["Service tax output", "40.00", "Tax summary by account"],
-					["Input tax", "120.00", "Tax summary, purchase side"],
-					["Net payable", "1,120.00 including service tax", "Your own arithmetic"],
-					["Ledger agreement", "identical figures", "General Ledger for the same accounts"]
+					["Company registration and SST number", "both printed", "Print preview header"],
+					["Invoice number and date", "SINV-SM-2026-0010, 10-02-2026", "Print preview"],
+					["Net, tax and total", "3,000.00, 240.00, 3,240.00", "Totals block"],
+					["Payment terms", "Net 30, due 12-03-2026", "Footer"],
+					["Internal fields", "cost and margin absent", "Read the whole page"]
 				]
 			},
-			"notes": "Twelve hundred of sales tax plus forty of service tax less one hundred twenty of input is one thousand one hundred twenty payable, and that single sum is what the client actually pays. Show the arithmetic in the meeting rather than the report, because the sum is what gets remembered and the report is what gets filed."
+			"notes": "The three totals on the page must match the document to the cent, because an invoice that disagrees with the ledger is the fastest way to lose an accountant's confidence. Print one invoice and reconcile it line by line against the form before you hand the client a template. It takes five minutes and prevents months of quiet distrust."
+		},
+		{
+			"kicker": "Lesson 3 · Naming series",
+			"title": "Series numbers that survive an audit",
+			"bullets": [
+				"Naming series control document numbers, and gaps are the first thing an auditor asks about",
+				"Use the prefix fields rather than renaming series mid-year",
+				"Each branch or company needs its own series when documents are filed separately",
+				"Cancelled documents keep their number, because a reused number is worse than a gap"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open Sales Invoice", "Settings → Naming Series", "Series pattern editor"],
+					["2", "Set the pattern", "SINV-SM-2026-.#####", "Example SINV-SM-2026-00010"],
+					["3", "Set the current value", "10 to continue after the last invoice", "Next number 11"],
+					["4", "Save and create a document", "New sales invoice", "Number SINV-SM-2026-00011"],
+					["5", "Cancel a document", "Cancel the new invoice", "Number stays used, not reused"],
+					["6", "Check the next", "Create another invoice", "Number SINV-SM-2026-00012"]
+				]
+			},
+			"notes": "Gaps are acceptable when a document was cancelled; they are not acceptable when a series was renamed or restarted. Explain that distinction once, and the client's auditor will stop raising it as a finding. Align the prefix with the year and the company abbreviation, because the number is often the only identifier on a customer's remittance advice."
+		},
+		{
+			"kicker": "Lesson 4 · Notifications",
+			"title": "Send the right message once, at the right moment",
+			"bullets": [
+				"A notification watches one document event and applies a condition you write in plain fields",
+				"Send too many and people filter them, so target the exception rather than the routine",
+				"Use the document's own fields in the subject so the message is useful without opening it",
+				"Test with a real document and check the recipient list, not just your own inbox"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Settings → Notification → New",
+						"Document type Sales Order, event Submit",
+						"Condition builder"
+					],
+					["2", "Set the condition", "grand_total greater than 5000", "Condition saved"],
+					["3", "Set recipients", "Role Sales Manager and the owner", "Two recipients defined"],
+					[
+						"4",
+						"Compose the message",
+						"Subject with order number, customer and total",
+						"Template stored"
+					],
+					["5", "Submit a 6,000.00 order", "Sales order for Aeon Big", "One email sent"],
+					["6", "Submit a 1,200.00 order", "Below the threshold", "No email sent"]
+				]
+			},
+			"notes": "Notifications are cheap to create and expensive to overuse, so the rule is one message per exception. A six thousand order triggering a note to the sales manager is a control; every order triggering a note is noise. Test with a document above and a document below the threshold, and check that the message arrives once rather than once per recipient plus the queue."
+		},
+		{
+			"kicker": "Lesson 4 · Verify notifications",
+			"title": "One message, one recipient list, one test",
+			"bullets": [
+				"A notification that fires twice trains people to ignore it, which defeats the control",
+				"Recipients should be roles or owners, not a typed list that rots after a resignation",
+				"The message must be useful without opening the document: number, customer, amount",
+				"Test above and below the condition, and check the queue for duplicates"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Email for a 6,000.00 order", "exactly one", "Recipient inbox and Email Queue"],
+					["Email for a 1,200.00 order", "none", "Recipient inbox"],
+					["Recipients", "Sales Manager role plus document owner", "Notification definition"],
+					["Subject line", "order number, customer and total present", "The received email"],
+					["Document link", "opens the submitted order", "Click the link in the email"]
+				]
+			},
+			"notes": "A notification is a control only if it is reliable, so test the failure case as carefully as the success case. Duplicate emails usually come from two notifications watching the same event, which is worth checking in the list before blaming the system. Keep one notification per exception and delete the rest."
+		},
+		{
+			"kicker": "Lesson 5 · Letterhead and terms",
+			"title": "Make every document look like one company",
+			"bullets": [
+				"A letterhead holds the logo, address and registration details used across all documents",
+				"Terms and conditions templates attach to quotations, orders and invoices without retyping",
+				"Both are configuration, so the client's team can maintain them after handover",
+				"Set a default so nobody has to remember to pick the right template"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Settings → Letterhead → New",
+						"Company name, address, registration, SST number",
+						"Letterhead saved"
+					],
+					["2", "Attach the image", "Logo at 200 pixels wide", "Logo renders on preview"],
+					[
+						"3",
+						"Create terms",
+						"Terms and Conditions template Payment Terms",
+						"Template body stored"
+					],
+					[
+						"4",
+						"Set defaults",
+						"Company → default letterhead and terms",
+						"Applied to new documents"
+					],
+					["5", "Print a quotation", "QT-SM-2026-0003", "Header, terms and footer all present"],
+					["6", "Hand over", "Show the client how to edit both", "They maintain it themselves"]
+				]
+			},
+			"notes": "These two settings are what make a system look finished, and they are also the easiest handover win. Show the client's administrator how to change an address or a term without a consultant, and they stop calling you for the small things. That is a commercial decision as much as a technical one."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "What a consultant configures without code",
+			"bullets": [
+				"Everything in this volume is standard configuration, so it survives an upgrade",
+				"Print, series, notifications, letterhead and terms are all client-maintainable",
+				"Custom code is out of scope for a functional consultant, and usually unnecessary",
+				"Each item below has a named owner after handover"
+			],
+			"table": {
+				"headers": ["Configuration", "Where", "Owner after go-live", "Risk if ignored"],
+				"rows": [
+					["Print format", "Printing → Print Format", "Admin", "Documents look unbranded"],
+					[
+						"Naming series",
+						"Document settings",
+						"Finance manager",
+						"Duplicate or gapless-invalid numbers"
+					],
+					[
+						"Notification",
+						"Settings → Notification",
+						"Sales manager",
+						"Exceptions discovered late"
+					],
+					["Letterhead", "Settings → Letterhead", "Admin", "Inconsistent customer documents"],
+					["Terms template", "Settings → Terms", "Finance manager", "Terms retyped and mistyped"]
+				]
+			},
+			"notes": "This page is the answer when a client asks for a custom print script: everything they actually want is here, in configuration, and it will still work after the next upgrade. Say that with confidence, because a functional consultant who reaches for code has left their own discipline."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "Testing print and notification changes",
+			"bullets": [
+				"Test with a real document in a real state, never with a blank form",
+				"Check the edge cases: long names, many lines, zero tax, foreign currency",
+				"Keep a before and after copy of each template, so a change can be reversed",
+				"Re-test after every upgrade, because print and notifications are the first casualties"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Invoice prints on one page", "yes, including terms", "Print preview"],
+					["Totals match the document", "3,240.00 with 240.00 tax", "Compare form and print"],
+					["Series continues", "next number sequential", "New document"],
+					["Notification fires once", "one email for a 6,000.00 order", "Recipient inbox"],
+					["Notification silent below threshold", "no email for 1,200.00", "Recipient inbox"]
+				]
+			},
+			"notes": "Testing is where most consultants lose an afternoon, so make it a checklist rather than an experiment. Five checks, five minutes, and the client sees a document they are happy to send. When an upgrade arrives, run the same five and you know within ten minutes whether anything broke."
 		}
 	],
 	"lab": {
-		"title": "Lab · Build SST templates, map an item mix and reconcile the return",
+		"title": "Lab · Brand the invoice, set the series and trigger one notification",
 		"minutes": 45,
 		"steps": [
-			"Create sales tax at 10 per cent and service tax at 8 per cent with separate output accounts",
-			"Create the matching input templates on the purchase side",
-			"Attach item tax templates to the blender, the delivery service and the exempt carton",
-			"Raise a mixed invoice with all three lines and confirm 240.00, 40.00 and 0.00",
-			"Confirm the invoice total of 2,940.00 with 280.00 of tax",
-			"Produce the January tax summary and confirm 1,200.00 output and 120.00 input",
-			"Compute the net payable and tie it to the two ledger accounts",
-			"Attach an exemption certificate to a customer and invoice an exempt line"
+			"Create a letterhead with the company registration and SST number",
+			"Build a sales invoice print format with header, items and totals",
+			"Preview an invoice and confirm net 3,000.00, tax 240.00 and total 3,240.00",
+			"Set the naming series to SINV-SM-2026-.##### and continue from the last number",
+			"Create and cancel a document to confirm the number is not reused",
+			"Create a notification for sales orders above 5,000.00 on submit",
+			"Submit a 6,000.00 order and confirm exactly one email",
+			"Submit a 1,200.00 order and confirm no email"
 		],
-		"done": "Done when the tax summary and the ledger agree on output and input, the mixed invoice shows both rates correctly, and the exempt customer has a stored certificate."
+		"done": "Done when a printed invoice carries the registration and SST number with totals matching the ledger, the series is sequential without reuse, and the notification fires only above the threshold."
 	},
 	"quiz": [
 		{
-			"question": "Why keep separate accounts for sales tax and service tax output?",
-			"options": [
-				"To reduce the rate",
-				"Because the return needs each box separately",
-				"To speed printing",
-				"To avoid e-Invoice"
-			],
+			"question": "Where do you build a print format without code?",
+			"options": ["Custom script", "Print Format Builder", "Server script", "Jinja file"],
 			"answer": 1,
-			"why": "SST-02 reports sales tax and service tax in different boxes, so they need separate accounts; a blended account cannot be split later."
+			"why": "The Print Format Builder assembles sections, fields and totals through configuration, which survives upgrades and needs no development."
 		},
 		{
-			"question": "Which document beats which when deciding an item's tax rate?",
+			"question": "Why must cancelled documents keep their numbers?",
 			"options": [
-				"Customer template beats item template",
-				"Item template beats customer template",
-				"Company default beats both",
-				"The invoice line beats everything"
+				"To save space",
+				"Because reusing a number breaks the audit trail",
+				"So tax can be claimed",
+				"To speed printing"
 			],
 			"answer": 1,
-			"why": "Precedence runs from the most specific to the least: item tax template, then customer or supplier template, then company default."
+			"why": "A cancelled document is still a document, and reusing its number creates two documents with one identity, which auditors treat as a control failure."
 		},
 		{
-			"question": "Output tax of 1,200.00 and input tax of 120.00 give a payable of what?",
-			"options": ["1,320.00", "1,080.00", "1,200.00", "120.00"],
-			"answer": 1,
-			"why": "The payable is output minus input, 1,200.00 − 120.00 = 1,080.00, and it must tie to the two ledger balances."
+			"question": "A notification condition of grand_total greater than 5000 will fire for which order?",
+			"options": ["1,200.00", "3,240.00", "6,000.00", "4,999.00"],
+			"answer": 2,
+			"why": "Only the 6,000.00 order exceeds the threshold. Testing both sides of the condition is part of configuring it."
 		},
 		{
-			"question": "What makes an exempt sale defensible?",
+			"question": "Which detail should be absent from a customer-facing print format?",
+			"options": ["Tax amount", "Payment terms", "Item cost and margin", "Company registration"],
+			"answer": 2,
+			"why": "Cost and margin are internal. Printing them exposes commercial information to the customer and is a common builder mistake."
+		},
+		{
+			"question": "Who should own the letterhead after handover?",
 			"options": [
-				"Typing zero in the rate",
-				"A category plus a stored exemption certificate",
-				"Cancelling the invoice",
-				"A journal entry"
+				"The consultant permanently",
+				"The client's administrator",
+				"The developer",
+				"Nobody"
 			],
 			"answer": 1,
-			"why": "An exemption needs a category for reporting and a certificate as evidence; a zero rate alone gives the auditor nothing to test."
-		},
-		{
-			"question": "Which documents must be excluded from the SST return?",
-			"options": [
-				"Submitted invoices",
-				"Draft and cancelled documents",
-				"Credit notes",
-				"Purchase invoices"
-			],
-			"answer": 1,
-			"why": "Only posted, submitted documents carry tax liability. Drafts have not happened and cancelled documents have been reversed."
+			"why": "Letterheads and terms are configuration, so handing ownership to the client's administrator removes a recurring support cost and speeds small changes."
 		}
 	],
 	"memory": {
-		"spine": "One tax template per rate per direction, an item category that follows the product, and a return that is the ledger seen three ways.",
+		"spine": "Documents customers can read, numbers an auditor can follow and messages that arrive once: three controls, all configuration, no code.",
 		"device": {
-			"kind": "rule",
-			"label": "One template per rate per direction",
+			"kind": "phrase",
+			"label": "Readable, numbered, said once",
 			"expansion": [
-				"Sales tax out, service tax out and purchase tax in never share a template",
-				"Goods at ten per cent and services at eight per cent sit on separate lines and templates",
-				"Item tax category overrides the customer default, which must be intended rather than discovered",
-				"SST-02 comes from posted invoices, so drafts and cancellations are excluded",
-				"The return, the tax summary and the ledger are one number seen three ways"
+				"Print format: sections, fields and totals from the builder, with no code to maintain",
+				"A Malaysian tax invoice needs the company name, registration number and SST number",
+				"Naming series control the numbers, and gaps are the auditor's first question",
+				"A notification watches one event with one condition and one recipient list",
+				"Test print and notification changes on a real document in a real state"
 			]
 		},
 		"cards": [
 			{
-				"q": "Why one template per rate per direction?",
-				"a": "The posting account and the return box differ by direction, and mixing them makes the return untraceable.",
-				"hint": "Account and box"
+				"q": "What must a Malaysian tax invoice show?",
+				"a": "Company name, registration number and SST number, plus the tax breakdown per line.",
+				"hint": "Not optional"
 			},
 			{
-				"q": "Goods at ten per cent and services at eight per cent on one invoice?",
-				"a": "Two lines on two templates, each rate posting to its own account.",
-				"hint": "Never one line"
+				"q": "What do auditors ask about numbering first?",
+				"a": "Whether there are gaps or duplicates in the series, and who can edit the prefix.",
+				"hint": "Series integrity"
 			},
 			{
-				"q": "Item tax category or customer default, which applies?",
-				"a": "The item's category wins, which is useful for exempt goods and dangerous when unintended.",
-				"hint": "Product beats party"
+				"q": "Why does a notification fire twice?",
+				"a": "It is attached to more than one event, or its condition matches both a draft and a submit.",
+				"hint": "One event, one send"
 			},
 			{
-				"q": "Which documents feed the SST-02 return?",
-				"a": "Posted invoices only, because drafts, cancelled documents and unsubmitted returns are excluded.",
-				"hint": "Posted only"
+				"q": "What should never be customised with code in this volume?",
+				"a": "Anything the print format builder or notification fields already do, because code does not survive an upgrade.",
+				"hint": "Configuration survives"
 			},
 			{
-				"q": "Which three numbers must agree?",
-				"a": "The return figure, the tax summary by account and the ledger balance of the tax account.",
-				"hint": "One number, three views"
+				"q": "How is a print format tested?",
+				"a": "With a real submitted document carrying real tax and a real address, never with a blank form.",
+				"hint": "Real document, real state"
 			}
 		],
 		"trap": {
-			"what": "An exempt customer is handled by typing zero per cent into the rate field.",
-			"why": "No exemption category or certificate sits behind the zero, so the return cannot evidence why tax was not charged."
+			"what": "A notification is configured to fire on save as well as on submit.",
+			"why": "Every draft edit emails the customer, people stop reading the messages, and the control that catches late invoices is gone."
 		}
 	},
-	"narration": "Malaysian tax is the part clients test you on first, because the numbers go to a government portal. Build separate templates for sales tax and service tax, with separate output and input accounts, because the return needs each box separately. Attach item tax templates so the rate follows the product: ten per cent goods, eight per cent services, zero for exempt with a stored certificate. Then the return: twelve hundred output less one hundred twenty input is one thousand eighty payable, and the same three numbers must appear in the tax summary, the ledger and the form. If they do not, the cause is a draft counted, a credit note that did not reverse tax, or a purchase without an input template. Keep the tax advisor's written confirmation with the configuration worksheet, because rates and thresholds change with every budget, and the consultant who documented the basis is the one who gets called back rather than blamed."
+	"narration": "Volume eight is where a functional consultant stops looking like an implementer. Print formats built in the builder give the customer a document worth reading, with the registration and tax number where they belong and totals matching the ledger to the cent. Naming series keep numbering sequential, and a cancelled document keeps its number because reusing one breaks the audit trail. Notifications watch a condition: an order above five thousand emails the sales manager, an order of twelve hundred stays quiet. Letterheads and terms templates make every document look like one company, and they are the easiest handover win because the client can maintain them alone. No code, all configuration, and it all survives the next upgrade. Test five things before handover: one page, matching totals, sequential numbering, one notification above the threshold and silence below it, and a letterhead the client can edit without calling you."
 }

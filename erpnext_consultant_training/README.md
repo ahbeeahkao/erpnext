@@ -4,6 +4,9 @@ A complete training course for people who **configure and demonstrate ERPNext fo
 course, not a feature tour: every lesson says which screen to open, which value to enter, and exactly what you
 should see afterwards.
 
+This is the only general ERPNext course in this repository. The shorter ten-chapter course that preceded it has been
+retired, and every topic it taught now has a home here.
+
 It opens with two concept primers — accounting, then distribution — because a consultant who cannot explain the
 books or the commercial model loses the room before the first configuration screen. Everything then runs against
 one sample company, **Seri Murni Sdn Bhd** (a Malaysian distributor with a small assembly operation), so the
@@ -42,20 +45,20 @@ questions with explanations.
 
 ## The eleven volumes
 
-| Volume                                    | Chapters               | Lessons   | Time    |
-| ----------------------------------------- | ---------------------- | --------- | ------- |
-| **Primers · Concepts**                    | ch01, ch02             | 2 primers | 200 min |
-| **0 · Foundations**                       | ch03, ch04, ch05, ch06 | 10        | 520 min |
-| **1 · Masters and Pricing**               | ch07, ch08             | 8         | 250 min |
-| **2 · Quote to Cash**                     | ch09, ch10             | 10        | 310 min |
-| **3 · Procure to Pay**                    | ch11, ch12             | 8         | 200 min |
-| **4 · Stock Accuracy and Valuation**      | ch13, ch14             | 8         | 200 min |
-| **5 · Accounting and the Close**          | ch15, ch16             | 8         | 200 min |
-| **6 · Manufacturing**                     | ch17, ch18             | 8         | 200 min |
-| **7 · Projects, Assets, Quality and CRM** | ch19, ch20             | 8         | 200 min |
-| **8 · Automation, Print and Permissions** | ch21, ch22             | 8         | 200 min |
-| **9 · Malaysia Compliance**               | ch23, ch24             | 8         | 200 min |
-| **10 · Migration, UAT and Go-Live**       | ch25, ch26, ch27       | 10        | 335 min |
+| Volume                                     | Chapters                     | Lessons   | Time    |
+| ------------------------------------------ | ---------------------------- | --------- | ------- |
+| **Primers · Concepts**                     | ch01, ch02                   | 2 primers | 200 min |
+| **0 · Foundations**                        | ch03, ch04, ch05, ch06       | 10        | 520 min |
+| **1 · Masters and Pricing**                | ch07, ch08                   | 10        | 260 min |
+| **2 · Quote to Cash**                      | ch09, ch10                   | 10        | 310 min |
+| **3 · Procure to Pay**                     | ch11, ch12                   | 10        | 210 min |
+| **4 · Stock Accuracy and Valuation**       | ch13, ch14, ch15             | 10        | 350 min |
+| **5 · Accounting and the Close**           | ch16, ch17                   | 10        | 210 min |
+| **6 · Manufacturing**                      | ch18, ch19                   | 10        | 210 min |
+| **7 · Projects, Assets, Quality and CRM**  | ch20, ch21, ch22             | 10        | 350 min |
+| **8 · Automation, Print and Permissions**  | ch23, ch24, ch25             | 10        | 340 min |
+| **9 · Malaysia Compliance**                | ch26, ch27                   | 8         | 200 min |
+| **10 · Migration, Go-Live and Continuity** | ch28, ch29, ch30, ch31, ch32 | 10        | 605 min |
 
 ### Chapters
 
@@ -73,22 +76,27 @@ questions with explanations.
 12. **Volume 3 · Supplier Reality: Returns, Advances and Landed Cost** — debit notes, advance payments, landed cost allocation that turns 120.00 into 126.00, and supplier ageing read properly.
 13. **Volume 4 · Warehouses, Transfers and Stock Counts** — the warehouse tree, material transfers that leave total value untouched, stock reconciliation, and reorder rules from arithmetic rather than feel.
 14. **Volume 4 · FIFO, Landed Cost and Valuation Reports** — FIFO layers producing 1,460.00 of cost of goods sold, repost item valuation, negative stock policy, and the three stock reports reconciled.
-15. **Volume 5 · Journals, Accruals and the Bank** — accruals that reverse, prepayments released monthly, a bank reconciliation to zero, and corrections that keep the audit trail.
-16. **Volume 5 · Month-End and Year-End Close** — five pre-close checks, the closing voucher transferring 4,680.00 of net profit, the five-page pack, and the year-end freeze.
-17. **Volume 6 · Bills of Materials and Work Orders** — a 230.00 bill of materials, work orders that reserve, material issues to the floor, and a completion that values at 230.00 per unit.
-18. **Volume 6 · Production Costing, Scrap and Subcontracting** — cost per good unit after scrap (255.56), subcontracting that returns the subcontractor warehouse to zero, and variance explained with evidence.
-19. **Volume 7 · Projects, Timesheets and Billable Work** — a project carrying 3,000.00 of revenue, 1,600.00 of cost and 1,400.00 of margin, with service tax treated separately.
-20. **Volume 7 · Assets, Quality and CRM** — a 60,000.00 van depreciating 1,000.00 a month, inspection that rejects before stock, and a 60 per cent opportunity worth 1,440.00 weighted.
-21. **Volume 8 · Print Formats, Naming and Notifications** — a branded invoice from the builder, gapless series that survive an audit, and one notification per exception.
-22. **Volume 8 · Permissions, Workflows and Automation** — roles without delete, a warehouse restriction proved by two logins, a discount workflow with an escape path, and auto repeat reviewed on its first cycle.
-23. **Volume 9 · Malaysian Tax and Statutory Setup** — SST templates with separate accounts, item tax categories, exemptions with certificates, and an SST-02 that ties to the ledger.
-24. **Volume 9 · e-Invoice (MyInvois) End to End** — master data that passes validation, accepted versus validated, the 72-hour cancellation window and its named errors, consolidation and self-billing.
-25. **Volume 10 · Migration: Mapping, Opening Balances and Import** — a signed mapping workbook, imports in dependency order, and an opening trial balance of 96,290.00 on both sides.
-26. **Volume 10 · UAT, Cut-Over and Go-Live** — a UAT script that passes on figures, a one-page cut-over, hypercare measured daily, and a handover pack with five owners.
-27. **Volume 10 · Continuity: Backups, Staging and Upgrades** — a timed restore drill, staging restored from production, the version register, the upgrade calendar with a named approver and a rollback point, and a twenty-minute post-upgrade verification that includes e-Invoice.
+15. **Volume 4 · Scanning on the Floor: Barcode Capture and Mobile Counting** — supplier and carton barcodes on one item, scanning into transfers and counts, a blind count with an offline device, recount thresholds in money, label stock, and the four-page SOP the warehouse runs without you.
+16. **Volume 5 · Journals, Accruals and the Bank** — accruals that reverse, prepayments released monthly, a bank reconciliation to zero, and corrections that keep the audit trail.
+17. **Volume 5 · Month-End and Year-End Close** — five pre-close checks, the closing voucher transferring 4,680.00 of net profit, the five-page pack, and the year-end freeze.
+18. **Volume 6 · Bills of Materials and Work Orders** — a 230.00 bill of materials, work orders that reserve, material issues to the floor, and a completion that values at 230.00 per unit.
+19. **Volume 6 · Production Costing, Scrap and Subcontracting** — cost per good unit after scrap (255.56), subcontracting that returns the subcontractor warehouse to zero, and variance explained with evidence.
+20. **Volume 7 · Projects, Timesheets and Billable Work** — a project carrying 3,000.00 of revenue, 1,600.00 of cost and 1,400.00 of margin, with service tax treated separately.
+21. **Volume 7 · Assets, Quality and CRM** — a 60,000.00 van depreciating 1,000.00 a month, inspection that rejects before stock, and a 60 per cent opportunity worth 1,440.00 weighted.
+22. **Volume 7 · The Service Desk: Issues, SLAs and Warranty Claims** — logging against a serial, service levels measured on a working calendar, the warranty decision with evidence, repair versus replace versus credit, billable field time, and the four numbers the service lead should trust.
+23. **Volume 8 · Print Formats, Naming and Notifications** — a branded invoice from the builder, gapless series that survive an audit, and one notification per exception.
+24. **Volume 8 · Customise Without Code: Property Setters, Custom Fields and Custom DocTypes** — where configuration ends and code begins, renaming and enforcing fields with setters, custom fields that earn their place, a custom DocType with a child table, the upgrade checks, and the six-column change register.
+25. **Volume 8 · Permissions, Workflows and Automation** — roles without delete, a warehouse restriction proved by two logins, a discount workflow with an escape path, and auto repeat reviewed on its first cycle.
+26. **Volume 9 · Malaysian Tax and Statutory Setup** — SST templates with separate accounts, item tax categories, exemptions with certificates, and an SST-02 that ties to the ledger.
+27. **Volume 9 · e-Invoice (MyInvois) End to End** — master data that passes validation, accepted versus validated, the 72-hour cancellation window and its named errors, consolidation and self-billing.
+28. **Volume 10 · Migration: Mapping, Opening Balances and Import** — a signed mapping workbook, imports in dependency order, and an opening trial balance of 96,290.00 on both sides.
+29. **Volume 10 · UAT, Cut-Over and Go-Live** — a UAT script that passes on figures, a one-page cut-over, hypercare measured daily, and a handover pack with five owners.
+30. **Volume 10 · Continuity: Backups, Staging and Upgrades** — a timed restore drill, staging restored from production, the version register, the upgrade calendar with a named approver and a rollback point, and a twenty-minute post-upgrade verification that includes e-Invoice.
+31. **Volume 10 · Site Security and Hardening: Protecting the Company's Money** — one person one account, the departure drill, two-factor by role, least privilege proved by a second login, network restrictions with host evidence, key inventory and rotation, the encryption key with two named holders, the signed review, and the first hour of an incident.
+32. **Volume 10 · The First Ninety Days: Health Checks and Handing Over** — the hypercare rhythm, triage by consequence, the day thirty and day sixty reviews, the fifteen-minute weekly check, adoption evidence per role, and an exit where the client holds every key.
 
-**Totals:** 27 chapters, 229 teaching slides, 337 pages including intros, labs, recall pages and quizzes, 224 lab
-steps, 135 quiz questions, 135 recall cards, 27 narrations, 3,015 minutes of syllabus (about 50 hours), and a
+**Totals:** 32 chapters, 295 teaching slides, 423 pages including intros, labs, recall pages and quizzes, 264 lab
+steps, 160 quiz questions, 160 recall cards, 32 narrations, 3,765 minutes of syllabus (about 63 hours), and a
 walkthrough table on every teaching slide.
 
 ---
@@ -135,19 +143,24 @@ chunking into three beats memorising ten.
 | 12  | Supplier reality                | **Reverse in the order you posted**           | rule    |
 | 13  | Warehouses and counts           | **One voucher, two rows**                     | phrase  |
 | 14  | FIFO and valuation              | **Value in equals value out plus value left** | rule    |
-| 15  | Journals, accruals and the bank | **Accrue, prepay, reconcile, reverse**        | rule    |
-| 16  | Month-end and year-end close    | **Move, judge, calculate, lock**              | phrase  |
-| 17  | BOMs and work orders            | **Recipe, promise, reserve, issue, complete** | phrase  |
-| 18  | Production costing              | **Good units carry the bad ones**             | rule    |
-| 19  | Projects and timesheets         | **Every entry names the project**             | rule    |
-| 20  | Assets, quality and CRM         | **Capitalise, depreciate, inspect, qualify**  | phrase  |
-| 21  | Print, naming, notifications    | **Readable, numbered, said once**             | phrase  |
-| 22  | Permissions and workflows       | **Roles do, permissions see**                 | rule    |
-| 23  | Malaysian tax                   | **One template per rate per direction**       | rule    |
-| 24  | e-Invoice end to end            | **Validate, submit, read, cancel inside 72**  | phrase  |
-| 25  | Migration and opening balances  | **Agree, then parents before children**       | phrase  |
-| 26  | UAT, cut-over and go-live       | **Script, sequence, numbers, hand over**      | phrase  |
-| 27  | Continuity and upgrades         | **Backup, prove, stage, pin**                 | rule    |
+| 15  | Scanning on the floor           | **Scan, confirm, recount, sign**              | phrase  |
+| 16  | Journals, accruals and the bank | **Accrue, prepay, reconcile, reverse**        | rule    |
+| 17  | Month-end and year-end close    | **Move, judge, calculate, lock**              | phrase  |
+| 18  | BOMs and work orders            | **Recipe, promise, reserve, issue, complete** | phrase  |
+| 19  | Production costing              | **Good units carry the bad ones**             | rule    |
+| 20  | Projects and timesheets         | **Every entry names the project**             | rule    |
+| 21  | Assets, quality and CRM         | **Capitalise, depreciate, inspect, qualify**  | phrase  |
+| 22  | The service desk                | **Priority before promise**                   | rule    |
+| 23  | Print, naming, notifications    | **Readable, numbered, said once**             | phrase  |
+| 24  | Customise without code          | **Setters first, code last**                  | rule    |
+| 25  | Permissions and workflows       | **Roles do, permissions see**                 | rule    |
+| 26  | Malaysian tax                   | **One template per rate per direction**       | rule    |
+| 27  | e-Invoice end to end            | **Validate, submit, read, cancel inside 72**  | phrase  |
+| 28  | Migration and opening balances  | **Agree, then parents before children**       | phrase  |
+| 29  | UAT, cut-over and go-live       | **Script, sequence, numbers, hand over**      | phrase  |
+| 30  | Continuity and upgrades         | **Backup, prove, stage, pin**                 | rule    |
+| 31  | Security and hardening          | **Least privilege, then prove it**            | rule    |
+| 32  | The first ninety days           | **Week, month, quarter, exit**                | path    |
 
 A mnemonic is only used where the list is arbitrary (DEAD CLIC, TRIC, GUST). Where the list has logic, the
 chapter uses a rule, a story chain or a path instead, because an invented acronym for something with an internal
@@ -159,7 +172,7 @@ order is the weakest of the four.
     it, "Got it" marks it known, and progress is saved per browser. Press <kbd>R</kbd> anywhere for the recall sheet:
     the ten laws plus one row per chapter that jumps straight to its card set.
 -   **Off the deck:** `memory/cheatsheet.md` is a one-page printable for the wall, and `memory/cards.csv` imports
-    into Anki or Quizlet (`front,back,tag`, 135 cards, one tag per chapter) for spaced repetition.
+    into Anki or Quizlet (`front,back,tag`, 160 cards, one tag per chapter) for spaced repetition.
 -   **Teaching it:** run the recall page as a spoken drill. Read the device, ask one learner what it stands for, then
     let them flip all five cards before the quiz. The trap is the part clients remember, so never skip it.
 
@@ -213,7 +226,7 @@ erpnext_consultant_training/
 ├── index.html                 deck shell, no build step
 ├── styles.css                 deck and print styling
 ├── src/app.js                 router, renderer, quizzes, search, notes, print, audio
-├── course/                    manifest.json and ch01.json … ch27.json (source of truth)
+├── course/                    manifest.json and ch01.json … ch32.json (source of truth)
 ├── course/memory.json         the ten laws in three buckets, for the recall sheet
 ├── memory/                    cards.csv (Anki/Quizlet) and cheatsheet.md (printable)
 ├── audio/                     generated manifest and chapter narrations
