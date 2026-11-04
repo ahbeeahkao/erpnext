@@ -1,343 +1,467 @@
 {
 	"id": "ch19",
 	"number": 19,
-	"title": "Volume 6 · Production Costing, Scrap and Subcontracting",
-	"subtitle": "Lessons 5–8: what a finished unit really cost, how scrap changes the answer, and where subcontracting sits in the ledger",
+	"title": "Volume 6 · Payroll and Malaysian Statutory Deductions",
+	"subtitle": "Lessons 1–10: salary structures, the monthly run, EPF, SOCSO, EIS and PCB, the salary journal and the remittances",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 75,
 	"outcomes": [
-		"Read a production cost and reconcile it to the BOM",
-		"Handle scrap so the good units carry the loss",
-		"Subcontract an operation and keep material control",
-		"Explain variance between planned and actual cost to a production manager"
+		"Build a salary structure whose components map one to one onto the payslip",
+		"Run a monthly payroll, verify one slip by hand, and explain every deduction on it",
+		"Post the salary journal so wages, statutory liabilities and net pay each land correctly",
+		"Remit the statutory amounts, prove the accounts clear, and close payroll month end"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Production cost",
-			"title": "Read the finished cost before you defend it",
+			"kicker": "Lesson 1 · What payroll produces",
+			"title": "Five outputs, one of which is not a document",
 			"bullets": [
-				"Finished cost is materials consumed plus operations recorded, divided by good units",
-				"The stock ledger row is the proof, not the report total",
-				"A cost that differs from the BOM has exactly three usual causes",
-				"Cost reviewed weekly stops being an argument at month end"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Open the manufacture entry", "STE-SM-2026-0011", "Consumed and produced rows"],
-					["2", "Add up materials", "20 × 80.00 plus 10 × 40.00", "2,000.00"],
-					["3", "Add operating cost", "5 hours at 60.00 per hour", "300.00"],
-					["4", "Divide by good units", "2,300.00 across 10 assemblies", "230.00 per unit"],
-					["5", "Compare with the BOM", "BOM total 230.00", "No variance"],
-					[
-						"6",
-						"Record the check",
-						"One line in the production worksheet",
-						"Signed by production and finance"
-					]
-				]
-			},
-			"notes": "The arithmetic here is deliberately identical to the BOM, because the first production run should show no variance. Once a client sees that the system agrees with the recipe, they trust it when the numbers later diverge. Introduce variance only after the clean case is understood, or the learner will assume every difference is a system error."
-		},
-		{
-			"kicker": "Lesson 6 · Verify the cost",
-			"title": "Cost per unit, proved three ways",
-			"bullets": [
-				"Materials, operations and total must agree from the entry, the stock ledger and the BOM",
-				"Valuation per unit appears in the stock ledger row and the stock balance report",
-				"A rounding difference of a cent is normal, a difference of ten per cent is not",
-				"Any difference must be explained in the worksheet before the period closes"
+				"A payslip per employee, a payroll register, a salary journal, statutory remittances, and the annual earnings statement",
+				"The slip is the employee's evidence, so every line must be explainable in a sentence",
+				"The journal is the accountant's evidence, and it must reconcile to the register to the cent",
+				"Statutory remittances are the compliance evidence, and the deadline is the risk, not the calculation",
+				"None of the five is a spreadsheet, and all five must exist before you call payroll live"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Material cost", "2,000.00", "Manufacture entry consumed rows"],
-					["Operating cost", "300.00", "Manufacture entry operating cost"],
-					["Total cost", "2,300.00", "Manufacture entry total"],
-					["Valuation per unit", "230.00", "Stock Ledger, SM-ASM incoming row"],
-					["Stock value", "2,300.00 for 10 units", "Stock Balance report"]
+					["Payslip produced per employee", "One per person per month", "Salary Slip list"],
+					["Payroll register available", "Totals by component", "Payroll register report"],
+					["Salary journal posted", "One journal per payroll run", "Journal Entry, voucher type"],
+					["Statutory amounts separated", "Four liabilities, four accounts", "Trial balance"],
+					[
+						"Annual statement possible",
+						"Data sufficient for the year",
+						"Salary register by employee"
+					]
 				]
 			},
-			"notes": "Three ways of seeing the same number is the fastest way to build confidence in a new system. Ask the learner to read the figure off the entry, off the ledger and off the balance sheet item, then to explain why all three agree. When they can do that unprompted, they can survive any costing meeting."
+			"notes": "Say the five outputs out loud at the start of the payroll workshop. Clients ask for the payslip and forget the journal; accountants ask for the journal and forget the annual statement. Naming all five at once sets the acceptance criteria for the whole build."
 		},
 		{
-			"kicker": "Lesson 7 · Scrap",
-			"title": "Scrap one unit and let the good units carry it",
+			"kicker": "Lesson 2 · Structures",
+			"title": "Components, structure and the assignment",
 			"bullets": [
-				"Scrap is a quantity decision, not a cost adjustment typed into a journal",
-				"The total production cost stays the same while the good quantity falls",
-				"Cost per good unit therefore rises, and the finished stock carries that higher value",
-				"Scrap needs a reason code, because the causes are process, material or machine"
+				"A salary component is one line on a payslip: basic, allowance, overtime, EPF, SOCSO, EIS, PCB, loan recovery",
+				"Components are typed as earnings or deductions, and the type decides the arithmetic on the slip",
+				"A salary structure groups the components into the shape of one month's pay",
+				"The structure is assigned to an employee with an effective date, which is how a raise is recorded rather than retyped",
+				"Keep the component list short and named the way the payslip should read"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					[
-						"1",
-						"Open the work order",
-						"WO-SM-2026-0001, completed 10 units",
-						"Existing completion"
-					],
+					["1", "Create the basic earning component", "Basic Salary", "Earning component saved"],
 					[
 						"2",
-						"Create the scrap entry",
-						"Stock Entry type Material Issue from Main, quantity 1",
-						"One assembly removed"
+						"Create the allowances the client actually pays",
+						"Transport 200.00",
+						"Second earning component"
 					],
 					[
 						"3",
-						"Set the reason",
-						"Scrap - assembly defect, cost centre Assembly",
-						"Reason stored on the entry"
-					],
-					["4", "Save and Submit", "Confirm", "Stock falls to 9 assemblies"],
-					["5", "Read the cost", "Stock Balance for SM-ASM", "9 units still worth 2,300.00"],
-					["6", "Recompute per unit", "2,300.00 across 9 units", "255.56 per unit"]
-				]
-			},
-			"notes": "Two thousand three hundred across nine units is two hundred fifty five point five six, and that is the number the owner needs to see, because the loss is now visible in the value of the remaining stock. If the scrap were journalled away, the nine good units would look cheaper than they are and the next quotation would be priced on a lie."
-		},
-		{
-			"kicker": "Lesson 8 · Subcontracting",
-			"title": "Subcontract an operation and keep control of the material",
-			"bullets": [
-				"Subcontracting sends material out and buys a service back, and both must be recorded",
-				"The subcontractor warehouse is where your material sits while someone else holds it",
-				"The purchase receipt of the service adds that cost to the finished valuation",
-				"Sending material without a transfer is how stock disappears in a subcontracting business"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Create the subcontracting BOM",
-						"SM-ASM with operation Powder Coating marked subcontract",
-						"BOM ready for outsourcing"
-					],
-					[
-						"2",
-						"Raise the purchase order",
-						"Service item Powder Coating, 10 units at 12.00",
-						"Total 120.00"
-					],
-					[
-						"3",
-						"Transfer material",
-						"SM-ASM 10 units to Subcontractor - SM",
-						"Material leaves main"
+						"Create the statutory deduction components",
+						"EPF, SOCSO, EIS, PCB",
+						"Four deduction components"
 					],
 					[
 						"4",
-						"Receive the service",
-						"Purchase receipt against the order",
-						"Units return to main"
+						"Build the structure from those components",
+						"Basic + transport, less statutory",
+						"Structure saved"
 					],
-					["5", "Check valuation", "Stock Balance for SM-ASM", "242.00 per unit including 12.00"],
-					["6", "Reconcile material", "Subcontractor warehouse balance", "Zero, all units returned"]
+					[
+						"5",
+						"Assign the structure to the employee",
+						"From 2026-03-01, 3,000.00 gross",
+						"Assignment with a date"
+					],
+					["6", "Open the slip preview for one month", "(preview)", "Lines in payslip order"]
 				]
 			},
-			"notes": "Twelve ringgit of coating on a two hundred thirty assembly gives two hundred forty two, and the subcontractor warehouse must end at zero. That zero is the control: if material is still sitting with the subcontractor after the service receipt, someone is holding your stock without a document, which is a finding worth raising the same day."
+			"notes": "The test of a component list is whether an employee could read their payslip without asking a question. If a line says 'miscellaneous allowance', it will be queried every month until somebody renames it."
 		},
 		{
-			"kicker": "Lesson 7 · Verify scrap",
-			"title": "What scrap does to the remaining value",
+			"kicker": "Lesson 3 · Statutory deductions",
+			"title": "Four deductions, four liabilities, four deadlines",
 			"bullets": [
-				"Total production cost is unchanged by scrap, and the good units carry it",
-				"The stock value stays at 2,300.00 with nine units, so the report shows the loss",
-				"A scrap account only appears if you configured the entry to expense it directly",
-				"Recalculate the selling price implication before the next quotation goes out"
+				"EPF is a retirement contribution with an employee share and an employer share, both computed on wage bands",
+				"SOCSO covers employment injury and invalidity, and the employer share is larger than the employee share",
+				"EIS is employment insurance, small, and easy to forget because it rarely moves the net pay much",
+				"PCB is monthly tax deduction, calculated from annualised income, reliefs and rebates rather than a flat percentage",
+				"Rates and wage ceilings are schedule values that change, so confirm the current ones with the client's payroll advisor"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Assemblies in stock", "9", "Stock → Bin, Main - SM"],
-					["Stock value", "2,300.00 unchanged", "Stock Balance for SM-ASM"],
-					["Valuation per unit", "255.56", "Stock Ledger, latest row"],
 					[
-						"Scrap entry",
-						"1 unit issued with a reason and cost centre",
-						"Stock Entry STE-SM-2026-0012"
+						"Employee and employer shares separated",
+						"Two amounts per contribution",
+						"Salary slip detail"
 					],
-					["Margin at 350.00 selling price", "94.44, about 27 per cent", "Your own arithmetic"]
+					[
+						"Wage ceiling applied where relevant",
+						"Ceiling respected per schedule",
+						"Contribution calculation"
+					],
+					[
+						"PCB computed, not typed",
+						"Figure derived from the tax setup",
+						"Income tax calculation"
+					],
+					["Each deduction has its own account", "Four payable accounts", "Chart of accounts"],
+					["Current rates confirmed in writing", "Advisor note dated", "Payroll file"]
 				]
 			},
-			"notes": "Two hundred fifty five fifty six against a three hundred fifty selling price leaves ninety four forty four, roughly twenty seven per cent, down from thirty four. That fall is the real cost of the defect, and it belongs in the next pricing conversation rather than the scrap bin. Show the learner the margin before and after, and the quality discussion starts by itself."
+			"notes": "Do not memorise percentages; memorise the structure. Employee share, employer share, wage ceiling, and a tax figure that is calculated. Rates change and a consultant who quotes last year's number in a workshop loses the room, so the discipline is to confirm the schedule and record who confirmed it."
 		},
 		{
-			"kicker": "Lesson 8 · Verify subcontracting",
-			"title": "Proof the service and the material both landed",
+			"kicker": "Lesson 4 · Income tax setup",
+			"title": "Making PCB a calculation rather than an opinion",
 			"bullets": [
-				"Material out, service in, material back: three movements and one valuation",
-				"The service cost is only in stock if the receipt was against the subcontracting order",
-				"The subcontractor warehouse must return to zero, or material is unaccounted for",
-				"Subcontract purchase invoices still carry tax, and it is input tax like any purchase"
+				"The income tax slab holds the progressive rates, the reliefs and the rebates the calculation uses",
+				"Verify the slab against the current published schedule before the first payroll run, and date the check",
+				"Personal reliefs and rebates materially change a low-wage slip, so they belong in the setup rather than a note",
+				"An employee's tax number belongs on the record; without it the annual statement is incomplete",
+				"A manual PCB override is allowed, but it must be documented or it becomes an untraceable habit"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open the income tax slab", "(new)", "Empty slab with brackets"],
+					[
+						"2",
+						"Enter the current brackets from the published schedule",
+						"Brackets and rates",
+						"Save refused if brackets overlap"
+					],
+					["3", "Add standard personal reliefs", "Relief and rebate values", "Slab complete"],
+					["4", "Attach the slab to the payroll run", "(settings)", "Used in the calculation"],
+					["5", "Preview one employee's tax", "(preview)", "A computed figure, not a blank"],
+					["6", "Record the schedule date and source", "(write)", "Dated note in the payroll file"]
+				]
+			},
+			"notes": "The slab is where a consultant is closest to giving tax advice, so stay on the right side of the line: configure what the published schedule says, date the check, and let the advisor confirm the treatment of anything unusual."
+		},
+		{
+			"kicker": "Lesson 5 · The run",
+			"title": "One payroll entry, reviewed one slip at a time",
+			"bullets": [
+				"Payroll Entry is the monthly driver: it selects the employees and creates their slips in one action",
+				"Run it for the period, then read one slip line by line before submitting anything",
+				"A slip that looks wrong is usually a missing assignment or a stale structure, not a calculation bug",
+				"Submit the run only after the register totals agree with your own expected total",
+				"Keep a copy of the register with the run, because it is the evidence that the month was checked"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Create a payroll entry for the period", "March 2026", "Employee list loaded"],
+					[
+						"2",
+						"Confirm the employee selection",
+						"All active employees",
+						"Everyone who should be paid"
+					],
+					["3", "Create the salary slips", "(create)", "One slip per employee, draft"],
+					[
+						"4",
+						"Open one slip and read every line",
+						"Basic 3,000.00",
+						"Components, deductions, net"
+					],
+					[
+						"5",
+						"Compare the register total to your expectation",
+						"Agrees to the cent",
+						"Payroll register"
+					],
+					["6", "Submit the run", "(submit)", "Slips submitted, journal ready"]
+				]
+			},
+			"notes": "Read one slip completely rather than scrolling ten. A consultant who can explain a single payslip line by line will catch a misassigned structure immediately, whereas a scan of the register hides it in a total that looks plausible."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the slip",
+			"title": "Do the arithmetic by hand, once per month",
+			"bullets": [
+				"Take one employee and compute gross, each statutory deduction and net pay on paper",
+				"The employer shares are a cost, not a deduction, so they never reduce net pay and always increase the journal",
+				"A difference of a few sen is rounding; a difference of a few ringgit is a band, a ceiling or a wrong structure",
+				"Check the slip against the register, then check the register against your own total",
+				"Sign the check, because a payroll that nobody verified is a guess with a document attached"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Subcontractor warehouse balance", "0 units", "Stock → Bin, Subcontractor - SM"],
-					["Assemblies back in main", "10 units", "Stock → Bin, Main - SM"],
-					["Valuation per unit", "242.00", "Stock Ledger, latest incoming row"],
-					["Service cost in stock", "120.00 across ten units", "Landed value in the receipt"],
-					["Purchase invoice", "120.00 plus input tax", "Accounts → Purchase Invoice"]
+					["Gross agrees", "Basic plus allowances", "Salary slip header"],
+					[
+						"Employee deductions agree",
+						"EPF, SOCSO, EIS, PCB per schedule",
+						"Slip deductions section"
+					],
+					["Net pay agrees", "Gross minus employee deductions", "Slip net pay"],
+					[
+						"Employer shares identified",
+						"Cost on top of gross, not deducted",
+						"Slip employer contribution"
+					],
+					["Signed verification", "Date and name", "Payroll file"]
 				]
 			},
-			"notes": "The two numbers that matter are zero and two hundred forty two: nothing left with the supplier, and every returned unit carrying the service cost. If either is wrong, the receipt was raised against the wrong order or the transfer never happened, and both are visible in the same screen. Checking this weekly prevents the year-end scramble that subcontracting projects always produce."
+			"notes": "Use a worked example in the lab, on a gross of three thousand, and compute it by hand: employee EPF, SOCSO, EIS, the tax figure the slab produces, then net. The exercise exists to build the habit, because a consultant who cannot verify a slip cannot defend one."
 		},
 		{
-			"kicker": "Volume 6 · Reference",
-			"title": "Cost components and where they land",
+			"kicker": "Lesson 7 · The salary journal",
+			"title": "Where the money actually goes",
 			"bullets": [
-				"Every ringgit of production cost must land in inventory, not in an expense account",
-				"Capacity cost is labour and machine time, and it needs a rate the client can defend",
-				"Scrap and rework are cost of quality, and they belong in the same work order",
-				"Subcontracting adds an external service cost, which is still inventory until sale"
+				"Gross wages are an expense, split by cost centre when the client wants labour cost per department",
+				"Employee deductions are liabilities owed to EPF, SOCSO, EIS and the tax authority, not reductions in expense",
+				"Employer contributions are additional expense with their own liabilities, which is why the journal is larger than net pay",
+				"Net pay becomes a payable to employees until the bank transfer clears it",
+				"The journal must balance against the register, and the proof is the total of the four liabilities"
 			],
 			"table": {
-				"headers": ["Component", "Source", "Lands in", "Check"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
-						"Raw material",
-						"Stock issue at valuation",
-						"Work in progress, then finished goods",
-						"Quantity matches the BOM"
+						"1",
+						"Open the journal created by the payroll run",
+						"(open)",
+						"Draft journal with payroll lines"
 					],
 					[
-						"Direct labour",
-						"Operation time at workstation rate",
-						"Finished goods valuation",
-						"Hours recorded on the entry"
+						"2",
+						"Check wages hit the salary expense account",
+						"Gross 3,000.00",
+						"Debit to Salary Expense"
 					],
 					[
-						"Machine cost",
-						"Workstation rate including overhead",
-						"Finished goods valuation",
-						"Rate agreed with finance"
+						"3",
+						"Check the four statutory liabilities",
+						"EPF, SOCSO, EIS, PCB",
+						"Four credit balances"
 					],
 					[
-						"Subcontract service",
-						"Purchase invoice for the service",
-						"Finished goods valuation",
-						"Material returned to zero"
+						"4",
+						"Check employer shares are expensed",
+						"Employer EPF, SOCSO, EIS",
+						"Additional expense lines"
 					],
 					[
-						"Scrap",
-						"Material issue with a reason",
-						"Cost of the remaining good units",
-						"Reason code and approver"
-					]
+						"5",
+						"Check net pay sits as a payable",
+						"Net 2,649.00 less tax",
+						"Salary payable account"
+					],
+					["6", "Post the journal and read the ledger", "(submit)", "Balanced, one voucher"]
 				]
 			},
-			"notes": "This is the table to leave with a manufacturing client, because their accountant will ask where each element sits and their production manager will ask who controls it. Answering both columns in one page is what turns a system implementation into a costing conversation the client trusts."
+			"notes": "The journal is where a functional consultant proves they understand payroll: wages are expense, deductions are liabilities, employer shares are extra cost. Show the four liabilities as four accounts, because lumping them into one payable makes the monthly remittance a reconciliation exercise."
+		},
+		{
+			"kicker": "Lesson 8 · Remit and file",
+			"title": "The deadline is the compliance event",
+			"bullets": [
+				"Each statutory body has its own payment and filing date, and they are not all the same day",
+				"Pay the authority from the liability account so the account clears to zero by the deadline",
+				"Keep the receipt or acknowledgement with the payroll month, not in an inbox",
+				"The annual earnings statement is produced from the same records, so a clean month makes a clean year",
+				"A late remittance is a penalty regardless of whether the calculation was perfect"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Four liabilities paid separately", "One payment per authority", "Payment entries"],
+					["Liability accounts cleared", "Zero after remittance", "Trial balance"],
+					["Acknowledgements stored", "One per authority per month", "Payroll file"],
+					["Deadlines visible", "Calendar with owners", "Operations calendar"],
+					["Annual statement possible", "Every month complete", "Annual salary register"]
+				]
+			},
+			"notes": "Clients remember the deduction and forget the remittance date, so put the dates in the client's calendar with an owner, not in the handover document. A liability that never clears is either an unpaid remittance or a double payment, and both are found by looking at the account."
+		},
+		{
+			"kicker": "Lesson 9 · Leavers and corrections",
+			"title": "The messy months, handled in order",
+			"bullets": [
+				"A leaver needs a final slip with prorated wages, leave encashment and cleared advances, before the record is closed",
+				"Proration uses the joining or leaving date, so the first and last months are the ones that go wrong",
+				"Arrears from a late raise are a separate adjustment, documented with the reason and the period",
+				"Never edit a submitted slip; reverse and re-run, because the trail is the defence",
+				"Close the employee record with a date, so headcount and statutory reports stay honest"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Set the relieving date on the employee",
+						"2026-03-15",
+						"Proration applied to the final slip"
+					],
+					["2", "Encash the remaining leave", "5 days", "Line appears on the final slip"],
+					["3", "Clear advances before final pay", "Zero balance", "Trial balance"],
+					[
+						"4",
+						"Pay a late raise as a documented arrears line",
+						"January, 150.00",
+						"Adjustment with a reason"
+					],
+					[
+						"5",
+						"Reverse a wrong slip rather than editing it",
+						"(reverse)",
+						"Reversal and new slip"
+					],
+					["6", "Close the employee record", "(inactive)", "Headcount updated"]
+				]
+			},
+			"notes": "The leaver's month is where the employee is most attentive and least forgiving, so do it in order: prorate, encash, clear advances, then pay. And never edit a submitted slip — a reversal with a reason is defensible, an edit is not."
+		},
+		{
+			"kicker": "Lesson 10 · Month end",
+			"title": "Four checks that close payroll",
+			"bullets": [
+				"The register total equals the journal total, and both equal your hand calculation",
+				"Every statutory liability cleared to zero by the remittance, or explained with a date",
+				"Salary payable to employees is zero after the bank transfer, with no lingering advances",
+				"Headcount on the register equals headcount on the employee list, leavers included",
+				"File the month: register, journal, four acknowledgements and the signed verification"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Register equals journal",
+						"Same total, to the cent",
+						"Payroll register versus Journal Entry"
+					],
+					["Liabilities cleared", "Four accounts at zero", "Trial balance"],
+					["Salary payable cleared", "Zero after payment", "Salary payable account"],
+					["Headcount agrees", "Register equals employee list", "Two lists compared"],
+					["Month filed", "Five items, dated", "Payroll file"]
+				]
+			},
+			"notes": "Four checks, ten minutes, once a month, and payroll stops being frightening. The file matters as much as the checks: a month with no acknowledgements stored is a month you cannot prove was remitted, whatever the ledger says."
 		}
 	],
 	"lab": {
-		"title": "Lab · Cost a build, scrap a unit and subcontract an operation",
-		"minutes": 45,
+		"title": "Lab · Run one payroll month for Seri Murni and prove it",
+		"minutes": 80,
 		"steps": [
-			"Read the completed manufacture entry and confirm 2,300.00 total cost",
-			"Prove 230.00 per unit from the entry, the stock ledger and the stock balance",
-			"Issue one assembly as scrap with a reason and a cost centre",
-			"Confirm nine units now carry the full 2,300.00 and recompute the unit cost",
-			"Create a subcontracting operation on the BOM for powder coating at 12.00",
-			"Raise the purchase order and transfer ten assemblies to the subcontractor warehouse",
-			"Receive the service and confirm the new valuation of 242.00 per unit",
-			"Prove the subcontractor warehouse balance is zero after receipt"
+			"Build the salary components and one structure for a gross of 3,000.00 with transport of 200.00",
+			"Create the four statutory deduction components and assign each its own liability account",
+			"Enter the current income tax slab from the published schedule and date the source you used",
+			"Assign the structure to the employee from 2026-03-01 and preview one month's slip",
+			"Run the payroll entry for March, open one slip and read every line before submitting",
+			"Compute gross, employee EPF, SOCSO, EIS, the tax figure and net pay by hand, then compare",
+			"Post the salary journal and confirm wages, employer shares, four liabilities and net payable",
+			"Remit the four amounts, prove the accounts clear to zero, and file the month with its acknowledgements"
 		],
-		"done": "Done when scrap leaves nine units at 255.56 each, the subcontracted units carry 242.00, and no material remains in the subcontractor warehouse."
+		"done": "One month of payroll that reconciles three ways — hand calculation, salary slip and journal — with four statutory liabilities cleared to zero and a dated payroll file holding the register, journal and acknowledgements."
 	},
 	"quiz": [
 		{
-			"question": "A build costs 2,300.00 and one of ten units is scrapped. Cost per good unit becomes what?",
-			"options": ["230.00", "255.56", "207.00", "2,300.00"],
-			"answer": 1,
-			"why": "Total cost stays at 2,300.00 while the good quantity falls to nine, so each unit carries 255.56."
-		},
-		{
-			"question": "How should scrap be recorded?",
+			"question": "Which of payroll's five outputs is not a document for an individual?",
 			"options": [
-				"A journal reducing stock",
-				"A stock entry with a reason code",
-				"Editing the work order",
-				"A credit note"
+				"The payslip",
+				"The salary journal, which is the accounting evidence for the whole run",
+				"The annual statement",
+				"The remittance receipt"
 			],
 			"answer": 1,
-			"why": "Scrap is a quantity event, so it needs a stock entry with a reason, which also keeps the cost with the good units."
+			"why": "The other four relate to a person or an authority. The journal is the aggregate that must equal the register, and it is the output clients forget to define acceptance criteria for."
 		},
 		{
-			"question": "In subcontracting, where does your material sit while the supplier works on it?",
+			"question": "How should employer EPF, SOCSO and EIS shares be treated?",
 			"options": [
-				"Main warehouse",
-				"The subcontractor warehouse",
-				"Goods in transit",
-				"Work in progress"
+				"As deductions from gross pay",
+				"As additional expense with their own liabilities, on top of gross",
+				"As part of net pay",
+				"As a reduction in the salary expense account"
 			],
 			"answer": 1,
-			"why": "ERPNext holds subcontracted material in a subcontractor warehouse so the balance proves what is with the supplier."
+			"why": "The employee share reduces net pay; the employer share is extra cost. That is why the journal is larger than net pay and why lumping them into one payable hides the employer cost."
 		},
 		{
-			"question": "What should the subcontractor warehouse balance be after the service is received?",
-			"options": ["Equal to the order quantity", "Zero", "Negative", "Equal to the service cost"],
-			"answer": 1,
-			"why": "All transferred material should return, so a non-zero balance means material is unaccounted for and needs immediate investigation."
-		},
-		{
-			"question": "Which production cost lands in finished goods valuation?",
+			"question": "What does a difference of a few ringgit between your hand calculation and the slip most likely indicate?",
 			"options": [
-				"Only raw material",
-				"Material, operations and subcontract services",
-				"Only labour",
-				"Selling and admin costs"
+				"Rounding",
+				"A wrong wage band, an ignored ceiling or a stale structure assignment",
+				"A missing bank account",
+				"A tax rate that changed mid-year"
 			],
 			"answer": 1,
-			"why": "Production cost includes material, operations and bought-in services used in the build, all of which stay in inventory until sale."
+			"why": "Sen are rounding; ringgit are structural. Check the band, the ceiling and whether the employee still carries an old structure before looking for a calculation fault."
+		},
+		{
+			"question": "Why must statutory liabilities sit in four separate accounts?",
+			"options": [
+				"Because the chart of accounts requires it",
+				"Because each authority is paid separately, and the account must clear to zero",
+				"Because PCB is not a liability",
+				"Because employer shares are not liabilities"
+			],
+			"answer": 1,
+			"why": "Separate accounts make the monthly remittance a lookup rather than a reconciliation. One lumped payable cannot tell you which authority is unpaid."
+		},
+		{
+			"question": "What is the correct way to fix a submitted salary slip that is wrong?",
+			"options": [
+				"Edit the slip and resubmit",
+				"Reverse it and create a corrected slip with the reason recorded",
+				"Delete it and run payroll again",
+				"Adjust the next month's slip silently"
+			],
+			"answer": 1,
+			"why": "A reversal plus a new slip leaves a trail. Editing or deleting destroys the evidence that payroll was ever wrong, which is exactly what an auditor or a disputed payslip needs."
 		}
 	],
 	"memory": {
-		"spine": "Total production cost is fixed; the only question is how many good units must carry it, and scrap never answers that with a journal.",
+		"spine": "Gross is expense, deductions are liabilities, employer shares are cost, and every liability must clear to zero by its deadline.",
 		"device": {
-			"kind": "rule",
-			"label": "Good units carry the bad ones",
+			"kind": "phrase",
+			"label": "Gross, statutory, net, remit",
 			"expansion": [
-				"Finished cost is materials consumed plus operations recorded, divided by good units",
-				"Scrap is a quantity decision on the document, never a cost typed into a journal",
-				"Total production cost is unchanged by scrap, so the good units absorb it",
-				"Subcontracting is material out, service in and material back: three movements, one valuation",
-				"Every ringgit of production cost lands in inventory, not in an expense account"
+				"Gross wages are expense, split by cost centre where labour cost is measured",
+				"Employee deductions are four liabilities owed to four authorities, never a reduction in expense",
+				"Employer shares are extra cost on top of gross, with their own liabilities",
+				"Net pay is a payable to employees until the bank transfer clears it",
+				"Every liability clears to zero at remittance, and the month is filed with acknowledgements"
 			]
 		},
 		"cards": [
 			{
-				"q": "How is cost per finished unit calculated?",
-				"a": "Materials plus operations, divided by good units, with scrap in the numerator and never quietly subtracted.",
-				"hint": "Divide by good units"
+				"q": "What are the five outputs a payroll month must produce?",
+				"a": "Payslips, a payroll register, the salary journal, the statutory remittances, and data sufficient for the annual earnings statement.",
+				"hint": "Five, every month"
 			},
 			{
-				"q": "One of ten units is scrapped. What happens to total cost?",
-				"a": "It stays the same and the nine good units carry it, so unit cost rises.",
-				"hint": "Spread, not lost"
+				"q": "Why is the journal larger than net pay?",
+				"a": "Because gross includes employer EPF, SOCSO and EIS shares as extra expense, while net pay is gross minus the employee's deductions only.",
+				"hint": "Employer shares"
 			},
 			{
-				"q": "How is scrap recorded?",
-				"a": "As a quantity on the manufacture entry or a separate scrap entry, not as a journal.",
-				"hint": "Quantity, not money"
+				"q": "What belongs in the income tax setup, and what must be dated?",
+				"a": "The published brackets, reliefs and rebates from the current schedule — and a dated note of the source and who confirmed it.",
+				"hint": "Configure, don't advise"
 			},
 			{
-				"q": "How many movements does subcontracting create?",
-				"a": "Three: material out to the subcontractor, the service received, and the finished material back.",
-				"hint": "Out, service, back"
+				"q": "What proves a payroll month is finished?",
+				"a": "Register equals journal, four statutory liabilities at zero after remittance, salary payable cleared, headcount agreed, and the month filed.",
+				"hint": "Four checks"
 			},
 			{
-				"q": "Where must production cost land?",
-				"a": "In inventory value. An expense account here means the stock was under costed.",
-				"hint": "Balance sheet first"
+				"q": "How is a leaver's final month assembled?",
+				"a": "Prorate from the relieving date, encash remaining leave, clear advances, then pay — and close the employee record with a date.",
+				"hint": "Prorate, encash, clear, pay"
 			}
 		],
 		"trap": {
-			"what": "Scrap is written off to an expense account at the end of the month instead of on the document.",
-			"why": "Finished units then carry a cost that excludes the loss, the true unit cost is understated, and the expense appears where nobody looks."
+			"what": "The first payroll runs, the payslips look right, and nobody checks the journal — so the statutory liabilities sit in one account and go unpaid until a penalty arrives.",
+			"why": "A correct slip is not a correct month. Four separate liability accounts, a remittance calendar with owners, and four month-end checks make the compliance visible before an authority asks."
 		}
 	},
-	"narration": "Once a client has built something, the next question is what it cost, and the answer has to survive an argument. A completed build of ten assemblies carries two thousand of material and three hundred of labour, so two hundred thirty each, and the entry, the stock ledger and the stock balance must all say the same thing. Scrap is where costing gets real: one unit fails, the total cost does not move, and the nine good units now carry two hundred fifty five fifty six each. Subcontracting adds a bought-in service, twelve ringgit of coating, and a warehouse that must return to zero. Materials, labour, scrap, service: four components, one valuation, and a worksheet that lets the production manager and the accountant argue with numbers instead of opinions. Teach the four components in order, and insist on the worksheet, because a costing conversation without evidence becomes a personality contest, and the consultant is always the outsider in that room."
+	"narration": "Payroll is five outputs, not one: a payslip per person, a register, a salary journal, four statutory remittances, and enough data to produce the annual statement. Build it from components and a structure, assigned with an effective date, so a raise is a new assignment rather than a retyped slip. Then treat the statutory side structurally rather than from memory: a four layer deduction with an employee share, an employer share, a wage ceiling and a tax figure that is calculated from a slab. Rates change, so confirm the current schedule with the client's payroll advisor and date the check. Run the month through the payroll entry, but read one slip line by line and compute it by hand once, because a consultant who cannot verify a payslip cannot defend one. The journal is where understanding shows: gross wages are expense, deductions are liabilities to four authorities, employer shares are extra cost, and net pay is a payable until the bank clears it. Then remit, prove the four accounts clear to zero, and file the month with its acknowledgements. Leavers get prorated, encashed and cleared in that order, and a wrong slip is reversed, never edited."
 }

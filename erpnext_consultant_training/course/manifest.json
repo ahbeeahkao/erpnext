@@ -1,6 +1,6 @@
 {
 	"title": "ERPNext Functional Consultant",
-	"subtitle": "The complete eleven-volume consultant track: concept primers, setup, quote-to-cash, procure-to-pay, stock and scanning, close, manufacturing, projects, service, automation and front-end customisation, Malaysia compliance, go-live, continuity, security and handover",
+	"subtitle": "The complete twelve-volume consultant track: concept primers, setup, quote-to-cash, procure-to-pay, stock and scanning, close, people and Malaysian payroll, manufacturing, projects and service, automation and front-end customisation, Malaysia compliance, go-live, continuity, security and handover",
 	"version": "1.0.0",
 	"audience": "Functional consultants, implementation leads and key users who configure and demonstrate ERPNext",
 	"sample_company": "Seri Murni Sdn Bhd — a Malaysian distributor with a small assembly operation",
@@ -55,33 +55,39 @@
 		},
 		{
 			"id": "v6",
-			"title": "Volume 6 · Manufacturing",
+			"title": "Volume 6 · People: HR and Payroll",
 			"status": "built",
 			"chapters": ["ch18", "ch19"]
 		},
 		{
 			"id": "v7",
-			"title": "Volume 7 · Projects, Assets, Quality and CRM",
+			"title": "Volume 7 · Manufacturing",
 			"status": "built",
-			"chapters": ["ch20", "ch21", "ch22"]
+			"chapters": ["ch20", "ch21"]
 		},
 		{
 			"id": "v8",
-			"title": "Volume 8 · Automation, Print, Permissions and Customisation",
+			"title": "Volume 8 · Projects, Assets, Quality and CRM",
 			"status": "built",
-			"chapters": ["ch23", "ch24", "ch25"]
+			"chapters": ["ch22", "ch23", "ch24"]
 		},
 		{
 			"id": "v9",
-			"title": "Volume 9 · Malaysia Compliance",
+			"title": "Volume 9 · Automation, Print, Permissions and Customisation",
 			"status": "built",
-			"chapters": ["ch26", "ch27"]
+			"chapters": ["ch25", "ch26", "ch27"]
 		},
 		{
 			"id": "v10",
-			"title": "Volume 10 · Migration, Go-Live, Continuity and Handover",
+			"title": "Volume 10 · Malaysia Compliance",
 			"status": "built",
-			"chapters": ["ch28", "ch29", "ch30", "ch31", "ch32"]
+			"chapters": ["ch28", "ch29"]
+		},
+		{
+			"id": "v11",
+			"title": "Volume 11 · Migration, Go-Live, Continuity and Handover",
+			"chapters": ["ch30", "ch31", "ch32", "ch33", "ch34"],
+			"status": "built"
 		}
 	],
 	"chapters": [
@@ -212,6 +218,14 @@
 		{
 			"id": "ch32",
 			"file": "ch32.json"
+		},
+		{
+			"id": "ch33",
+			"file": "ch33.json"
+		},
+		{
+			"id": "ch34",
+			"file": "ch34.json"
 		}
 	]
 }

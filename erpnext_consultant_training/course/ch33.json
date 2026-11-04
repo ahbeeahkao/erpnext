@@ -1,0 +1,434 @@
+{
+	"id": "ch33",
+	"number": 33,
+	"title": "Volume 11 · Site Security and Hardening: Protecting the Company's Money",
+	"subtitle": "Lessons 1–10: accounts, two-factor, least privilege, network exposure, keys and the first hour of an incident",
+	"level": "Advanced",
+	"minutes": 65,
+	"outcomes": [
+		"Close the account habits that make a site easy to enter, starting with the administrator",
+		"Specify two-factor authentication, session rules and network restrictions the host will enforce",
+		"Manage integration keys and the encryption key as assets with an owner and a rotation date",
+		"Run a security review a client can sign, and know what to do in the first hour of an incident"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Why it is your job",
+			"title": "The site holds the money, not just the data",
+			"bullets": [
+				"A ledger with payment details and tax identifiers is a target, and the fastest route in is a shared login",
+				"The functional consultant does not administer servers, but does specify what must be enforced",
+				"Most incidents a consultant will meet are ordinary: a departed staff member, a shared password, a stale key",
+				"Security work is cheap when it is a checklist and expensive when it is an incident",
+				"Put it in the handover pack with a name and a review date, or it will not happen"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Security expectation agreed", "Written in the support agreement", "Scope document"],
+					["Named security owner", "One person at the client", "Handover pack"],
+					["Review frequency set", "Quarterly account review", "Operations calendar"],
+					["Incident contact known", "Host contact and escalation", "Support agreement"],
+					["Client told what is theirs", "Network and devices named", "Handover pack, exclusions"]
+				]
+			},
+			"notes": "Say plainly what is the host's job and what is the client's: the consultant specifies, the host enforces, the client owns the people. Without that sentence each party assumes the other has done the account review, and the departed warehouse manager still has a login."
+		},
+		{
+			"kicker": "Lesson 2 · Accounts",
+			"title": "One person, one account, every time",
+			"bullets": [
+				"Shared logins destroy the audit trail and make a departure impossible to unwind cleanly",
+				"The administrator account is for administration, not for daily invoicing",
+				"Every account has a real name, a role and a manager who confirms it is still needed",
+				"Departure procedure: disable on the last day, reassign open documents, and keep the record",
+				"Show the client the activity log once, because it answers the question they always ask later"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"List every enabled user with role and manager",
+						"(report)",
+						"User list with roles"
+					],
+					[
+						"2",
+						"Identify shared and generic accounts",
+						"warehouse, admin",
+						"Two or three suspicious names"
+					],
+					["3", "Replace each with named accounts", "(create)", "New users, old ones disabled"],
+					[
+						"4",
+						"Confirm daily work is not done as administrator",
+						"(check)",
+						"Ordinary users carry the volume"
+					],
+					["5", "Write the departure procedure", "Disable, reassign, record", "Handover pack"],
+					[
+						"6",
+						"Run a departure dry run with a test user",
+						"(disable)",
+						"Account closed, documents reassigned"
+					]
+				]
+			},
+			"notes": "The departure dry run is what turns a policy into a capability. Most clients have never disabled an account while documents were open, and the first attempt is usually during a resignation, in a hurry. Rehearse it once with a test user."
+		},
+		{
+			"kicker": "Lesson 3 · Two-factor",
+			"title": "The single control that stops credential theft",
+			"bullets": [
+				"Two-factor authentication is the highest-value control per minute of effort on any internet-facing site",
+				"Enforce it for roles that can see money, prices or personal data, and for every administrator",
+				"Check how recovery works before enforcing, or one lost phone becomes an outage",
+				"Enforce by role rather than asking politely, because optional security is decoration",
+				"Record who holds which device and who may reset it"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Confirm two-factor is available and enforced by role",
+						"(settings)",
+						"Policy visible in the user form"
+					],
+					["2", "Apply it to administrators first", "Admin roles", "Login now asks for a code"],
+					[
+						"3",
+						"Extend to finance and sales roles",
+						"Accounts, Sales Manager",
+						"Both roles challenged"
+					],
+					["4", "Register a second device for the owner", "(enrol)", "Two devices listed"],
+					["5", "Test recovery with one device removed", "(login)", "Recovery path works"],
+					[
+						"6",
+						"Record device holders and reset authority",
+						"(write)",
+						"Register in the handover pack"
+					]
+				]
+			},
+			"notes": "Enforce by role and rehearse the recovery before you switch it on for everyone. The worst outcome is a controller locked out at month end and no documented way back, which teaches the client that security costs them money."
+		},
+		{
+			"kicker": "Lesson 4 · Least privilege",
+			"title": "Give access like you are lending money",
+			"bullets": [
+				"Least privilege means the smallest set of rights that lets the person finish today's work",
+				"Delete is the first right to withhold, because a deleted document is the hardest to reconstruct",
+				"Warehouse and company restrictions are part of privilege, not an afterthought, and they must be tested by logging in as the user",
+				"Role proliferation is a smell: fifty roles means nobody can describe who may do what",
+				"Review access quarterly against the org chart, and record every removal"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["No role grants delete except one", "Single controlled role", "Role permission manager"],
+					["Warehouse restrictions tested", "Two logins, two results", "Same report, two users"],
+					["Roles map to the org chart", "One page, names against roles", "Access matrix document"],
+					["Quarterly review recorded", "Dated, with removals listed", "Review minutes"],
+					[
+						"Leavers removed same day",
+						"Disable timestamp before departure date",
+						"User list history"
+					]
+				]
+			},
+			"notes": "Privilege is the area where a functional consultant has the most leverage and the least excuse, because the tools are all in the browser. The two-login test is the only proof that a restriction works. Run it, then write the access matrix down."
+		},
+		{
+			"kicker": "Lesson 5 · Network and transport",
+			"title": "Who can reach the login page at all",
+			"bullets": [
+				"HTTPS everywhere is non-negotiable; a login form over plain HTTP is a password in a plain envelope",
+				"Restrict the administrative paths to known addresses where the host allows it, so the world only sees the login",
+				"Remote access for staff should be a VPN or a managed proxy, not an open port",
+				"Session timeouts belong to the risk appetite of the client, not to the default",
+				"Any restriction must be tested from outside, because 'should be blocked' is not a control"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Login page is HTTPS", "Valid certificate, no warning", "Browser address bar"],
+					[
+						"Administrative paths restricted",
+						"Refused from an unknown address",
+						"Test from mobile data"
+					],
+					["Session timeout configured", "Value matches policy", "Settings"],
+					["No database port exposed", "Connection refused externally", "External port check"],
+					["Restrictions documented", "List of allowed networks", "Handover pack"]
+				]
+			},
+			"notes": "Most of this belongs to the host, and that is precisely why it must be written as a requirement with evidence. Ask for a screenshot of a refused connection from outside the network. A verbal assurance that it is locked down is not a control."
+		},
+		{
+			"kicker": "Lesson 6 · Keys and integrations",
+			"title": "Every key is a spare key to the ledger",
+			"bullets": [
+				"API keys and e-Invoice credentials are privileges in disguise, so they need an owner, a scope and a review date",
+				"Never use one key for every integration, because revoking it then stops everything at once",
+				"Keys live in the host's secret store or the site configuration, never in a spreadsheet or a chat message",
+				"Rotate on a schedule and immediately when someone with access leaves",
+				"Log which integration uses which key, or revocation becomes guesswork"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Inventory every integration and its credential", "(list)", "Integration register"],
+					["2", "Record owner and purpose per key", "(write)", "Register with names"],
+					["3", "Separate keys per integration", "(create)", "One key, one consumer"],
+					["4", "Store secrets outside documents", "(host)", "Secret store reference"],
+					["5", "Set a rotation date", "Quarterly", "Calendar entry with owner"],
+					["6", "Test revocation on one spare key", "(revoke)", "Only that integration stops"]
+				]
+			},
+			"notes": "The revocation test is worth the ten minutes: revoke a spare key and confirm only its integration stops. Clients discover during an incident that one key serves four systems, and then they cannot cut off the compromised one without stopping trading."
+		},
+		{
+			"kicker": "Lesson 7 · The encryption key",
+			"title": "The one file that cannot be regenerated",
+			"bullets": [
+				"The site encryption key protects stored credentials and encrypted fields, and losing it damages the site permanently",
+				"Store it outside the backup, with two named holders and a documented retrieval path",
+				"Rotate it only with a plan, because rotation has to re-encrypt what it protects",
+				"Test retrieval: the holder should be able to produce it without the consultant's help",
+				"Record the key's location in the handover pack as a pointer, never the key itself"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Key stored outside the backup",
+						"Two independent locations",
+						"Secret store and sealed copy"
+					],
+					["Two named holders", "Names with roles", "Handover pack"],
+					["Retrieval tested", "Holder produced it unaided", "Drill log"],
+					["Rotation plan written", "Steps and re-encryption checks", "Runbook"],
+					[
+						"Handover holds a pointer only",
+						"No key material in the document",
+						"Handover pack review"
+					]
+				]
+			},
+			"notes": "This is the item clients nod at and then fail. Test retrieval with the actual holder in the room, and watch where they go, because if the answer is 'ask the consultant' the plan is not finished. Never put the key itself in the handover pack."
+		},
+		{
+			"kicker": "Lesson 8 · Watching",
+			"title": "The logs nobody reads until it is too late",
+			"bullets": [
+				"Failed logins, permission changes and document deletions are the three signals worth watching",
+				"Activity history per document answers the practical question: who changed this, and when",
+				"Alerts should reach a person, not a folder; a weekly summary is enough for a small site",
+				"An audit trail nobody can query is a story, not a control",
+				"Agree the retention period with the client's auditor before the first incident"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Failed logins visible", "Count with source", "Login attempt log"],
+					["Permission changes tracked", "Who, what, when", "Activity log and version history"],
+					["Deletions reviewed weekly", "List of deleted documents", "Deleted document list"],
+					["Alerts reach a person", "Named recipient", "Notification settings"],
+					["Retention agreed", "Months stated", "Handover pack"]
+				]
+			},
+			"notes": "Keep the watching small enough to survive: three signals, one weekly summary, one named recipient. A client who is asked to read a security dashboard will not, but a client who receives four lines on a Monday will."
+		},
+		{
+			"kicker": "Lesson 9 · The review",
+			"title": "One page a client can sign",
+			"bullets": [
+				"A security review is a checklist with evidence, not an opinion, and it fits on one page",
+				"Each line: the control, the evidence, the date and who confirmed it",
+				"Include the items you cannot verify yourself, marked as host-confirmed with a date",
+				"Repeat it quarterly and after every departure, because both change the answer",
+				"The signed page is what protects the client and the consultant when something goes wrong"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Accounts reviewed", "No shared logins, dated", "Review sheet"],
+					["Two-factor enforced", "Roles listed", "Same sheet"],
+					["Least privilege tested", "Two-login evidence attached", "Report screenshots"],
+					["Network restrictions evidenced", "Host confirmation dated", "Host email"],
+					["Keys inventoried and rotated", "Register with dates", "Integration register"]
+				]
+			},
+			"notes": "One page, dated, signed. That document is the difference between a professional engagement and an argument after an incident. It also makes the next review fast, because you compare against the last signed page."
+		},
+		{
+			"kicker": "Lesson 10 · The first hour",
+			"title": "If it happens, the sequence matters",
+			"bullets": [
+				"Contain first: disable the account, revoke the key, and do not stop to diagnose",
+				"Preserve evidence before cleaning: export the logs you will need and note the times",
+				"Tell the client's owner in one message with facts, not a narrative of discovery",
+				"Restore and verify using the drill from the continuity chapter, then re-enter the window",
+				"Write the incident note within a day, and change one control as a result"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Disable the affected account and revoke its keys",
+						"(disable)",
+						"Access stopped within minutes"
+					],
+					[
+						"2",
+						"Export logs and record times before any cleanup",
+						"(export)",
+						"Evidence file with timestamps"
+					],
+					["3", "Notify the client owner with the facts", "(message)", "One dated summary"],
+					[
+						"4",
+						"Restore the last good backup if data was altered",
+						"(restore)",
+						"Site returns to the known state"
+					],
+					[
+						"5",
+						"Verify with the twenty-minute checklist",
+						"(check)",
+						"Invoice, print, reports, e-Invoice"
+					],
+					[
+						"6",
+						"Write the incident note and change one control",
+						"(write)",
+						"Dated note, one action"
+					]
+				]
+			},
+			"notes": "The order is contain, preserve, notify, restore, verify, learn. Consultants who start by investigating burn the hour that mattered. Rehearse the disabling step in a test account so the first time is not during an incident."
+		}
+	],
+	"lab": {
+		"title": "Lab · Harden the Seri Murni site and sign the review",
+		"minutes": 65,
+		"steps": [
+			"Export the enabled user list, identify shared logins and write the departure procedure",
+			"Disable a test user who holds an open document and reassign the document to their manager",
+			"Enforce two-factor for administrators and finance, enrol a second device and test recovery",
+			"Test one warehouse restriction with two logins and attach both screenshots to the review",
+			"Confirm HTTPS, session timeout and restricted administrative paths, with host evidence dated",
+			"Inventory every integration key with its owner, then revoke a spare key and prove only that integration stops",
+			"Locate the encryption key through its holder without your help, and record the pointer in the handover pack",
+			"Complete the one-page security review, sign it, and rehearse the first three steps of the incident sequence"
+		],
+		"done": "A signed one-page security review with dated evidence, no shared accounts, two-factor enforced by role, keys inventoried with an owner, and a holder who produced the encryption key unaided."
+	},
+	"quiz": [
+		{
+			"question": "Why is two-factor authentication the highest-value control on an internet-facing site?",
+			"options": [
+				"It encrypts the database",
+				"It stops a stolen or guessed password from being enough on its own",
+				"It replaces role permissions",
+				"It reduces hosting cost"
+			],
+			"answer": 1,
+			"why": "Most real incidents begin with credentials. Two-factor makes the stolen password insufficient, which is a large risk reduction for a few minutes of configuration per user."
+		},
+		{
+			"question": "What makes a departure procedure a capability rather than a policy?",
+			"options": [
+				"A signature from management",
+				"A dry run with a test user who holds open documents",
+				"A paragraph in the handover pack",
+				"An annual reminder"
+			],
+			"answer": 1,
+			"why": "The hard part is reassigning open documents while disabling access. Until someone has done it once under no pressure, the policy has never been tested."
+		},
+		{
+			"question": "Why must an integration key belong to exactly one integration?",
+			"options": [
+				"Because keys expire quickly",
+				"Because otherwise revoking a compromised key stops several integrations at once",
+				"Because the system limits key count",
+				"Because each key needs its own password"
+			],
+			"answer": 1,
+			"why": "Revocation is the containment step in an incident. A shared key turns a surgical response into an outage that stops trading."
+		},
+		{
+			"question": "What is the correct answer if nobody can produce the encryption key without the consultant?",
+			"options": [
+				"It is fine because the backup exists",
+				"The plan is unfinished and retrieval must be drilled with the named holder",
+				"The key can be regenerated",
+				"The host will supply a new one"
+			],
+			"answer": 1,
+			"why": "The key cannot be regenerated without losing what it protects, and the backup usually does not contain it. Until two named holders can retrieve it unaided, there is no plan."
+		},
+		{
+			"question": "What is the right first move in the first hour of a suspected compromise?",
+			"options": [
+				"Investigate the cause",
+				"Contain access, then preserve the evidence before cleaning anything",
+				"Restore from last night's backup immediately",
+				"Email the whole company"
+			],
+			"answer": 1,
+			"why": "Containment stops the damage; preserving the logs keeps the cause findable. Restoring first, or investigating first, destroys the evidence you need for both decisions."
+		}
+	],
+	"memory": {
+		"spine": "One person one account, two factors, the smallest privilege, the fewest open doors, and every key with an owner and a date.",
+		"device": {
+			"kind": "rule",
+			"label": "Least privilege, then prove it",
+			"expansion": [
+				"Nobody shares a login, and the administrator account is not a workspace",
+				"Two-factor is enforced by role before anything else is discussed",
+				"Privilege is the smallest set that finishes today's work, tested by logging in as the user",
+				"Network and keys are restrictions with evidence, not assurances",
+				"The one-page review is dated and signed, and the encryption key has two named holders"
+			]
+		},
+		"cards": [
+			{
+				"q": "Why is a shared login worse than a weak password?",
+				"a": "Because it destroys the audit trail and makes a departure impossible to unwind. You cannot disable one person without disabling everyone.",
+				"hint": "One person, one account"
+			},
+			{
+				"q": "What evidence proves a restriction actually restricts?",
+				"a": "A second login that shows the difference, or a refused connection from outside the network. Configuration alone is not evidence.",
+				"hint": "Two logins"
+			},
+			{
+				"q": "What must exist before two-factor is enforced for finance?",
+				"a": "A tested recovery path and a second enrolled device, plus a recorded reset authority, so month end cannot be lost to a phone.",
+				"hint": "Recovery first"
+			},
+			{
+				"q": "How should integration keys and e-Invoice credentials be managed?",
+				"a": "One key per integration, an owner and purpose in a register, storage outside documents, a rotation date, and a tested revocation.",
+				"hint": "One key, one job"
+			},
+			{
+				"q": "What are the first two moves in a suspected compromise?",
+				"a": "Contain access — disable the account, revoke the key — then preserve the logs before anything is cleaned or restored.",
+				"hint": "Contain, preserve"
+			}
+		],
+		"trap": {
+			"what": "The client says the host handles security, so no account review is done and the encryption key lives only in the consultant's notes.",
+			"why": "The host protects the server; it cannot stop a shared login or a stale key. Write the split of responsibility, run the review quarterly, and drill key retrieval with two named holders."
+		}
+	},
+	"narration": "This chapter exists because the site holds the money, and the easiest way in is not technical. Start with accounts: one person one login, no shared warehouse account, and the administrator kept for administration rather than daily invoicing. Write the departure procedure and rehearse it with a test user who holds open documents, because that is the step clients fail under pressure. Then enforce two factor by role, beginning with administrators and finance, after proving that recovery works, so a lost phone is not a lost month end. Privilege is next: withhold delete, restrict by warehouse, and prove it with a second login rather than a configuration screenshot. Network exposure and keys belong to the host and to you jointly, so ask for evidence of a refused connection from outside, keep one key per integration with an owner and a rotation date, and test revocation. Find the encryption key through its named holder without your help. Then sign the one page review, dated, with the items you cannot verify marked as host confirmed. And if something happens, contain access first, preserve the logs second, notify the owner third, and only then restore and verify."
+}

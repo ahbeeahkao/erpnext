@@ -1,481 +1,484 @@
 {
 	"id": "ch18",
 	"number": 18,
-	"title": "Volume 6 · Bills of Materials and Work Orders",
-	"subtitle": "Lessons 1–4: a bill of materials the floor will follow, a work order that reserves the right stock, and a completion that leaves a sane valuation",
+	"title": "Volume 6 · HR Foundation: Employees, Leave, Attendance and Claims",
+	"subtitle": "Lessons 1–10: installing the HR app, the employee record that payroll depends on, leave, attendance and expense claims",
 	"level": "Advanced",
-	"minutes": 65,
+	"minutes": 70,
 	"outcomes": [
-		"Build a bill of materials with materials, operations and a defensible cost",
-		"Plan a work order from real demand and read what it reserves",
-		"Issue components to the floor without losing the valuation trail",
-		"Complete production so finished goods carry materials plus capacity cost"
+		"Install the HR app on a hosted site and verify what it adds before anyone uses it",
+		"Build an employee record complete enough that payroll can run from it without a spreadsheet",
+		"Configure leave types, allocation and attendance so the numbers are defensible",
+		"Run an expense claim from receipt to ledger entry"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Bill of materials",
-			"title": "Write a bill of materials the floor will follow",
+			"kicker": "Lesson 1 · Why HR lives here",
+			"title": "People are master data with a ledger attached",
 			"bullets": [
-				"A BOM is a recipe: quantities, operations and the cost of both",
-				"Quantities must be per single finished unit, or every work order multiplies the error",
-				"Operations carry time and rate, which is how labour enters the finished cost",
-				"Include only what the floor actually consumes, not what the drawing says in theory"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Manufacturing → Bill of Materials → New",
-						"Item SM-ASM, quantity 1, company SM",
-						"Empty BOM form"
-					],
-					[
-						"2",
-						"Add components",
-						"SM-MTR 2 Nos at 80.00, SM-HSG 1 Nos at 40.00",
-						"Material cost 200.00"
-					],
-					[
-						"3",
-						"Add operation",
-						"Assembly, workstation Assembly Line, 30 minutes",
-						"Operation row accepted"
-					],
-					["4", "Set the rate", "60.00 per hour on the operation", "Operating cost 30.00"],
-					["5", "Save and Submit", "Confirm", "BOM-SM-ASM-001, total cost 230.00"],
-					["6", "Check the tree", "Manufacturing → BOM Tree", "One level, two components"]
-				]
-			},
-			"notes": "Two motors at eighty and one housing at forty is two hundred of material, and half an hour at sixty adds thirty of capacity, so the assembly costs two hundred thirty to make. If the learner cannot predict that number before saving, they will not notice when a supplier price change silently makes every finished unit wrong. The BOM is the only place where a costing error is cheap to fix."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the BOM",
-			"title": "The cost roll-up, proved line by line",
-			"bullets": [
-				"Material cost, operating cost and total must each be visible and explainable",
-				"A BOM without operations still works, but labour then never reaches inventory",
-				"Quantity per unit of one keeps the work order arithmetic trivial",
-				"Every BOM needs an owner, because prices and routings both change"
+				"Salaries are an expense with statutory liabilities, so the people data belongs where the ledger is",
+				"Core ERPNext has no employee, leave or payroll documents; the HR app supplies them",
+				"A consultant who cannot say where HR stops and payroll starts will promise both and deliver neither",
+				"Leave, attendance and claims are approvals first and accounting second, so the workflow matters more than the fields",
+				"Decide with the client whether HR runs here or in a separate payroll system, and record the answer"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Material cost", "200.00", "BOM → Costing section"],
-					["Operating cost", "30.00", "BOM → Operations table"],
-					["Total cost per unit", "230.00", "BOM total"],
-					["Selling price assumption", "350.00", "Item price for SM-ASM"],
-					["Gross margin per unit", "120.00, about 34 per cent", "Your own arithmetic"]
+					["HR app installed or not", "Stated, with the app version", "Apps list on the site"],
+					[
+						"Employee documents present",
+						"Employee, Leave, Attendance, Expense Claim",
+						"Desk search"
+					],
+					["Scope decision recorded", "In this system or another, named", "Scope document"],
+					["Statutory owner named", "Who files EPF, SOCSO, EIS and PCB", "Client org chart"],
+					["Approver per process", "Leave, claim and payroll each named", "Authorisation matrix"]
 				]
 			},
-			"notes": "A three hundred fifty selling price against two hundred thirty of cost gives one hundred twenty of margin, roughly thirty four per cent, and that single ratio is what the owner will ask about in the first production meeting. Teach the learner to state it before anyone asks, because a consultant who arrives with the margin already computed sets the tone for the whole engagement."
+			"notes": "Say the scope sentence in the first workshop: employee records, leave, attendance and claims are configured here; the statutory filing is the client's payroll function, and the ledger receives the journal. That one sentence prevents the most expensive misunderstanding in a Malaysian ERPNext project."
 		},
 		{
-			"kicker": "Lesson 3 · Work order",
-			"title": "Plan a work order from real demand",
+			"kicker": "Lesson 2 · Installing the app",
+			"title": "Adding the HR app without a surprise",
 			"bullets": [
-				"A work order is a promise to the floor: this item, this quantity, this date",
-				"Required items are reserved against the warehouse you nominate, not against hope",
-				"The planned start date drives the material request, so set it honestly",
-				"Do not create work orders for stock you have not sold unless the client plans to stock"
+				"The HR app is a separate Frappe app, so it is installed on the site rather than switched on in settings",
+				"Ask the host to install it in a maintenance window, never during a trading day",
+				"Install on staging first and open every one of the new documents before repeating on production",
+				"Installing an app runs migrations, so take a backup and record the versions either side of the change",
+				"After installation, review which roles can see employee and salary data before anyone logs in"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Manufacturing → Work Order → New",
-						"Item SM-ASM, quantity 10, BOM-SM-ASM-001",
-						"Required items populated"
+						"Take a backup of the site before the change",
+						"(backup)",
+						"Archive with a timestamp"
 					],
 					[
 						"2",
-						"Set the dates",
-						"Planned start 05-02-2026, planned end 07-02-2026",
-						"Schedule recorded"
-					],
-					["3", "Set source warehouse", "Main - SM for components", "Reserved quantities shown"],
-					["4", "Save and Submit", "Confirm", "WO-SM-2026-0001, status Not Started"],
-					["5", "Read required items", "SM-MTR 20, SM-HSG 10", "Reserved against Main"],
-					[
-						"6",
-						"Check availability",
-						"Stock Balance for both components",
-						"Enough or a shortage flagged"
-					]
-				]
-			},
-			"notes": "Ten assemblies need twenty motors and ten housings, and the work order says so before anything moves. That is the value of the document: it converts a sales promise into a material promise. If availability is short, the conversation happens on the planning screen rather than on the assembly floor, which is a day earlier and considerably cheaper."
-		},
-		{
-			"kicker": "Lesson 4 · Verify the reservation",
-			"title": "What the work order actually reserves",
-			"bullets": [
-				"Reserved quantity is a planning number and does not move the stock ledger",
-				"Stock only moves when material is transferred to the floor",
-				"A work order with no reservation means the item is not stock-tracked or the warehouse is wrong",
-				"Status changes are the audit trail of the production process"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Reserved SM-MTR", "20 units", "Work Order → Required Items"],
-					["Reserved SM-HSG", "10 units", "Work Order → Required Items"],
-					["Stock ledger effect", "none until material transfer", "Stock Ledger for SM-MTR"],
-					["Work order status", "Not Started", "Work Order header"],
-					["Projected quantity at Main", "reduced by the reservation", "Stock → Item dashboard"]
-				]
-			},
-			"notes": "This is where learners confuse planning with posting. Reserved quantities live in the work order and in availability reports, while the stock ledger stays untouched until the transfer. Say the sentence twice: a reservation is a promise, a transfer is a movement. The distinction prevents the classic panic when a client sees stock still in main after an issue was supposedly made."
-		},
-		{
-			"kicker": "Lesson 5 · Material issue",
-			"title": "Issue components to the floor",
-			"bullets": [
-				"Material transfer for manufacture moves components to the work-in-progress warehouse",
-				"The transfer is the moment cost leaves raw stock and joins the production order",
-				"Transfer exactly what the work order asks for, not the whole shelf",
-				"Partial transfers are normal for long builds, and the work order tracks the balance"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open WO-SM-2026-0001 → Create → Material Transfer",
-						"Nothing",
-						"Stock entry pre-filled with components"
-					],
-					[
-						"2",
-						"Set warehouses",
-						"From Main - SM to Assembly Floor - SM",
-						"Transfer type for manufacture"
+						"Ask the host to fetch and install the HR app",
+						"bench get-app hrms",
+						"App present in the apps list"
 					],
 					[
 						"3",
-						"Confirm quantities",
-						"SM-MTR 20, SM-HSG 10",
-						"Transferred quantity equals required"
+						"Install it on the site",
+						"bench --site site install-app hrms",
+						"Installation completes without error"
 					],
-					["4", "Save and Submit", "Confirm", "Stock entry STE-SM-2026-0010 submitted"],
+					["4", "Run migrations", "bench --site site migrate", "Migrations finish cleanly"],
 					[
 						"5",
-						"Check the bins",
-						"Main and Assembly Floor",
-						"Main falls by 20 and 10, floor rises"
+						"Open the new documents as an administrator",
+						"Employee, Leave Application",
+						"Forms render, no error banner"
 					],
 					[
 						"6",
-						"Check the work order",
-						"Transfer status",
-						"Material transferred, status In Process"
+						"Review role permissions on salary data",
+						"(roles)",
+						"Only HR and finance roles may read"
 					]
 				]
 			},
-			"notes": "Twenty motors and ten housings leave main and arrive on the floor, and the total value of the company has not changed. That is the point to make loudly, because the client's accountant will see two ledger rows and ask which one is the cost. Neither is: cost becomes expense only when the finished item is sold."
+			"notes": "This is the one place in the course where a command line is the honest instruction, because a functional consultant does not get to invent an installation path. Phrase it as a request to the host with evidence back: app in the list, documents open, versions recorded."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the WIP",
-			"title": "Work in progress on the floor, in numbers",
+			"kicker": "Lesson 3 · HR settings",
+			"title": "Company-level decisions that everything inherits",
 			"bullets": [
-				"Work in progress is the value of components consumed but not yet finished",
-				"The floor warehouse quantity is your visual WIP, and it must match the work order",
-				"No profit appears at this stage, however long the build takes",
-				"A floor balance that outlives the work order is scrap or theft, not WIP"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Components on the floor", "SM-MTR 20, SM-HSG 10", "Stock → Bin, Assembly Floor - SM"],
-					["Value on the floor", "2,000.00", "Stock Balance, Assembly Floor"],
-					[
-						"Main warehouse after issue",
-						"reduced by 20 motors and 10 housings",
-						"Stock → Bin, Main - SM"
-					],
-					["Work order status", "In Process", "Work Order header"],
-					["Profit and loss effect", "none", "Profit and Loss Statement"]
-				]
-			},
-			"notes": "Two thousand of components sitting on the floor is a number a client can see with their own eyes, and that is why the floor warehouse earns its place. When the count on the floor disagrees with the work order, the conversation is about physical control rather than accounting, and it is the warehouse supervisor who owns the answer."
-		},
-		{
-			"kicker": "Lesson 7 · Completion",
-			"title": "Complete the order and value the finished goods",
-			"bullets": [
-				"The manufacture entry consumes components and produces the finished item in one document",
-				"Valuation carries materials plus the operating cost you configured",
-				"A short completion leaves components on the floor, which the next transfer must explain",
-				"Scrap and rework belong in the same work order, not in a separate correction later"
+				"Holiday lists decide whether a day counts as leave, so build them before the first application",
+				"Standard working hours and the weekly off pattern drive attendance, not the other way round",
+				"Leave approver and expense approver are set per employee or by role, and the choice is visible in practice",
+				"Payroll settings carry the company, the currency and the rounding, so mistakes surface on every slip",
+				"Set these once with the client in the room, then treat changes to them as a change request"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open the work order → Create → Manufacture",
-						"Nothing",
-						"Entry with consumed and produced rows"
+						"Create the holiday list for the year",
+						"14 public holidays",
+						"Holiday list with dates"
 					],
 					[
 						"2",
-						"Check the consumed rows",
-						"SM-MTR 20, SM-HSG 10 from Assembly Floor",
-						"Consumption pre-filled"
-					],
-					["3", "Check the produced row", "SM-ASM 10 units into Main - SM", "Finished quantity 10"],
-					[
-						"4",
-						"Confirm operating cost",
-						"0.50 hours × 10 units at 60.00 per hour",
-						"Operating cost 300.00"
-					],
-					["5", "Save and Submit", "Confirm", "Finished goods valued at 230.00 each"],
-					["6", "Read the stock ledger", "Filter SM-ASM", "Incoming 10 at 230.00, value 2,300.00"]
-				]
-			},
-			"notes": "Two thousand of materials plus three hundred of capacity gives two thousand three hundred, or two hundred thirty per assembly, which matches the BOM exactly. When the completion value differs from the BOM, the difference is always one of three things: a rate change on a component, an operation time recorded differently, or additional costs added on the entry."
-		},
-		{
-			"kicker": "Volume 6 · Reference",
-			"title": "Production documents in order",
-			"bullets": [
-				"Each document answers one question and hands the next one a number",
-				"Skipping the material transfer makes the completion consume stock that is not there",
-				"The work order is the only place where planned and actual quantities meet",
-				"Every document has a status that tells you where the build actually stands"
-			],
-			"table": {
-				"headers": ["Document", "When", "Purpose", "What to verify"],
-				"rows": [
-					[
-						"Bill of Materials",
-						"Once per product",
-						"Defines materials, operations and cost",
-						"Cost per unit matches the quote"
-					],
-					[
-						"Work Order",
-						"Per build",
-						"Reserves stock and schedules the floor",
-						"Required quantities are correct"
-					],
-					[
-						"Material Transfer for Manufacture",
-						"At build start",
-						"Moves components to the floor",
-						"Floor quantity equals required"
-					],
-					[
-						"Manufacture entry",
-						"At completion",
-						"Consumes components, produces finished goods",
-						"Valuation equals materials plus operations"
-					],
-					[
-						"Stock Entry for scrap",
-						"When a unit fails",
-						"Removes the failed unit and its cost",
-						"Cost per good unit recalculated"
-					]
-				]
-			},
-			"notes": "Walk this table once with the client's production supervisor and once with their accountant, and you will hear two different questions: can I build it, and what did it cost. Answering both from the same five documents is what makes ERPNext usable on a shop floor rather than merely installed."
-		},
-		{
-			"kicker": "Lesson 8 · Job cards",
-			"title": "The floor needs a card per operation",
-			"bullets": [
-				"A job card turns one work order into the sequence of operations, each with time, quantity and a person",
-				"Time logged against a card is how labour enters the cost, so an unused card means an under-costed product",
-				"Quantity completed per operation is what shows the bottleneck, which is a capacity question rather than a costing one",
-				"Printed cards still work, and a printed card that names the operation is a training aid as well as a record",
-				"Reconcile card time against the timesheet, or the payroll and the product cost tell different stories"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Add operations to the BOM", "Cut, Assemble, Test", "Three operations with times"],
-					[
-						"2",
-						"Release a work order for ten units",
-						"(submit)",
-						"Job cards generated per operation"
+						"Set standard working hours and weekly off",
+						"Mon–Fri, 09:00–18:00",
+						"HR settings saved"
 					],
 					[
 						"3",
-						"Log time on the cutting card",
-						"1.5 hours, operator A",
-						"Time recorded against the card"
+						"Set the default leave approver rule",
+						"Reporting line",
+						"Approver resolves per employee"
 					],
+					["4", "Set the expense claim approver", "Department head", "Claim routes correctly"],
 					[
-						"4",
-						"Record quantity completed per card",
-						"10 of 10 cut",
-						"Progress visible per operation"
+						"5",
+						"Confirm payroll currency and rounding",
+						"MYR, two decimals, round half up",
+						"Payroll settings saved"
 					],
-					["5", "Print the cards for the floor", "(print)", "Cards with operation and quantity"],
-					[
-						"6",
-						"Reconcile cards against the timesheet",
-						"(compare)",
-						"Hours agree within tolerance"
-					]
+					["6", "Test one leave application end to end", "(apply)", "Approver receives it"]
 				]
 			},
-			"notes": "Job cards are the difference between a work order that reports cost and a work order that reports progress. On a small floor the honest version is one card per operation, printed, with the operator writing time. Do not let the card become a form filled at the end of the week from memory."
+			"notes": "Holiday lists are the item clients forget and then argue about. A leave application that counts a public holiday as annual leave destroys trust in the system faster than any bug. Build the list for the current and next year in the same session."
 		},
 		{
-			"kicker": "Lesson 9 · Planning",
-			"title": "From demand to a plan you can defend",
+			"kicker": "Lesson 4 · The employee record",
+			"title": "Every field that payroll will read",
 			"bullets": [
-				"A production plan answers a different question from a work order: what should we make, and when",
-				"Start from real demand — open sales orders and a stated forecast — never from a hunch about the month",
-				"The plan shows shortages of components before the order is released, which is the point of doing it",
-				"Capacity is a constraint, so compare planned hours against the hours the floor actually has",
-				"A plan reviewed weekly is a tool; one produced monthly is a report"
+				"Date of joining decides proration, statutory registration and the first payslip",
+				"Department and designation drive cost centre, approval routing and reporting, so they are not decoration",
+				"Statutory identifiers — EPF, SOCSO, EIS and income tax number — must be captured once, correctly",
+				"Bank details belong on the record, because the payment file is generated from it",
+				"Payroll runs from this record; a missing field becomes a manual correction every single month"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Confirm open demand for the next four weeks",
-						"Sales orders and forecast",
-						"Demand list by item"
+						"Create the employee with personal details",
+						"Aina binti Rahman",
+						"Employee record saved"
 					],
-					["2", "Run the plan for the assembly items", "(plan)", "Suggested quantities by week"],
+					[
+						"2",
+						"Set the joining date and confirmation date",
+						"2026-02-01",
+						"Proration calculated later"
+					],
 					[
 						"3",
-						"Read the component shortage list",
-						"Bearing kit short by 4",
-						"Shortage rows on the plan"
+						"Assign company, department and designation",
+						"Seri Murni, Warehouse, Storekeeper",
+						"Cost centre resolved"
 					],
 					[
 						"4",
-						"Compare planned hours against available hours",
-						"38 planned, 40 available",
-						"Capacity view"
+						"Add statutory identifiers",
+						"EPF, SOCSO, EIS, tax number",
+						"Four identifiers stored"
 					],
 					[
 						"5",
-						"Release work orders only for the current week",
-						"(release)",
-						"One week of orders, not four"
+						"Add bank account and salary mode",
+						"Maybank, bank transfer",
+						"Payment details ready"
 					],
-					["6", "Repeat next week against the same demand", "(plan)", "Plan and reality compared"]
+					["6", "Attach the signed offer letter", "(attach)", "Evidence on the record"]
 				]
 			},
-			"notes": "The plan earns its place by finding a shortage before the order is released. Releasing four weeks of work orders at once defeats the purpose, because the plan can no longer be adjusted. Weekly, one week ahead, is the discipline that makes small manufacturers trust it."
+			"notes": "The statutory identifiers are where a client's old spreadsheet is usually wrong, and the error only appears when a contribution is rejected. Capture them from the actual registration documents, not from memory, and attach the evidence to the employee record."
+		},
+		{
+			"kicker": "Lesson 5 · Structure",
+			"title": "Departments, designations and grades",
+			"bullets": [
+				"A department is a reporting and cost unit, so build it from how the client measures performance",
+				"A designation is a job title, and it should not be used as a proxy for grade or pay band",
+				"Grades carry the salary structure, which is how a promotion changes pay without editing a slip",
+				"Keep the tree shallow enough that every department maps to exactly one cost centre",
+				"Report headcount by department once, because that is the first HR report anyone asks for"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Departments map to cost centres",
+						"One to one, no gaps",
+						"Department tree versus cost centres"
+					],
+					["Designations are job titles only", "No pay information encoded", "Designation list"],
+					[
+						"Grades carry salary structures",
+						"One structure per grade",
+						"Salary structure assignment"
+					],
+					[
+						"Headcount report returns rows",
+						"Counts per department",
+						"Employee report grouped by department"
+					],
+					["Tree shallow enough to use", "Three levels at most", "Department tree"]
+				]
+			},
+			"notes": "The common failure is a department tree that mirrors the org chart in excruciating detail. Three levels is enough for a distributor, and every extra level is a place where an employee gets filed wrongly and the cost report quietly lies."
+		},
+		{
+			"kicker": "Lesson 6 · Leave",
+			"title": "Types, allocation and the balance nobody argues with",
+			"bullets": [
+				"A leave type defines the entitlement and the rules; an allocation gives a person days for a period",
+				"Decide earned versus fixed allocation before the first month, because converting later is manual work",
+				"Carry-forward and encashment are policy decisions the client must state in writing",
+				"Leave without pay is a payroll input, not just an HR record, so connect it before the first absence",
+				"A leave balance a manager can see and an employee cannot is a dispute waiting to happen"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Create the annual leave type", "14 days per year", "Leave type saved"],
+					[
+						"2",
+						"Create medical leave as a separate type",
+						"14 days, no carry forward",
+						"Second type saved"
+					],
+					["3", "Allocate annual leave to the employee", "14 days for 2026", "Balance shows 14"],
+					[
+						"4",
+						"Apply for two days of annual leave",
+						"12 and 13 March",
+						"Application routes to approver"
+					],
+					["5", "Approve and read the balance", "(approve)", "Balance drops to 12"],
+					["6", "Apply for leave without pay", "One day, unpaid", "Flagged for payroll deduction"]
+				]
+			},
+			"notes": "The leave-without-pay path is the one that must reach payroll, because an unpaid day that never becomes a deduction is a salary error the employee discovers before you do. Test it in the same session as the paid leave test."
+		},
+		{
+			"kicker": "Lesson 7 · Attendance",
+			"title": "Records, shifts and the honest percentage",
+			"bullets": [
+				"Attendance is a daily fact per employee, and it can be entered manually or derived from check-ins",
+				"Shift types define the expected hours, which is what makes an absence detectable",
+				"Check-in data from a device or a phone produces records, but only if the shift exists to compare against",
+				"Overtime and late deduction are payroll inputs, so the link must be configured, not assumed",
+				"Publish one attendance percentage per department monthly, and expect the conversation to improve it"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Create the day shift", "09:00–18:00, one hour break", "Shift type saved"],
+					[
+						"2",
+						"Assign the shift to the employee",
+						"From 2026-03-01",
+						"Shift visible on the record"
+					],
+					[
+						"3",
+						"Record attendance for a working day",
+						"Present, 09:02 in, 18:10 out",
+						"Attendance saved"
+					],
+					["4", "Record an absence", "Absent, no leave", "Marked for payroll review"],
+					["5", "Read attendance for the month", "(report)", "Present days count per employee"],
+					[
+						"6",
+						"Confirm the percentage per department",
+						"94 per cent",
+						"Report grouped by department"
+					]
+				]
+			},
+			"notes": "Attendance is where clients want biometric integration on day one and manual entry by day thirty. Start with the shift and the daily record, prove the report, and only then discuss devices — otherwise the project stalls on hardware nobody budgeted for."
+		},
+		{
+			"kicker": "Lesson 8 · Claims",
+			"title": "Expense claims from receipt to ledger",
+			"bullets": [
+				"An expense claim is an employee advance, a reimbursement or both, and the difference decides the accounting",
+				"Every line needs an expense account and a cost centre, or the claim cannot be posted honestly",
+				"Receipts attach to the claim, which is the only defence when a tax auditor asks",
+				"Approval before payment, and payment only after the sanction, keeps the advance account clean",
+				"A claim paid through payroll and a claim paid through accounts take different routes; choose one per policy"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Create the expense claim for the employee", "Aina, March", "Draft claim"],
+					[
+						"2",
+						"Add a line with account and cost centre",
+						"Travel, Warehouse",
+						"Line posted correctly"
+					],
+					["3", "Attach the receipts", "(attach)", "Evidence on the claim"],
+					["4", "Submit for approval", "(submit)", "Approver receives it"],
+					["5", "Approve, then create the payment", "(pay)", "Ledger shows expense and payment"],
+					["6", "Check the advance account is clear", "Zero balance", "Trial balance"]
+				]
+			},
+			"notes": "The advance account is the check that catches sloppy claims, because an advance that never clears is money the company has lost track of. Reconcile it monthly and the claims process stays honest without anyone policing receipts."
+		},
+		{
+			"kicker": "Lesson 9 · Verify the people layer",
+			"title": "Four checks before payroll is allowed to run",
+			"bullets": [
+				"Headcount in the system must equal the client's payroll list, name by name and not just in total",
+				"Every employee needs a joining date, a department and four statutory identifiers before the first run",
+				"Leave balances should reconcile to the policy for the year to date, employee by employee",
+				"Claims and advances must be at zero or explained before payroll, because payroll will not fix them",
+				"Run the checks on staging with production data first, then repeat them on production"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Headcount matches the payroll list",
+						"Same names, same count",
+						"Employee list versus payroll sheet"
+					],
+					["Every record complete", "Zero blanks in required fields", "Employee list filters"],
+					["Leave balances reconcile", "Policy days minus taken days", "Leave balance report"],
+					["Advances cleared or explained", "Zero unexplained", "Advance account in the ledger"],
+					["Checks repeated on production", "Same results, dated", "Verification sheet"]
+				]
+			},
+			"notes": "These four checks are the gate before payroll, and they take half an hour. Skipping them is how a client discovers in month three that two employees were never in the system and their salaries were paid from a spreadsheet nobody reconciled."
+		},
+		{
+			"kicker": "Lesson 10 · Handover",
+			"title": "Employee data is the most sensitive data you will touch",
+			"bullets": [
+				"Salary, identity numbers and bank details are personal data, so restrict them by role from the first day",
+				"Only HR and finance roles should read salary fields; everyone else sees names and departments",
+				"Record who has access to employee data and review it with the same rigour as ledger access",
+				"Hand over the HR settings, the holiday list calendar and the leave policy in writing",
+				"Leave the client with a monthly routine: attendance, leave balances, advances and headcount"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Salary fields restricted by role", "Two roles only", "Role permission manager"],
+					["Access list recorded", "Names and roles, dated", "Access review sheet"],
+					["Holiday calendar handed over", "Current and next year", "Handover pack"],
+					["Leave policy documented", "Types, days, carry forward", "Same pack"],
+					[
+						"Monthly routine agreed",
+						"Attendance, balances, advances, headcount",
+						"Operations calendar"
+					]
+				]
+			},
+			"notes": "Close the chapter on the obligation rather than the features. Employee data is the most sensitive thing in the system, and a consultant who leaves salary visible to every user has created a problem no amount of training will undo."
 		}
 	],
 	"lab": {
-		"title": "Lab · Build a BOM, run a work order and value the output",
-		"minutes": 45,
+		"title": "Lab · Stand up HR for Seri Murni and run one month clean",
+		"minutes": 70,
 		"steps": [
-			"Create the SM-ASM bill of materials with two motors, one housing and a 30 minute operation",
-			"Confirm the cost roll-up of 200.00 materials and 30.00 operations",
-			"Create a work order for 10 units and confirm the 20 and 10 component requirement",
-			"Issue the components to the Assembly Floor and confirm main warehouse falls",
-			"Confirm the floor holds 2,000.00 of work in progress and no profit has moved",
-			"Complete the work order with 10 finished units and 300.00 of operating cost",
-			"Confirm finished goods valuation of 230.00 per unit and total 2,300.00",
-			"Compare the completion value with the BOM and explain any difference"
+			"Confirm with the host that the HR app is installed on staging, and record the versions and the backup taken",
+			"Open each new document as an administrator and restrict salary fields to HR and finance roles",
+			"Build the 2026 holiday list, standard working hours and the weekly off pattern",
+			"Create one employee with joining date, department, designation, four statutory identifiers and bank details",
+			"Allocate fourteen days of annual leave and run one approved application with one day of unpaid leave",
+			"Create a day shift, record attendance for a working day and one absence, then read the monthly report",
+			"Raise an expense claim with receipts, approve it, pay it, and confirm the advance account is clear",
+			"Run the four pre-payroll checks: headcount, record completeness, leave balances and cleared advances"
 		],
-		"done": "Done when 10 assemblies sit in main at 230.00 each, the floor is empty of components for this order, and the completion value matches the BOM line for line."
+		"done": "A working HR foundation on staging: an employee record payroll can use without a spreadsheet, leave and attendance that reconcile, one claim posted to the ledger, and four pre-payroll checks signed off."
 	},
 	"quiz": [
 		{
-			"question": "Two motors at 80.00, one housing at 40.00 and half an hour at 60.00 per hour give a unit cost of what?",
-			"options": ["200.00", "230.00", "260.00", "180.00"],
-			"answer": 1,
-			"why": "Materials are 2 × 80 + 40 = 200, and the operation is 0.5 × 60 = 30, so the BOM costs 230.00 per unit."
-		},
-		{
-			"question": "What does submitting a work order do to the stock ledger?",
+			"question": "Why does the HR app change the installation process rather than a setting?",
 			"options": [
-				"Moves components to the floor",
-				"Nothing, it only reserves",
-				"Produces finished goods",
-				"Creates a purchase order"
+				"Because it is licensed separately",
+				"Because it is a separate Frappe app that must be installed on the site and migrated",
+				"Because it replaces the chart of accounts",
+				"Because it needs a new database"
 			],
 			"answer": 1,
-			"why": "A work order reserves quantities for planning. Stock moves only when material is transferred to the floor."
+			"why": "Core ERPNext has no employee, leave or payroll documents. The HR app adds them, which means installing and migrating — a maintenance activity with a backup before and versions recorded after."
 		},
 		{
-			"question": "When does component cost become an expense?",
+			"question": "Which employee fields make the difference between a record and a payroll input?",
 			"options": [
-				"At the material transfer",
-				"At work order completion",
-				"When the finished item is sold",
-				"When the BOM is saved"
-			],
-			"answer": 2,
-			"why": "Component and labour cost accumulate in inventory until the finished item is sold, at which point cost of goods sold is recognised."
-		},
-		{
-			"question": "What does the manufacture entry add to finished goods valuation?",
-			"options": [
-				"Only material cost",
-				"Materials plus operating cost",
-				"Selling price",
-				"Only operating cost"
+				"Photograph and address",
+				"Joining date, department, statutory identifiers and bank details",
+				"Designation and appraisal score",
+				"Emergency contact and blood group"
 			],
 			"answer": 1,
-			"why": "The manufacture entry consumes components and adds the operating cost from the BOM, giving the full production cost per unit."
+			"why": "Those four drive proration, cost centre, statutory contributions and the payment file. A missing one becomes a manual correction on every payslip."
 		},
 		{
-			"question": "10 assemblies cost 2,300.00 to build. Cost per unit is what?",
-			"options": ["230.00", "200.00", "255.56", "300.00"],
-			"answer": 0,
-			"why": "2,000 of materials plus 300 of operations is 2,300 across 10 good units, which is 230.00 each."
+			"question": "Why must the holiday list exist before the first leave application?",
+			"options": [
+				"Because leave cannot be applied for without it",
+				"Because otherwise a public holiday counts as leave taken and the balance is wrong",
+				"Because it sets the payroll period",
+				"Because it controls the shift pattern"
+			],
+			"answer": 1,
+			"why": "The calendar decides which days consume entitlement. Build the current and next year in the same session, or the first dispute arrives with the first public holiday."
+		},
+		{
+			"question": "What does an uncleared employee advance usually indicate?",
+			"options": [
+				"A tax adjustment",
+				"A claim that was paid without being posted against the right account",
+				"A leave balance error",
+				"A missing attendance record"
+			],
+			"answer": 1,
+			"why": "Advances must clear through approved claims. A standing balance is money the company has lost track of, and it hides until somebody reconciles the account."
+		},
+		{
+			"question": "Why are salary fields restricted by role from day one?",
+			"options": [
+				"To improve performance",
+				"Because pay, identity numbers and bank details are personal data with a legal dimension",
+				"To stop users editing leave balances",
+				"Because the app requires it"
+			],
+			"answer": 1,
+			"why": "Personal data exposure is not recoverable by training. Restrict to HR and finance, record who has access, and review it with the same discipline as ledger access."
 		}
 	],
 	"memory": {
-		"spine": "A recipe, a promise, a reservation, an issue and a completion: five steps from demand to finished goods, each with its own document.",
+		"spine": "The employee record is the payroll input, so build the calendar, the identifiers and the approvals before the first slip.",
 		"device": {
-			"kind": "phrase",
-			"label": "Recipe, promise, reserve, issue, complete",
+			"kind": "rule",
+			"label": "The employee record is the payroll input",
 			"expansion": [
-				"BOM: quantities and operations, with the cost of both, written so the floor can follow it",
-				"Work order: this item, this quantity, this date, a promise to the floor",
-				"Reservation: planning only, because quantities reserved never move the ledger",
-				"Material Transfer for Manufacture: components move to the work in progress warehouse",
-				"Manufacture: components consumed and finished goods produced in one document"
+				"Install the HR app in a maintenance window, after a backup, and record the versions either side",
+				"Holiday lists and shifts decide what leave and attendance mean, so build them first",
+				"Joining date, department, statutory identifiers and bank details are the four payroll inputs",
+				"Leave without pay and overtime must reach payroll, or the first salary is wrong",
+				"Salary fields belong to HR and finance only, recorded in the access review"
 			]
 		},
 		"cards": [
 			{
-				"q": "Does a work order move stock?",
-				"a": "No, it reserves. Only the transfer and the manufacture entry move quantity.",
-				"hint": "Promise versus movement"
+				"q": "What has to exist before anyone applies for leave?",
+				"a": "The holiday list for the current and next year, the leave types with their entitlement, and the approver rule. Otherwise the first public holiday eats an entitlement.",
+				"hint": "Calendar first"
 			},
 			{
-				"q": "What is work in progress?",
-				"a": "The value of components consumed but not yet finished, sitting in the work in progress warehouse.",
-				"hint": "Half made stock"
+				"q": "Which four employee fields does payroll actually read?",
+				"a": "Joining date, department, the statutory identifiers (EPF, SOCSO, EIS, tax number) and bank details. Everything else is context.",
+				"hint": "Date, department, IDs, bank"
 			},
 			{
-				"q": "What does a BOM cost roll up contain?",
-				"a": "Material cost plus operating cost per unit, at the BOM's own rates and operations.",
-				"hint": "Material plus operations"
+				"q": "Why does leave without pay have to reach payroll?",
+				"a": "Because an unpaid day that never becomes a deduction is a salary overpayment the employee spots before the consultant does.",
+				"hint": "Payroll input"
 			},
 			{
-				"q": "Where are components actually consumed?",
-				"a": "In the Manufacture stock entry, which also produces and values the finished item.",
-				"hint": "One document, two directions"
+				"q": "What do the four pre-payroll checks cover?",
+				"a": "Headcount name by name against the payroll list, record completeness, leave balances against policy, and advances cleared or explained.",
+				"hint": "Half an hour"
 			},
 			{
-				"q": "Why must the finished valuation be explainable?",
-				"a": "It becomes the cost of every later sale, so an unexplainable BOM cost is an unexplainable margin.",
-				"hint": "Cost in, cost out"
+				"q": "How should the HR app installation be handled?",
+				"a": "As a maintenance change: backup first, ask the host to fetch and install the app, migrate, open every new document, then record the versions.",
+				"hint": "Host, backup, evidence"
 			}
 		],
 		"trap": {
-			"what": "Components are issued straight out of the main warehouse and the work in progress step is skipped.",
-			"why": "Nothing is ever in process, so a half finished order looks like a stock loss and the finished goods value cannot be rebuilt."
+			"what": "HR is configured but the client's real employee list lives in a spreadsheet, so payroll runs from the spreadsheet and the system becomes a museum.",
+			"why": "Payroll must read the employee records or the system is decoration. Reconcile headcount name by name before the first run, and make the spreadsheet read-only the week payroll goes live."
 		}
 	},
-	"narration": "Manufacturing scares functional consultants because it looks technical, and it is not. A bill of materials is a recipe: two motors at eighty, one housing at forty, half an hour of assembly at sixty an hour, which gives two hundred thirty per unit. A work order turns demand into a reservation: ten assemblies need twenty motors and ten housings, and nothing has moved yet. The material transfer moves components to the floor, where they are work in progress and still not an expense. Completion consumes the components, adds three hundred of operating cost, and produces ten assemblies at two hundred thirty each. Four documents, one cost, no mystery. If the completion differs from the BOM, check the rate, the time and any extra charges before blaming the system, and write the answer in the production worksheet. A client who can explain a cost per unit from four documents will trust the system with their quotations, and that trust is the whole point of the volume."
+	"narration": "People data is master data with a ledger attached, and in ERPNext it arrives through a separate app. Install it the way you install anything: backup first, ask the host to fetch and install the HR app, migrate, then open every new document and record the versions either side. Before anyone applies for leave, build the holiday list and the shifts, because a public holiday counted as annual leave destroys trust faster than any bug. Then the employee record, which is the payroll input: joining date, department, and the four statutory identifiers for EPF, SOCSO, EIS and income tax, plus bank details. Leave needs types, allocations and an approval route, and the unpaid day must reach payroll or the first salary is wrong. Attendance needs a shift to compare against before a percentage means anything. Claims need an account and a cost centre per line, an approval before payment, and an advance account that clears to zero. Finish with the four pre-payroll checks: headcount name by name, complete records, leave balances that reconcile, and advances cleared. And restrict salary fields to HR and finance from day one, because pay and identity numbers are personal data."
 }
