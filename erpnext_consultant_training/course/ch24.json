@@ -1,448 +1,426 @@
 {
 	"id": "ch24",
 	"number": 24,
-	"title": "Volume 8 · Customise Without Code: Property Setters, Custom Fields and Custom DocTypes",
-	"subtitle": "Lessons 1–10: what a functional consultant may change in the browser, what survives an upgrade, and how to say no to code",
+	"title": "Volume 8 · The Service Desk: Issues, SLAs and Warranty Claims",
+	"subtitle": "Lessons 1–10: logging issues against assets, running SLAs honestly, and settling warranty claims without losing money",
 	"level": "Advanced",
-	"minutes": 70,
+	"minutes": 65,
 	"outcomes": [
-		"Draw the line between configuration in the browser and customisation that needs a developer",
-		"Rename, hide, reorder and enforce fields with property setters that survive an upgrade",
-		"Add custom fields and a custom DocType with a child table without touching a file",
-		"Prove a customisation survives a migration, and keep a change register a successor can read"
+		"Log an issue against a serialised asset and keep the service history attached to it",
+		"Configure service levels that measure the response the client actually promised",
+		"Decide when a repair is free of charge and when it is billable, with evidence",
+		"Turn field service time into an invoice that matches the agreement"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Where the line is",
-			"title": "Configuration ends where a file begins",
+			"kicker": "Lesson 1 · The issue desk",
+			"title": "Why service work needs its own document",
 			"bullets": [
-				"Everything in Customize Form, a property setter, a custom field or the DocType editor is configuration and belongs to you",
-				"Anything that needs a file in an app, a hook or a script is development and belongs to somebody else",
-				"The line is not about difficulty, it is about who can reverse the change without a deployment",
-				"Say the line out loud in the first workshop, so a requirement does not drift into code by accident",
-				"Every configuration change is recorded in a register, because it is invisible until it breaks something"
+				"A customer complaint is not a sales return, and treating it as one destroys the warranty history",
+				"An issue records who reported it, which asset, what the symptom was and who owns the fix",
+				"The same asset accumulates issues over years, which is how a client learns which model to stop buying",
+				"Without an issue record, the service team keeps its history in a chat group and the warranty claim in a memory",
+				"A distributor with an assembly line needs this even at two issues a week"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
+					["Issue exists as its own document", "Status, priority, owner", "Desk, Issues list"],
 					[
-						"Configuration scope agreed in writing",
-						"List of allowed changes",
-						"Project scope document"
+						"Issue linked to a serialised asset",
+						"Serial shown on the issue",
+						"Issue form, asset field"
 					],
-					[
-						"Code requests routed elsewhere",
-						"Named developer or vendor",
-						"Scope document, exclusions"
-					],
-					["Reversal path understood", "Undo in the browser, not a deploy", "Change register"],
-					["Register started on day one", "Row per change, dated", "Change register sheet"],
-					["Client told which is which", "Session notes signed", "Workshop minutes"]
+					["Reported-by captured", "Customer contact, not just company", "Contact field"],
+					["Owner assigned", "One person, not a team", "Assigned To"],
+					["History visible per asset", "Issues listed against the serial", "Asset dashboard"]
 				]
 			},
-			"notes": "The most expensive sentence in a project is 'it's only a small change'. Small changes that need a file still need a deployment, a test and a rollback, and nobody budgeted for that. Draw the line in the first workshop, in writing, while everyone is still friendly."
+			"notes": "The first objection is always volume: we only get two complaints a week. Volume is not the argument, warranty is. Without a per-asset history, the client cannot tell an early failure from a misuse pattern, and pays for both."
 		},
 		{
-			"kicker": "Lesson 2 · Property setters",
-			"title": "Change the form without changing the DocType",
+			"kicker": "Lesson 2 · Logging",
+			"title": "A five-field issue that survives an audit",
 			"bullets": [
-				"A property setter records an override on top of the standard definition, so the standard stays intact underneath",
-				"Rename a label, make a field mandatory or read-only, hide it, or move it within its section",
-				"Setters survive a migration, which is why they are the consultant's tool and hand-edited DocTypes are not",
-				"Keep the list short and justified, because twenty setters is a design problem wearing a configuration hat",
-				"Every setter goes in the register with the reason the client asked for it"
+				"Asset, symptom, reporter, priority and promised response: five fields, filled every time",
+				"The symptom is written in the customer's words plus one sentence of technical description",
+				"Priority is set by impact, not by who shouted, and the SLA clock follows the priority",
+				"Attach the photograph at logging time, because the second visit is where the cost is",
+				"Nothing is closed without a resolution note a stranger could understand"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Open Issue for customer Kim Huat Hardware", "(new)", "Draft issue"],
+					["2", "Select the serialised asset", "SN-2026-00418", "Asset and its history load"],
+					[
+						"3",
+						"Write the symptom in the customer's words",
+						"Bearing noise above 800 rpm",
+						"Description saved"
+					],
+					["4", "Set priority from impact", "High", "SLA clock starts on submission"],
+					["5", "Attach the photograph and a reading", "(attach)", "Two attachments on the issue"],
+					["6", "Assign an owner", "Service technician", "Issue appears in their queue"]
+				]
+			},
+			"notes": "Five fields, consistently, is worth more than twenty fields filled sometimes. The photograph at logging is the highest-value habit, because it turns a second site visit into a phone call."
+		},
+		{
+			"kicker": "Lesson 3 · Service levels",
+			"title": "Make the SLA measurable or do not promise it",
+			"bullets": [
+				"A service level is a response and a resolution target per priority, not an aspiration in a proposal",
+				"Response means the clock stops when someone with the right skill starts, not when the ticket is read",
+				"Holiday calendars and working hours belong in the setup, or the SLA breaches itself over a long weekend",
+				"Measure from submission to first response, and report the breaches with their cause",
+				"A client who signs an eight-hour promise with no weekend cover has bought a number they cannot meet"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open Customize Form for the DocType",
-						"Sales Invoice",
-						"Form editor with the standard layout"
+						"Set working hours and holidays for the service calendar",
+						"Mon–Fri 09:00–18:00",
+						"Calendar saved"
 					],
 					[
 						"2",
-						"Rename a label the client dislikes",
-						"Customer PO No",
-						"Label changes on every form"
+						"Define service level by priority",
+						"High: respond 4h, resolve 24h",
+						"Two targets stored"
 					],
-					["3", "Make a field mandatory", "Customer PO No required", "Save refused without it"],
-					["4", "Make a field read-only", "Territory", "Field visible, not editable"],
-					[
-						"5",
-						"Hide a field the business never uses",
-						"Ignore Pricing Rule",
-						"Field gone from the form"
-					],
-					["6", "Record each change in the register", "(write)", "Six rows, dated and justified"]
-				]
-			},
-			"notes": "Property setters are the highest-leverage tool a functional consultant has, and the most abused. Each one is a small divergence from standard behaviour that the next consultant has to discover. Keep them few, documented, and named after the client's own language."
-		},
-		{
-			"kicker": "Lesson 3 · Custom fields",
-			"title": "Add what the business needs and nothing else",
-			"bullets": [
-				"A custom field is a real column with a real type, so choose the type carefully the first time",
-				"Place it deliberately: after which field, in which section, and whether it shows in the list view",
-				"A field nobody filters or reports on is a field nobody needed",
-				"Defaults and options are configuration; conditional mandatory rules generally are not",
-				"Name fields for the business, not the database, because the label is what the client reads"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Create a custom field on Sales Invoice",
-						"Deliver To Site",
-						"New field in the form editor"
-					],
-					["2", "Choose the type", "Data", "Single-line text field"],
 					[
 						"3",
-						"Place it after the customer address",
-						"Insert After",
-						"Field appears where expected"
+						"Assign priority to the agreement",
+						"High, Medium, Low",
+						"Priority list configured"
 					],
-					["4", "Show it in the list view", "In List View", "Column available in the list"],
-					[
-						"5",
-						"Save, then open an existing invoice",
-						"(open)",
-						"Field present on old records too"
-					],
-					["6", "Add a report column using it", "(report builder)", "Field selectable as a column"]
-				]
-			},
-			"notes": "The test for a custom field is not whether the client asked for it, but whether anyone filters, prints or reports on it. If the answer is no, it becomes an empty box that someone will eventually fill with the wrong thing. Ask the reporting question before you create the column."
-		},
-		{
-			"kicker": "Lesson 4 · Verify the field",
-			"title": "One field, three audiences",
-			"bullets": [
-				"The field must be visible where the work happens, which is usually the form and the list, not a report nobody opens",
-				"It must be hidden or read-only where it would mislead, which means checking it under a second role",
-				"It must survive a migration: refresh the form and confirm the field is still placed correctly",
-				"Old records must still open, because a custom field added today appears on documents from last year",
-				"If the field feeds a report, check the report returns rows before you call it done"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Visible on the form", "Field in the expected section", "Open a new Sales Invoice"],
-					["Visible in the list view", "Column shows and sorts", "Invoice list"],
-					[
-						"Correct under a second role",
-						"Same field, correct editability",
-						"Log in as a normal user"
-					],
-					["Survives a form reload", "Placement unchanged", "Customize Form after refresh"],
-					["Report returns rows", "Non-zero results using the field", "Report Builder"]
-				]
-			},
-			"notes": "Customisation without verification is decoration. The second-role check catches the commonest failure, which is a field that a sales user can edit when finance assumed it was locked down."
-		},
-		{
-			"kicker": "Lesson 5 · Custom DocTypes",
-			"title": "A new document you build in the browser",
-			"bullets": [
-				"The DocType editor creates a real table, so the naming and the fields are decisions with consequences",
-				"Choose the naming series before the first record exists, because changing it later breaks links",
-				"Submittable suits anything with a lifecycle and a freeze; keep it simple unless the lifecycle is real",
-				"Permissions come next, or the new document is visible to everyone or nobody",
-				"A custom DocType is a commitment: it becomes something the client supports after you leave"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Create a DocType from the DocType list",
-						"Site Survey",
-						"New DocType, draft state"
-					],
-					["2", "Set the naming series", "SURV-.YYYY.-", "Records named SURV-2026-0001"],
-					["3", "Add the business fields", "Site, Contact, Findings", "Three fields on the form"],
-					["4", "Decide submittable", "Not submittable", "Save only, no submit button"],
-					[
-						"5",
-						"Set permissions per role",
-						"Technician create, Manager delete",
-						"Roles listed with rights"
-					],
-					["6", "Create one record to prove it", "SURV-2026-0001", "Document saves and lists"]
-				]
-			},
-			"notes": "The naming decision is the one people regret. A DocType created with a hash or a plain number cannot be renumbered once records exist, and every link to it depends on those names. Decide the series before the first save, and write the decision in the register."
-		},
-		{
-			"kicker": "Lesson 6 · Child tables",
-			"title": "Lines inside a document you built",
-			"bullets": [
-				"A child table turns one survey into many findings without creating a document per finding",
-				"The child DocType carries the fields; the parent decides how many rows and what order",
-				"Grid columns and their widths are a usability decision, not decoration",
-				"Anything the client will sum, count or report per row belongs in the table, not in a long text field",
-				"Child tables are edited in the browser like any other, and they survive migrations the same way"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Create a child DocType for findings",
-						"Survey Finding",
-						"Check the child table flag"
-					],
-					["2", "Add the row fields", "Area, Severity, Action", "Three columns per finding"],
-					["3", "Add a table field on the parent DocType", "Findings", "Grid on the survey form"],
 					[
 						"4",
-						"Set the child DocType on that field",
-						"Survey Finding",
-						"Rows editable in the grid"
+						"Raise a test issue outside working hours",
+						"(submit)",
+						"Clock counts from the next working hour"
 					],
 					[
 						"5",
-						"Set column widths and in-list visibility",
-						"Action visible in list",
-						"Readable grid"
+						"Respond and check the elapsed time",
+						"(update)",
+						"Elapsed shown against the target"
 					],
-					["6", "Enter three findings and save", "(save)", "One survey, three rows stored"]
+					["6", "Report breaches for the week", "(report)", "Breach list with causes"]
 				]
 			},
-			"notes": "The distinction between a child table and a text field decides whether the client can ever report on the data. If the answer to a question needs a count of findings by severity, it has to be rows. Ask the reporting question again, at design time."
+			"notes": "Most SLA failures are calendar failures, not people failures. A promise of four hours starting at five on Friday means the clock runs all weekend unless the calendar says otherwise. Configure it, then demonstrate the weekend test."
 		},
 		{
-			"kicker": "Lesson 7 · Layout and usability",
-			"title": "Sections, columns and the three-second form",
+			"kicker": "Lesson 4 · Verify the clock",
+			"title": "What an SLA report must prove",
 			"bullets": [
-				"A form that a new user can complete in three seconds is the goal, and layout is most of it",
-				"Group related fields into sections and name the section the way the business talks",
-				"Two columns is usually right; three becomes a scanning problem on a laptop screen",
-				"Move the fields the client types first to the top, because order is a form of training",
-				"Test the layout with a real user on a real screen before calling it finished"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Split the form into business sections",
-						"Delivery, Billing, Findings",
-						"Three labelled sections"
-					],
-					["2", "Set two columns per section", "(layout)", "Fields paired, readable"],
-					[
-						"3",
-						"Move the typed-first fields to the top",
-						"Customer, Site",
-						"First tab stops in the right order"
-					],
-					["4", "Collapse the rarely used section", "Internal", "Hidden until expanded"],
-					["5", "Ask a real user to complete it", "(user test)", "Completed without help"],
-					["6", "Record the layout decision", "(write)", "Register row with the reason"]
-				]
-			},
-			"notes": "Layout work looks cosmetic and is not: it is the difference between a form people use correctly and a form they fill with guesses. Time a real user on a real task, and treat any hesitation as a design defect rather than a training gap."
-		},
-		{
-			"kicker": "Lesson 8 · What survives",
-			"title": "Prove the customisation survives an upgrade",
-			"bullets": [
-				"Property setters, custom fields and custom DocTypes live in the database, so they survive a migration",
-				"Hand-edited standard DocTypes and doctored core files do not, which is why the line matters",
-				"A migration can still rename a standard field underneath your setter, so verify after each upgrade",
-				"Test on staging first, with production data, then repeat the checks on production",
-				"Keep the register portable: a list a successor can read without opening the system"
+				"The elapsed time must be computed from stored timestamps, not from a note in the description",
+				"A breach must be attributable: which target, which priority, which agent, which cause",
+				"Response and resolution are separate measures, and a fast response with a slow resolution is still a breach",
+				"Report the median and the worst case, because the average hides the customer who is about to leave",
+				"Keep the report small enough that the service lead reads it weekly"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
+					["Elapsed computed from timestamps", "Hours, to the minute", "Issue form and SLA report"],
+					["Breaches attributable", "Target, agent and cause named", "Weekly SLA report"],
+					["Response and resolution separated", "Two columns, two verdicts", "Same report"],
+					["Worst case shown", "Longest open issue", "Same report, top row"],
+					["Report reviewed weekly", "Dated notes on actions", "Service meeting minutes"]
+				]
+			},
+			"notes": "An SLA report that says ninety-eight per cent is useless if the two per cent are the client's biggest account. Show the worst case next to the median, and make the review weekly so the breach is a conversation rather than a post-mortem."
+		},
+		{
+			"kicker": "Lesson 5 · Free or billable",
+			"title": "The warranty decision, with evidence",
+			"bullets": [
+				"Warranty is a date, a serial and a condition, and all three must be findable in one place",
+				"The delivery date of the serial is the warranty start, not the invoice date of the first order from that customer",
+				"Free of charge covers the part and the labour per the agreement, and the agreement must say which",
+				"Damage in transit and misuse are exclusions, and the photograph taken at logging is what settles the argument",
+				"Record the decision with the reason, because next year's claim will refer to this one"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Warranty start date found", "Delivery date of the serial", "Serial number record"],
+					["Claim inside the period", "Date compared, verdict stated", "Issue form"],
+					["Exclusions checked", "Photograph and report reviewed", "Attachments"],
+					["Decision recorded", "Free of charge, yes or no, with reason", "Issue resolution note"],
+					["Billable claim priced", "Parts and labour on a quotation", "Linked sales order"]
+				]
+			},
+			"notes": "The warranty decision is where a distributor leaks money quietly, usually by goodwill. Goodwill is a fine policy if it is recorded and limited, and a disaster if it is assumed. Make the decision explicit and store the reason."
+		},
+		{
+			"kicker": "Lesson 6 · Repair, replace or credit",
+			"title": "Three outcomes and the documents each needs",
+			"bullets": [
+				"A repair consumes parts and labour, which is a material issue and a service invoice",
+				"A replacement ships a new serial and takes the old one back, which is a delivery and a return, never a deletion",
+				"A credit closes the commercial complaint, and only where the goods are not coming back",
+				"Each outcome creates a different document trail, so the choice is made before the work, not after",
+				"Never re-use a serial number for a replacement unit"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Decide the outcome with the customer", "Repair", "Outcome recorded on the issue"],
+					["2", "Issue the parts to the job", "Bearing kit x1", "Stock leaves against the issue"],
+					["3", "Book the technician's time", "2.5 hours", "Time recorded against the issue"],
 					[
-						"Setters still applied",
-						"Labels, mandatory and read-only intact",
-						"Customize Form after migrate"
+						"4",
+						"Raise the invoice if billable",
+						"Parts + labour + SST",
+						"Sales invoice with service tax"
 					],
-					["Custom fields still placed", "Correct section and list visibility", "Open a document"],
-					["Custom DocType still saves", "New record created", "The DocType list"],
-					["Child table renders", "Rows editable", "Parent form"],
 					[
-						"Register matches reality",
-						"Every setter accounted for",
-						"Register versus Customize Form"
+						"5",
+						"For a replacement, despatched and received back",
+						"New serial, old serial",
+						"Two documents, both serials visible"
+					],
+					[
+						"6",
+						"Close the issue with the resolution note",
+						"(close)",
+						"Status closed, owner and date"
 					]
 				]
 			},
-			"notes": "The upgrade test is what separates a configuration from a hack. Run it on staging, with production data, and compare the register against what the system actually does. Anything that no longer matches is either a broken setter or an undocumented change."
+			"notes": "The replacement path is the one that goes wrong, because someone ships a new unit and forgets the return, so the old serial stays in stock forever. Decide the outcome first and let the documents follow it."
 		},
 		{
-			"kicker": "Lesson 9 · The change register",
-			"title": "Six columns that save a successor",
+			"kicker": "Lesson 7 · Field service",
+			"title": "Time, travel and the invoice that follows",
 			"bullets": [
-				"Date, DocType, what changed, why, who asked and how to reverse it: six columns, nothing else",
-				"The reason matters more than the change, because it is the part nobody can reconstruct",
-				"Keep it outside the system as well, so it survives an outage and a handover",
-				"Review it with the client quarterly and delete what nobody uses, deliberately",
-				"A register that is a work of fiction is worse than none, so write the row when you make the change"
+				"Field time is billable or absorbed by the agreement, and either way it is recorded per issue",
+				"Travel is a line item the client signed for, not a surprise at month end",
+				"Time recorded in a chat message is not evidence; it belongs on the document it bills against",
+				"A service invoice that does not name the issue cannot be defended when the customer queries it",
+				"Batch the invoicing monthly, but record the time the day it happens"
 			],
 			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["Every change has a row", "Count matches Customize Form", "Register versus settings"],
-					["Reason recorded", "One sentence per row", "Register, why column"],
-					["Reversal documented", "Steps to undo", "Register, reversal column"],
-					["Held outside the system", "Exported copy dated", "Project folder"],
-					["Reviewed quarterly", "Dated review note", "Review minutes"]
-				]
-			},
-			"notes": "The register is the cheapest insurance in a customisation-heavy project. Without it, the next consultant spends a week discovering twenty setters, and the client pays for that week. Write the row in the moment, not at the end of the project."
-		},
-		{
-			"kicker": "Lesson 10 · Saying no",
-			"title": "The conversation that keeps the project supportable",
-			"bullets": [
-				"When a requirement needs code, say so plainly and price it as development with its own testing and rollback",
-				"Offer the configuration alternative first: often field, workflow or report changes solve eighty per cent",
-				"Write the accepted gap into the scope document so it is a decision rather than an omission",
-				"A consultant who promises code and cannot deliver it damages the whole system's credibility",
-				"The client respects a clear boundary far more than a vague yes"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Configuration alternative explored", "Options listed with effort", "Scope document"],
-					["Code request routed", "Named owner and estimate", "Change request"],
 					[
-						"Gap recorded as a decision",
-						"Accepted, deferred or rejected",
-						"Scope document, decisions log"
+						"1",
+						"Record the visit against the issue",
+						"Date, technician, arrival and departure",
+						"Time entries on the issue"
 					],
-					["Client informed in writing", "Email or minutes", "Project folder"],
-					["No promise made outside scope", "Nothing verbal left open", "Meeting minutes"]
+					[
+						"2",
+						"Add travel as a separate line",
+						"60 km @ agreed rate",
+						"Quotation or invoice line"
+					],
+					[
+						"3",
+						"Check the agreement for what is included",
+						"Labour included, travel excluded",
+						"Service agreement terms"
+					],
+					["4", "Generate the invoice for the month", "(create)", "Lines name issue and asset"],
+					["5", "Apply service tax where due", "8% on service", "Tax template on the invoice"],
+					["6", "Attach the visit log to the invoice", "(attach)", "Evidence travels with the bill"]
 				]
 			},
-			"notes": "The boundary conversation is a consultant skill, not an admin task. A vague yes buys a week of goodwill and costs a year of support. Offer the configuration path, name what code would cost, and record the decision — then the client owns it with you rather than blaming you for it."
+			"notes": "Clients query service invoices more than any other kind, because the work is invisible after it is done. A line that names the issue, the date and the technician ends the query before it starts."
+		},
+		{
+			"kicker": "Lesson 8 · The asset history",
+			"title": "What the serial number accumulates",
+			"bullets": [
+				"The serial number is the thread: delivery, warranty start, issues, parts consumed, invoices",
+				"Two years of history answers the question the client asks next year: is this model worth buying again",
+				"Failure rate per model is a purchasing input, not a service statistic",
+				"A repair that consumes parts should show on the asset, so the next technician knows what was replaced",
+				"Report the top ten failing serials quarterly, and expect that report to change a purchasing decision"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Every issue attached to a serial", "Count matches the issue list", "Asset history"],
+					["Parts consumed visible", "Line items per repair", "Same view"],
+					["Warranty dates on the record", "Start and end dates", "Serial record"],
+					["Failure ranking produced", "Top ten serials by issue count", "Quarterly report"],
+					["Purchasing sees it", "Dated note in the review", "Procurement minutes"]
+				]
+			},
+			"notes": "This is the commercial argument for the whole chapter. A distributor who can show that one model generates three times the warranty cost has a purchasing decision for free. Build the ranking once and the client will maintain it."
+		},
+		{
+			"kicker": "Lesson 9 · Verify the desk",
+			"title": "Four numbers the service lead should trust",
+			"bullets": [
+				"Open issues by priority, because that is the queue somebody has to work today",
+				"Median response and median resolution, split by priority rather than averaged across all",
+				"Warranty cost as a percentage of the model's revenue, which is the number purchasing reacts to",
+				"Billable versus absorbed hours, because absorbed hours are a decision and should be seen as one",
+				"If a number cannot be produced from the documents, it is not a metric, it is an opinion"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Open by priority", "Counts per priority, aged", "Issue list filters"],
+					["Response and resolution medians", "Per priority, with worst case", "SLA report"],
+					["Warranty cost versus revenue", "Per model, quarterly", "Issue cost report plus sales"],
+					["Billable versus absorbed", "Hours, per technician", "Timesheet summary"],
+					["All four from documents", "No spreadsheet outside the system", "Source check"]
+				]
+			},
+			"notes": "Four numbers, weekly, beats a dashboard nobody opens. The test for each is the same: can it be produced from the documents alone? If a spreadsheet is needed, the process has a hole worth fixing."
+		},
+		{
+			"kicker": "Lesson 10 · Handover",
+			"title": "The service playbook",
+			"bullets": [
+				"One page per scenario: log, respond, decide warranty, repair or replace, invoice, close",
+				"The warranty rules in writing, with the exclusions the client actually intends to enforce",
+				"The escalation path with names and hours, because an SLA without escalation is a wish",
+				"The monthly pack: the four numbers, the breach list and the warranty ranking",
+				"The parts list a technician is allowed to consume without approval"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Scenarios documented",
+						"Log, respond, decide, repair, invoice, close",
+						"Service playbook"
+					],
+					["Warranty rules written", "Period, exclusions, approver", "Playbook, warranty section"],
+					["Escalation named", "Contact, hours, backup", "Playbook, escalation page"],
+					["Monthly pack agreed", "Four numbers, breach list, ranking", "Review meeting agenda"],
+					["Parts authority set", "Value limit per technician", "Authorisation matrix"]
+				]
+			},
+			"notes": "Close with the playbook, because the desk outlives the project. The parts authority limit is the line most often missing: without it a technician either waits for approval on a bearing or consumes a motor unasked, and both cost money."
 		}
 	],
 	"lab": {
-		"title": "Lab · Customise a sales invoice and a site survey without code",
-		"minutes": 70,
+		"title": "Lab · Run one warranty claim end to end at Seri Murni",
+		"minutes": 60,
 		"steps": [
-			"Draw up the configuration scope with the client and write the code boundary into it",
-			"Rename one label, make one field mandatory, and hide one field the business never uses",
-			"Create a custom field for the delivery site, place it correctly and show it in the list view",
-			"Verify the field as a normal sales user and confirm what it may and may not edit",
-			"Build a site survey DocType with its own naming series and one record",
-			"Add a findings child table with three columns and enter three findings on the survey",
-			"Reorganise the invoice form into two named sections and time a real user completing it",
-			"Run the upgrade checks, complete the change register and list every reversal step"
+			"Open an issue against serial SN-2026-00418 with a photograph and a reading attached",
+			"Set the priority, confirm the SLA clock started, and record the calendar it is measured against",
+			"Raise a second test issue outside working hours and check when its clock begins",
+			"Look up the serial's delivery date and state whether the claim is inside the warranty period",
+			"Decide repair, replacement or credit, and write the reason into the resolution note",
+			"Issue the parts and book the technician's two and a half hours against the issue",
+			"Raise the invoice with parts, labour, travel and service tax, naming the issue on every line",
+			"Produce the four service numbers and the breach list, and add them to the monthly pack"
 		],
-		"done": "A documented set of browser-only customisations that a second role can use correctly, a custom DocType with a child table holding real data, and a six-column register with a reversal step for every change."
+		"done": "One issue closed with a defensible warranty decision, its parts and time consumed against the asset, an invoice that names the issue, and four service numbers produced from documents alone."
 	},
 	"quiz": [
 		{
-			"question": "What actually separates configuration from development for a functional consultant?",
+			"question": "Why must a service complaint be logged as an issue rather than a sales return?",
 			"options": [
-				"The difficulty of the change",
-				"Whether the change needs a file, a deployment and a developer to reverse it",
-				"Whether the client has budget",
-				"Whether the field is custom or standard"
+				"Because returns cannot carry attachments",
+				"Because the issue keeps the per-asset history that the warranty decision depends on",
+				"Because issues are cheaper to process",
+				"Because returns close automatically"
 			],
 			"answer": 1,
-			"why": "Configuration is reversible in the browser and survives a migration; a file-based change needs a deployment and a rollback. That boundary is what decides whether you may promise it."
+			"why": "A return records goods movement. The issue records symptom, reporter and asset, which is what tells you whether a failure is inside warranty and whether a model is worth buying again."
 		},
 		{
-			"question": "Why are property setters safer than editing the standard DocType directly?",
+			"question": "What makes an SLA meetable rather than aspirational?",
 			"options": [
-				"They are faster to enter",
-				"The standard definition stays intact underneath and the override survives a migration",
-				"They require fewer permissions",
-				"They avoid the change register"
+				"A generous target per priority",
+				"Working hours and holidays configured, with response measured from stored timestamps",
+				"A monthly review meeting",
+				"Priority set by the customer"
 			],
 			"answer": 1,
-			"why": "A setter is an override stored on top of the standard definition, so an upgrade overwrites the standard, not your change, and the original behaviour remains recoverable."
+			"why": "Most breaches are calendar breaches. Without working hours the clock runs through nights and weekends, and without timestamps the measurement is somebody's recollection."
 		},
 		{
-			"question": "What is the first decision that becomes hard to reverse on a custom DocType?",
+			"question": "When does a serial number's warranty period start?",
 			"options": [
-				"The permission list",
-				"The naming series, because every link depends on the names it produces",
-				"The field order in the form",
-				"Whether it is submittable"
+				"When the item was purchased from the supplier",
+				"When the serialised unit was delivered to the customer",
+				"When the first issue is raised",
+				"When the invoice is paid"
 			],
 			"answer": 1,
-			"why": "Once records exist under a series, renumbering them breaks every reference. Choose the series before the first save, and record why."
+			"why": "Delivery of the specific serial is the only date that matches the unit in the customer's hands. Using the supplier's purchase date shortens the warranty the customer was promised."
 		},
 		{
-			"question": "When does a custom field earn its place?",
+			"question": "What is the dangerous omission in a replacement rather than a repair?",
 			"options": [
-				"When the client asks for it",
-				"When someone filters, prints or reports on it",
-				"When the form has room for it",
-				"When it duplicates an existing field"
+				"Failing to raise a service invoice",
+				"Shipping the new serial without receiving the old one back",
+				"Failing to update the SLA",
+				"Not booking travel time"
 			],
 			"answer": 1,
-			"why": "A field nobody queries is an empty box waiting to be filled wrongly. Ask the reporting question before creating the column."
+			"why": "The old unit stays in stock forever and the ledger keeps an asset that no longer exists. Replacement needs a delivery out and a return in, both visible."
 		},
 		{
-			"question": "What belongs in a change register, beyond what changed?",
+			"question": "Which service figure is most likely to change a purchasing decision?",
 			"options": [
-				"The consultant's hours",
-				"Why it changed, who asked, and how to reverse it",
-				"The database table name",
-				"The stack trace of any error"
+				"Median response time",
+				"Warranty cost as a percentage of revenue per model",
+				"Open issues by priority",
+				"Billable versus absorbed hours"
 			],
 			"answer": 1,
-			"why": "The reason and the reversal are the parts a successor cannot reconstruct. Without them the register records facts but cannot restore behaviour."
+			"why": "It joins service cost to the commercial result for a specific model, which is the comparison a purchasing manager can act on. The others manage today's queue."
 		}
 	],
 	"memory": {
-		"spine": "Configuration is what you can reverse in the browser; everything else is development, and it is somebody else's promise.",
+		"spine": "Log the issue against the serial, measure the clock, decide warranty with evidence, and bill what the agreement allows.",
 		"device": {
 			"kind": "rule",
-			"label": "Setters first, code last",
+			"label": "Priority before promise",
 			"expansion": [
-				"Property setters change labels, mandatory and read-only without touching the standard",
-				"Custom fields need a reporting question before they need a type",
-				"A custom DocType needs its naming series decided before the first record",
-				"Child tables are for anything the client will count, sum or report per row",
-				"Every change gets a register row with its reason and its reversal"
+				"Priority is set by impact at logging, and the SLA clock follows the priority",
+				"Promises are made in a calendar, so working hours and holidays decide the measurement",
+				"Warranty is decided from the serial's delivery date and recorded with its reason",
+				"Repair, replace or credit is chosen before work starts, because each needs different documents",
+				"Every closed issue carries a resolution note and, if billable, an invoice that names it"
 			]
 		},
 		"cards": [
 			{
-				"q": "How do you tell whether a request is configuration or development?",
-				"a": "If it can be made and reversed in the browser without a file or a deployment, it is configuration and it is yours. Otherwise it belongs to a developer.",
-				"hint": "Reversible without a deploy"
+				"q": "Which five fields make an issue defensible later?",
+				"a": "Asset, symptom, reporter, priority and promised response, plus the resolution note on close. Everything else is optional.",
+				"hint": "Five, every time"
 			},
 			{
-				"q": "What does a property setter leave untouched underneath?",
-				"a": "The standard DocType definition. The override sits on top, so a migration replaces the standard and keeps the setter.",
-				"hint": "Override, not edit"
+				"q": "Why do service levels breach themselves over a long weekend?",
+				"a": "Because the clock runs on the service calendar. If working hours and holidays are not configured, a Friday evening issue breaches by Monday morning.",
+				"hint": "Calendar, not effort"
 			},
 			{
-				"q": "Which custom DocType decision is hardest to undo and why?",
-				"a": "The naming series. Every record name is referenced by links, so renumbering later breaks them. Decide before the first save.",
-				"hint": "Names are forever"
+				"q": "What decides whether a repair is free of charge?",
+				"a": "The serial's delivery date against the warranty period, the exclusions in the agreement, and the evidence attached at logging. The decision and its reason are recorded.",
+				"hint": "Date, serial, evidence"
 			},
 			{
-				"q": "When does a table field beat a long text field?",
-				"a": "When somebody will count, sum or report per line, such as findings by severity. Rows can be reported; prose cannot.",
-				"hint": "Count it or drop it"
+				"q": "Why is a replacement the riskiest of the three service outcomes?",
+				"a": "Because it needs a delivery out and the old unit back in. If the return is forgotten, a serial that no longer exists stays in stock forever.",
+				"hint": "Two documents"
 			},
 			{
-				"q": "What must the change register carry besides the change itself?",
-				"a": "The reason it was made, who asked for it, the date, and how to reverse it — plus a copy held outside the system.",
-				"hint": "Why and how to undo"
+				"q": "Which four numbers belong in the monthly service pack?",
+				"a": "Open issues by priority, median response and resolution per priority, warranty cost versus revenue per model, and billable versus absorbed hours.",
+				"hint": "Queue, clock, cost, hours"
 			}
 		],
 		"trap": {
-			"what": "A promising sales demo ends with 'we can make it do anything', so three code changes are promised, none are priced, and go-live slips.",
-			"why": "Anything needing a file is development with its own testing and rollback. Offer the configuration path, price the code path, and record the gap as a decision the client owns."
+			"what": "The client handles complaints by phone and goodwill, so the desk is configured but never used, and warranty cost is invisible.",
+			"why": "Goodwill with no record is a subsidy nobody measures. Log every complaint against the serial, record each warranty decision with its reason, and put the four numbers in a monthly pack the purchasing lead reads."
 		}
 	},
-	"narration": "Most requirements a consultant hears can be met in the browser, and the value of knowing where that stops is what this chapter is for. Configuration is anything you can change and reverse in Customize Form: a property setter that renames a label, makes a field mandatory, hides it or makes it read-only, without touching the standard definition underneath. Custom fields come next, but only when somebody will filter, print or report on them, because a field nobody queries is an empty box. Then the DocType editor, where a functional consultant can build a new document with its own naming series and a child table for lines, provided the series is decided before the first record exists. Verify every change the same way: on the form, in the list, under a second role, and again after a migration on staging. Keep a six-column register, with the reason and the reversal, because that is the part the next consultant cannot reconstruct. And when a requirement genuinely needs code, say so plainly, price it, and write the gap down as a decision rather than letting a vague yes carry the project."
+	"narration": "Service work is where a distributor leaks money without noticing, and it starts with the document. A complaint is not a sales return: it is an issue, logged against a serial number, in the customer's words, with a photograph and an owner. Priority comes from impact, and the service level clock follows the priority, which is why working hours and holidays must be configured before anyone promises four hours on a Friday. Warranty is a date, a serial and a condition. Find the delivery date of that exact unit, check the exclusions, and record the decision with its reason, because next year's claim will refer to this one. Then choose the outcome before the work starts: a repair consumes parts and time, a replacement ships a new serial and must take the old one back, a credit closes the commercial complaint. Bill from the issue, so every line names the asset and the visit. And finish with the four numbers the service lead should trust: open issues by priority, median response and resolution, warranty cost against revenue per model, and billable against absorbed hours."
 }

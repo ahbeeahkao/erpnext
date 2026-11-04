@@ -1,426 +1,401 @@
 {
 	"id": "ch22",
 	"number": 22,
-	"title": "Volume 7 · The Service Desk: Issues, SLAs and Warranty Claims",
-	"subtitle": "Lessons 1–10: logging issues against assets, running SLAs honestly, and settling warranty claims without losing money",
+	"title": "Volume 8 · Projects, Timesheets and Billable Work",
+	"subtitle": "Lessons 1–4: a project that carries its own profit and loss, timesheets that become invoices, and a close that shows the margin",
 	"level": "Advanced",
-	"minutes": 65,
+	"minutes": 70,
 	"outcomes": [
-		"Log an issue against a serialised asset and keep the service history attached to it",
-		"Configure service levels that measure the response the client actually promised",
-		"Decide when a repair is free of charge and when it is billable, with evidence",
-		"Turn field service time into an invoice that matches the agreement"
+		"Set up a project whose cost and revenue land on the same report",
+		"Record billable and non-billable time without inflating the client invoice",
+		"Turn approved timesheets into an invoice with the right tax treatment",
+		"Report project margin and close the project with evidence"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · The issue desk",
-			"title": "Why service work needs its own document",
+			"kicker": "Lesson 1 · Project",
+			"title": "Create a project that tracks its own profit",
 			"bullets": [
-				"A customer complaint is not a sales return, and treating it as one destroys the warranty history",
-				"An issue records who reported it, which asset, what the symptom was and who owns the fix",
-				"The same asset accumulates issues over years, which is how a client learns which model to stop buying",
-				"Without an issue record, the service team keeps its history in a chat group and the warranty claim in a memory",
-				"A distributor with an assembly line needs this even at two issues a week"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Issue exists as its own document", "Status, priority, owner", "Desk, Issues list"],
-					[
-						"Issue linked to a serialised asset",
-						"Serial shown on the issue",
-						"Issue form, asset field"
-					],
-					["Reported-by captured", "Customer contact, not just company", "Contact field"],
-					["Owner assigned", "One person, not a team", "Assigned To"],
-					["History visible per asset", "Issues listed against the serial", "Asset dashboard"]
-				]
-			},
-			"notes": "The first objection is always volume: we only get two complaints a week. Volume is not the argument, warranty is. Without a per-asset history, the client cannot tell an early failure from a misuse pattern, and pays for both."
-		},
-		{
-			"kicker": "Lesson 2 · Logging",
-			"title": "A five-field issue that survives an audit",
-			"bullets": [
-				"Asset, symptom, reporter, priority and promised response: five fields, filled every time",
-				"The symptom is written in the customer's words plus one sentence of technical description",
-				"Priority is set by impact, not by who shouted, and the SLA clock follows the priority",
-				"Attach the photograph at logging time, because the second visit is where the cost is",
-				"Nothing is closed without a resolution note a stranger could understand"
+				"A project is a cost collector, and its value appears only if every entry names it",
+				"Set the expected start and end dates, because they drive the billing schedule",
+				"Assign a cost centre if the client reports by department as well as by project",
+				"Create the project before the first timesheet, not after the first invoice"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Open Issue for customer Kim Huat Hardware", "(new)", "Draft issue"],
-					["2", "Select the serialised asset", "SN-2026-00418", "Asset and its history load"],
+					["1", "Projects → Project → New", "Aeon Big rollout, company SM", "Empty project form"],
+					["2", "Set the dates", "Start 02-02-2026, end 27-02-2026", "Schedule recorded"],
 					[
 						"3",
-						"Write the symptom in the customer's words",
-						"Bearing noise above 800 rpm",
-						"Description saved"
+						"Set billing",
+						"Project currency MYR, 150.00 per hour billing rate",
+						"Rate stored for billing"
 					],
-					["4", "Set priority from impact", "High", "SLA clock starts on submission"],
-					["5", "Attach the photograph and a reading", "(attach)", "Two attachments on the issue"],
-					["6", "Assign an owner", "Service technician", "Issue appears in their queue"]
+					["4", "Set cost centre", "Retail Counter - SM for delivery work", "Cost centre carried"],
+					["5", "Save", "Nothing else", "Project PROJ-0001, status Open"],
+					["6", "Check the dashboard", "Project overview", "Zero hours, zero cost, zero billed"]
 				]
 			},
-			"notes": "Five fields, consistently, is worth more than twenty fields filled sometimes. The photograph at logging is the highest-value habit, because it turns a second site visit into a phone call."
+			"notes": "The billing rate on the project is what turns hours into money, so get it agreed in writing before the first timesheet. Twenty hours at one hundred fifty is three thousand of revenue, and the client will compare that against the fixed quote in the contract. A project without a rate produces timesheets that finance has to reprice by hand, which is exactly the work a consultant is hired to remove."
 		},
 		{
-			"kicker": "Lesson 3 · Service levels",
-			"title": "Make the SLA measurable or do not promise it",
+			"kicker": "Lesson 2 · Verify the setup",
+			"title": "What the project must carry before work starts",
 			"bullets": [
-				"A service level is a response and a resolution target per priority, not an aspiration in a proposal",
-				"Response means the clock stops when someone with the right skill starts, not when the ticket is read",
-				"Holiday calendars and working hours belong in the setup, or the SLA breaches itself over a long weekend",
-				"Measure from submission to first response, and report the breaches with their cause",
-				"A client who signs an eight-hour promise with no weekend cover has bought a number they cannot meet"
+				"Rate, cost centre, dates and customer are the four fields that matter",
+				"A project with no customer cannot be invoiced without retyping everything",
+				"Cost centre makes the project visible in departmental reporting as well",
+				"The percentage complete figure is a management input, not an accounting one"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Customer", "Aeon Big Sdn Bhd", "Project form"],
+					["Billing rate", "150.00 per hour", "Project → Billing"],
+					["Cost centre", "Retail Counter - SM", "Project form"],
+					["Expected hours", "20", "Project → Costing"],
+					["Expected revenue", "3,000.00", "Your own arithmetic"]
+				]
+			},
+			"notes": "Twenty hours at one hundred fifty is three thousand, and the expected cost will come from timesheets at the internal rate. Writing both numbers down before work starts is what makes the margin conversation possible in week three, when the client asks why the invoice is higher than they remember."
+		},
+		{
+			"kicker": "Lesson 3 · Timesheet",
+			"title": "Record time so it can be billed and costed",
+			"bullets": [
+				"A timesheet records hours against a project and an activity, and it carries a cost",
+				"Mark billable time deliberately, because non-billable hours still cost money",
+				"Approve timesheets before invoicing, or the invoice will not be defensible",
+				"The internal cost rate is separate from the billing rate and is what finance needs"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Set working hours and holidays for the service calendar",
-						"Mon–Fri 09:00–18:00",
-						"Calendar saved"
+						"Projects → Timesheet → New",
+						"Employee Aina, project Aeon Big rollout",
+						"Empty timesheet"
 					],
-					[
-						"2",
-						"Define service level by priority",
-						"High: respond 4h, resolve 24h",
-						"Two targets stored"
-					],
+					["2", "Add a line", "Activity Implementation, 8 hours on 05-02-2026", "Line accepted"],
 					[
 						"3",
-						"Assign priority to the agreement",
-						"High, Medium, Low",
-						"Priority list configured"
+						"Mark billing",
+						"Billable, billing rate 150.00, cost rate 80.00",
+						"Amounts computed"
 					],
 					[
 						"4",
-						"Raise a test issue outside working hours",
-						"(submit)",
-						"Clock counts from the next working hour"
+						"Add a second line",
+						"Design review, 2 hours, non-billable",
+						"Billable total unchanged"
 					],
-					[
-						"5",
-						"Respond and check the elapsed time",
-						"(update)",
-						"Elapsed shown against the target"
-					],
-					["6", "Report breaches for the week", "(report)", "Breach list with causes"]
+					["5", "Save and Submit", "Confirm", "Timesheet TS-2026-0001, cost 800.00"],
+					["6", "Check the project", "Project cost", "800.00 against the project"]
 				]
 			},
-			"notes": "Most SLA failures are calendar failures, not people failures. A promise of four hours starting at five on Friday means the clock runs all weekend unless the calendar says otherwise. Configure it, then demonstrate the weekend test."
+			"notes": "Eight billable hours at one hundred fifty and two non-billable at the same rate is a trap, because non-billable time must not reach the invoice. Marking it correctly keeps three thousand of revenue intact while still costing eight hundred, which is the honest picture. Teach the difference before the first timesheet, not after the first disputed invoice."
 		},
 		{
-			"kicker": "Lesson 4 · Verify the clock",
-			"title": "What an SLA report must prove",
+			"kicker": "Lesson 4 · Bill the project",
+			"title": "Turn approved time into a defensible invoice",
 			"bullets": [
-				"The elapsed time must be computed from stored timestamps, not from a note in the description",
-				"A breach must be attributable: which target, which priority, which agent, which cause",
-				"Response and resolution are separate measures, and a fast response with a slow resolution is still a breach",
-				"Report the median and the worst case, because the average hides the customer who is about to leave",
-				"Keep the report small enough that the service lead reads it weekly"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Elapsed computed from timestamps", "Hours, to the minute", "Issue form and SLA report"],
-					["Breaches attributable", "Target, agent and cause named", "Weekly SLA report"],
-					["Response and resolution separated", "Two columns, two verdicts", "Same report"],
-					["Worst case shown", "Longest open issue", "Same report, top row"],
-					["Report reviewed weekly", "Dated notes on actions", "Service meeting minutes"]
-				]
-			},
-			"notes": "An SLA report that says ninety-eight per cent is useless if the two per cent are the client's biggest account. Show the worst case next to the median, and make the review weekly so the breach is a conversation rather than a post-mortem."
-		},
-		{
-			"kicker": "Lesson 5 · Free or billable",
-			"title": "The warranty decision, with evidence",
-			"bullets": [
-				"Warranty is a date, a serial and a condition, and all three must be findable in one place",
-				"The delivery date of the serial is the warranty start, not the invoice date of the first order from that customer",
-				"Free of charge covers the part and the labour per the agreement, and the agreement must say which",
-				"Damage in transit and misuse are exclusions, and the photograph taken at logging is what settles the argument",
-				"Record the decision with the reason, because next year's claim will refer to this one"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Warranty start date found", "Delivery date of the serial", "Serial number record"],
-					["Claim inside the period", "Date compared, verdict stated", "Issue form"],
-					["Exclusions checked", "Photograph and report reviewed", "Attachments"],
-					["Decision recorded", "Free of charge, yes or no, with reason", "Issue resolution note"],
-					["Billable claim priced", "Parts and labour on a quotation", "Linked sales order"]
-				]
-			},
-			"notes": "The warranty decision is where a distributor leaks money quietly, usually by goodwill. Goodwill is a fine policy if it is recorded and limited, and a disaster if it is assumed. Make the decision explicit and store the reason."
-		},
-		{
-			"kicker": "Lesson 6 · Repair, replace or credit",
-			"title": "Three outcomes and the documents each needs",
-			"bullets": [
-				"A repair consumes parts and labour, which is a material issue and a service invoice",
-				"A replacement ships a new serial and takes the old one back, which is a delivery and a return, never a deletion",
-				"A credit closes the commercial complaint, and only where the goods are not coming back",
-				"Each outcome creates a different document trail, so the choice is made before the work, not after",
-				"Never re-use a serial number for a replacement unit"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Decide the outcome with the customer", "Repair", "Outcome recorded on the issue"],
-					["2", "Issue the parts to the job", "Bearing kit x1", "Stock leaves against the issue"],
-					["3", "Book the technician's time", "2.5 hours", "Time recorded against the issue"],
-					[
-						"4",
-						"Raise the invoice if billable",
-						"Parts + labour + SST",
-						"Sales invoice with service tax"
-					],
-					[
-						"5",
-						"For a replacement, despatched and received back",
-						"New serial, old serial",
-						"Two documents, both serials visible"
-					],
-					[
-						"6",
-						"Close the issue with the resolution note",
-						"(close)",
-						"Status closed, owner and date"
-					]
-				]
-			},
-			"notes": "The replacement path is the one that goes wrong, because someone ships a new unit and forgets the return, so the old serial stays in stock forever. Decide the outcome first and let the documents follow it."
-		},
-		{
-			"kicker": "Lesson 7 · Field service",
-			"title": "Time, travel and the invoice that follows",
-			"bullets": [
-				"Field time is billable or absorbed by the agreement, and either way it is recorded per issue",
-				"Travel is a line item the client signed for, not a surprise at month end",
-				"Time recorded in a chat message is not evidence; it belongs on the document it bills against",
-				"A service invoice that does not name the issue cannot be defended when the customer queries it",
-				"Batch the invoicing monthly, but record the time the day it happens"
+				"Invoicing from a timesheet carries hours, rate and project onto the invoice automatically",
+				"Service tax treatment differs from goods, so check the template before submitting",
+				"An invoice without a project loses the margin link that made the project worth creating",
+				"Bill monthly, because a single invoice at the end hides cost overruns until it is too late"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Record the visit against the issue",
-						"Date, technician, arrival and departure",
-						"Time entries on the issue"
+						"Open TS-2026-0001 → Create → Sales Invoice",
+						"Nothing",
+						"Customer and project pre-filled"
+					],
+					["2", "Check the line", "20 hours at 150.00", "Net 3,000.00"],
+					["3", "Apply service tax", "Service Tax 8 % template", "Tax 240.00, total 3,240.00"],
+					["4", "Save and Submit", "Confirm", "Invoice SINV-SM-2026-0010"],
+					["5", "Read the project", "Project cost and billed", "Cost 1,600.00, billed 3,000.00"],
+					["6", "Check the margin", "Project profitability", "1,400.00, about 46 per cent"]
+				]
+			},
+			"notes": "Twenty hours at one hundred fifty is three thousand of revenue, twenty hours at eighty is one thousand six hundred of cost, and the difference of one thousand four hundred is the margin the project exists to produce. Service tax of eight per cent adds two hundred forty, which is a liability and never revenue. When those three numbers are visible on one screen, the client stops treating projects as a reporting nicety."
+		},
+		{
+			"kicker": "Lesson 5 · Project close",
+			"title": "Close the project with the numbers attached",
+			"bullets": [
+				"Closing means no more time or cost can be posted against the project",
+				"Compare final cost with the estimate and write down the reason for the difference",
+				"Unbilled timesheets must be invoiced or written off before closing",
+				"A closed project is the reference for pricing the next one"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Check unbilled time",
+						"Filter timesheets by project and billing status",
+						"List empty or explained"
 					],
 					[
 						"2",
-						"Add travel as a separate line",
-						"60 km @ agreed rate",
-						"Quotation or invoice line"
+						"Check cost",
+						"Project cost against the 1,600.00 estimate",
+						"Variance within tolerance"
 					],
+					["3", "Set completion", "100 per cent complete, status Completed", "Project closes"],
+					[
+						"4",
+						"Attach evidence",
+						"Signed timesheet and invoice in the file",
+						"Audit trail complete"
+					],
+					["5", "Record the lesson", "Variance note in the project sheet", "Reason written down"],
+					["6", "Confirm no postings", "Attempt a new timesheet", "Project no longer accepts time"]
+				]
+			},
+			"notes": "The value of closing properly is the next quotation. A project that ended at one thousand six hundred of cost against an estimate of one thousand two hundred teaches the client to reprice, provided somebody writes it down. Make the variance note part of the close, or the same underestimate will repeat on every engagement and the consultant will be blamed for the system's silence."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "Project documents and the controls they carry",
+			"bullets": [
+				"Each document adds one dimension: time, cost, revenue or status",
+				"The project record is the join between all four, which is why it must be named everywhere",
+				"Approval is the control that makes timesheets billable and defensible",
+				"Every control has an owner in the client's team, not in the consultant's head"
+			],
+			"table": {
+				"headers": ["Document", "Adds", "Control", "Who owns it"],
+				"rows": [
+					[
+						"Project",
+						"Cost centre, rate, customer",
+						"Rate agreed before work",
+						"Engagement manager"
+					],
+					["Timesheet", "Hours and internal cost", "Approval before billing", "Team lead"],
+					["Sales Invoice", "Revenue and tax", "Matches approved hours", "Finance"],
+					["Project profitability", "Margin by project", "Reviewed monthly", "Finance manager"],
+					["Completion note", "Variance and lessons", "Signed at close", "Engagement manager"]
+				]
+			},
+			"notes": "Projects fail in ERPNext for a boring reason: somebody forgets to name the project on a timesheet, and the cost disappears into a departmental expense. The fix is a control, not a report, so agree who checks that every timesheet carries a project and put it in the weekly meeting. When that control is in place, the margin report is trustworthy by default."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "Reading the project profit and loss",
+			"bullets": [
+				"Revenue comes from invoices that name the project, not from quotations",
+				"Cost comes from timesheets and purchase documents that name the project",
+				"Unbilled work in progress is a real asset, and it belongs in the month-end pack",
+				"A margin of 46 per cent on services is healthy for Malaysian implementation work"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Project revenue", "3,000.00 net of tax", "Project profitability report"],
+					["Project cost", "1,600.00 at 80.00 per hour", "Project profitability report"],
+					["Gross margin", "1,400.00, about 46 per cent", "Your own arithmetic"],
+					["Unbilled time", "0.00 after the invoice", "Timesheet billing status"],
+					["Service tax", "240.00 payable, not revenue", "General Ledger, Service Tax account"]
+				]
+			},
+			"notes": "Show this page to the client's finance manager and to the engagement manager in the same meeting, because they will each read a different line. Finance wants unbilled time at zero; the engagement manager wants margin above forty per cent. When both are on one page, the project review takes ten minutes instead of an hour."
+		},
+		{
+			"kicker": "Lesson 6 · Tasks",
+			"title": "A project that tracks work, not just money",
+			"bullets": [
+				"Tasks give the project a shape: what has to happen, in what order, and who owns each piece",
+				"Dependencies are a promise about sequence, so make them explicit rather than implied in a chat",
+				"A task without an owner is a wish, and it will be the one that slips",
+				"Keep the task list small enough that the weekly review covers every row",
+				"Billable tasks and internal tasks belong in the same list, marked differently"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create the tasks from the signed scope",
+						"Survey, Install, Train, Sign-off",
+						"Four tasks under the project"
+					],
+					["2", "Assign an owner to each", "(users)", "Every task has a name"],
 					[
 						"3",
-						"Check the agreement for what is included",
-						"Labour included, travel excluded",
-						"Service agreement terms"
+						"Set the sequence as dependencies",
+						"Install after Survey",
+						"Blocking shown on the task"
 					],
-					["4", "Generate the invoice for the month", "(create)", "Lines name issue and asset"],
-					["5", "Apply service tax where due", "8% on service", "Tax template on the invoice"],
-					["6", "Attach the visit log to the invoice", "(attach)", "Evidence travels with the bill"]
+					["4", "Add expected hours per task", "Survey 4h, Install 16h", "Planned effort recorded"],
+					["5", "Mark one task billable", "Install", "Task flagged for invoicing"],
+					["6", "Review the list in the weekly meeting", "(meeting)", "Owners confirm dates"]
 				]
 			},
-			"notes": "Clients query service invoices more than any other kind, because the work is invisible after it is done. A line that names the issue, the date and the technician ends the query before it starts."
+			"notes": "Tasks are where a project manager and an accountant finally look at the same screen. Keep the list short, the owners real and the dependencies explicit. A project with forty tasks and one owner is a spreadsheet in disguise."
 		},
 		{
-			"kicker": "Lesson 8 · The asset history",
-			"title": "What the serial number accumulates",
+			"kicker": "Lesson 7 · Milestones",
+			"title": "Billing at milestones without arguing",
 			"bullets": [
-				"The serial number is the thread: delivery, warranty start, issues, parts consumed, invoices",
-				"Two years of history answers the question the client asks next year: is this model worth buying again",
-				"Failure rate per model is a purchasing input, not a service statistic",
-				"A repair that consumes parts should show on the asset, so the next technician knows what was replaced",
-				"Report the top ten failing serials quarterly, and expect that report to change a purchasing decision"
+				"A milestone is a billing trigger with evidence attached, not a date in a contract",
+				"Agree what proves the milestone: a signed sheet, a photograph, a delivered unit",
+				"Bill from the project against the milestone, so the invoice and the evidence are linked",
+				"A percentage-of-completion invoice needs a completion measure the client accepts, or it becomes a negotiation",
+				"Keep unbilled work visible, because billing late is the most common way a project loses margin"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Every issue attached to a serial", "Count matches the issue list", "Asset history"],
-					["Parts consumed visible", "Line items per repair", "Same view"],
-					["Warranty dates on the record", "Start and end dates", "Serial record"],
-					["Failure ranking produced", "Top ten serials by issue count", "Quarterly report"],
-					["Purchasing sees it", "Dated note in the review", "Procurement minutes"]
+					["Milestone evidence attached", "Signed sheet or photograph", "Project attachment"],
+					["Invoice linked to the project", "Project named on the line", "Sales Invoice"],
+					["Billed versus completed", "No large gap", "Project profitability"],
+					["Unbilled work listed", "Hours and value", "Timesheet summary"],
+					["Gantt reflects reality", "Tasks updated in the week", "Project view"]
 				]
 			},
-			"notes": "This is the commercial argument for the whole chapter. A distributor who can show that one model generates three times the warranty cost has a purchasing decision for free. Build the ranking once and the client will maintain it."
+			"notes": "Milestones fail because the evidence was never defined. If the contract says 'on completion of installation', the argument arrives with the first invoice. Define the evidence at contract stage, attach it when you bill, and the conversation never happens."
 		},
 		{
-			"kicker": "Lesson 9 · Verify the desk",
-			"title": "Four numbers the service lead should trust",
+			"kicker": "Lesson 8 · Verify the project",
+			"title": "Three views that must agree",
 			"bullets": [
-				"Open issues by priority, because that is the queue somebody has to work today",
-				"Median response and median resolution, split by priority rather than averaged across all",
-				"Warranty cost as a percentage of the model's revenue, which is the number purchasing reacts to",
-				"Billable versus absorbed hours, because absorbed hours are a decision and should be seen as one",
-				"If a number cannot be produced from the documents, it is not a metric, it is an opinion"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Open by priority", "Counts per priority, aged", "Issue list filters"],
-					["Response and resolution medians", "Per priority, with worst case", "SLA report"],
-					["Warranty cost versus revenue", "Per model, quarterly", "Issue cost report plus sales"],
-					["Billable versus absorbed", "Hours, per technician", "Timesheet summary"],
-					["All four from documents", "No spreadsheet outside the system", "Source check"]
-				]
-			},
-			"notes": "Four numbers, weekly, beats a dashboard nobody opens. The test for each is the same: can it be produced from the documents alone? If a spreadsheet is needed, the process has a hole worth fixing."
-		},
-		{
-			"kicker": "Lesson 10 · Handover",
-			"title": "The service playbook",
-			"bullets": [
-				"One page per scenario: log, respond, decide warranty, repair or replace, invoice, close",
-				"The warranty rules in writing, with the exclusions the client actually intends to enforce",
-				"The escalation path with names and hours, because an SLA without escalation is a wish",
-				"The monthly pack: the four numbers, the breach list and the warranty ranking",
-				"The parts list a technician is allowed to consume without approval"
+				"The task list, the timesheet and the invoice must tell one story about the same work",
+				"Planned hours against actual hours shows whether the estimate was honest or optimistic",
+				"Cost to date against billed to date is the margin conversation, and it should happen monthly",
+				"A project closed with unbilled hours has donated margin, so check before closing",
+				"Report the variance per task, because that is where the next estimate improves"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
 					[
-						"Scenarios documented",
-						"Log, respond, decide, repair, invoice, close",
-						"Service playbook"
+						"Task hours match timesheet",
+						"Install 16 planned, 15 actual",
+						"Task list versus timesheets"
 					],
-					["Warranty rules written", "Period, exclusions, approver", "Playbook, warranty section"],
-					["Escalation named", "Contact, hours, backup", "Playbook, escalation page"],
-					["Monthly pack agreed", "Four numbers, breach list, ranking", "Review meeting agenda"],
-					["Parts authority set", "Value limit per technician", "Authorisation matrix"]
+					["Billed equals completed", "No unbilled completed task", "Project profitability"],
+					["Cost and revenue visible", "Margin per project", "Project profit and loss"],
+					["Variance per task", "Over or under, in hours", "Task report"],
+					["Closed with nothing unbilled", "Zero unbilled hours", "Pre-close check"]
 				]
 			},
-			"notes": "Close with the playbook, because the desk outlives the project. The parts authority limit is the line most often missing: without it a technician either waits for approval on a bearing or consumes a motor unasked, and both cost money."
+			"notes": "The pre-close check is the one that pays for the chapter. Closing a project with unbilled hours is a margin donation nobody records, and it is invisible until someone compares the timesheet against the invoices a year later."
 		}
 	],
 	"lab": {
-		"title": "Lab · Run one warranty claim end to end at Seri Murni",
-		"minutes": 60,
+		"title": "Lab · Run a 20-hour project from setup to margin",
+		"minutes": 45,
 		"steps": [
-			"Open an issue against serial SN-2026-00418 with a photograph and a reading attached",
-			"Set the priority, confirm the SLA clock started, and record the calendar it is measured against",
-			"Raise a second test issue outside working hours and check when its clock begins",
-			"Look up the serial's delivery date and state whether the claim is inside the warranty period",
-			"Decide repair, replacement or credit, and write the reason into the resolution note",
-			"Issue the parts and book the technician's two and a half hours against the issue",
-			"Raise the invoice with parts, labour, travel and service tax, naming the issue on every line",
-			"Produce the four service numbers and the breach list, and add them to the monthly pack"
+			"Create the Aeon Big rollout project with a 150.00 billing rate and a cost centre",
+			"Confirm the expected revenue of 3,000.00 before any work is recorded",
+			"Record 20 billable hours and 2 non-billable hours on a timesheet",
+			"Submit the timesheet and confirm the project cost of 1,600.00",
+			"Create the sales invoice from the timesheet with 8 per cent service tax",
+			"Confirm net revenue 3,000.00, tax 240.00 and total 3,240.00",
+			"Read project profitability and confirm the 1,400.00 margin",
+			"Close the project and confirm new timesheets are refused"
 		],
-		"done": "One issue closed with a defensible warranty decision, its parts and time consumed against the asset, an invoice that names the issue, and four service numbers produced from documents alone."
+		"done": "Done when the project shows 3,000.00 revenue, 1,600.00 cost and 1,400.00 margin, no unbilled time remains, and the project no longer accepts postings."
 	},
 	"quiz": [
 		{
-			"question": "Why must a service complaint be logged as an issue rather than a sales return?",
-			"options": [
-				"Because returns cannot carry attachments",
-				"Because the issue keeps the per-asset history that the warranty decision depends on",
-				"Because issues are cheaper to process",
-				"Because returns close automatically"
-			],
+			"question": "20 billable hours at 150.00 with 8 per cent service tax give aninvoice total of what?",
+			"options": ["3,000.00", "3,240.00", "3,120.00", "2,760.00"],
 			"answer": 1,
-			"why": "A return records goods movement. The issue records symptom, reporter and asset, which is what tells you whether a failure is inside warranty and whether a model is worth buying again."
+			"why": "Net is 3,000.00 and service tax of 8 per cent adds 240.00, giving 3,240.00, of which the tax is a liability not income."
 		},
 		{
-			"question": "What makes an SLA meetable rather than aspirational?",
+			"question": "Where does project cost come from?",
 			"options": [
-				"A generous target per priority",
-				"Working hours and holidays configured, with response measured from stored timestamps",
-				"A monthly review meeting",
-				"Priority set by the customer"
+				"The quotation",
+				"Timesheets and purchase documents naming the project",
+				"The customer record",
+				"The stock ledger"
 			],
 			"answer": 1,
-			"why": "Most breaches are calendar breaches. Without working hours the clock runs through nights and weekends, and without timestamps the measurement is somebody's recollection."
+			"why": "Only documents that name the project feed its cost, which is why naming the project on a timesheet is the control that matters."
 		},
 		{
-			"question": "When does a serial number's warranty period start?",
-			"options": [
-				"When the item was purchased from the supplier",
-				"When the serialised unit was delivered to the customer",
-				"When the first issue is raised",
-				"When the invoice is paid"
-			],
-			"answer": 1,
-			"why": "Delivery of the specific serial is the only date that matches the unit in the customer's hands. Using the supplier's purchase date shortens the warranty the customer was promised."
+			"question": "What is the project margin with 20 hours billed at 150.00 and costed at 80.00 per hour?",
+			"options": ["1,400.00", "1,600.00", "3,000.00", "2,240.00"],
+			"answer": 0,
+			"why": "Revenue is 3,000.00 and cost is 1,600.00, leaving 1,400.00, which is about 46 per cent of revenue."
 		},
 		{
-			"question": "What is the dangerous omission in a replacement rather than a repair?",
+			"question": "What happens to non-billable time on a timesheet?",
 			"options": [
-				"Failing to raise a service invoice",
-				"Shipping the new serial without receiving the old one back",
-				"Failing to update the SLA",
-				"Not booking travel time"
+				"It is invoiced",
+				"It costs the project but is not billed",
+				"It is deleted",
+				"It moves to the customer"
 			],
 			"answer": 1,
-			"why": "The old unit stays in stock forever and the ledger keeps an asset that no longer exists. Replacement needs a delivery out and a return in, both visible."
+			"why": "Non-billable time still carries internal cost, so it reduces margin without appearing on the invoice."
 		},
 		{
-			"question": "Which service figure is most likely to change a purchasing decision?",
+			"question": "Why close a project in the system?",
 			"options": [
-				"Median response time",
-				"Warranty cost as a percentage of revenue per model",
-				"Open issues by priority",
-				"Billable versus absorbed hours"
+				"To delete timesheets",
+				"To prevent further postings and capture the variance",
+				"To close the fiscal year",
+				"To archive the invoice"
 			],
 			"answer": 1,
-			"why": "It joins service cost to the commercial result for a specific model, which is the comparison a purchasing manager can act on. The others manage today's queue."
+			"why": "Closing stops new time and cost, and the variance note becomes the reference for pricing the next engagement."
 		}
 	],
 	"memory": {
-		"spine": "Log the issue against the serial, measure the clock, decide warranty with evidence, and bill what the agreement allows.",
+		"spine": "A project is a collector, and it only collects what names it, so every hour and every invoice must carry the project field.",
 		"device": {
 			"kind": "rule",
-			"label": "Priority before promise",
+			"label": "Every entry names the project",
 			"expansion": [
-				"Priority is set by impact at logging, and the SLA clock follows the priority",
-				"Promises are made in a calendar, so working hours and holidays decide the measurement",
-				"Warranty is decided from the serial's delivery date and recorded with its reason",
-				"Repair, replace or credit is chosen before work starts, because each needs different documents",
-				"Every closed issue carries a resolution note and, if billable, an invoice that names it"
+				"A project is a cost collector whose profit and loss exists only if postings name it",
+				"Four fields before work starts: rate, cost centre, dates and customer",
+				"A timesheet records hours against project and activity and carries both a billing and a costing rate",
+				"Invoice from the timesheet so hours, rate and project travel together",
+				"Closing stops time and cost, and does not reverse revenue already billed"
 			]
 		},
 		"cards": [
 			{
-				"q": "Which five fields make an issue defensible later?",
-				"a": "Asset, symptom, reporter, priority and promised response, plus the resolution note on close. Everything else is optional.",
-				"hint": "Five, every time"
+				"q": "Why is a project profit and loss empty?",
+				"a": "Something was posted without the project field, because the collector only sees postings that name it.",
+				"hint": "Name it or lose it"
 			},
 			{
-				"q": "Why do service levels breach themselves over a long weekend?",
-				"a": "Because the clock runs on the service calendar. If working hours and holidays are not configured, a Friday evening issue breaches by Monday morning.",
-				"hint": "Calendar, not effort"
+				"q": "Where does project revenue come from?",
+				"a": "Sales invoices that name the project, not quotations and not orders.",
+				"hint": "Invoices, not promises"
 			},
 			{
-				"q": "What decides whether a repair is free of charge?",
-				"a": "The serial's delivery date against the warranty period, the exclusions in the agreement, and the evidence attached at logging. The decision and its reason are recorded.",
-				"hint": "Date, serial, evidence"
+				"q": "What does a timesheet carry besides hours?",
+				"a": "A billing rate and a costing rate, so one hour is both revenue and cost.",
+				"hint": "Two rates, one hour"
 			},
 			{
-				"q": "Why is a replacement the riskiest of the three service outcomes?",
-				"a": "Because it needs a delivery out and the old unit back in. If the return is forgotten, a serial that no longer exists stays in stock forever.",
-				"hint": "Two documents"
+				"q": "Why invoice from the timesheet?",
+				"a": "Hours, rate and project land on the invoice without retyping, so the margin stays traceable.",
+				"hint": "No retyping"
 			},
 			{
-				"q": "Which four numbers belong in the monthly service pack?",
-				"a": "Open issues by priority, median response and resolution per priority, warranty cost versus revenue per model, and billable versus absorbed hours.",
-				"hint": "Queue, clock, cost, hours"
+				"q": "What does closing a project do?",
+				"a": "It stops further time and cost postings, and it does not reverse revenue already billed.",
+				"hint": "Stop, do not undo"
 			}
 		],
 		"trap": {
-			"what": "The client handles complaints by phone and goodwill, so the desk is configured but never used, and warranty cost is invisible.",
-			"why": "Goodwill with no record is a subsidy nobody measures. Log every complaint against the serial, record each warranty decision with its reason, and put the four numbers in a monthly pack the purchasing lead reads."
+			"what": "Hours are captured on the timesheet but the invoice is raised by hand at a different rate.",
+			"why": "Revenue and cost no longer share a rate, so project margin is fiction and the timesheet becomes paperwork nobody trusts."
 		}
 	},
-	"narration": "Service work is where a distributor leaks money without noticing, and it starts with the document. A complaint is not a sales return: it is an issue, logged against a serial number, in the customer's words, with a photograph and an owner. Priority comes from impact, and the service level clock follows the priority, which is why working hours and holidays must be configured before anyone promises four hours on a Friday. Warranty is a date, a serial and a condition. Find the delivery date of that exact unit, check the exclusions, and record the decision with its reason, because next year's claim will refer to this one. Then choose the outcome before the work starts: a repair consumes parts and time, a replacement ships a new serial and must take the old one back, a credit closes the commercial complaint. Bill from the issue, so every line names the asset and the visit. And finish with the four numbers the service lead should trust: open issues by priority, median response and resolution, warranty cost against revenue per model, and billable against absorbed hours."
+	"narration": "Services work is deceptively simple, and the margin is where consultants get caught. A project is a cost collector: name it on a timesheet, name it on an invoice, and it carries both sides. Twenty hours at one hundred fifty is three thousand of revenue; twenty hours at eighty is one thousand six hundred of cost; the difference is one thousand four hundred, about forty six per cent. Service tax of eight per cent adds two hundred forty and stays a liability. Record non-billable time anyway, because it costs money even though it cannot be invoiced. Then close the project with a variance note, which is the only way the next quote gets better. A project that is never closed teaches nobody anything and quietly repeats its mistakes. Twenty hours, one rate, one invoice, one margin: when a client can state those four numbers from memory, the services practice is under control, and the next quotation is priced on evidence rather than optimism."
 }

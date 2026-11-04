@@ -1,395 +1,448 @@
 {
 	"id": "ch26",
 	"number": 26,
-	"title": "Volume 9 · Malaysian Tax and Statutory Setup",
-	"subtitle": "Lessons 1–4: SST templates that survive an audit, item tax categories that match the law, and an SST-02 return that reconciles",
+	"title": "Volume 9 · Customise Without Code: Property Setters, Custom Fields and Custom DocTypes",
+	"subtitle": "Lessons 1–10: what a functional consultant may change in the browser, what survives an upgrade, and how to say no to code",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 70,
 	"outcomes": [
-		"Build sales and purchase tax templates with separate liability accounts",
-		"Map items to tax categories so the right rate lands on the right line",
-		"Produce SST-02 figures that tie to the general ledger",
-		"Handle exempt and zero-rated lines with the evidence an auditor asks for"
+		"Draw the line between configuration in the browser and customisation that needs a developer",
+		"Rename, hide, reorder and enforce fields with property setters that survive an upgrade",
+		"Add custom fields and a custom DocType with a child table without touching a file",
+		"Prove a customisation survives a migration, and keep a change register a successor can read"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Tax templates",
-			"title": "Build the SST templates an auditor expects",
+			"kicker": "Lesson 1 · Where the line is",
+			"title": "Configuration ends where a file begins",
 			"bullets": [
-				"One template per rate per direction: sales tax out, service tax out, purchase tax in",
-				"Each template names an account, and those accounts become the return's source lines",
-				"Service tax on services is eight per cent, sales tax on goods is ten per cent in our sample",
-				"Never reuse one account for both output and input, or the return cannot be split"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Accounts → Tax Template → New", "Sales Tax 10 %, type Sales", "Template form"],
-					["2", "Add the row", "Rate 10, account SST Output - SM", "One tax row"],
-					[
-						"3",
-						"Create the service template",
-						"Service Tax 8 %, account Service Tax Output - SM",
-						"Second template"
-					],
-					[
-						"4",
-						"Create the purchase templates",
-						"Purchase tax 10 % and service tax 8 %, input accounts",
-						"Two more templates"
-					],
-					[
-						"5",
-						"Set tax categories",
-						"In-State, Out-of-State, Exempt",
-						"Three categories available"
-					],
-					[
-						"6",
-						"Attach to a customer",
-						"Aeon Big uses Sales Tax 10 %",
-						"Default template on the customer"
-					]
-				]
-			},
-			"notes": "Separate accounts are the whole trick: output tax is a liability, input tax is an asset, and the difference is what you file. Most Malaysian sites start with one combined account and then cannot produce SST-02 without a spreadsheet. Fix it at configuration time, because changing it later means remapping every historical posting."
-		},
-		{
-			"kicker": "Lesson 2 · Verify the tax",
-			"title": "One invoice that proves the matrix",
-			"bullets": [
-				"Goods at ten per cent and services at eight per cent must sit on separate templates",
-				"The invoice total is net plus tax, and the tax amount is never income",
-				"Each tax row names its account, so the ledger carries the split automatically",
-				"An exempt line carries no tax but still needs a category for reporting"
+				"Everything in Customize Form, a property setter, a custom field or the DocType editor is configuration and belongs to you",
+				"Anything that needs a file in an app, a hook or a script is development and belongs to somebody else",
+				"The line is not about difficulty, it is about who can reverse the change without a deployment",
+				"Say the line out loud in the first workshop, so a requirement does not drift into code by accident",
+				"Every configuration change is recorded in a register, because it is invisible until it breaks something"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Goods line", "2,400.00 at 10 % gives 240.00", "Sales Invoice, tax summary"],
-					["Service line", "500.00 at 8 % gives 40.00", "Sales Invoice, tax summary"],
-					["Invoice total", "2,940.00", "Invoice totals"],
-					["SST Output account", "240.00 credit", "General Ledger, SST Output - SM"],
-					["Service Tax Output account", "40.00 credit", "General Ledger, Service Tax Output - SM"]
+					[
+						"Configuration scope agreed in writing",
+						"List of allowed changes",
+						"Project scope document"
+					],
+					[
+						"Code requests routed elsewhere",
+						"Named developer or vendor",
+						"Scope document, exclusions"
+					],
+					["Reversal path understood", "Undo in the browser, not a deploy", "Change register"],
+					["Register started on day one", "Row per change, dated", "Change register sheet"],
+					["Client told which is which", "Session notes signed", "Workshop minutes"]
 				]
 			},
-			"notes": "Two rates on one invoice is the case that breaks most first attempts, because a single template cannot carry both. Make the learner compute two thousand four hundred plus five hundred plus two hundred forty plus forty, and then read the same four numbers off the tax summary. When they agree, the tax configuration is defensible."
+			"notes": "The most expensive sentence in a project is 'it's only a small change'. Small changes that need a file still need a deployment, a test and a rollback, and nobody budgeted for that. Draw the line in the first workshop, in writing, while everyone is still friendly."
 		},
 		{
-			"kicker": "Lesson 3 · Item tax categories",
-			"title": "Map items so the rate follows the product",
+			"kicker": "Lesson 2 · Property setters",
+			"title": "Change the form without changing the DocType",
 			"bullets": [
-				"Tax category on the item overrides the customer's default, and that precedence must be intended",
-				"A service item with sales tax creates an incorrect return even though the invoice looks right",
-				"Exempt goods need their own category and a reason code, not just a zero rate",
-				"Review the mapping once with the client's tax advisor and keep the email"
+				"A property setter records an override on top of the standard definition, so the standard stays intact underneath",
+				"Rename a label, make a field mandatory or read-only, hide it, or move it within its section",
+				"Setters survive a migration, which is why they are the consultant's tool and hand-edited DocTypes are not",
+				"Keep the list short and justified, because twenty setters is a design problem wearing a configuration hat",
+				"Every setter goes in the register with the reason the client asked for it"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open item SM-BL200",
-						"Tax section, item tax template Sales Tax 10 %",
-						"Template attached"
+						"Open Customize Form for the DocType",
+						"Sales Invoice",
+						"Form editor with the standard layout"
 					],
 					[
 						"2",
-						"Open item SM-DEL",
-						"Service item with Service Tax 8 %",
-						"Service template attached"
+						"Rename a label the client dislikes",
+						"Customer PO No",
+						"Label changes on every form"
 					],
-					["3", "Open item SM-CTN", "Exempt packaging with the exempt category", "Exempt attached"],
-					[
-						"4",
-						"Create a mixed invoice",
-						"One line each of the three items",
-						"Three different tax rows"
-					],
-					["5", "Check the summary", "240.00, 40.00 and 0.00", "Totals 280.00 tax"],
-					["6", "Print the invoice", "Tax shown per line", "Customer sees the breakdown"]
-				]
-			},
-			"notes": "Precedence confuses everyone, so write it on the configuration worksheet: item template beats customer template beats company default. Test it with the three-line invoice above and the client can see the precedence rather than being told about it. When the tax advisor changes a rate, this is also the list you update."
-		},
-		{
-			"kicker": "Lesson 4 · SST return",
-			"title": "Produce SST-02 figures from the ledger",
-			"bullets": [
-				"The return is built from posted invoices, so drafts and cancelled documents must be excluded",
-				"Output tax total equals the credit balance on the output accounts for the period",
-				"Input tax is only claimable on invoices that are submitted and matched to a receipt",
-				"The payable figure is output minus input, and it must tie to the ledger to the cent"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open the tax summary",
-						"01-01-2026 to 31-01-2026, sales tax",
-						"Output tax by account"
-					],
-					["2", "Read the output figure", "1,200.00", "Tax summary report"],
-					["3", "Read the input figure", "120.00", "Tax summary, purchase side"],
-					["4", "Compute the payable", "1,200.00 minus 120.00", "1,080.00"],
-					["5", "Tie to the ledger", "SST Output and SST Input balances", "Same two numbers"],
-					[
-						"6",
-						"File and record",
-						"Return reference in the tax worksheet",
-						"Evidence for the auditor"
-					]
-				]
-			},
-			"notes": "Twelve hundred out, one hundred twenty in, one thousand eighty payable: three numbers that must appear in the report, in the ledger and on the return. If they do not, the usual causes are a draft invoice counted, a credit note not reversing tax, or a purchase invoice without the input template. All three are visible in the tax summary by account."
-		},
-		{
-			"kicker": "Lesson 4 · Verify the return",
-			"title": "Three numbers that must agree",
-			"bullets": [
-				"The return figure, the tax summary and the ledger balance are the same number seen three ways",
-				"A draft or cancelled document in the summary shifts the return and must be explained",
-				"Input tax is only claimable where the purchase invoice exists, so unbooked bills understate the claim",
-				"Sign the worksheet with the date filed, because that is the audit evidence"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Output tax", "1,200.00", "Tax summary and General Ledger"],
-					["Input tax", "120.00", "Tax summary and General Ledger"],
-					["Net payable", "1,080.00", "Your own arithmetic and the return"],
-					[
-						"Draft documents in the period",
-						"none contributing tax",
-						"Sales and purchase registers"
-					],
-					["Filed reference", "recorded with the date", "Tax worksheet"]
-				]
-			},
-			"notes": "The check takes four minutes and prevents the most common compliance finding: a return that disagrees with the ledger because a document was posted in a later period. Print the summary for the period, print the ledger for the same accounts, and staple them to the return. When an auditor asks, the answer is a page rather than an explanation."
-		},
-		{
-			"kicker": "Lesson 5 · Exemptions",
-			"title": "Exempt and zero-rated lines with evidence",
-			"bullets": [
-				"An exemption is a category plus a certificate, not a zero typed into a rate field",
-				"Schedule A and B exemptions must be referenced on the invoice or the claim fails",
-				"Exempt sales still appear in the return, in their own box",
-				"Keep the customer's exemption certificate with the customer record"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Create the exempt template",
-						"0 % with the Exempt - SM account mapping",
-						"Exempt template available"
-					],
-					[
-						"2",
-						"Attach to the customer",
-						"Exemption certificate number in the customer record",
-						"Evidence stored"
-					],
-					[
-						"3",
-						"Invoice the exempt line",
-						"100 units at 12.00, no tax",
-						"Total 1,200.00 with zero tax"
-					],
-					["4", "Check the return", "Exempt box populated", "Separate from taxable sales"],
+					["3", "Make a field mandatory", "Customer PO No required", "Save refused without it"],
+					["4", "Make a field read-only", "Territory", "Field visible, not editable"],
 					[
 						"5",
-						"Attempt a taxable line",
-						"Same customer, taxable item",
-						"Template override required"
+						"Hide a field the business never uses",
+						"Ignore Pricing Rule",
+						"Field gone from the form"
 					],
-					["6", "Document the exception", "Reason in the tax worksheet", "Auditor can see why"]
+					["6", "Record each change in the register", "(write)", "Six rows, dated and justified"]
 				]
 			},
-			"notes": "Exemptions are where clients get enthusiastic and auditors get interested, so the rule is one certificate per customer, stored, with an expiry date. The system will happily apply a zero rate; it cannot judge whether the exemption is valid. Put that judgement in writing and attach it to the customer record before the first exempt invoice."
+			"notes": "Property setters are the highest-leverage tool a functional consultant has, and the most abused. Each one is a small divergence from standard behaviour that the next consultant has to discover. Keep them few, documented, and named after the client's own language."
 		},
 		{
-			"kicker": "Volume 9 · Reference",
-			"title": "Malaysian configuration checklist",
+			"kicker": "Lesson 3 · Custom fields",
+			"title": "Add what the business needs and nothing else",
 			"bullets": [
-				"Tax rates, accounts and categories are configuration, and they must be evidenced",
-				"e-Invoice readiness depends on the same master data being clean",
-				"Every row below has an owner in the client's finance team",
-				"Revisit annually, because rates and thresholds change with each budget"
+				"A custom field is a real column with a real type, so choose the type carefully the first time",
+				"Place it deliberately: after which field, in which section, and whether it shows in the list view",
+				"A field nobody filters or reports on is a field nobody needed",
+				"Defaults and options are configuration; conditional mandatory rules generally are not",
+				"Name fields for the business, not the database, because the label is what the client reads"
 			],
 			"table": {
-				"headers": ["Configuration", "Value in our sample", "Owner", "Evidence"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
-						"Sales tax on goods",
-						"10 per cent to SST Output - SM",
-						"Finance manager",
-						"Tax advisor email"
+						"1",
+						"Create a custom field on Sales Invoice",
+						"Deliver To Site",
+						"New field in the form editor"
 					],
+					["2", "Choose the type", "Data", "Single-line text field"],
 					[
-						"Service tax",
-						"8 per cent to Service Tax Output - SM",
-						"Finance manager",
-						"Tax advisor email"
+						"3",
+						"Place it after the customer address",
+						"Insert After",
+						"Field appears where expected"
 					],
+					["4", "Show it in the list view", "In List View", "Column available in the list"],
 					[
-						"Purchase tax",
-						"10 per cent and 8 per cent input accounts",
-						"Finance manager",
-						"Configuration worksheet"
+						"5",
+						"Save, then open an existing invoice",
+						"(open)",
+						"Field present on old records too"
 					],
-					[
-						"Tax categories",
-						"In-State, Out-of-State, Exempt",
-						"Finance manager",
-						"Worksheet signed"
-					],
-					[
-						"Exemption certificates",
-						"stored per customer with expiry",
-						"Sales admin",
-						"Certificate scans"
-					]
+					["6", "Add a report column using it", "(report builder)", "Field selectable as a column"]
 				]
 			},
-			"notes": "This checklist is the deliverable that makes a compliance conversation concrete. Hand it over signed, with the tax advisor's email attached, and the client's auditor has a starting point that is not a memory of a phone call. It also protects the consultant when a rate changes and nobody told them."
+			"notes": "The test for a custom field is not whether the client asked for it, but whether anyone filters, prints or reports on it. If the answer is no, it becomes an empty box that someone will eventually fill with the wrong thing. Ask the reporting question before you create the column."
 		},
 		{
-			"kicker": "Volume 9 · Reference",
-			"title": "Reading the tax summary by account",
+			"kicker": "Lesson 4 · Verify the field",
+			"title": "One field, three audiences",
 			"bullets": [
-				"Grouping by account is what makes the return auditable, because each account is one box",
-				"A single blended tax account hides the split between sales tax and service tax",
-				"Credit notes must reduce both the taxable amount and the tax in the same period",
-				"Compare the summary with the general ledger, not with a spreadsheet"
+				"The field must be visible where the work happens, which is usually the form and the list, not a report nobody opens",
+				"It must be hidden or read-only where it would mislead, which means checking it under a second role",
+				"It must survive a migration: refresh the form and confirm the field is still placed correctly",
+				"Old records must still open, because a custom field added today appears on documents from last year",
+				"If the field feeds a report, check the report returns rows before you call it done"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Sales tax output", "1,200.00 for January", "Tax summary by account"],
-					["Service tax output", "40.00", "Tax summary by account"],
-					["Input tax", "120.00", "Tax summary, purchase side"],
-					["Net payable", "1,120.00 including service tax", "Your own arithmetic"],
-					["Ledger agreement", "identical figures", "General Ledger for the same accounts"]
+					["Visible on the form", "Field in the expected section", "Open a new Sales Invoice"],
+					["Visible in the list view", "Column shows and sorts", "Invoice list"],
+					[
+						"Correct under a second role",
+						"Same field, correct editability",
+						"Log in as a normal user"
+					],
+					["Survives a form reload", "Placement unchanged", "Customize Form after refresh"],
+					["Report returns rows", "Non-zero results using the field", "Report Builder"]
 				]
 			},
-			"notes": "Twelve hundred of sales tax plus forty of service tax less one hundred twenty of input is one thousand one hundred twenty payable, and that single sum is what the client actually pays. Show the arithmetic in the meeting rather than the report, because the sum is what gets remembered and the report is what gets filed."
+			"notes": "Customisation without verification is decoration. The second-role check catches the commonest failure, which is a field that a sales user can edit when finance assumed it was locked down."
+		},
+		{
+			"kicker": "Lesson 5 · Custom DocTypes",
+			"title": "A new document you build in the browser",
+			"bullets": [
+				"The DocType editor creates a real table, so the naming and the fields are decisions with consequences",
+				"Choose the naming series before the first record exists, because changing it later breaks links",
+				"Submittable suits anything with a lifecycle and a freeze; keep it simple unless the lifecycle is real",
+				"Permissions come next, or the new document is visible to everyone or nobody",
+				"A custom DocType is a commitment: it becomes something the client supports after you leave"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create a DocType from the DocType list",
+						"Site Survey",
+						"New DocType, draft state"
+					],
+					["2", "Set the naming series", "SURV-.YYYY.-", "Records named SURV-2026-0001"],
+					["3", "Add the business fields", "Site, Contact, Findings", "Three fields on the form"],
+					["4", "Decide submittable", "Not submittable", "Save only, no submit button"],
+					[
+						"5",
+						"Set permissions per role",
+						"Technician create, Manager delete",
+						"Roles listed with rights"
+					],
+					["6", "Create one record to prove it", "SURV-2026-0001", "Document saves and lists"]
+				]
+			},
+			"notes": "The naming decision is the one people regret. A DocType created with a hash or a plain number cannot be renumbered once records exist, and every link to it depends on those names. Decide the series before the first save, and write the decision in the register."
+		},
+		{
+			"kicker": "Lesson 6 · Child tables",
+			"title": "Lines inside a document you built",
+			"bullets": [
+				"A child table turns one survey into many findings without creating a document per finding",
+				"The child DocType carries the fields; the parent decides how many rows and what order",
+				"Grid columns and their widths are a usability decision, not decoration",
+				"Anything the client will sum, count or report per row belongs in the table, not in a long text field",
+				"Child tables are edited in the browser like any other, and they survive migrations the same way"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create a child DocType for findings",
+						"Survey Finding",
+						"Check the child table flag"
+					],
+					["2", "Add the row fields", "Area, Severity, Action", "Three columns per finding"],
+					["3", "Add a table field on the parent DocType", "Findings", "Grid on the survey form"],
+					[
+						"4",
+						"Set the child DocType on that field",
+						"Survey Finding",
+						"Rows editable in the grid"
+					],
+					[
+						"5",
+						"Set column widths and in-list visibility",
+						"Action visible in list",
+						"Readable grid"
+					],
+					["6", "Enter three findings and save", "(save)", "One survey, three rows stored"]
+				]
+			},
+			"notes": "The distinction between a child table and a text field decides whether the client can ever report on the data. If the answer to a question needs a count of findings by severity, it has to be rows. Ask the reporting question again, at design time."
+		},
+		{
+			"kicker": "Lesson 7 · Layout and usability",
+			"title": "Sections, columns and the three-second form",
+			"bullets": [
+				"A form that a new user can complete in three seconds is the goal, and layout is most of it",
+				"Group related fields into sections and name the section the way the business talks",
+				"Two columns is usually right; three becomes a scanning problem on a laptop screen",
+				"Move the fields the client types first to the top, because order is a form of training",
+				"Test the layout with a real user on a real screen before calling it finished"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Split the form into business sections",
+						"Delivery, Billing, Findings",
+						"Three labelled sections"
+					],
+					["2", "Set two columns per section", "(layout)", "Fields paired, readable"],
+					[
+						"3",
+						"Move the typed-first fields to the top",
+						"Customer, Site",
+						"First tab stops in the right order"
+					],
+					["4", "Collapse the rarely used section", "Internal", "Hidden until expanded"],
+					["5", "Ask a real user to complete it", "(user test)", "Completed without help"],
+					["6", "Record the layout decision", "(write)", "Register row with the reason"]
+				]
+			},
+			"notes": "Layout work looks cosmetic and is not: it is the difference between a form people use correctly and a form they fill with guesses. Time a real user on a real task, and treat any hesitation as a design defect rather than a training gap."
+		},
+		{
+			"kicker": "Lesson 8 · What survives",
+			"title": "Prove the customisation survives an upgrade",
+			"bullets": [
+				"Property setters, custom fields and custom DocTypes live in the database, so they survive a migration",
+				"Hand-edited standard DocTypes and doctored core files do not, which is why the line matters",
+				"A migration can still rename a standard field underneath your setter, so verify after each upgrade",
+				"Test on staging first, with production data, then repeat the checks on production",
+				"Keep the register portable: a list a successor can read without opening the system"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Setters still applied",
+						"Labels, mandatory and read-only intact",
+						"Customize Form after migrate"
+					],
+					["Custom fields still placed", "Correct section and list visibility", "Open a document"],
+					["Custom DocType still saves", "New record created", "The DocType list"],
+					["Child table renders", "Rows editable", "Parent form"],
+					[
+						"Register matches reality",
+						"Every setter accounted for",
+						"Register versus Customize Form"
+					]
+				]
+			},
+			"notes": "The upgrade test is what separates a configuration from a hack. Run it on staging, with production data, and compare the register against what the system actually does. Anything that no longer matches is either a broken setter or an undocumented change."
+		},
+		{
+			"kicker": "Lesson 9 · The change register",
+			"title": "Six columns that save a successor",
+			"bullets": [
+				"Date, DocType, what changed, why, who asked and how to reverse it: six columns, nothing else",
+				"The reason matters more than the change, because it is the part nobody can reconstruct",
+				"Keep it outside the system as well, so it survives an outage and a handover",
+				"Review it with the client quarterly and delete what nobody uses, deliberately",
+				"A register that is a work of fiction is worse than none, so write the row when you make the change"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Every change has a row", "Count matches Customize Form", "Register versus settings"],
+					["Reason recorded", "One sentence per row", "Register, why column"],
+					["Reversal documented", "Steps to undo", "Register, reversal column"],
+					["Held outside the system", "Exported copy dated", "Project folder"],
+					["Reviewed quarterly", "Dated review note", "Review minutes"]
+				]
+			},
+			"notes": "The register is the cheapest insurance in a customisation-heavy project. Without it, the next consultant spends a week discovering twenty setters, and the client pays for that week. Write the row in the moment, not at the end of the project."
+		},
+		{
+			"kicker": "Lesson 10 · Saying no",
+			"title": "The conversation that keeps the project supportable",
+			"bullets": [
+				"When a requirement needs code, say so plainly and price it as development with its own testing and rollback",
+				"Offer the configuration alternative first: often field, workflow or report changes solve eighty per cent",
+				"Write the accepted gap into the scope document so it is a decision rather than an omission",
+				"A consultant who promises code and cannot deliver it damages the whole system's credibility",
+				"The client respects a clear boundary far more than a vague yes"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Configuration alternative explored", "Options listed with effort", "Scope document"],
+					["Code request routed", "Named owner and estimate", "Change request"],
+					[
+						"Gap recorded as a decision",
+						"Accepted, deferred or rejected",
+						"Scope document, decisions log"
+					],
+					["Client informed in writing", "Email or minutes", "Project folder"],
+					["No promise made outside scope", "Nothing verbal left open", "Meeting minutes"]
+				]
+			},
+			"notes": "The boundary conversation is a consultant skill, not an admin task. A vague yes buys a week of goodwill and costs a year of support. Offer the configuration path, name what code would cost, and record the decision — then the client owns it with you rather than blaming you for it."
 		}
 	],
 	"lab": {
-		"title": "Lab · Build SST templates, map an item mix and reconcile the return",
-		"minutes": 45,
+		"title": "Lab · Customise a sales invoice and a site survey without code",
+		"minutes": 70,
 		"steps": [
-			"Create sales tax at 10 per cent and service tax at 8 per cent with separate output accounts",
-			"Create the matching input templates on the purchase side",
-			"Attach item tax templates to the blender, the delivery service and the exempt carton",
-			"Raise a mixed invoice with all three lines and confirm 240.00, 40.00 and 0.00",
-			"Confirm the invoice total of 2,940.00 with 280.00 of tax",
-			"Produce the January tax summary and confirm 1,200.00 output and 120.00 input",
-			"Compute the net payable and tie it to the two ledger accounts",
-			"Attach an exemption certificate to a customer and invoice an exempt line"
+			"Draw up the configuration scope with the client and write the code boundary into it",
+			"Rename one label, make one field mandatory, and hide one field the business never uses",
+			"Create a custom field for the delivery site, place it correctly and show it in the list view",
+			"Verify the field as a normal sales user and confirm what it may and may not edit",
+			"Build a site survey DocType with its own naming series and one record",
+			"Add a findings child table with three columns and enter three findings on the survey",
+			"Reorganise the invoice form into two named sections and time a real user completing it",
+			"Run the upgrade checks, complete the change register and list every reversal step"
 		],
-		"done": "Done when the tax summary and the ledger agree on output and input, the mixed invoice shows both rates correctly, and the exempt customer has a stored certificate."
+		"done": "A documented set of browser-only customisations that a second role can use correctly, a custom DocType with a child table holding real data, and a six-column register with a reversal step for every change."
 	},
 	"quiz": [
 		{
-			"question": "Why keep separate accounts for sales tax and service tax output?",
+			"question": "What actually separates configuration from development for a functional consultant?",
 			"options": [
-				"To reduce the rate",
-				"Because the return needs each box separately",
-				"To speed printing",
-				"To avoid e-Invoice"
+				"The difficulty of the change",
+				"Whether the change needs a file, a deployment and a developer to reverse it",
+				"Whether the client has budget",
+				"Whether the field is custom or standard"
 			],
 			"answer": 1,
-			"why": "SST-02 reports sales tax and service tax in different boxes, so they need separate accounts; a blended account cannot be split later."
+			"why": "Configuration is reversible in the browser and survives a migration; a file-based change needs a deployment and a rollback. That boundary is what decides whether you may promise it."
 		},
 		{
-			"question": "Which document beats which when deciding an item's tax rate?",
+			"question": "Why are property setters safer than editing the standard DocType directly?",
 			"options": [
-				"Customer template beats item template",
-				"Item template beats customer template",
-				"Company default beats both",
-				"The invoice line beats everything"
+				"They are faster to enter",
+				"The standard definition stays intact underneath and the override survives a migration",
+				"They require fewer permissions",
+				"They avoid the change register"
 			],
 			"answer": 1,
-			"why": "Precedence runs from the most specific to the least: item tax template, then customer or supplier template, then company default."
+			"why": "A setter is an override stored on top of the standard definition, so an upgrade overwrites the standard, not your change, and the original behaviour remains recoverable."
 		},
 		{
-			"question": "Output tax of 1,200.00 and input tax of 120.00 give a payable of what?",
-			"options": ["1,320.00", "1,080.00", "1,200.00", "120.00"],
-			"answer": 1,
-			"why": "The payable is output minus input, 1,200.00 − 120.00 = 1,080.00, and it must tie to the two ledger balances."
-		},
-		{
-			"question": "What makes an exempt sale defensible?",
+			"question": "What is the first decision that becomes hard to reverse on a custom DocType?",
 			"options": [
-				"Typing zero in the rate",
-				"A category plus a stored exemption certificate",
-				"Cancelling the invoice",
-				"A journal entry"
+				"The permission list",
+				"The naming series, because every link depends on the names it produces",
+				"The field order in the form",
+				"Whether it is submittable"
 			],
 			"answer": 1,
-			"why": "An exemption needs a category for reporting and a certificate as evidence; a zero rate alone gives the auditor nothing to test."
+			"why": "Once records exist under a series, renumbering them breaks every reference. Choose the series before the first save, and record why."
 		},
 		{
-			"question": "Which documents must be excluded from the SST return?",
+			"question": "When does a custom field earn its place?",
 			"options": [
-				"Submitted invoices",
-				"Draft and cancelled documents",
-				"Credit notes",
-				"Purchase invoices"
+				"When the client asks for it",
+				"When someone filters, prints or reports on it",
+				"When the form has room for it",
+				"When it duplicates an existing field"
 			],
 			"answer": 1,
-			"why": "Only posted, submitted documents carry tax liability. Drafts have not happened and cancelled documents have been reversed."
+			"why": "A field nobody queries is an empty box waiting to be filled wrongly. Ask the reporting question before creating the column."
+		},
+		{
+			"question": "What belongs in a change register, beyond what changed?",
+			"options": [
+				"The consultant's hours",
+				"Why it changed, who asked, and how to reverse it",
+				"The database table name",
+				"The stack trace of any error"
+			],
+			"answer": 1,
+			"why": "The reason and the reversal are the parts a successor cannot reconstruct. Without them the register records facts but cannot restore behaviour."
 		}
 	],
 	"memory": {
-		"spine": "One tax template per rate per direction, an item category that follows the product, and a return that is the ledger seen three ways.",
+		"spine": "Configuration is what you can reverse in the browser; everything else is development, and it is somebody else's promise.",
 		"device": {
 			"kind": "rule",
-			"label": "One template per rate per direction",
+			"label": "Setters first, code last",
 			"expansion": [
-				"Sales tax out, service tax out and purchase tax in never share a template",
-				"Goods at ten per cent and services at eight per cent sit on separate lines and templates",
-				"Item tax category overrides the customer default, which must be intended rather than discovered",
-				"SST-02 comes from posted invoices, so drafts and cancellations are excluded",
-				"The return, the tax summary and the ledger are one number seen three ways"
+				"Property setters change labels, mandatory and read-only without touching the standard",
+				"Custom fields need a reporting question before they need a type",
+				"A custom DocType needs its naming series decided before the first record",
+				"Child tables are for anything the client will count, sum or report per row",
+				"Every change gets a register row with its reason and its reversal"
 			]
 		},
 		"cards": [
 			{
-				"q": "Why one template per rate per direction?",
-				"a": "The posting account and the return box differ by direction, and mixing them makes the return untraceable.",
-				"hint": "Account and box"
+				"q": "How do you tell whether a request is configuration or development?",
+				"a": "If it can be made and reversed in the browser without a file or a deployment, it is configuration and it is yours. Otherwise it belongs to a developer.",
+				"hint": "Reversible without a deploy"
 			},
 			{
-				"q": "Goods at ten per cent and services at eight per cent on one invoice?",
-				"a": "Two lines on two templates, each rate posting to its own account.",
-				"hint": "Never one line"
+				"q": "What does a property setter leave untouched underneath?",
+				"a": "The standard DocType definition. The override sits on top, so a migration replaces the standard and keeps the setter.",
+				"hint": "Override, not edit"
 			},
 			{
-				"q": "Item tax category or customer default, which applies?",
-				"a": "The item's category wins, which is useful for exempt goods and dangerous when unintended.",
-				"hint": "Product beats party"
+				"q": "Which custom DocType decision is hardest to undo and why?",
+				"a": "The naming series. Every record name is referenced by links, so renumbering later breaks them. Decide before the first save.",
+				"hint": "Names are forever"
 			},
 			{
-				"q": "Which documents feed the SST-02 return?",
-				"a": "Posted invoices only, because drafts, cancelled documents and unsubmitted returns are excluded.",
-				"hint": "Posted only"
+				"q": "When does a table field beat a long text field?",
+				"a": "When somebody will count, sum or report per line, such as findings by severity. Rows can be reported; prose cannot.",
+				"hint": "Count it or drop it"
 			},
 			{
-				"q": "Which three numbers must agree?",
-				"a": "The return figure, the tax summary by account and the ledger balance of the tax account.",
-				"hint": "One number, three views"
+				"q": "What must the change register carry besides the change itself?",
+				"a": "The reason it was made, who asked for it, the date, and how to reverse it — plus a copy held outside the system.",
+				"hint": "Why and how to undo"
 			}
 		],
 		"trap": {
-			"what": "An exempt customer is handled by typing zero per cent into the rate field.",
-			"why": "No exemption category or certificate sits behind the zero, so the return cannot evidence why tax was not charged."
+			"what": "A promising sales demo ends with 'we can make it do anything', so three code changes are promised, none are priced, and go-live slips.",
+			"why": "Anything needing a file is development with its own testing and rollback. Offer the configuration path, price the code path, and record the gap as a decision the client owns."
 		}
 	},
-	"narration": "Malaysian tax is the part clients test you on first, because the numbers go to a government portal. Build separate templates for sales tax and service tax, with separate output and input accounts, because the return needs each box separately. Attach item tax templates so the rate follows the product: ten per cent goods, eight per cent services, zero for exempt with a stored certificate. Then the return: twelve hundred output less one hundred twenty input is one thousand eighty payable, and the same three numbers must appear in the tax summary, the ledger and the form. If they do not, the cause is a draft counted, a credit note that did not reverse tax, or a purchase without an input template. Keep the tax advisor's written confirmation with the configuration worksheet, because rates and thresholds change with every budget, and the consultant who documented the basis is the one who gets called back rather than blamed."
+	"narration": "Most requirements a consultant hears can be met in the browser, and the value of knowing where that stops is what this chapter is for. Configuration is anything you can change and reverse in Customize Form: a property setter that renames a label, makes a field mandatory, hides it or makes it read-only, without touching the standard definition underneath. Custom fields come next, but only when somebody will filter, print or report on them, because a field nobody queries is an empty box. Then the DocType editor, where a functional consultant can build a new document with its own naming series and a child table for lines, provided the series is decided before the first record exists. Verify every change the same way: on the form, in the list, under a second role, and again after a migration on staging. Keep a six-column register, with the reason and the reversal, because that is the part the next consultant cannot reconstruct. And when a requirement genuinely needs code, say so plainly, price it, and write the gap down as a decision rather than letting a vague yes carry the project."
 }

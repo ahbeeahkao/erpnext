@@ -1,412 +1,485 @@
 {
 	"id": "ch32",
 	"number": 32,
-	"title": "Volume 10 · The First Ninety Days: Health Checks and Handing Over",
-	"subtitle": "Lessons 1–10: the hypercare rhythm, the weekly health check, adoption evidence, and leaving without the client collapsing",
-	"level": "Capstone",
-	"minutes": 65,
+	"title": "Volume 11 · Continuity: Backups, Staging and Upgrades",
+	"subtitle": "Lessons 1–10: the restore drill you can evidence, a staging site that earns its keep, and an upgrade calendar with a rollback",
+	"level": "Advanced",
+	"minutes": 70,
 	"outcomes": [
-		"Run a hypercare rhythm that catches problems while they are still small",
-		"Perform a fifteen-minute weekly health check that a client can own",
-		"Measure adoption with evidence rather than anecdotes",
-		"Hand over to a successor so the client does not depend on any single person"
+		"Specify and witness a restore drill instead of trusting that backups exist",
+		"Define staging that mirrors production closely enough to test an upgrade on",
+		"Run a twenty-minute post-upgrade verification that covers print formats, workflows and e-Invoice",
+		"Write a version register and an upgrade calendar the client can own without you",
+		"Leave a continuity section in the handover pack that survives the next staff change"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Days one to seven",
-			"title": "Hypercare is a rhythm, not a hotline",
+			"kicker": "Lesson 1 · Whose job is it",
+			"title": "Continuity is a deliverable, not an afterthought",
 			"bullets": [
-				"Week one has a fixed shape: a morning check, a same-day triage, and one written update per day",
-				"The first three days produce the real issue list, and the first weekend produces the real test",
-				"Nobody learns a new system and a new routine at once; keep the routine, change the system",
-				"Log every issue in one place from the first hour, even the ones solved by a phone call",
-				"The daily update is three lines: what broke, who owns it, what is at risk tomorrow"
+				"A functional consultant does not administer servers, but does specify what continuity must look like",
+				"The test is simple: how long until the business is trading again, and who is allowed to decide",
+				"An untested backup is a rumour; a restore drill you watched is evidence you can sign",
+				"Write the requirement into the handover pack with a name and a frequency against each item",
+				"Client staff change; a written continuity section is what survives the change"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Morning check performed", "Signed by name and time", "Hypercare log"],
-					["Issue list single-sourced", "One list, no chat threads", "Issue tracker"],
-					["Daily update sent", "Three lines, dated", "Project folder"],
-					["Weekend cover agreed", "Names and hours", "Support agreement"],
-					["Escalation path live", "Contact tested once", "Escalation page"]
+					[
+						"Recovery expectation agreed",
+						"Hours, not days, stated in writing",
+						"Handover pack, continuity section"
+					],
+					["Backup frequency documented", "Nightly database and files", "Managed hosting console"],
+					["Restore drill scheduled", "Quarterly, with a named owner", "Operations calendar"],
+					["Upgrade approval named", "One person, not a committee", "RACI or support agreement"],
+					[
+						"Evidence retained",
+						"Dated drill report in the project folder",
+						"Handover pack appendix"
+					]
 				]
 			},
-			"notes": "The rhythm is what stops hypercare becoming panic. A fixed morning check and one written update a day gives the client a heartbeat they can rely on, and gives you a record of what actually happened in the week that everyone later misremembers."
+			"notes": "Say the quiet part early: nobody in the room wants to talk about backups until the day they need one, and by then it is too late to discover the drill was never run. Your job is to turn continuity from a promise into a dated exercise with a name against it. Two sentences in the handover pack, agreed in the last week of the project, prevent the worst conversation of the following year."
 		},
 		{
-			"kicker": "Lesson 2 · Weeks two to four",
-			"title": "Triage the fix list by consequence",
+			"kicker": "Lesson 2 · What a backup contains",
+			"title": "Database, files and the configuration that is not in either",
 			"bullets": [
-				"Split the list into three: wrong numbers, blocked work, and cosmetic. Only the first two get fixed this month",
-				"A wrong number is a data or configuration defect and outranks everything, because trust in the ledger is the product",
-				"Blocked work is a training or permission problem more often than a missing feature",
-				"Cosmetic items go to one batch, agreed in advance, so the list has an end",
-				"Publish the triage decision, because a client who cannot see the reasoning assumes they were ignored"
+				"A complete backup is the database plus the site's files, which include uploaded documents and private attachments",
+				"The database alone restores a site where every invoice printout has a missing attachment",
+				"Configuration such as custom fields and print formats lives in the database, but custom apps live in code",
+				"The site config carries the database password and encryption key, and it is not in the backup",
+				"A backup you cannot restore is worthless, and a restored site without its encryption key is damaged"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Export the full issue list with owners", "(export)", "One list, every item"],
 					[
-						"2",
-						"Mark each item wrong number, blocked or cosmetic",
-						"(triage)",
-						"Three labelled groups"
+						"1",
+						"Open the hosting console for the site",
+						"(console)",
+						"Site list with the Seri Murni instance"
 					],
+					["2", "Inspect the backup schedule", "(read)", "Nightly job, with-files enabled"],
 					[
 						"3",
-						"Fix wrong numbers first, with evidence",
-						"(fix)",
-						"Number reproduced and corrected"
+						"Download the latest backup set",
+						"(download)",
+						"Database archive plus files archive"
 					],
 					[
 						"4",
-						"Resolve blocked work by training or permission",
-						"(fix)",
-						"User completes the task"
+						"Check the set is current",
+						"dated last night",
+						"Archive timestamps match the schedule"
 					],
-					["5", "Batch the cosmetic items", "One release per month", "Agreed batch list"],
-					["6", "Publish the triage and the dates", "(message)", "Client sees the reasoning"]
+					[
+						"5",
+						"Locate the site config separately",
+						"site_config.json",
+						"Contains db password and encryption key"
+					],
+					[
+						"6",
+						"Store the key outside the backup",
+						"(vault)",
+						"Key retrievable by someone other than the DBA"
+					]
 				]
 			},
-			"notes": "The triage conversation is where trust is either built or lost. A cosmetic complaint fixed instantly while a wrong stock value waits teaches the client that volume wins. Publish the rule instead, then apply it to the loudest voice in the room."
+			"notes": "This is where a functional consultant earns their place in a technical conversation: you are not taking the backup, you are checking that the set is complete and current, and that the encryption key is stored somewhere other than the machine it protects. Ask the hosting provider for the schedule in writing and attach it to the handover pack."
 		},
 		{
-			"kicker": "Lesson 3 · Day thirty",
-			"title": "The first review, with numbers",
+			"kicker": "Lesson 3 · The restore drill",
+			"title": "Restore into a scratch site and time it",
 			"bullets": [
-				"Thirty days is long enough for real data and short enough to change course",
-				"Bring four numbers: open issues, wrong-number incidents, transaction volume and one adoption measure",
-				"Compare against the go-live baseline, not against an ideal, because the comparison is what means something",
-				"Agree three changes for the next month and write them down with owners",
-				"Invite the person who signs, not only the people who use the system"
+				"A restore drill runs into a scratch site, never over production, and it is timed with a stopwatch",
+				"The drill is done when someone can log in, open last night's invoice and see the attachment",
+				"Record the elapsed time, the person who did it and the date, because that record is the evidence",
+				"Run it quarterly and again after any infrastructure change the hosting provider makes",
+				"If the drill fails, the finding is not a technical problem, it is a go-live blocker"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create a scratch site on the same host",
+						"bench new-site drill.local",
+						"Empty site available"
+					],
+					[
+						"2",
+						"Restore the latest backup into it",
+						"bench --site drill.local restore /path/backup",
+						"Restore completes without error"
+					],
+					[
+						"3",
+						"Run migrations if the versions differ",
+						"bench --site drill.local migrate",
+						"Migrations finish"
+					],
+					["4", "Log in as a real user", "(browser)", "Desk opens with the client's data"],
+					[
+						"5",
+						"Open last night's invoice and its attachment",
+						"(open)",
+						"Document and file both present"
+					],
+					["6", "Record elapsed time and owner", "e.g. 48 minutes", "Dated entry in the drill log"]
+				]
+			},
+			"notes": "Time the drill out loud. The number is the deliverable, because it converts an abstract promise into a business fact the client can plan around: we can be back in under an hour, or we cannot. Attach the dated log to the handover pack, and if the drill has never been run, say so plainly and make it a pre-go-live action rather than a footnote."
+		},
+		{
+			"kicker": "Lesson 4 · Staging",
+			"title": "A site you are allowed to break",
+			"bullets": [
+				"Staging is a second site with production-like data where upgrades, patches and customisations are tested first",
+				"A staging site with no data proves nothing, because half the failures are in the data, not the code",
+				"Restore a production backup into staging before each upgrade so the test is honest",
+				"Anything tested on production is a change you are making while the business is trading",
+				"Staging is not a luxury line item; it is the cheapest insurance in the project"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Open issues counted", "Total, aged, and by owner", "Issue tracker"],
-					["Wrong-number incidents counted", "Zero or a labelled list", "Issue tracker, tagged"],
-					["Transaction volume read", "Invoices per week versus before", "Sales Invoice list"],
-					["One adoption measure", "For example delivery notes per order", "Transaction counts"],
-					["Three actions agreed", "Owners and dates", "Review minutes"]
-				]
-			},
-			"notes": "The day-thirty review is where you find out whether the go-live was a success or merely a launch. Bring numbers, not narrative, and bring them compared to the baseline. Three actions with owners is the right size; ten is a wish list."
-		},
-		{
-			"kicker": "Lesson 4 · Day sixty",
-			"title": "The second-user test",
-			"bullets": [
-				"By day sixty somebody other than the champion should be able to complete a core cycle unaided",
-				"Pick a cycle the business runs weekly: order to delivery, purchase to payment, count to reconciliation",
-				"Watch, do not help, and note every hesitation as a documentation or design defect",
-				"If only one person can do it, the project has built a dependency rather than a capability",
-				"Fix what you observe, then repeat the test with a third person"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
+					["Staging exists", "Separate site and URL", "Hosting console"],
+					["Data refreshed before a test", "Production backup restored", "Staging database"],
 					[
-						"1",
-						"Choose one weekly cycle and one second user",
-						"Order to delivery",
-						"Named user, named task"
+						"Configuration matches",
+						"Same custom fields and print formats",
+						"Compare Setting lists"
 					],
-					["2", "Ask them to run it while you watch", "(observe)", "Completed without your hands"],
-					["3", "Record every hesitation and question", "(write)", "List of six to ten points"],
-					["4", "Fix the causes, not the symptoms", "Guide, label, default", "Defects closed"],
-					["5", "Repeat with a third user", "(observe)", "Fewer hesitations"],
-					["6", "Record the result in the handover pack", "(write)", "Dated capability note"]
+					["Credentials differ", "No production secrets in staging", "site_config.json"],
+					["Refresh scheduled", "Monthly or per upgrade", "Operations calendar"]
 				]
 			},
-			"notes": "The second-user test is the cheapest way to find out whether the training worked. Watching silently is the discipline: the moment you reach for the mouse you have learned nothing and taught dependence."
+			"notes": "The argument that wins this line item is arithmetic: one upgrade tested on production during a stock take costs more than a staging site for a year. Restore production data into staging before each upgrade, and keep production credentials out of it, because a staging site that can send live e-Invoices is a liability rather than a rehearsal."
 		},
 		{
-			"kicker": "Lesson 5 · Day ninety",
-			"title": "Handing over to a successor, not an absence",
+			"kicker": "Lesson 5 · Versions and the calendar",
+			"title": "Pin what you run and schedule when it changes",
 			"bullets": [
-				"The deliverable at ninety days is a named internal owner who can configure, not just operate",
-				"They should be able to add a user, a warehouse, a price list and a print format without calling you",
-				"Sit with them while they do it once, then sign them off in writing",
-				"Leave a support route with an agreed response time, so escalation is a decision rather than a habit",
-				"The test of the handover is a week where nothing is asked of you"
+				"Record the exact Frappe, ERPNext and custom app versions at go-live in a version register",
+				"Pin those versions so an unannounced update does not change behaviour during a busy week",
+				"Plan upgrades on a calendar with a business-quiet window, not on the day a patch appears",
+				"Review the changelog before upgrading for renamed fields and deprecated features",
+				"Every upgrade has a named approver and a rollback point, even when nothing goes wrong"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Versions recorded",
+						"Frappe, ERPNext, apps, with dates",
+						"Version register in the handover pack"
+					],
+					["Versions pinned", "No automatic update path", "Hosting or bench configuration"],
+					["Upgrade window agreed", "Quarterly, outside month end", "Operations calendar"],
+					["Changelog reviewed", "Notes attached to the upgrade request", "Upgrade ticket"],
+					["Rollback point exists", "Backup taken immediately before", "Backup log with timestamp"]
+				]
+			},
+			"notes": "The version register is the document you will be grateful for a year later when a client reports behaviour that no longer matches the course or the manual. Pin, schedule, read the changelog, approve by name, and take the backup immediately before the upgrade so the rollback point is minutes old rather than a night old."
+		},
+		{
+			"kicker": "Lesson 6 · What breaks",
+			"title": "The five things an upgrade disturbs",
+			"bullets": [
+				"Print formats are the most common casualty, especially custom HTML that references a renamed field",
+				"Custom apps and patches may need a migration step or a version bump of their own",
+				"Workflows change when states or actions are renamed, and documents can strand mid-flow",
+				"Reports built on specific field names fail quietly by returning nothing rather than an error",
+				"e-Invoice submission credentials and endpoints must be re-checked, particularly sandbox versus production"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Print format renders", "Invoice PDF with logo and terms", "Open any submitted invoice"],
+					["Custom app loads", "No error banner on the Desk", "Desk home after upgrade"],
+					[
+						"Workflow intact",
+						"Document moves draft to approved",
+						"Test a document through every state"
+					],
+					["Report returns rows", "Non-zero result, same as before", "Run the saved reports"],
+					["e-Invoice ready", "Endpoint and credentials correct", "Settings → Malaysia e-Invoice"]
+				]
+			},
+			"notes": "This list is the difference between an upgrade and an outage. Print formats break first and most visibly, because clients print invoices before they read reports. Workflows break quietly, stranding documents in a state nobody can move. Reports break silently, returning nothing. Test all five deliberately rather than waiting for the client to discover them one by one."
+		},
+		{
+			"kicker": "Lesson 7 · The twenty-minute check",
+			"title": "A post-upgrade verification you can hand to the client",
+			"bullets": [
+				"Twenty minutes, five checks, one sign-off: that is the whole ritual and it must be repeatable",
+				"Do it on staging first, then repeat on production immediately after the upgrade window",
+				"Write the result into the upgrade ticket so the next person can see what was verified and when",
+				"A check that cannot be repeated by client staff is not a check, it is your private habit",
+				"Attach the checklist to the handover pack with the name of whoever is qualified to run it"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Name the internal owner and their deputy",
+						"Log in as a normal user, not administrator",
+						"(login)",
+						"Desk loads without an error banner"
+					],
+					[
+						"2",
+						"Create and submit a test invoice",
+						"1 x SM-BL200",
+						"Stock and ledger rows appear as usual"
+					],
+					["3", "Print that invoice", "(print)", "PDF renders with logo, terms and totals"],
+					[
+						"4",
+						"Run two saved reports",
+						"Collections – overdue",
+						"Rows returned, totals unchanged"
+					],
+					[
+						"5",
+						"Submit one e-Invoice in sandbox",
+						"(submit)",
+						"Accepted or validated, no credential error"
+					],
+					["6", "Sign the ticket with time and name", "(write)", "Dated verification entry"]
+				]
+			},
+			"notes": "Twenty minutes is the whole cost, and it converts an upgrade from an act of faith into a checked procedure. Insist that a normal user, not the administrator, performs the login step, because permission issues hide from administrator accounts. Then get the ticket signed, so the next upgrade starts from evidence rather than assumption."
+		},
+		{
+			"kicker": "Lesson 8 · The e-Invoice risk",
+			"title": "Where compliance meets continuity",
+			"bullets": [
+				"e-Invoice submission depends on credentials, endpoints and a working outbound connection, all outside the ledger",
+				"After any upgrade, submit one document in sandbox before allowing production submissions to resume",
+				"Keep a written fallback: manual submission through MyInvois portal within the statutory window",
+				"Never store production e-Invoice credentials in staging or in a backup taken for testing",
+				"A refused submission after an upgrade is a compliance event, so it belongs in the upgrade checklist"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Sandbox submission works",
+						"Accepted with a submission UID",
+						"Sandbox portal and app log"
+					],
+					[
+						"Production credentials intact",
+						"Token obtains successfully",
+						"Settings → Malaysia e-Invoice"
+					],
+					["Endpoint correct", "Preprod versus production URL", "Same settings screen"],
+					[
+						"Fallback documented",
+						"Manual portal path and owner",
+						"Handover pack, compliance section"
+					],
+					[
+						"Failure alerts reach a human",
+						"Email or queue visible in the Desk",
+						"Error log and notifications"
+					]
+				]
+			},
+			"notes": "The compliance dimension is what makes continuity more than housekeeping. A batch of refused e-Invoices after a quiet upgrade is a statutory problem with a deadline, not an inconvenience. Test one submission in sandbox, confirm the production endpoint has not been switched, and write the manual fallback down with a name against it."
+		},
+		{
+			"kicker": "Lesson 9 · Rollback",
+			"title": "The plan you hope never to use",
+			"bullets": [
+				"A rollback plan is a backup taken immediately before the change plus a written way to restore it",
+				"Decide in advance who may call a rollback and how long the decision may take",
+				"Restoring a backup discards transactions made after it, so the window must be planned, not improvised",
+				"Rehearse the decision, not just the command: the technical step is easy, the business call is not",
+				"If the rollback needs a person who is on leave, the plan is not finished"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Take a backup immediately before the upgrade",
+						"(backup)",
+						"Archive with a timestamp minutes old"
+					],
+					[
+						"2",
+						"Note the transactions made during the window",
+						"(record)",
+						"A short, known list of documents"
+					],
+					[
+						"3",
+						"Agree the decision maker and the cut-off time",
 						"(agree)",
-						"Two names in the handover pack"
+						"Name in the upgrade ticket"
 					],
-					[
-						"2",
-						"Walk through adding a user with the right role",
-						"(shadow)",
-						"Owner does it, you watch"
-					],
-					[
-						"3",
-						"Add a warehouse and a price list together",
-						"(shadow)",
-						"Both created by the owner"
-					],
-					["4", "Change one print format", "(shadow)", "Format updated and printed"],
-					["5", "Agree the support route and response time", "(agree)", "Written terms"],
-					["6", "Run one week with no questions to you", "(wait)", "Quiet week, logged as evidence"]
-				]
-			},
-			"notes": "Handing over to a person rather than to a document is the difference between a project that ends and a project that never does. Name a deputy as well, because the owner takes leave, and the quiet week is the only real proof."
-		},
-		{
-			"kicker": "Lesson 6 · The weekly check",
-			"title": "Fifteen minutes that prevent most surprises",
-			"bullets": [
-				"Five checks: overnight jobs ran, error log is quiet, stock and ledger reconcile, pending documents are not aging, backups completed",
-				"The scheduler failing silently is the most common cause of a surprise a month later",
-				"Aged drafts mean work that never became a transaction, and reports do not see it",
-				"Log the check with a date and a name, so a quiet week is provable later",
-				"Hand the check to the client's owner by week four, and watch them run it twice"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Scheduled jobs ran", "No failures in the log", "Scheduled job log"],
-					["Error log quiet", "No new critical entries", "Error log"],
-					[
-						"Stock and ledger agree",
-						"Inventory value matches the account",
-						"Stock balance versus ledger"
-					],
-					["Aged drafts counted", "Under the agreed threshold", "Open documents by age"],
-					["Backups completed", "Last night, with files", "Backup log"],
-					["Check signed", "Date and name", "Weekly health sheet"]
-				]
-			},
-			"notes": "Fifteen minutes a week is the cheapest maintenance in the whole engagement, and the one most often skipped once the consultant leaves. Hand it over with a printed sheet, and make the signature part of the routine rather than an audit afterthought."
-		},
-		{
-			"kicker": "Lesson 7 · Adoption evidence",
-			"title": "Prove use, do not assert it",
-			"bullets": [
-				"Adoption is measurable: documents per week, users active, exceptions handled inside the system, print formats actually printed",
-				"A rising count of spreadsheets beside the system is the clearest sign of adoption failure",
-				"Look for workarounds: stock adjustments used as corrections, journals used as edits, one user posting for everyone",
-				"Interview two users per role and ask what they still do outside the system",
-				"Put the evidence in the ninety-day report with the baseline beside it"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Documents per week tracked", "Trend against go-live week", "Transaction counts"],
-					["Active users per role", "Most of the role, not one person", "User activity"],
-					[
-						"Exceptions handled in system",
-						"Returns, adjustments, cancellations",
-						"Document type counts"
-					],
-					["Spreadsheets retired", "Named files no longer maintained", "Client confirmation"],
-					["Interviews done", "Two per role", "Interview notes"]
-				]
-			},
-			"notes": "Adoption numbers are easy to fake accidentally, because a single power user can produce impressive volume. Count active users per role, and look for the workarounds that tell you the system is being used around rather than used."
-		},
-		{
-			"kicker": "Lesson 8 · Knowledge that stays",
-			"title": "A hundred pages nobody reads is not a handover",
-			"bullets": [
-				"Four artefacts beat a manual: the weekly sheet, the four-page SOP, the change register and the continuity section",
-				"Write for the person who joins in a year, with today's names replaced by roles",
-				"Every procedure starts with the trigger, not the tool: when this happens, do that",
-				"Keep one index page that says where everything is, including what is not in the system",
-				"Test the knowledge by asking the owner to answer a question from it without you"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Four artefacts exist", "Sheet, SOP, register, continuity", "Handover pack"],
-					["Written in roles, not names", "No departed names in procedures", "Read-through"],
-					["Triggers first", "Each procedure opens with when", "Same read-through"],
-					["Index page present", "One page, links to all", "Handover pack first page"],
-					["Owner answered a question from it", "Dated test", "Handover log"]
-				]
-			},
-			"notes": "Volume is the enemy of a handover. Four artefacts that get used beat a manual that gets filed. The role-versus-name test is quick and revealing: if the procedure names a person who left, it is already historical."
-		},
-		{
-			"kicker": "Lesson 9 · Metrics the client keeps",
-			"title": "Three numbers after you go",
-			"bullets": [
-				"Accuracy: stock count variance and ledger agreement, because everything else depends on it",
-				"Timeliness: how long a document takes from creation to submission, per cycle",
-				"Exceptions: cancellations, adjustments and manual journals per hundred transactions, which reveal process holes",
-				"A client watching three numbers will notice a change before it becomes a crisis",
-				"Agree who reads them and when, or they become a dashboard nobody opens"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Accuracy measured", "Variance per cent, monthly", "Count results"],
-					["Timeliness measured", "Days from creation to submit", "Document timestamps"],
-					["Exception rate measured", "Per hundred transactions", "Document type counts"],
-					["Reader named", "Role and frequency", "Operations calendar"],
-					["Trend shown", "Three months minimum", "Monthly pack"]
-				]
-			},
-			"notes": "Three numbers, read monthly by a named person, is a working control. The exception rate is the most diagnostic and the least used: a rising count of manual journals usually means a process nobody documented is happening every week."
-		},
-		{
-			"kicker": "Lesson 10 · The exit",
-			"title": "Ending well is part of the deliverable",
-			"bullets": [
-				"An exit is a dated moment with a signed handover, not a slow fade in response times",
-				"Close every open item explicitly: fixed, accepted, or transferred with a name against it",
-				"Return access you no longer need, and hand back the keys the client owns",
-				"Leave the successor's contact in writing, so the client knows who to call and why",
-				"Offer one optional review at quarter end, priced, so ongoing help is a choice rather than a dependency"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Close the open item list item by item",
-						"(review)",
-						"Fixed, accepted or transferred"
-					],
-					["2", "Sign the handover pack with the owner", "(sign)", "Dated signature page"],
-					["3", "Return or revoke your own access", "(disable)", "Your account closed"],
 					[
 						"4",
-						"Confirm the client holds every key and password",
-						"(check)",
-						"Key register complete"
+						"If triggered, restore the pre-upgrade backup",
+						"(restore)",
+						"Site returns to the recorded state"
 					],
-					["5", "Write the successor and support route", "(write)", "Contact page in the pack"],
-					["6", "Offer the quarter-end review in writing", "(propose)", "Dated offer, priced"]
+					[
+						"5",
+						"Re-enter the window transactions",
+						"(re-enter)",
+						"Documents restored from the recorded list"
+					],
+					["6", "Write a short incident note", "(write)", "Dated note in the handover pack"]
 				]
 			},
-			"notes": "The exit is judged by what the client can do the week after you leave, not by the closing meeting. Closing every item explicitly, returning access and naming the successor turns the end of a project into the start of a capability — which is the only outcome worth signing."
+			"notes": "Rollbacks fail for organisational reasons far more often than technical ones: nobody agreed who could call it, so an hour passes while people discuss. Fix that in the ticket — one name, one cut-off time — and make sure the pre-upgrade backup is taken minutes before the change, not the night before, so the transactions to replay are a short list rather than a day of trading."
+		},
+		{
+			"kicker": "Lesson 10 · The handover",
+			"title": "What goes in the continuity section",
+			"bullets": [
+				"Backup schedule, drill log with dates and elapsed times, and the owner of each",
+				"Version register with the pinned numbers and the date they were last confirmed",
+				"Upgrade calendar, approval name and the twenty-minute verification checklist",
+				"The e-Invoice fallback route, with the person who may execute it and the statutory window",
+				"A one-page index so the next consultant or the client's IT can find all of it in a minute"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Backup schedule attached", "Nightly, with-files, host named", "Handover pack"],
+					["Drill log present", "Dates, elapsed time, person", "Same section"],
+					["Version register current", "Exact versions and date confirmed", "Same section"],
+					["Upgrade checklist included", "Twenty-minute script, named owner", "Same section"],
+					["Fallback route written", "Portal path, owner, deadline", "Compliance annex"]
+				]
+			},
+			"notes": "Close the volume where you opened it: continuity is a document someone else can act on. If the client's IT can pick up this section and run a drill without calling you, the project is finished in the way that matters. Read the index out loud in the final session, hand it over on paper as well as in the repository, and name the person responsible for each line."
 		}
 	],
 	"lab": {
-		"title": "Lab · Run a ninety-day close-out for Seri Murni",
-		"minutes": 70,
+		"title": "Lab · Evidence continuity for Seri Murni in one afternoon",
+		"minutes": 65,
 		"steps": [
-			"Draw the hypercare rhythm on one page and run the morning check with a name and time against it",
-			"Triage a twenty-item fix list into wrong number, blocked and cosmetic, then publish three dates",
-			"Prepare the day-thirty review with four numbers compared against the go-live baseline",
-			"Run the second-user test on order to delivery and record every hesitation without helping",
-			"Perform the fifteen-minute weekly health check and sign the sheet",
-			"Collect adoption evidence per role and name the spreadsheets that have actually been retired",
-			"Sit with the internal owner while they add a user, a warehouse and a print format themselves",
-			"Complete the exit: close every open item, sign the handover, revoke your own access, offer one dated quarterly review"
+			"Inspect the hosting console and record the backup schedule, retention and whether files are included",
+			"Download the latest backup set and confirm the timestamps match last night's schedule",
+			"Create a scratch site, restore the set into it and time the restore with a stopwatch",
+			"Log in as a normal user, open last night's invoice and confirm the attachment opens",
+			"Write the drill entry: date, elapsed minutes, person, and what failed if anything did",
+			"Take a production backup into staging, run any available patch on staging, then execute the five checks",
+			"Switch the e-Invoice endpoint to sandbox and submit one document, then confirm production credentials are untouched",
+			"Complete the version register, the upgrade calendar with an approver, and the one-page index for the handover pack"
 		],
-		"done": "A dated ninety-day close-out with a signed weekly health sheet, a published triage, an ownership test passed by a second user, adoption numbers per role, and an exit where the client holds every key and your access is closed."
+		"done": "A dated drill log with an elapsed time, a staging site restored from production, a signed twenty-minute verification, and a continuity section the client's IT could follow without you."
 	},
 	"quiz": [
 		{
-			"question": "What gives hypercare its structure in the first week?",
+			"question": "Why is a nightly backup that has never been restored not evidence of continuity?",
 			"options": [
-				"A hotline number",
-				"A fixed morning check, same-day triage and one written update per day",
-				"A daily meeting with everyone",
-				"An open-ended support contract"
+				"Because backups are only valid for thirty days",
+				"Because nobody knows whether it restores, how long it takes or whether files and the encryption key are usable",
+				"Because ERPNext backups exclude the database",
+				"Because hosting providers do not keep backups"
 			],
 			"answer": 1,
-			"why": "A rhythm produces a heartbeat the client can rely on and a record of what happened. An open hotline produces neither, and memories of week one are always wrong."
+			"why": "A backup is a hypothesis until a drill proves it. The drill produces the two facts that matter: the restore works, and the business can be trading again in a known number of minutes."
 		},
 		{
-			"question": "In a fix-list triage, which category outranks the others?",
+			"question": "What must be stored separately from the backup itself?",
 			"options": [
-				"Cosmetic complaints from the loudest user",
-				"Wrong numbers, because trust in the ledger is the product",
-				"Blocked work",
-				"Anything raised by the champion"
+				"The chart of accounts",
+				"The site encryption key, without which a restored site cannot read encrypted data",
+				"The print formats",
+				"The list of saved filters"
 			],
 			"answer": 1,
-			"why": "A wrong number undermines every report built on it. Blocked work is usually training or permission; cosmetic items can be batched. A published rule stops volume deciding."
+			"why": "The site configuration holds the database password and the encryption key, and it is not inside the backup. Losing the key leaves a restored site unable to decrypt data it still holds."
 		},
 		{
-			"question": "What does the second-user test actually prove?",
+			"question": "Why does staging need production-like data rather than an empty site?",
 			"options": [
-				"That training was delivered",
-				"That somebody other than the champion can complete a core cycle unaided",
-				"That the system is fast",
-				"That permissions are correct"
+				"Because empty sites cannot be upgraded",
+				"Because many failures depend on the data and configuration, not the code",
+				"Because staging must be licensed separately",
+				"Because reports need rows to render"
 			],
 			"answer": 1,
-			"why": "It measures capability rather than attendance. Watching without helping is what exposes the hesitations that documentation or design should have prevented."
+			"why": "Custom fields, print formats, workflow states and real document shapes are where upgrades break. An empty staging site tests the code path only, which is the smallest part of the risk."
 		},
 		{
-			"question": "Which weekly health check failure most often causes a surprise a month later?",
+			"question": "Which artefact usually breaks first after an upgrade, and most visibly?",
 			"options": [
-				"A quiet error log",
-				"A scheduler that stopped running without anyone noticing",
-				"Aged drafts",
-				"Backups completing late"
+				"The General Ledger report",
+				"Custom print formats, especially those referencing renamed fields",
+				"The chart of accounts",
+				"User permissions"
 			],
 			"answer": 1,
-			"why": "Silent scheduler failures mean recurring documents and jobs simply stop, and nobody notices until a number is missing at month end."
+			"why": "Print formats are HTML that names fields directly, so a renamed field turns an invoice PDF into an error or a blank. Clients print invoices before they read reports, which makes it the first visible failure."
 		},
 		{
-			"question": "What is the clearest evidence that adoption has failed despite busy transaction counts?",
+			"question": "What makes a rollback plan genuinely usable?",
 			"options": [
-				"Users complain about speed",
-				"Spreadsheets proliferate beside the system to get the work done",
-				"Documents are submitted late",
-				"The error log grows"
+				"A script that restores the last nightly backup",
+				"A backup taken minutes before the change, a named decision maker and a cut-off time",
+				"A support ticket with the hosting provider",
+				"A documented list of every change made since go-live"
 			],
 			"answer": 1,
-			"why": "Parallel spreadsheets mean the real work is happening outside, often done by one power user whose volume makes the dashboard look healthy."
+			"why": "Rollbacks fail organisationally more often than technically. A backup minutes old keeps the replay list short, and a named decision maker with a cut-off time stops an hour being lost to discussion."
 		}
 	],
 	"memory": {
-		"spine": "Rhythm for the first week, triage by consequence, prove adoption with numbers, and leave a named owner who never needs you.",
+		"spine": "Pin the versions, prove the restore, test on staging, and let one named person approve the upgrade.",
 		"device": {
-			"kind": "path",
-			"label": "Week, month, quarter, exit",
+			"kind": "rule",
+			"label": "Backup, prove, stage, pin",
 			"expansion": [
-				"Week one: morning check, same-day triage, one written update a day",
-				"Month one: numbers at day thirty, three agreed actions with owners",
-				"Month two: a second user completes a weekly cycle unaided while you watch",
-				"Month three: the internal owner configures a user, a warehouse and a print format",
-				"Exit: every item closed, keys handed back, your access revoked, one dated offer"
+				"Backup, and store the encryption key somewhere the backup cannot reach",
+				"Prove it with a timed restore drill into a scratch site, logged with a date",
+				"Stage the upgrade on a site holding production-like data, never on production itself",
+				"Pin the versions, schedule the window, and review the changelog before the change",
+				"One named approver, one cut-off time, and a twenty-minute verification afterwards"
 			]
 		},
 		"cards": [
 			{
-				"q": "What three things shape a hypercare week?",
-				"a": "A morning check with a name and time, same-day triage of anything wrong, and one written update per day. Everything else is optional.",
-				"hint": "Check, triage, update"
+				"q": "What two facts does a restore drill give the client?",
+				"a": "That the backup actually restores, and how many minutes the business needs before it can trade again. Both belong in the handover pack.",
+				"hint": "Time it out loud"
 			},
 			{
-				"q": "How should a fix list be split, and in what order?",
-				"a": "Wrong numbers first, then blocked work, then cosmetic in one agreed batch — and publish the rule so volume does not decide.",
-				"hint": "Numbers before noise"
+				"q": "Why does staging need a copy of production data?",
+				"a": "Upgrades break on custom fields, print formats and workflow states, which live in the data and configuration rather than in the code.",
+				"hint": "Empty sites prove little"
 			},
 			{
-				"q": "Why is the second-user test more valuable than a training record?",
-				"a": "It measures capability: a non-champion completes a weekly cycle unaided while you watch in silence, exposing hesitations that training missed.",
-				"hint": "Watch, don't help"
+				"q": "What belongs in the version register?",
+				"a": "The exact Frappe, ERPNext and custom app versions, pinned at go-live, with the date each was last confirmed and who confirmed it.",
+				"hint": "Numbers, dates, names"
 			},
 			{
-				"q": "Which five checks make up the weekly health routine?",
-				"a": "Scheduled jobs ran, error log quiet, stock and ledger agree, aged drafts counted, backups completed — signed with a date and a name.",
-				"hint": "Fifteen minutes"
+				"q": "Which five checks make up the post-upgrade verification?",
+				"a": "Log in as a normal user, submit a test invoice, print it, run two saved reports, and submit one e-Invoice in sandbox.",
+				"hint": "Twenty minutes, five checks"
 			},
 			{
-				"q": "What does a good exit actually deliver?",
-				"a": "Every open item closed as fixed, accepted or transferred, keys handed back, your access revoked, a named successor, and one dated optional review.",
-				"hint": "Capability, not farewell"
+				"q": "What makes a rollback plan usable rather than aspirational?",
+				"a": "A backup taken minutes before the change, a named decision maker, a cut-off time, and a short recorded list of transactions to replay.",
+				"hint": "One name, one time"
 			}
 		],
 		"trap": {
-			"what": "Hypercare drifts: response times lengthen quietly, the champion is the only user, and the consultant is still answering questions in month nine.",
-			"why": "Dependence feels like success and is the opposite. Set the exit date at the start, hand over to a named owner with a deputy, publish three numbers the client reads, and close every item explicitly when the date arrives."
+			"what": "The client says 'the hosting provider handles backups' and signs off go-live without a drill.",
+			"why": "Handled is not proven. Ask for the schedule in writing, run one timed restore into a scratch site, log the result, and make an unproven restore a go-live blocker rather than a footnote."
 		}
 	},
-	"narration": "Go live is a launch, not an ending, and the ninety days after it decide whether the client owns a system or rents one. The first week needs a rhythm rather than a hotline: a morning check with a name and a time, same day triage of anything wrong, and one written update every day. Then triage the fix list by consequence. Wrong numbers first, because trust in the ledger is the product, then blocked work, which is usually training or a permission, then the cosmetic items in one agreed batch with a published rule so volume does not decide. At day thirty bring four numbers compared against the go-live baseline, and agree three actions with owners. At day sixty watch a second user, not the champion, complete a weekly cycle unaided, and record every hesitation as a defect rather than a training gap. At day ninety hand over to a named internal owner and a deputy, who can add a user, a warehouse and a print format without calling you. Along the way run the fifteen minute weekly check, prove adoption with counts per role instead of anecdotes, and finish with a dated exit: every item closed, keys handed back, your access revoked, and one optional review priced in writing."
+	"narration": "Volume ten ends where most projects are weakest: what happens after go-live, on the day something breaks. Continuity is a consultant deliverable even though the commands belong to somebody else. Pin the versions you went live on and write them in a register. Check with the hosting provider that the nightly backup includes files, and store the site encryption key somewhere the backup cannot reach, because a restored site without its key cannot read what it holds. Then prove it: restore into a scratch site, time it with a stopwatch, log the elapsed minutes with a date and a person, and attach that log to the handover pack. Before every upgrade, restore production data into staging and test there, because print formats, workflows and saved reports break on data and configuration, not just code. Keep one named approver and a cut-off time so a rollback decision takes minutes rather than an argument. Afterwards, twenty minutes of verification: log in as a normal user, submit a test invoice, print it, run two saved reports, and submit one e-Invoice in sandbox. Then sign the ticket and hand the whole section over."
 }

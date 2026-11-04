@@ -1,346 +1,454 @@
 {
 	"id": "ch23",
 	"number": 23,
-	"title": "Volume 8 · Print Formats, Naming and Notifications",
-	"subtitle": "Lessons 1–4: documents the customer can read, series numbers that survive an audit, and notifications that arrive once",
+	"title": "Volume 8 · Assets, Quality and CRM",
+	"subtitle": "Lessons 5–8: capitalise and depreciate a van, inspect what arrives, and convert a lead into a priced quotation",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 65,
 	"outcomes": [
-		"Build a print format from the builder without writing code",
-		"Set naming series per document type and branch so numbering stays gapless",
-		"Configure a notification that fires on the right event and only once",
-		"Standardise letterheads and terms so every document looks like one company"
+		"Capitalise a purchase as an asset and post depreciation every month",
+		"Use quality inspection to reject goods before they reach stock",
+		"Move a lead through opportunity to a priced quotation without losing the trail",
+		"Decide which of these three modules a distributor should switch on first"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Print format",
-			"title": "Design a print format the customer will read",
+			"kicker": "Lesson 5 · Fixed assets",
+			"title": "Capitalise the van instead of expensing it",
 			"bullets": [
-				"The print format builder gives you sections, fields and totals without a line of code",
-				"Print only the fields the customer needs: prices, quantities, tax and terms",
-				"Test with a real document, because a short address or a long item name breaks layouts",
-				"Attach a letterhead, or every invoice leaves the building looking improvised"
+				"An asset purchase is a purchase invoice with an asset item, which creates the asset record",
+				"Useful life and depreciation method are accounting policy, so get them signed off",
+				"Six figures of van on the balance sheet is very different from six figures of expense",
+				"Every asset needs a location and a custodian, or the register is fiction"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Printing → Print Format → New",
-						"Document type Sales Invoice, standard format",
-						"Builder canvas with sections"
+						"Create the asset item",
+						"SM-VAN, is fixed asset, asset category Vehicles",
+						"Item flagged for capitalisation"
 					],
 					[
 						"2",
-						"Add header fields",
-						"Customer name, address, invoice number, date, due date",
-						"Header block defined"
+						"Purchase invoice",
+						"Van 60,000.00 from the dealer, no stock effect",
+						"Asset created automatically"
 					],
 					[
 						"3",
-						"Add the items table",
-						"Item, quantity, rate, amount, tax",
-						"Table with five columns"
+						"Open the asset",
+						"Location Main, custodian warehouse supervisor",
+						"Asset ACC-0001"
 					],
-					["4", "Add totals", "Net total, tax, grand total", "Totals block"],
 					[
-						"5",
-						"Attach letterhead",
-						"Seri Murni Sdn Bhd with registration and SST number",
-						"Branded footer and header"
+						"4",
+						"Check the category",
+						"5 years straight line, 0 salvage",
+						"Monthly depreciation 1,000.00"
 					],
-					["6", "Preview", "Invoice SINV-SM-2026-0010", "One page, totals 3,240.00 with tax 240.00"]
+					["5", "Submit the invoice", "Confirm", "Asset status Submitted, value 60,000.00"],
+					["6", "Read the balance sheet", "31-01-2026", "Fixed assets 60,000.00"]
 				]
 			},
-			"notes": "A print format is the only part of ERPNext most customers ever see, and it is judged in five seconds. Two rules cover most of it: put the tax number and the amount due at the bottom where people look, and never print internal fields such as cost or margin. Preview with the longest item name and the shortest address you can find."
+			"notes": "Sixty thousand over five years is twelve thousand a year, or one thousand a month, and that is the number the client's accountant will check first. Capitalising also keeps the profit and loss statement readable, because a van is not a January cost. Get the category approved in writing before the first invoice, since changing depreciation method later means a restatement."
 		},
 		{
-			"kicker": "Lesson 2 · Verify the print",
-			"title": "What a Malaysian invoice must show",
+			"kicker": "Lesson 6 · Depreciation",
+			"title": "Post depreciation monthly, not annually in a panic",
 			"bullets": [
-				"Company name, registration and SST number are not optional on a tax invoice",
-				"Invoice number, date, customer details and item description must be legible",
-				"Tax must be shown as a separate amount, not folded into the rate",
-				"Terms and payment instructions reduce the number of calls to accounts"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Company registration and SST number", "both printed", "Print preview header"],
-					["Invoice number and date", "SINV-SM-2026-0010, 10-02-2026", "Print preview"],
-					["Net, tax and total", "3,000.00, 240.00, 3,240.00", "Totals block"],
-					["Payment terms", "Net 30, due 12-03-2026", "Footer"],
-					["Internal fields", "cost and margin absent", "Read the whole page"]
-				]
-			},
-			"notes": "The three totals on the page must match the document to the cent, because an invoice that disagrees with the ledger is the fastest way to lose an accountant's confidence. Print one invoice and reconcile it line by line against the form before you hand the client a template. It takes five minutes and prevents months of quiet distrust."
-		},
-		{
-			"kicker": "Lesson 3 · Naming series",
-			"title": "Series numbers that survive an audit",
-			"bullets": [
-				"Naming series control document numbers, and gaps are the first thing an auditor asks about",
-				"Use the prefix fields rather than renaming series mid-year",
-				"Each branch or company needs its own series when documents are filed separately",
-				"Cancelled documents keep their number, because a reused number is worse than a gap"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Open Sales Invoice", "Settings → Naming Series", "Series pattern editor"],
-					["2", "Set the pattern", "SINV-SM-2026-.#####", "Example SINV-SM-2026-00010"],
-					["3", "Set the current value", "10 to continue after the last invoice", "Next number 11"],
-					["4", "Save and create a document", "New sales invoice", "Number SINV-SM-2026-00011"],
-					["5", "Cancel a document", "Cancel the new invoice", "Number stays used, not reused"],
-					["6", "Check the next", "Create another invoice", "Number SINV-SM-2026-00012"]
-				]
-			},
-			"notes": "Gaps are acceptable when a document was cancelled; they are not acceptable when a series was renamed or restarted. Explain that distinction once, and the client's auditor will stop raising it as a finding. Align the prefix with the year and the company abbreviation, because the number is often the only identifier on a customer's remittance advice."
-		},
-		{
-			"kicker": "Lesson 4 · Notifications",
-			"title": "Send the right message once, at the right moment",
-			"bullets": [
-				"A notification watches one document event and applies a condition you write in plain fields",
-				"Send too many and people filter them, so target the exception rather than the routine",
-				"Use the document's own fields in the subject so the message is useful without opening it",
-				"Test with a real document and check the recipient list, not just your own inbox"
+				"Depreciation is a journal the system generates from the schedule",
+				"Straight line on sixty thousand over five years is one thousand a month",
+				"Accumulated depreciation is a separate account, so the asset keeps its cost",
+				"Year-end catch-up postings are a symptom of a missing monthly routine"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Settings → Notification → New",
-						"Document type Sales Order, event Submit",
-						"Condition builder"
+						"Assets → Depreciation → Process Depreciation",
+						"Company SM, 31-01-2026",
+						"Assets due for depreciation"
 					],
-					["2", "Set the condition", "grand_total greater than 5000", "Condition saved"],
-					["3", "Set recipients", "Role Sales Manager and the owner", "Two recipients defined"],
-					[
-						"4",
-						"Compose the message",
-						"Subject with order number, customer and total",
-						"Template stored"
-					],
-					["5", "Submit a 6,000.00 order", "Sales order for Aeon Big", "One email sent"],
-					["6", "Submit a 1,200.00 order", "Below the threshold", "No email sent"]
+					["2", "Review the schedule", "Van, 1,000.00 for the month", "Single line preview"],
+					["3", "Submit", "Confirm", "Depreciation entry created"],
+					["4", "Read the asset", "ACC-0001", "Accumulated 1,000.00, net book value 59,000.00"],
+					["5", "Read the GL", "Depreciation expense account", "Debit 1,000.00"],
+					["6", "Repeat monthly", "Same routine on the last day", "Twelve entries per year"]
 				]
 			},
-			"notes": "Notifications are cheap to create and expensive to overuse, so the rule is one message per exception. A six thousand order triggering a note to the sales manager is a control; every order triggering a note is noise. Test with a document above and a document below the threshold, and check that the message arrives once rather than once per recipient plus the queue."
+			"notes": "After twelve months the net book value is forty eight thousand, and the depreciation expense for the year is twelve thousand. Ask the learner to state both before opening the report, because those two figures are what the auditor tests. If the client only posts at year end, the monthly management accounts are wrong all year, which undermines every other number the consultant produced."
 		},
 		{
-			"kicker": "Lesson 4 · Verify notifications",
-			"title": "One message, one recipient list, one test",
+			"kicker": "Lesson 7 · Quality",
+			"title": "Inspect what arrives before it becomes stock",
 			"bullets": [
-				"A notification that fires twice trains people to ignore it, which defeats the control",
-				"Recipients should be roles or owners, not a typed list that rots after a resignation",
-				"The message must be useful without opening the document: number, customer, amount",
-				"Test above and below the condition, and check the queue for duplicates"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Email for a 6,000.00 order", "exactly one", "Recipient inbox and Email Queue"],
-					["Email for a 1,200.00 order", "none", "Recipient inbox"],
-					["Recipients", "Sales Manager role plus document owner", "Notification definition"],
-					["Subject line", "order number, customer and total present", "The received email"],
-					["Document link", "opens the submitted order", "Click the link in the email"]
-				]
-			},
-			"notes": "A notification is a control only if it is reliable, so test the failure case as carefully as the success case. Duplicate emails usually come from two notifications watching the same event, which is worth checking in the list before blaming the system. Keep one notification per exception and delete the rest."
-		},
-		{
-			"kicker": "Lesson 5 · Letterhead and terms",
-			"title": "Make every document look like one company",
-			"bullets": [
-				"A letterhead holds the logo, address and registration details used across all documents",
-				"Terms and conditions templates attach to quotations, orders and invoices without retyping",
-				"Both are configuration, so the client's team can maintain them after handover",
-				"Set a default so nobody has to remember to pick the right template"
+				"Quality inspection sits between the receipt and the warehouse when configured that way",
+				"Rejected quantity stays out of sellable stock, which is the entire point",
+				"Each inspection needs parameters with numeric ranges, or it is a tick box",
+				"Quality results feed the supplier conversation, so keep them per supplier"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Settings → Letterhead → New",
-						"Company name, address, registration, SST number",
-						"Letterhead saved"
+						"Quality → Quality Inspection Template",
+						"Visual check, parameters Appearance and Function",
+						"Template saved"
 					],
-					["2", "Attach the image", "Logo at 200 pixels wide", "Logo renders on preview"],
+					[
+						"2",
+						"Attach to the item",
+						"SM-BL200 requires inspection on purchase",
+						"Inspection required flag"
+					],
 					[
 						"3",
-						"Create terms",
-						"Terms and Conditions template Payment Terms",
-						"Template body stored"
+						"Receive 10 units",
+						"Purchase receipt against the order",
+						"Quality inspection generated"
 					],
 					[
 						"4",
-						"Set defaults",
-						"Company → default letterhead and terms",
-						"Applied to new documents"
+						"Record results",
+						"9 accepted, 1 rejected for a cracked housing",
+						"Rejected quantity 1"
 					],
-					["5", "Print a quotation", "QT-SM-2026-0003", "Header, terms and footer all present"],
-					["6", "Hand over", "Show the client how to edit both", "They maintain it themselves"]
+					["5", "Submit the inspection", "Confirm", "Receipt proceeds with 9 units"],
+					["6", "Check stock", "Bin at Main", "9 units received, not 10"]
 				]
 			},
-			"notes": "These two settings are what make a system look finished, and they are also the easiest handover win. Show the client's administrator how to change an address or a term without a consultant, and they stop calling you for the small things. That is a commercial decision as much as a technical one."
+			"notes": "One rejected unit means nine accepted, and the supplier conversation now has a document behind it. Quality is often sold as a compliance feature, but its real value in distribution is the argument it wins with a supplier who disputes a return. If a client rejects inspection as bureaucracy, ask them what evidence they use today."
 		},
 		{
-			"kicker": "Volume 8 · Reference",
-			"title": "What a consultant configures without code",
+			"kicker": "Lesson 8 · CRM",
+			"title": "From lead to opportunity to priced quotation",
 			"bullets": [
-				"Everything in this volume is standard configuration, so it survives an upgrade",
-				"Print, series, notifications, letterhead and terms are all client-maintainable",
-				"Custom code is out of scope for a functional consultant, and usually unnecessary",
-				"Each item below has a named owner after handover"
+				"A lead is an unqualified contact; an opportunity is a deal with a value and a date",
+				"Converting keeps the trail, which is what makes pipeline reporting possible",
+				"The quotation carries the price, and it is the first document a customer sees",
+				"Every opportunity needs a probability and a territory, or the pipeline report lies"
 			],
 			"table": {
-				"headers": ["Configuration", "Where", "Owner after go-live", "Risk if ignored"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["Print format", "Printing → Print Format", "Admin", "Documents look unbranded"],
+					["1", "CRM → Lead → New", "Aeon Big, contact and source Trade show", "Lead LD-0001"],
 					[
-						"Naming series",
-						"Document settings",
-						"Finance manager",
-						"Duplicate or gapless-invalid numbers"
+						"2",
+						"Convert to opportunity",
+						"10 blenders, value 2,400.00, close date 20-02-2026",
+						"Opportunity OPP-0001"
 					],
+					["3", "Set probability", "60 per cent, territory Selangor", "Weighted value 1,440.00"],
 					[
-						"Notification",
-						"Settings → Notification",
-						"Sales manager",
-						"Exceptions discovered late"
+						"4",
+						"Create the quotation",
+						"10 SM-BL200 at 240.00 plus SST",
+						"Quotation 2,640.00 total"
 					],
-					["Letterhead", "Settings → Letterhead", "Admin", "Inconsistent customer documents"],
-					["Terms template", "Settings → Terms", "Finance manager", "Terms retyped and mistyped"]
+					["5", "Send and track", "Status Open, valid 30 days", "Quotation in the pipeline"],
+					[
+						"6",
+						"Review the pipeline",
+						"CRM → Opportunity pipeline",
+						"Weighted pipeline includes 1,440.00"
+					]
 				]
 			},
-			"notes": "This page is the answer when a client asks for a custom print script: everything they actually want is here, in configuration, and it will still work after the next upgrade. Say that with confidence, because a functional consultant who reaches for code has left their own discipline."
+			"notes": "Sixty per cent of twenty four hundred is fourteen hundred forty, and that weighted number is what a sales director actually manages. Without probability and territory, the pipeline report is a list of hopes. The quotation itself is ordinary work, but the trail from lead to opportunity to quotation to order is what lets the owner see conversion rates for the first time."
 		},
 		{
-			"kicker": "Volume 8 · Reference",
-			"title": "Testing print and notification changes",
+			"kicker": "Lesson 6 · Verify depreciation",
+			"title": "Schedule, ledger and register agree",
 			"bullets": [
-				"Test with a real document in a real state, never with a blank form",
-				"Check the edge cases: long names, many lines, zero tax, foreign currency",
-				"Keep a before and after copy of each template, so a change can be reversed",
-				"Re-test after every upgrade, because print and notifications are the first casualties"
+				"The asset, the ledger and the register must show the same accumulated amount",
+				"Net book value falls by the monthly charge, and the expense sits in the right period",
+				"A missed month is visible immediately in the schedule, not at year end",
+				"Disposal later depends on this schedule being correct today"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Invoice prints on one page", "yes, including terms", "Print preview"],
-					["Totals match the document", "3,240.00 with 240.00 tax", "Compare form and print"],
-					["Series continues", "next number sequential", "New document"],
-					["Notification fires once", "one email for a 6,000.00 order", "Recipient inbox"],
-					["Notification silent below threshold", "no email for 1,200.00", "Recipient inbox"]
+					["Monthly depreciation", "1,000.00", "Asset → Depreciation Schedule"],
+					["Accumulated depreciation after January", "1,000.00", "Asset ACC-0001"],
+					["Net book value", "59,000.00", "Asset register"],
+					["Depreciation expense", "1,000.00", "Profit and Loss Statement, January"],
+					["Balance sheet fixed assets", "59,000.00", "Balance Sheet, 31-01-2026"]
 				]
 			},
-			"notes": "Testing is where most consultants lose an afternoon, so make it a checklist rather than an experiment. Five checks, five minutes, and the client sees a document they are happy to send. When an upgrade arrives, run the same five and you know within ten minutes whether anything broke."
+			"notes": "Three views of one number again: the schedule, the asset record and the balance sheet. When they agree, the client can file the month without adjustment. When they disagree, the cause is nearly always a depreciation entry posted in a closed period or an asset created after the run date, and both are one-minute fixes."
+		},
+		{
+			"kicker": "Lesson 8 · Verify the pipeline",
+			"title": "What the CRM numbers actually prove",
+			"bullets": [
+				"Weighted pipeline equals value times probability, summed across open opportunities",
+				"A quotation without an opportunity is a document with no history",
+				"Conversion rate is the number a sales director will ask for first",
+				"Data quality in CRM is measured by how many fields are blank"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Opportunity value", "2,400.00", "Opportunity OPP-0001"],
+					["Probability", "60 per cent", "Opportunity form"],
+					["Weighted pipeline", "1,440.00", "CRM pipeline report"],
+					["Quotation", "2,640.00 including SST", "Quotation QT-SM-2026-0003"],
+					[
+						"Conversion rate this month",
+						"leading indicator, not yet a rate",
+						"CRM → Lead and Opportunity analysis"
+					]
+				]
+			},
+			"notes": "The weighted figure of fourteen hundred forty is the only CRM number a manager should act on weekly, because it changes with probability rather than with optimism. Quotation total of two thousand six hundred forty is where the tax enters and where sales and finance usually disagree. Show both on one page and the pipeline meeting becomes a forecast rather than a wish list."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "What to switch on first for a distributor",
+			"bullets": [
+				"Assets are mandatory once a client owns vehicles or equipment above their capitalisation threshold",
+				"Quality is worth it when returns or supplier disputes are a recurring cost",
+				"CRM pays only if someone owns the pipeline weekly, otherwise it becomes a data graveyard",
+				"Each module adds a control the client must operate, so sequence them"
+			],
+			"table": {
+				"headers": ["Module", "Switch on when", "First control", "Cost of skipping it"],
+				"rows": [
+					[
+						"Fixed assets",
+						"Any capital purchase above the threshold",
+						"Monthly depreciation run",
+						"Expenses hit one month, audit finding"
+					],
+					[
+						"Quality",
+						"Recurring returns or supplier disputes",
+						"Reject before stock",
+						"Returns processed after the sale"
+					],
+					[
+						"CRM",
+						"A named person owns the pipeline",
+						"Weekly pipeline review",
+						"Quotations with no history"
+					],
+					[
+						"Projects",
+						"Billable service work",
+						"Timesheets approved weekly",
+						"Unbilled work at year end"
+					],
+					[
+						"Subcontracting",
+						"External processing steps",
+						"Subcontractor stock at zero",
+						"Material lost off site"
+					]
+				]
+			},
+			"notes": "Sequencing is the consultant's judgement call, and this table is the argument to have with the client before the proposal. A distributor with three vans needs assets in phase one; a trader who sells on quotation needs CRM before panels. Say what you would switch on first, and say what you would leave until year two."
+		},
+		{
+			"kicker": "Volume 8 · Reference",
+			"title": "The three reports that keep these modules honest",
+			"bullets": [
+				"Asset register value must equal the fixed asset control account",
+				"Quality rejection rate by supplier is the number that changes behaviour",
+				"Pipeline weighted value must match the opportunities it sums, without duplicates",
+				"All three are monthly reads, not annual ones"
+			],
+			"table": {
+				"headers": ["Report", "Expected figure", "Where to look", "Question it answers"],
+				"rows": [
+					[
+						"Asset register",
+						"59,000.00 net book value after January",
+						"Assets → Asset register",
+						"What do we own and what is it worth"
+					],
+					[
+						"Fixed asset control",
+						"59,000.00 in the balance sheet",
+						"Balance Sheet",
+						"Does the ledger agree"
+					],
+					[
+						"Quality rejection rate",
+						"10 per cent for this receipt",
+						"Quality Inspection analysis",
+						"Which supplier costs us returns"
+					],
+					[
+						"Weighted pipeline",
+						"1,440.00 for this opportunity",
+						"CRM → Opportunity pipeline",
+						"What will we sell next month"
+					],
+					[
+						"Depreciation for the month",
+						"1,000.00",
+						"Profit and Loss Statement",
+						"Is the cost in the right period"
+					]
+				]
+			},
+			"notes": "Reconciling the asset register to the control account is the same discipline as debtors and creditors, and it takes two minutes a month. Quality rejection rate and weighted pipeline are softer, but each has a single number a manager can act on. Give the client these five rows as the monthly read, and the modules earn their place."
+		},
+		{
+			"kicker": "Lesson 9 · Attribution",
+			"title": "Where the lead actually came from",
+			"bullets": [
+				"A source field on the lead is worth more than a campaign record nobody fills in",
+				"Attribution answers the question the client asks after two quarters: which channel produces paying customers",
+				"Keep the list of sources short and closed, or the field fills with free text and stops reporting",
+				"Carry the source from lead to opportunity to quotation, so the conversion is traceable end to end",
+				"Weighted value is a forecast, not a promise, and it should be labelled as one"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Define five sources and no more",
+						"Walk-in, Referral, Website, Event, Outbound",
+						"Closed list on the lead"
+					],
+					["2", "Create three leads with different sources", "(create)", "Source recorded on each"],
+					["3", "Convert one to an opportunity", "(convert)", "Source carried over"],
+					["4", "Quote the opportunity", "1,200.00", "Quotation linked to the opportunity"],
+					["5", "Set probability and read weighted value", "60%, 720.00", "Weighted value shown"],
+					["6", "Report conversion by source", "(report)", "Rows per source, not blanks"]
+				]
+			},
+			"notes": "Attribution is only as good as the list behind it. Five closed options produce a report; free text produces a field that looks populated and reports nothing. Carry the source through the conversion, or the interesting question — which channel closes — stays unanswerable."
+		},
+		{
+			"kicker": "Lesson 10 · Verify the pipeline",
+			"title": "What the CRM numbers must prove",
+			"bullets": [
+				"A pipeline that only counts opportunities is a wish list; it must show ageing and next action",
+				"Every open opportunity needs a next action and a date, or it is a record nobody is working",
+				"A service contract attached to an asset closes the loop with the service desk",
+				"Conversion rates per source are the only CRM number a managing director acts on",
+				"Clean the pipeline monthly, closing lost opportunities with a reason rather than deleting them"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Every opportunity has a next action",
+						"Zero blanks",
+						"Opportunity list, filter on next action"
+					],
+					["Ageing visible", "Days since last activity", "Same list"],
+					["Lost reasons recorded", "Reason on every closed-lost", "Closed opportunities"],
+					["Conversion by source", "Percentages per source", "Conversion report"],
+					["Service contract on asset", "Contract linked to serial", "Asset record"]
+				]
+			},
+			"notes": "The next-action field is the whole discipline. A pipeline where every row has an owner and a date gets worked; one where rows have neither becomes a museum of good intentions that nobody trusts, and the client quietly returns to a spreadsheet."
 		}
 	],
 	"lab": {
-		"title": "Lab · Brand the invoice, set the series and trigger one notification",
+		"title": "Lab · Capitalise a van, depreciate it, inspect a receipt and convert a lead",
 		"minutes": 45,
 		"steps": [
-			"Create a letterhead with the company registration and SST number",
-			"Build a sales invoice print format with header, items and totals",
-			"Preview an invoice and confirm net 3,000.00, tax 240.00 and total 3,240.00",
-			"Set the naming series to SINV-SM-2026-.##### and continue from the last number",
-			"Create and cancel a document to confirm the number is not reused",
-			"Create a notification for sales orders above 5,000.00 on submit",
-			"Submit a 6,000.00 order and confirm exactly one email",
-			"Submit a 1,200.00 order and confirm no email"
+			"Create the asset item and purchase the van for 60,000.00 on a purchase invoice",
+			"Confirm the asset category produces 1,000.00 of monthly depreciation",
+			"Run depreciation for January and confirm net book value of 59,000.00",
+			"Confirm the depreciation expense of 1,000.00 in the profit and loss statement",
+			"Set up a quality inspection template and attach it to SM-BL200",
+			"Receive 10 units, reject 1 and confirm only 9 reach stock",
+			"Create a lead for Aeon Big and convert it to a 2,400.00 opportunity",
+			"Produce the quotation for 2,640.00 including SST and check the weighted pipeline"
 		],
-		"done": "Done when a printed invoice carries the registration and SST number with totals matching the ledger, the series is sequential without reuse, and the notification fires only above the threshold."
+		"done": "Done when the van shows 59,000.00 net book value, nine units were received after inspection, and the opportunity carries a 1,440.00 weighted value with a live quotation."
 	},
 	"quiz": [
 		{
-			"question": "Where do you build a print format without code?",
-			"options": ["Custom script", "Print Format Builder", "Server script", "Jinja file"],
+			"question": "A 60,000.00 asset with a five year straight line life depreciates monthly by what?",
+			"options": ["500.00", "1,000.00", "5,000.00", "12,000.00"],
 			"answer": 1,
-			"why": "The Print Format Builder assembles sections, fields and totals through configuration, which survives upgrades and needs no development."
+			"why": "60,000 divided by five years is 12,000 a year, or 1,000.00 a month over twelve periods."
 		},
 		{
-			"question": "Why must cancelled documents keep their numbers?",
+			"question": "What does the asset register value reconcile to?",
 			"options": [
-				"To save space",
-				"Because reusing a number breaks the audit trail",
-				"So tax can be claimed",
-				"To speed printing"
+				"The bank balance",
+				"The fixed asset control account",
+				"The creditor ageing",
+				"Stock value"
 			],
 			"answer": 1,
-			"why": "A cancelled document is still a document, and reusing its number creates two documents with one identity, which auditors treat as a control failure."
+			"why": "The register is the detail behind the control account, so the two must agree, exactly as debtors and creditors do."
 		},
 		{
-			"question": "A notification condition of grand_total greater than 5000 will fire for which order?",
-			"options": ["1,200.00", "3,240.00", "6,000.00", "4,999.00"],
-			"answer": 2,
-			"why": "Only the 6,000.00 order exceeds the threshold. Testing both sides of the condition is part of configuring it."
-		},
-		{
-			"question": "Which detail should be absent from a customer-facing print format?",
-			"options": ["Tax amount", "Payment terms", "Item cost and margin", "Company registration"],
-			"answer": 2,
-			"why": "Cost and margin are internal. Printing them exposes commercial information to the customer and is a common builder mistake."
-		},
-		{
-			"question": "Who should own the letterhead after handover?",
-			"options": [
-				"The consultant permanently",
-				"The client's administrator",
-				"The developer",
-				"Nobody"
-			],
+			"question": "After a quality inspection rejects one of ten units, what reaches stock?",
+			"options": ["10 units", "9 units", "11 units", "0 units"],
 			"answer": 1,
-			"why": "Letterheads and terms are configuration, so handing ownership to the client's administrator removes a recurring support cost and speeds small changes."
+			"why": "Rejected quantity stays out of sellable stock, so only the accepted nine units are received into the warehouse."
+		},
+		{
+			"question": "A 2,400.00 opportunity at 60 per cent probability has what weighted value?",
+			"options": ["2,400.00", "1,440.00", "960.00", "600.00"],
+			"answer": 1,
+			"why": "Weighted value is value times probability, so 2,400 × 0.6 = 1,440.00, which is what the pipeline report should show."
+		},
+		{
+			"question": "Which module should a distributor with three delivery vans switch on first?",
+			"options": ["CRM", "Fixed assets", "Quality", "Projects"],
+			"answer": 1,
+			"why": "Vehicles above the capitalisation threshold must be capitalised and depreciated, or the profit and loss statement carries a distorted one-off cost."
 		}
 	],
 	"memory": {
-		"spine": "Documents customers can read, numbers an auditor can follow and messages that arrive once: three controls, all configuration, no code.",
+		"spine": "Capitalise, depreciate, inspect and qualify: four modules, one habit of proving each of them against a register and a report.",
 		"device": {
 			"kind": "phrase",
-			"label": "Readable, numbered, said once",
+			"label": "Capitalise, depreciate, inspect, qualify",
 			"expansion": [
-				"Print format: sections, fields and totals from the builder, with no code to maintain",
-				"A Malaysian tax invoice needs the company name, registration number and SST number",
-				"Naming series control the numbers, and gaps are the auditor's first question",
-				"A notification watches one event with one condition and one recipient list",
-				"Test print and notification changes on a real document in a real state"
+				"Capitalise: a purchase invoice with an asset item creates the Asset record",
+				"Depreciate: a journal generated from the schedule, monthly, not once in a December panic",
+				"Inspect: Quality Inspection sits between the receipt and the warehouse when configured",
+				"Qualify: lead, then opportunity, then a priced quotation",
+				"Asset register, ledger and schedule must show the same accumulated amount"
 			]
 		},
 		"cards": [
 			{
-				"q": "What must a Malaysian tax invoice show?",
-				"a": "Company name, registration number and SST number, plus the tax breakdown per line.",
-				"hint": "Not optional"
+				"q": "How is a van capitalised rather than expensed?",
+				"a": "With a purchase invoice whose item is marked as a fixed asset, which creates the Asset record.",
+				"hint": "Asset item, not expense"
 			},
 			{
-				"q": "What do auditors ask about numbering first?",
-				"a": "Whether there are gaps or duplicates in the series, and who can edit the prefix.",
-				"hint": "Series integrity"
+				"q": "Where does accumulated depreciation have to agree?",
+				"a": "In three places: the asset register, the depreciation account in the ledger and the schedule.",
+				"hint": "Three views, one number"
 			},
 			{
-				"q": "Why does a notification fire twice?",
-				"a": "It is attached to more than one event, or its condition matches both a draft and a submit.",
-				"hint": "One event, one send"
+				"q": "Lead or opportunity?",
+				"a": "A lead is an unqualified contact, an opportunity is a deal with a value, a date and a probability.",
+				"hint": "Contact versus deal"
 			},
 			{
-				"q": "What should never be customised with code in this volume?",
-				"a": "Anything the print format builder or notification fields already do, because code does not survive an upgrade.",
-				"hint": "Configuration survives"
+				"q": "How is weighted pipeline calculated?",
+				"a": "Sum of value times probability across all open opportunities.",
+				"hint": "Value times confidence"
 			},
 			{
-				"q": "How is a print format tested?",
-				"a": "With a real submitted document carrying real tax and a real address, never with a blank form.",
-				"hint": "Real document, real state"
+				"q": "When does a quality inspection happen?",
+				"a": "On receipt, before the goods become available stock, when the item is configured that way.",
+				"hint": "Before it is stock"
 			}
 		],
 		"trap": {
-			"what": "A notification is configured to fire on save as well as on submit.",
-			"why": "Every draft edit emails the customer, people stop reading the messages, and the control that catches late invoices is gone."
+			"what": "Depreciation is posted once a year as a single large journal in December.",
+			"why": "Eleven months of the profit and loss are wrong and the register never matched the ledger in between, so nobody could catch it early."
 		}
 	},
-	"narration": "Volume eight is where a functional consultant stops looking like an implementer. Print formats built in the builder give the customer a document worth reading, with the registration and tax number where they belong and totals matching the ledger to the cent. Naming series keep numbering sequential, and a cancelled document keeps its number because reusing one breaks the audit trail. Notifications watch a condition: an order above five thousand emails the sales manager, an order of twelve hundred stays quiet. Letterheads and terms templates make every document look like one company, and they are the easiest handover win because the client can maintain them alone. No code, all configuration, and it all survives the next upgrade. Test five things before handover: one page, matching totals, sequential numbering, one notification above the threshold and silence below it, and a letterhead the client can edit without calling you."
+	"narration": "Three modules that clients ask for and rarely operate properly. Fixed assets first: sixty thousand of van becomes twelve thousand a year, one thousand a month, and the register must agree with the control account every month. Quality second: an inspection that rejects one of ten units is the difference between an argument with a supplier and a documented claim. CRM third, and only if somebody owns the pipeline: a lead becomes an opportunity with a value and a probability, twenty four hundred at sixty per cent is fourteen hundred forty, and the quotation is the first document the customer sees. Each module adds a control the client has to run, so sequence them and say plainly what you would leave until year two. Assets and quality carry a control that runs itself once configured; CRM only works when a person owns it, so name that person in the workshop before you switch it on, and put the weekly pipeline review in the same meeting as the sales forecast."
 }

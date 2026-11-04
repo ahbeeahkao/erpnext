@@ -20,12 +20,12 @@ const corpus = JSON.stringify(chapters);
 describe("course manifest", () => {
 	it("describes a consultant course with a volume roadmap", () => {
 		assert.match(manifest.title, /Consultant/);
-		assert.equal(manifest.chapters.length, 32);
+		assert.equal(manifest.chapters.length, 34);
 		assert.ok(manifest.sample_company.includes("Seri Murni"));
 		assert.ok(manifest.volumes.length >= 10, `${manifest.volumes.length} volumes listed`);
 		const built = manifest.volumes.filter((volume) => volume.status === "built");
 		const planned = manifest.volumes.filter((volume) => volume.status === "planned");
-		assert.equal(built.length, 13, "two primers and eleven volumes are built");
+		assert.equal(built.length, 14, "two primers and twelve volumes are built");
 		assert.ok(planned.length === 0, "every declared volume is built");
 		for (const volume of built) {
 			assert.ok(volume.chapters.length >= 1, `${volume.id} needs chapters`);
@@ -265,8 +265,8 @@ describe("memory layer", () => {
 	it("gives every chapter its own device and every card its own question", () => {
 		assert.equal(new Set(labels).size, chapters.length, "two chapters share a device label");
 		const questions = chapters.flatMap((chapter) => chapter.memory.cards.map((card) => card.q));
-		assert.equal(questions.length, 160, "thirty-two chapters of five cards");
-		assert.equal(new Set(questions).size, 160, "a recall question is repeated");
+		assert.equal(questions.length, 170, "thirty-four chapters of five cards");
+		assert.equal(new Set(questions).size, 170, "a recall question is repeated");
 	});
 
 	it("indexes ten laws in three buckets", () => {
@@ -293,7 +293,7 @@ describe("memory layer", () => {
 	it("ships the printable and importable artefacts, and keeps them in step", () => {
 		const csv = text("memory/cards.csv").trim().split("\n");
 		assert.equal(csv[0], "front,back,tag");
-		assert.equal(csv.length - 1, 160, "one CSV row per recall card");
+		assert.equal(csv.length - 1, 170, "one CSV row per recall card");
 		const quote = (value) => `"${String(value).replace(/"/g, '""')}"`;
 		const first = chapters[0].memory.cards[0];
 		assert.ok(csv[1].includes(quote(first.q)), "memory/cards.csv is stale — run npm run memory");
@@ -333,11 +333,11 @@ describe("course as a whole", () => {
 		assert.ok(steps >= 180, `${steps} lab steps`);
 		assert.ok(minutes >= 2500, `${minutes} minutes of syllabus`);
 		const cards = chapters.reduce((sum, chapter) => sum + chapter.memory.cards.length, 0);
-		assert.equal(cards, 160, "five recall cards per chapter");
+		assert.equal(cards, 170, "five recall cards per chapter");
 		assert.equal(tables, slides, "every teaching slide carries a table");
 	});
 
-	it("covers the functional consultant ground of all eleven volumes", () => {
+	it("covers the functional consultant ground of all twelve volumes", () => {
 		for (const term of [
 			"chart of accounts",
 			"cost center",
@@ -400,6 +400,20 @@ describe("course as a whole", () => {
 			"encryption key",
 			"health check",
 			"idempotent",
+			"employee",
+			"hr app",
+			"leave type",
+			"attendance",
+			"expense claim",
+			"salary structure",
+			"salary slip",
+			"payroll entry",
+			"epf",
+			"socso",
+			"eis",
+			"pcb",
+			"income tax slab",
+			"statutory",
 		]) {
 			assert.ok(corpus.toLowerCase().includes(term.toLowerCase()), `the course never mentions ${term}`);
 		}
