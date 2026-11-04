@@ -1,400 +1,401 @@
 {
 	"id": "ch20",
 	"number": 20,
-	"title": "Volume 7 · Assets, Quality and CRM",
-	"subtitle": "Lessons 5–8: capitalise and depreciate a van, inspect what arrives, and convert a lead into a priced quotation",
+	"title": "Volume 7 · Projects, Timesheets and Billable Work",
+	"subtitle": "Lessons 1–4: a project that carries its own profit and loss, timesheets that become invoices, and a close that shows the margin",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 70,
 	"outcomes": [
-		"Capitalise a purchase as an asset and post depreciation every month",
-		"Use quality inspection to reject goods before they reach stock",
-		"Move a lead through opportunity to a priced quotation without losing the trail",
-		"Decide which of these three modules a distributor should switch on first"
+		"Set up a project whose cost and revenue land on the same report",
+		"Record billable and non-billable time without inflating the client invoice",
+		"Turn approved timesheets into an invoice with the right tax treatment",
+		"Report project margin and close the project with evidence"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Fixed assets",
-			"title": "Capitalise the van instead of expensing it",
+			"kicker": "Lesson 1 · Project",
+			"title": "Create a project that tracks its own profit",
 			"bullets": [
-				"An asset purchase is a purchase invoice with an asset item, which creates the asset record",
-				"Useful life and depreciation method are accounting policy, so get them signed off",
-				"Six figures of van on the balance sheet is very different from six figures of expense",
-				"Every asset needs a location and a custodian, or the register is fiction"
+				"A project is a cost collector, and its value appears only if every entry names it",
+				"Set the expected start and end dates, because they drive the billing schedule",
+				"Assign a cost centre if the client reports by department as well as by project",
+				"Create the project before the first timesheet, not after the first invoice"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					[
-						"1",
-						"Create the asset item",
-						"SM-VAN, is fixed asset, asset category Vehicles",
-						"Item flagged for capitalisation"
-					],
-					[
-						"2",
-						"Purchase invoice",
-						"Van 60,000.00 from the dealer, no stock effect",
-						"Asset created automatically"
-					],
+					["1", "Projects → Project → New", "Aeon Big rollout, company SM", "Empty project form"],
+					["2", "Set the dates", "Start 02-02-2026, end 27-02-2026", "Schedule recorded"],
 					[
 						"3",
-						"Open the asset",
-						"Location Main, custodian warehouse supervisor",
-						"Asset ACC-0001"
+						"Set billing",
+						"Project currency MYR, 150.00 per hour billing rate",
+						"Rate stored for billing"
 					],
-					[
-						"4",
-						"Check the category",
-						"5 years straight line, 0 salvage",
-						"Monthly depreciation 1,000.00"
-					],
-					["5", "Submit the invoice", "Confirm", "Asset status Submitted, value 60,000.00"],
-					["6", "Read the balance sheet", "31-01-2026", "Fixed assets 60,000.00"]
+					["4", "Set cost centre", "Retail Counter - SM for delivery work", "Cost centre carried"],
+					["5", "Save", "Nothing else", "Project PROJ-0001, status Open"],
+					["6", "Check the dashboard", "Project overview", "Zero hours, zero cost, zero billed"]
 				]
 			},
-			"notes": "Sixty thousand over five years is twelve thousand a year, or one thousand a month, and that is the number the client's accountant will check first. Capitalising also keeps the profit and loss statement readable, because a van is not a January cost. Get the category approved in writing before the first invoice, since changing depreciation method later means a restatement."
+			"notes": "The billing rate on the project is what turns hours into money, so get it agreed in writing before the first timesheet. Twenty hours at one hundred fifty is three thousand of revenue, and the client will compare that against the fixed quote in the contract. A project without a rate produces timesheets that finance has to reprice by hand, which is exactly the work a consultant is hired to remove."
 		},
 		{
-			"kicker": "Lesson 6 · Depreciation",
-			"title": "Post depreciation monthly, not annually in a panic",
+			"kicker": "Lesson 2 · Verify the setup",
+			"title": "What the project must carry before work starts",
 			"bullets": [
-				"Depreciation is a journal the system generates from the schedule",
-				"Straight line on sixty thousand over five years is one thousand a month",
-				"Accumulated depreciation is a separate account, so the asset keeps its cost",
-				"Year-end catch-up postings are a symptom of a missing monthly routine"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Assets → Depreciation → Process Depreciation",
-						"Company SM, 31-01-2026",
-						"Assets due for depreciation"
-					],
-					["2", "Review the schedule", "Van, 1,000.00 for the month", "Single line preview"],
-					["3", "Submit", "Confirm", "Depreciation entry created"],
-					["4", "Read the asset", "ACC-0001", "Accumulated 1,000.00, net book value 59,000.00"],
-					["5", "Read the GL", "Depreciation expense account", "Debit 1,000.00"],
-					["6", "Repeat monthly", "Same routine on the last day", "Twelve entries per year"]
-				]
-			},
-			"notes": "After twelve months the net book value is forty eight thousand, and the depreciation expense for the year is twelve thousand. Ask the learner to state both before opening the report, because those two figures are what the auditor tests. If the client only posts at year end, the monthly management accounts are wrong all year, which undermines every other number the consultant produced."
-		},
-		{
-			"kicker": "Lesson 7 · Quality",
-			"title": "Inspect what arrives before it becomes stock",
-			"bullets": [
-				"Quality inspection sits between the receipt and the warehouse when configured that way",
-				"Rejected quantity stays out of sellable stock, which is the entire point",
-				"Each inspection needs parameters with numeric ranges, or it is a tick box",
-				"Quality results feed the supplier conversation, so keep them per supplier"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Quality → Quality Inspection Template",
-						"Visual check, parameters Appearance and Function",
-						"Template saved"
-					],
-					[
-						"2",
-						"Attach to the item",
-						"SM-BL200 requires inspection on purchase",
-						"Inspection required flag"
-					],
-					[
-						"3",
-						"Receive 10 units",
-						"Purchase receipt against the order",
-						"Quality inspection generated"
-					],
-					[
-						"4",
-						"Record results",
-						"9 accepted, 1 rejected for a cracked housing",
-						"Rejected quantity 1"
-					],
-					["5", "Submit the inspection", "Confirm", "Receipt proceeds with 9 units"],
-					["6", "Check stock", "Bin at Main", "9 units received, not 10"]
-				]
-			},
-			"notes": "One rejected unit means nine accepted, and the supplier conversation now has a document behind it. Quality is often sold as a compliance feature, but its real value in distribution is the argument it wins with a supplier who disputes a return. If a client rejects inspection as bureaucracy, ask them what evidence they use today."
-		},
-		{
-			"kicker": "Lesson 8 · CRM",
-			"title": "From lead to opportunity to priced quotation",
-			"bullets": [
-				"A lead is an unqualified contact; an opportunity is a deal with a value and a date",
-				"Converting keeps the trail, which is what makes pipeline reporting possible",
-				"The quotation carries the price, and it is the first document a customer sees",
-				"Every opportunity needs a probability and a territory, or the pipeline report lies"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "CRM → Lead → New", "Aeon Big, contact and source Trade show", "Lead LD-0001"],
-					[
-						"2",
-						"Convert to opportunity",
-						"10 blenders, value 2,400.00, close date 20-02-2026",
-						"Opportunity OPP-0001"
-					],
-					["3", "Set probability", "60 per cent, territory Selangor", "Weighted value 1,440.00"],
-					[
-						"4",
-						"Create the quotation",
-						"10 SM-BL200 at 240.00 plus SST",
-						"Quotation 2,640.00 total"
-					],
-					["5", "Send and track", "Status Open, valid 30 days", "Quotation in the pipeline"],
-					[
-						"6",
-						"Review the pipeline",
-						"CRM → Opportunity pipeline",
-						"Weighted pipeline includes 1,440.00"
-					]
-				]
-			},
-			"notes": "Sixty per cent of twenty four hundred is fourteen hundred forty, and that weighted number is what a sales director actually manages. Without probability and territory, the pipeline report is a list of hopes. The quotation itself is ordinary work, but the trail from lead to opportunity to quotation to order is what lets the owner see conversion rates for the first time."
-		},
-		{
-			"kicker": "Lesson 6 · Verify depreciation",
-			"title": "Schedule, ledger and register agree",
-			"bullets": [
-				"The asset, the ledger and the register must show the same accumulated amount",
-				"Net book value falls by the monthly charge, and the expense sits in the right period",
-				"A missed month is visible immediately in the schedule, not at year end",
-				"Disposal later depends on this schedule being correct today"
+				"Rate, cost centre, dates and customer are the four fields that matter",
+				"A project with no customer cannot be invoiced without retyping everything",
+				"Cost centre makes the project visible in departmental reporting as well",
+				"The percentage complete figure is a management input, not an accounting one"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Monthly depreciation", "1,000.00", "Asset → Depreciation Schedule"],
-					["Accumulated depreciation after January", "1,000.00", "Asset ACC-0001"],
-					["Net book value", "59,000.00", "Asset register"],
-					["Depreciation expense", "1,000.00", "Profit and Loss Statement, January"],
-					["Balance sheet fixed assets", "59,000.00", "Balance Sheet, 31-01-2026"]
+					["Customer", "Aeon Big Sdn Bhd", "Project form"],
+					["Billing rate", "150.00 per hour", "Project → Billing"],
+					["Cost centre", "Retail Counter - SM", "Project form"],
+					["Expected hours", "20", "Project → Costing"],
+					["Expected revenue", "3,000.00", "Your own arithmetic"]
 				]
 			},
-			"notes": "Three views of one number again: the schedule, the asset record and the balance sheet. When they agree, the client can file the month without adjustment. When they disagree, the cause is nearly always a depreciation entry posted in a closed period or an asset created after the run date, and both are one-minute fixes."
+			"notes": "Twenty hours at one hundred fifty is three thousand, and the expected cost will come from timesheets at the internal rate. Writing both numbers down before work starts is what makes the margin conversation possible in week three, when the client asks why the invoice is higher than they remember."
 		},
 		{
-			"kicker": "Lesson 8 · Verify the pipeline",
-			"title": "What the CRM numbers actually prove",
+			"kicker": "Lesson 3 · Timesheet",
+			"title": "Record time so it can be billed and costed",
 			"bullets": [
-				"Weighted pipeline equals value times probability, summed across open opportunities",
-				"A quotation without an opportunity is a document with no history",
-				"Conversion rate is the number a sales director will ask for first",
-				"Data quality in CRM is measured by how many fields are blank"
+				"A timesheet records hours against a project and an activity, and it carries a cost",
+				"Mark billable time deliberately, because non-billable hours still cost money",
+				"Approve timesheets before invoicing, or the invoice will not be defensible",
+				"The internal cost rate is separate from the billing rate and is what finance needs"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Projects → Timesheet → New",
+						"Employee Aina, project Aeon Big rollout",
+						"Empty timesheet"
+					],
+					["2", "Add a line", "Activity Implementation, 8 hours on 05-02-2026", "Line accepted"],
+					[
+						"3",
+						"Mark billing",
+						"Billable, billing rate 150.00, cost rate 80.00",
+						"Amounts computed"
+					],
+					[
+						"4",
+						"Add a second line",
+						"Design review, 2 hours, non-billable",
+						"Billable total unchanged"
+					],
+					["5", "Save and Submit", "Confirm", "Timesheet TS-2026-0001, cost 800.00"],
+					["6", "Check the project", "Project cost", "800.00 against the project"]
+				]
+			},
+			"notes": "Eight billable hours at one hundred fifty and two non-billable at the same rate is a trap, because non-billable time must not reach the invoice. Marking it correctly keeps three thousand of revenue intact while still costing eight hundred, which is the honest picture. Teach the difference before the first timesheet, not after the first disputed invoice."
+		},
+		{
+			"kicker": "Lesson 4 · Bill the project",
+			"title": "Turn approved time into a defensible invoice",
+			"bullets": [
+				"Invoicing from a timesheet carries hours, rate and project onto the invoice automatically",
+				"Service tax treatment differs from goods, so check the template before submitting",
+				"An invoice without a project loses the margin link that made the project worth creating",
+				"Bill monthly, because a single invoice at the end hides cost overruns until it is too late"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Open TS-2026-0001 → Create → Sales Invoice",
+						"Nothing",
+						"Customer and project pre-filled"
+					],
+					["2", "Check the line", "20 hours at 150.00", "Net 3,000.00"],
+					["3", "Apply service tax", "Service Tax 8 % template", "Tax 240.00, total 3,240.00"],
+					["4", "Save and Submit", "Confirm", "Invoice SINV-SM-2026-0010"],
+					["5", "Read the project", "Project cost and billed", "Cost 1,600.00, billed 3,000.00"],
+					["6", "Check the margin", "Project profitability", "1,400.00, about 46 per cent"]
+				]
+			},
+			"notes": "Twenty hours at one hundred fifty is three thousand of revenue, twenty hours at eighty is one thousand six hundred of cost, and the difference of one thousand four hundred is the margin the project exists to produce. Service tax of eight per cent adds two hundred forty, which is a liability and never revenue. When those three numbers are visible on one screen, the client stops treating projects as a reporting nicety."
+		},
+		{
+			"kicker": "Lesson 5 · Project close",
+			"title": "Close the project with the numbers attached",
+			"bullets": [
+				"Closing means no more time or cost can be posted against the project",
+				"Compare final cost with the estimate and write down the reason for the difference",
+				"Unbilled timesheets must be invoiced or written off before closing",
+				"A closed project is the reference for pricing the next one"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Check unbilled time",
+						"Filter timesheets by project and billing status",
+						"List empty or explained"
+					],
+					[
+						"2",
+						"Check cost",
+						"Project cost against the 1,600.00 estimate",
+						"Variance within tolerance"
+					],
+					["3", "Set completion", "100 per cent complete, status Completed", "Project closes"],
+					[
+						"4",
+						"Attach evidence",
+						"Signed timesheet and invoice in the file",
+						"Audit trail complete"
+					],
+					["5", "Record the lesson", "Variance note in the project sheet", "Reason written down"],
+					["6", "Confirm no postings", "Attempt a new timesheet", "Project no longer accepts time"]
+				]
+			},
+			"notes": "The value of closing properly is the next quotation. A project that ended at one thousand six hundred of cost against an estimate of one thousand two hundred teaches the client to reprice, provided somebody writes it down. Make the variance note part of the close, or the same underestimate will repeat on every engagement and the consultant will be blamed for the system's silence."
+		},
+		{
+			"kicker": "Volume 7 · Reference",
+			"title": "Project documents and the controls they carry",
+			"bullets": [
+				"Each document adds one dimension: time, cost, revenue or status",
+				"The project record is the join between all four, which is why it must be named everywhere",
+				"Approval is the control that makes timesheets billable and defensible",
+				"Every control has an owner in the client's team, not in the consultant's head"
+			],
+			"table": {
+				"headers": ["Document", "Adds", "Control", "Who owns it"],
+				"rows": [
+					[
+						"Project",
+						"Cost centre, rate, customer",
+						"Rate agreed before work",
+						"Engagement manager"
+					],
+					["Timesheet", "Hours and internal cost", "Approval before billing", "Team lead"],
+					["Sales Invoice", "Revenue and tax", "Matches approved hours", "Finance"],
+					["Project profitability", "Margin by project", "Reviewed monthly", "Finance manager"],
+					["Completion note", "Variance and lessons", "Signed at close", "Engagement manager"]
+				]
+			},
+			"notes": "Projects fail in ERPNext for a boring reason: somebody forgets to name the project on a timesheet, and the cost disappears into a departmental expense. The fix is a control, not a report, so agree who checks that every timesheet carries a project and put it in the weekly meeting. When that control is in place, the margin report is trustworthy by default."
+		},
+		{
+			"kicker": "Volume 7 · Reference",
+			"title": "Reading the project profit and loss",
+			"bullets": [
+				"Revenue comes from invoices that name the project, not from quotations",
+				"Cost comes from timesheets and purchase documents that name the project",
+				"Unbilled work in progress is a real asset, and it belongs in the month-end pack",
+				"A margin of 46 per cent on services is healthy for Malaysian implementation work"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Opportunity value", "2,400.00", "Opportunity OPP-0001"],
-					["Probability", "60 per cent", "Opportunity form"],
-					["Weighted pipeline", "1,440.00", "CRM pipeline report"],
-					["Quotation", "2,640.00 including SST", "Quotation QT-SM-2026-0003"],
-					[
-						"Conversion rate this month",
-						"leading indicator, not yet a rate",
-						"CRM → Lead and Opportunity analysis"
-					]
+					["Project revenue", "3,000.00 net of tax", "Project profitability report"],
+					["Project cost", "1,600.00 at 80.00 per hour", "Project profitability report"],
+					["Gross margin", "1,400.00, about 46 per cent", "Your own arithmetic"],
+					["Unbilled time", "0.00 after the invoice", "Timesheet billing status"],
+					["Service tax", "240.00 payable, not revenue", "General Ledger, Service Tax account"]
 				]
 			},
-			"notes": "The weighted figure of fourteen hundred forty is the only CRM number a manager should act on weekly, because it changes with probability rather than with optimism. Quotation total of two thousand six hundred forty is where the tax enters and where sales and finance usually disagree. Show both on one page and the pipeline meeting becomes a forecast rather than a wish list."
+			"notes": "Show this page to the client's finance manager and to the engagement manager in the same meeting, because they will each read a different line. Finance wants unbilled time at zero; the engagement manager wants margin above forty per cent. When both are on one page, the project review takes ten minutes instead of an hour."
 		},
 		{
-			"kicker": "Volume 7 · Reference",
-			"title": "What to switch on first for a distributor",
+			"kicker": "Lesson 6 · Tasks",
+			"title": "A project that tracks work, not just money",
 			"bullets": [
-				"Assets are mandatory once a client owns vehicles or equipment above their capitalisation threshold",
-				"Quality is worth it when returns or supplier disputes are a recurring cost",
-				"CRM pays only if someone owns the pipeline weekly, otherwise it becomes a data graveyard",
-				"Each module adds a control the client must operate, so sequence them"
+				"Tasks give the project a shape: what has to happen, in what order, and who owns each piece",
+				"Dependencies are a promise about sequence, so make them explicit rather than implied in a chat",
+				"A task without an owner is a wish, and it will be the one that slips",
+				"Keep the task list small enough that the weekly review covers every row",
+				"Billable tasks and internal tasks belong in the same list, marked differently"
 			],
 			"table": {
-				"headers": ["Module", "Switch on when", "First control", "Cost of skipping it"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
-						"Fixed assets",
-						"Any capital purchase above the threshold",
-						"Monthly depreciation run",
-						"Expenses hit one month, audit finding"
+						"1",
+						"Create the tasks from the signed scope",
+						"Survey, Install, Train, Sign-off",
+						"Four tasks under the project"
 					],
+					["2", "Assign an owner to each", "(users)", "Every task has a name"],
 					[
-						"Quality",
-						"Recurring returns or supplier disputes",
-						"Reject before stock",
-						"Returns processed after the sale"
+						"3",
+						"Set the sequence as dependencies",
+						"Install after Survey",
+						"Blocking shown on the task"
 					],
-					[
-						"CRM",
-						"A named person owns the pipeline",
-						"Weekly pipeline review",
-						"Quotations with no history"
-					],
-					[
-						"Projects",
-						"Billable service work",
-						"Timesheets approved weekly",
-						"Unbilled work at year end"
-					],
-					[
-						"Subcontracting",
-						"External processing steps",
-						"Subcontractor stock at zero",
-						"Material lost off site"
-					]
+					["4", "Add expected hours per task", "Survey 4h, Install 16h", "Planned effort recorded"],
+					["5", "Mark one task billable", "Install", "Task flagged for invoicing"],
+					["6", "Review the list in the weekly meeting", "(meeting)", "Owners confirm dates"]
 				]
 			},
-			"notes": "Sequencing is the consultant's judgement call, and this table is the argument to have with the client before the proposal. A distributor with three vans needs assets in phase one; a trader who sells on quotation needs CRM before panels. Say what you would switch on first, and say what you would leave until year two."
+			"notes": "Tasks are where a project manager and an accountant finally look at the same screen. Keep the list short, the owners real and the dependencies explicit. A project with forty tasks and one owner is a spreadsheet in disguise."
 		},
 		{
-			"kicker": "Volume 7 · Reference",
-			"title": "The three reports that keep these modules honest",
+			"kicker": "Lesson 7 · Milestones",
+			"title": "Billing at milestones without arguing",
 			"bullets": [
-				"Asset register value must equal the fixed asset control account",
-				"Quality rejection rate by supplier is the number that changes behaviour",
-				"Pipeline weighted value must match the opportunities it sums, without duplicates",
-				"All three are monthly reads, not annual ones"
+				"A milestone is a billing trigger with evidence attached, not a date in a contract",
+				"Agree what proves the milestone: a signed sheet, a photograph, a delivered unit",
+				"Bill from the project against the milestone, so the invoice and the evidence are linked",
+				"A percentage-of-completion invoice needs a completion measure the client accepts, or it becomes a negotiation",
+				"Keep unbilled work visible, because billing late is the most common way a project loses margin"
 			],
 			"table": {
-				"headers": ["Report", "Expected figure", "Where to look", "Question it answers"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					[
-						"Asset register",
-						"59,000.00 net book value after January",
-						"Assets → Asset register",
-						"What do we own and what is it worth"
-					],
-					[
-						"Fixed asset control",
-						"59,000.00 in the balance sheet",
-						"Balance Sheet",
-						"Does the ledger agree"
-					],
-					[
-						"Quality rejection rate",
-						"10 per cent for this receipt",
-						"Quality Inspection analysis",
-						"Which supplier costs us returns"
-					],
-					[
-						"Weighted pipeline",
-						"1,440.00 for this opportunity",
-						"CRM → Opportunity pipeline",
-						"What will we sell next month"
-					],
-					[
-						"Depreciation for the month",
-						"1,000.00",
-						"Profit and Loss Statement",
-						"Is the cost in the right period"
-					]
+					["Milestone evidence attached", "Signed sheet or photograph", "Project attachment"],
+					["Invoice linked to the project", "Project named on the line", "Sales Invoice"],
+					["Billed versus completed", "No large gap", "Project profitability"],
+					["Unbilled work listed", "Hours and value", "Timesheet summary"],
+					["Gantt reflects reality", "Tasks updated in the week", "Project view"]
 				]
 			},
-			"notes": "Reconciling the asset register to the control account is the same discipline as debtors and creditors, and it takes two minutes a month. Quality rejection rate and weighted pipeline are softer, but each has a single number a manager can act on. Give the client these five rows as the monthly read, and the modules earn their place."
+			"notes": "Milestones fail because the evidence was never defined. If the contract says 'on completion of installation', the argument arrives with the first invoice. Define the evidence at contract stage, attach it when you bill, and the conversation never happens."
+		},
+		{
+			"kicker": "Lesson 8 · Verify the project",
+			"title": "Three views that must agree",
+			"bullets": [
+				"The task list, the timesheet and the invoice must tell one story about the same work",
+				"Planned hours against actual hours shows whether the estimate was honest or optimistic",
+				"Cost to date against billed to date is the margin conversation, and it should happen monthly",
+				"A project closed with unbilled hours has donated margin, so check before closing",
+				"Report the variance per task, because that is where the next estimate improves"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Task hours match timesheet",
+						"Install 16 planned, 15 actual",
+						"Task list versus timesheets"
+					],
+					["Billed equals completed", "No unbilled completed task", "Project profitability"],
+					["Cost and revenue visible", "Margin per project", "Project profit and loss"],
+					["Variance per task", "Over or under, in hours", "Task report"],
+					["Closed with nothing unbilled", "Zero unbilled hours", "Pre-close check"]
+				]
+			},
+			"notes": "The pre-close check is the one that pays for the chapter. Closing a project with unbilled hours is a margin donation nobody records, and it is invisible until someone compares the timesheet against the invoices a year later."
 		}
 	],
 	"lab": {
-		"title": "Lab · Capitalise a van, depreciate it, inspect a receipt and convert a lead",
+		"title": "Lab · Run a 20-hour project from setup to margin",
 		"minutes": 45,
 		"steps": [
-			"Create the asset item and purchase the van for 60,000.00 on a purchase invoice",
-			"Confirm the asset category produces 1,000.00 of monthly depreciation",
-			"Run depreciation for January and confirm net book value of 59,000.00",
-			"Confirm the depreciation expense of 1,000.00 in the profit and loss statement",
-			"Set up a quality inspection template and attach it to SM-BL200",
-			"Receive 10 units, reject 1 and confirm only 9 reach stock",
-			"Create a lead for Aeon Big and convert it to a 2,400.00 opportunity",
-			"Produce the quotation for 2,640.00 including SST and check the weighted pipeline"
+			"Create the Aeon Big rollout project with a 150.00 billing rate and a cost centre",
+			"Confirm the expected revenue of 3,000.00 before any work is recorded",
+			"Record 20 billable hours and 2 non-billable hours on a timesheet",
+			"Submit the timesheet and confirm the project cost of 1,600.00",
+			"Create the sales invoice from the timesheet with 8 per cent service tax",
+			"Confirm net revenue 3,000.00, tax 240.00 and total 3,240.00",
+			"Read project profitability and confirm the 1,400.00 margin",
+			"Close the project and confirm new timesheets are refused"
 		],
-		"done": "Done when the van shows 59,000.00 net book value, nine units were received after inspection, and the opportunity carries a 1,440.00 weighted value with a live quotation."
+		"done": "Done when the project shows 3,000.00 revenue, 1,600.00 cost and 1,400.00 margin, no unbilled time remains, and the project no longer accepts postings."
 	},
 	"quiz": [
 		{
-			"question": "A 60,000.00 asset with a five year straight line life depreciates monthly by what?",
-			"options": ["500.00", "1,000.00", "5,000.00", "12,000.00"],
+			"question": "20 billable hours at 150.00 with 8 per cent service tax give aninvoice total of what?",
+			"options": ["3,000.00", "3,240.00", "3,120.00", "2,760.00"],
 			"answer": 1,
-			"why": "60,000 divided by five years is 12,000 a year, or 1,000.00 a month over twelve periods."
+			"why": "Net is 3,000.00 and service tax of 8 per cent adds 240.00, giving 3,240.00, of which the tax is a liability not income."
 		},
 		{
-			"question": "What does the asset register value reconcile to?",
+			"question": "Where does project cost come from?",
 			"options": [
-				"The bank balance",
-				"The fixed asset control account",
-				"The creditor ageing",
-				"Stock value"
+				"The quotation",
+				"Timesheets and purchase documents naming the project",
+				"The customer record",
+				"The stock ledger"
 			],
 			"answer": 1,
-			"why": "The register is the detail behind the control account, so the two must agree, exactly as debtors and creditors do."
+			"why": "Only documents that name the project feed its cost, which is why naming the project on a timesheet is the control that matters."
 		},
 		{
-			"question": "After a quality inspection rejects one of ten units, what reaches stock?",
-			"options": ["10 units", "9 units", "11 units", "0 units"],
-			"answer": 1,
-			"why": "Rejected quantity stays out of sellable stock, so only the accepted nine units are received into the warehouse."
+			"question": "What is the project margin with 20 hours billed at 150.00 and costed at 80.00 per hour?",
+			"options": ["1,400.00", "1,600.00", "3,000.00", "2,240.00"],
+			"answer": 0,
+			"why": "Revenue is 3,000.00 and cost is 1,600.00, leaving 1,400.00, which is about 46 per cent of revenue."
 		},
 		{
-			"question": "A 2,400.00 opportunity at 60 per cent probability has what weighted value?",
-			"options": ["2,400.00", "1,440.00", "960.00", "600.00"],
+			"question": "What happens to non-billable time on a timesheet?",
+			"options": [
+				"It is invoiced",
+				"It costs the project but is not billed",
+				"It is deleted",
+				"It moves to the customer"
+			],
 			"answer": 1,
-			"why": "Weighted value is value times probability, so 2,400 × 0.6 = 1,440.00, which is what the pipeline report should show."
+			"why": "Non-billable time still carries internal cost, so it reduces margin without appearing on the invoice."
 		},
 		{
-			"question": "Which module should a distributor with three delivery vans switch on first?",
-			"options": ["CRM", "Fixed assets", "Quality", "Projects"],
+			"question": "Why close a project in the system?",
+			"options": [
+				"To delete timesheets",
+				"To prevent further postings and capture the variance",
+				"To close the fiscal year",
+				"To archive the invoice"
+			],
 			"answer": 1,
-			"why": "Vehicles above the capitalisation threshold must be capitalised and depreciated, or the profit and loss statement carries a distorted one-off cost."
+			"why": "Closing stops new time and cost, and the variance note becomes the reference for pricing the next engagement."
 		}
 	],
 	"memory": {
-		"spine": "Capitalise, depreciate, inspect and qualify: four modules, one habit of proving each of them against a register and a report.",
+		"spine": "A project is a collector, and it only collects what names it, so every hour and every invoice must carry the project field.",
 		"device": {
-			"kind": "phrase",
-			"label": "Capitalise, depreciate, inspect, qualify",
+			"kind": "rule",
+			"label": "Every entry names the project",
 			"expansion": [
-				"Capitalise: a purchase invoice with an asset item creates the Asset record",
-				"Depreciate: a journal generated from the schedule, monthly, not once in a December panic",
-				"Inspect: Quality Inspection sits between the receipt and the warehouse when configured",
-				"Qualify: lead, then opportunity, then a priced quotation",
-				"Asset register, ledger and schedule must show the same accumulated amount"
+				"A project is a cost collector whose profit and loss exists only if postings name it",
+				"Four fields before work starts: rate, cost centre, dates and customer",
+				"A timesheet records hours against project and activity and carries both a billing and a costing rate",
+				"Invoice from the timesheet so hours, rate and project travel together",
+				"Closing stops time and cost, and does not reverse revenue already billed"
 			]
 		},
 		"cards": [
 			{
-				"q": "How is a van capitalised rather than expensed?",
-				"a": "With a purchase invoice whose item is marked as a fixed asset, which creates the Asset record.",
-				"hint": "Asset item, not expense"
+				"q": "Why is a project profit and loss empty?",
+				"a": "Something was posted without the project field, because the collector only sees postings that name it.",
+				"hint": "Name it or lose it"
 			},
 			{
-				"q": "Where does accumulated depreciation have to agree?",
-				"a": "In three places: the asset register, the depreciation account in the ledger and the schedule.",
-				"hint": "Three views, one number"
+				"q": "Where does project revenue come from?",
+				"a": "Sales invoices that name the project, not quotations and not orders.",
+				"hint": "Invoices, not promises"
 			},
 			{
-				"q": "Lead or opportunity?",
-				"a": "A lead is an unqualified contact, an opportunity is a deal with a value, a date and a probability.",
-				"hint": "Contact versus deal"
+				"q": "What does a timesheet carry besides hours?",
+				"a": "A billing rate and a costing rate, so one hour is both revenue and cost.",
+				"hint": "Two rates, one hour"
 			},
 			{
-				"q": "How is weighted pipeline calculated?",
-				"a": "Sum of value times probability across all open opportunities.",
-				"hint": "Value times confidence"
+				"q": "Why invoice from the timesheet?",
+				"a": "Hours, rate and project land on the invoice without retyping, so the margin stays traceable.",
+				"hint": "No retyping"
 			},
 			{
-				"q": "When does a quality inspection happen?",
-				"a": "On receipt, before the goods become available stock, when the item is configured that way.",
-				"hint": "Before it is stock"
+				"q": "What does closing a project do?",
+				"a": "It stops further time and cost postings, and it does not reverse revenue already billed.",
+				"hint": "Stop, do not undo"
 			}
 		],
 		"trap": {
-			"what": "Depreciation is posted once a year as a single large journal in December.",
-			"why": "Eleven months of the profit and loss are wrong and the register never matched the ledger in between, so nobody could catch it early."
+			"what": "Hours are captured on the timesheet but the invoice is raised by hand at a different rate.",
+			"why": "Revenue and cost no longer share a rate, so project margin is fiction and the timesheet becomes paperwork nobody trusts."
 		}
 	},
-	"narration": "Three modules that clients ask for and rarely operate properly. Fixed assets first: sixty thousand of van becomes twelve thousand a year, one thousand a month, and the register must agree with the control account every month. Quality second: an inspection that rejects one of ten units is the difference between an argument with a supplier and a documented claim. CRM third, and only if somebody owns the pipeline: a lead becomes an opportunity with a value and a probability, twenty four hundred at sixty per cent is fourteen hundred forty, and the quotation is the first document the customer sees. Each module adds a control the client has to run, so sequence them and say plainly what you would leave until year two. Assets and quality carry a control that runs itself once configured; CRM only works when a person owns it, so name that person in the workshop before you switch it on, and put the weekly pipeline review in the same meeting as the sales forecast."
+	"narration": "Services work is deceptively simple, and the margin is where consultants get caught. A project is a cost collector: name it on a timesheet, name it on an invoice, and it carries both sides. Twenty hours at one hundred fifty is three thousand of revenue; twenty hours at eighty is one thousand six hundred of cost; the difference is one thousand four hundred, about forty six per cent. Service tax of eight per cent adds two hundred forty and stays a liability. Record non-billable time anyway, because it costs money even though it cannot be invoiced. Then close the project with a variance note, which is the only way the next quote gets better. A project that is never closed teaches nobody anything and quietly repeats its mistakes. Twenty hours, one rate, one invoice, one margin: when a client can state those four numbers from memory, the services practice is under control, and the next quotation is priced on evidence rather than optimism."
 }

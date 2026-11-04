@@ -1,0 +1,412 @@
+{
+	"id": "ch32",
+	"number": 32,
+	"title": "Volume 10 · The First Ninety Days: Health Checks and Handing Over",
+	"subtitle": "Lessons 1–10: the hypercare rhythm, the weekly health check, adoption evidence, and leaving without the client collapsing",
+	"level": "Capstone",
+	"minutes": 65,
+	"outcomes": [
+		"Run a hypercare rhythm that catches problems while they are still small",
+		"Perform a fifteen-minute weekly health check that a client can own",
+		"Measure adoption with evidence rather than anecdotes",
+		"Hand over to a successor so the client does not depend on any single person"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Days one to seven",
+			"title": "Hypercare is a rhythm, not a hotline",
+			"bullets": [
+				"Week one has a fixed shape: a morning check, a same-day triage, and one written update per day",
+				"The first three days produce the real issue list, and the first weekend produces the real test",
+				"Nobody learns a new system and a new routine at once; keep the routine, change the system",
+				"Log every issue in one place from the first hour, even the ones solved by a phone call",
+				"The daily update is three lines: what broke, who owns it, what is at risk tomorrow"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Morning check performed", "Signed by name and time", "Hypercare log"],
+					["Issue list single-sourced", "One list, no chat threads", "Issue tracker"],
+					["Daily update sent", "Three lines, dated", "Project folder"],
+					["Weekend cover agreed", "Names and hours", "Support agreement"],
+					["Escalation path live", "Contact tested once", "Escalation page"]
+				]
+			},
+			"notes": "The rhythm is what stops hypercare becoming panic. A fixed morning check and one written update a day gives the client a heartbeat they can rely on, and gives you a record of what actually happened in the week that everyone later misremembers."
+		},
+		{
+			"kicker": "Lesson 2 · Weeks two to four",
+			"title": "Triage the fix list by consequence",
+			"bullets": [
+				"Split the list into three: wrong numbers, blocked work, and cosmetic. Only the first two get fixed this month",
+				"A wrong number is a data or configuration defect and outranks everything, because trust in the ledger is the product",
+				"Blocked work is a training or permission problem more often than a missing feature",
+				"Cosmetic items go to one batch, agreed in advance, so the list has an end",
+				"Publish the triage decision, because a client who cannot see the reasoning assumes they were ignored"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Export the full issue list with owners", "(export)", "One list, every item"],
+					[
+						"2",
+						"Mark each item wrong number, blocked or cosmetic",
+						"(triage)",
+						"Three labelled groups"
+					],
+					[
+						"3",
+						"Fix wrong numbers first, with evidence",
+						"(fix)",
+						"Number reproduced and corrected"
+					],
+					[
+						"4",
+						"Resolve blocked work by training or permission",
+						"(fix)",
+						"User completes the task"
+					],
+					["5", "Batch the cosmetic items", "One release per month", "Agreed batch list"],
+					["6", "Publish the triage and the dates", "(message)", "Client sees the reasoning"]
+				]
+			},
+			"notes": "The triage conversation is where trust is either built or lost. A cosmetic complaint fixed instantly while a wrong stock value waits teaches the client that volume wins. Publish the rule instead, then apply it to the loudest voice in the room."
+		},
+		{
+			"kicker": "Lesson 3 · Day thirty",
+			"title": "The first review, with numbers",
+			"bullets": [
+				"Thirty days is long enough for real data and short enough to change course",
+				"Bring four numbers: open issues, wrong-number incidents, transaction volume and one adoption measure",
+				"Compare against the go-live baseline, not against an ideal, because the comparison is what means something",
+				"Agree three changes for the next month and write them down with owners",
+				"Invite the person who signs, not only the people who use the system"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Open issues counted", "Total, aged, and by owner", "Issue tracker"],
+					["Wrong-number incidents counted", "Zero or a labelled list", "Issue tracker, tagged"],
+					["Transaction volume read", "Invoices per week versus before", "Sales Invoice list"],
+					["One adoption measure", "For example delivery notes per order", "Transaction counts"],
+					["Three actions agreed", "Owners and dates", "Review minutes"]
+				]
+			},
+			"notes": "The day-thirty review is where you find out whether the go-live was a success or merely a launch. Bring numbers, not narrative, and bring them compared to the baseline. Three actions with owners is the right size; ten is a wish list."
+		},
+		{
+			"kicker": "Lesson 4 · Day sixty",
+			"title": "The second-user test",
+			"bullets": [
+				"By day sixty somebody other than the champion should be able to complete a core cycle unaided",
+				"Pick a cycle the business runs weekly: order to delivery, purchase to payment, count to reconciliation",
+				"Watch, do not help, and note every hesitation as a documentation or design defect",
+				"If only one person can do it, the project has built a dependency rather than a capability",
+				"Fix what you observe, then repeat the test with a third person"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Choose one weekly cycle and one second user",
+						"Order to delivery",
+						"Named user, named task"
+					],
+					["2", "Ask them to run it while you watch", "(observe)", "Completed without your hands"],
+					["3", "Record every hesitation and question", "(write)", "List of six to ten points"],
+					["4", "Fix the causes, not the symptoms", "Guide, label, default", "Defects closed"],
+					["5", "Repeat with a third user", "(observe)", "Fewer hesitations"],
+					["6", "Record the result in the handover pack", "(write)", "Dated capability note"]
+				]
+			},
+			"notes": "The second-user test is the cheapest way to find out whether the training worked. Watching silently is the discipline: the moment you reach for the mouse you have learned nothing and taught dependence."
+		},
+		{
+			"kicker": "Lesson 5 · Day ninety",
+			"title": "Handing over to a successor, not an absence",
+			"bullets": [
+				"The deliverable at ninety days is a named internal owner who can configure, not just operate",
+				"They should be able to add a user, a warehouse, a price list and a print format without calling you",
+				"Sit with them while they do it once, then sign them off in writing",
+				"Leave a support route with an agreed response time, so escalation is a decision rather than a habit",
+				"The test of the handover is a week where nothing is asked of you"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Name the internal owner and their deputy",
+						"(agree)",
+						"Two names in the handover pack"
+					],
+					[
+						"2",
+						"Walk through adding a user with the right role",
+						"(shadow)",
+						"Owner does it, you watch"
+					],
+					[
+						"3",
+						"Add a warehouse and a price list together",
+						"(shadow)",
+						"Both created by the owner"
+					],
+					["4", "Change one print format", "(shadow)", "Format updated and printed"],
+					["5", "Agree the support route and response time", "(agree)", "Written terms"],
+					["6", "Run one week with no questions to you", "(wait)", "Quiet week, logged as evidence"]
+				]
+			},
+			"notes": "Handing over to a person rather than to a document is the difference between a project that ends and a project that never does. Name a deputy as well, because the owner takes leave, and the quiet week is the only real proof."
+		},
+		{
+			"kicker": "Lesson 6 · The weekly check",
+			"title": "Fifteen minutes that prevent most surprises",
+			"bullets": [
+				"Five checks: overnight jobs ran, error log is quiet, stock and ledger reconcile, pending documents are not aging, backups completed",
+				"The scheduler failing silently is the most common cause of a surprise a month later",
+				"Aged drafts mean work that never became a transaction, and reports do not see it",
+				"Log the check with a date and a name, so a quiet week is provable later",
+				"Hand the check to the client's owner by week four, and watch them run it twice"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Scheduled jobs ran", "No failures in the log", "Scheduled job log"],
+					["Error log quiet", "No new critical entries", "Error log"],
+					[
+						"Stock and ledger agree",
+						"Inventory value matches the account",
+						"Stock balance versus ledger"
+					],
+					["Aged drafts counted", "Under the agreed threshold", "Open documents by age"],
+					["Backups completed", "Last night, with files", "Backup log"],
+					["Check signed", "Date and name", "Weekly health sheet"]
+				]
+			},
+			"notes": "Fifteen minutes a week is the cheapest maintenance in the whole engagement, and the one most often skipped once the consultant leaves. Hand it over with a printed sheet, and make the signature part of the routine rather than an audit afterthought."
+		},
+		{
+			"kicker": "Lesson 7 · Adoption evidence",
+			"title": "Prove use, do not assert it",
+			"bullets": [
+				"Adoption is measurable: documents per week, users active, exceptions handled inside the system, print formats actually printed",
+				"A rising count of spreadsheets beside the system is the clearest sign of adoption failure",
+				"Look for workarounds: stock adjustments used as corrections, journals used as edits, one user posting for everyone",
+				"Interview two users per role and ask what they still do outside the system",
+				"Put the evidence in the ninety-day report with the baseline beside it"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Documents per week tracked", "Trend against go-live week", "Transaction counts"],
+					["Active users per role", "Most of the role, not one person", "User activity"],
+					[
+						"Exceptions handled in system",
+						"Returns, adjustments, cancellations",
+						"Document type counts"
+					],
+					["Spreadsheets retired", "Named files no longer maintained", "Client confirmation"],
+					["Interviews done", "Two per role", "Interview notes"]
+				]
+			},
+			"notes": "Adoption numbers are easy to fake accidentally, because a single power user can produce impressive volume. Count active users per role, and look for the workarounds that tell you the system is being used around rather than used."
+		},
+		{
+			"kicker": "Lesson 8 · Knowledge that stays",
+			"title": "A hundred pages nobody reads is not a handover",
+			"bullets": [
+				"Four artefacts beat a manual: the weekly sheet, the four-page SOP, the change register and the continuity section",
+				"Write for the person who joins in a year, with today's names replaced by roles",
+				"Every procedure starts with the trigger, not the tool: when this happens, do that",
+				"Keep one index page that says where everything is, including what is not in the system",
+				"Test the knowledge by asking the owner to answer a question from it without you"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Four artefacts exist", "Sheet, SOP, register, continuity", "Handover pack"],
+					["Written in roles, not names", "No departed names in procedures", "Read-through"],
+					["Triggers first", "Each procedure opens with when", "Same read-through"],
+					["Index page present", "One page, links to all", "Handover pack first page"],
+					["Owner answered a question from it", "Dated test", "Handover log"]
+				]
+			},
+			"notes": "Volume is the enemy of a handover. Four artefacts that get used beat a manual that gets filed. The role-versus-name test is quick and revealing: if the procedure names a person who left, it is already historical."
+		},
+		{
+			"kicker": "Lesson 9 · Metrics the client keeps",
+			"title": "Three numbers after you go",
+			"bullets": [
+				"Accuracy: stock count variance and ledger agreement, because everything else depends on it",
+				"Timeliness: how long a document takes from creation to submission, per cycle",
+				"Exceptions: cancellations, adjustments and manual journals per hundred transactions, which reveal process holes",
+				"A client watching three numbers will notice a change before it becomes a crisis",
+				"Agree who reads them and when, or they become a dashboard nobody opens"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Accuracy measured", "Variance per cent, monthly", "Count results"],
+					["Timeliness measured", "Days from creation to submit", "Document timestamps"],
+					["Exception rate measured", "Per hundred transactions", "Document type counts"],
+					["Reader named", "Role and frequency", "Operations calendar"],
+					["Trend shown", "Three months minimum", "Monthly pack"]
+				]
+			},
+			"notes": "Three numbers, read monthly by a named person, is a working control. The exception rate is the most diagnostic and the least used: a rising count of manual journals usually means a process nobody documented is happening every week."
+		},
+		{
+			"kicker": "Lesson 10 · The exit",
+			"title": "Ending well is part of the deliverable",
+			"bullets": [
+				"An exit is a dated moment with a signed handover, not a slow fade in response times",
+				"Close every open item explicitly: fixed, accepted, or transferred with a name against it",
+				"Return access you no longer need, and hand back the keys the client owns",
+				"Leave the successor's contact in writing, so the client knows who to call and why",
+				"Offer one optional review at quarter end, priced, so ongoing help is a choice rather than a dependency"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Close the open item list item by item",
+						"(review)",
+						"Fixed, accepted or transferred"
+					],
+					["2", "Sign the handover pack with the owner", "(sign)", "Dated signature page"],
+					["3", "Return or revoke your own access", "(disable)", "Your account closed"],
+					[
+						"4",
+						"Confirm the client holds every key and password",
+						"(check)",
+						"Key register complete"
+					],
+					["5", "Write the successor and support route", "(write)", "Contact page in the pack"],
+					["6", "Offer the quarter-end review in writing", "(propose)", "Dated offer, priced"]
+				]
+			},
+			"notes": "The exit is judged by what the client can do the week after you leave, not by the closing meeting. Closing every item explicitly, returning access and naming the successor turns the end of a project into the start of a capability — which is the only outcome worth signing."
+		}
+	],
+	"lab": {
+		"title": "Lab · Run a ninety-day close-out for Seri Murni",
+		"minutes": 70,
+		"steps": [
+			"Draw the hypercare rhythm on one page and run the morning check with a name and time against it",
+			"Triage a twenty-item fix list into wrong number, blocked and cosmetic, then publish three dates",
+			"Prepare the day-thirty review with four numbers compared against the go-live baseline",
+			"Run the second-user test on order to delivery and record every hesitation without helping",
+			"Perform the fifteen-minute weekly health check and sign the sheet",
+			"Collect adoption evidence per role and name the spreadsheets that have actually been retired",
+			"Sit with the internal owner while they add a user, a warehouse and a print format themselves",
+			"Complete the exit: close every open item, sign the handover, revoke your own access, offer one dated quarterly review"
+		],
+		"done": "A dated ninety-day close-out with a signed weekly health sheet, a published triage, an ownership test passed by a second user, adoption numbers per role, and an exit where the client holds every key and your access is closed."
+	},
+	"quiz": [
+		{
+			"question": "What gives hypercare its structure in the first week?",
+			"options": [
+				"A hotline number",
+				"A fixed morning check, same-day triage and one written update per day",
+				"A daily meeting with everyone",
+				"An open-ended support contract"
+			],
+			"answer": 1,
+			"why": "A rhythm produces a heartbeat the client can rely on and a record of what happened. An open hotline produces neither, and memories of week one are always wrong."
+		},
+		{
+			"question": "In a fix-list triage, which category outranks the others?",
+			"options": [
+				"Cosmetic complaints from the loudest user",
+				"Wrong numbers, because trust in the ledger is the product",
+				"Blocked work",
+				"Anything raised by the champion"
+			],
+			"answer": 1,
+			"why": "A wrong number undermines every report built on it. Blocked work is usually training or permission; cosmetic items can be batched. A published rule stops volume deciding."
+		},
+		{
+			"question": "What does the second-user test actually prove?",
+			"options": [
+				"That training was delivered",
+				"That somebody other than the champion can complete a core cycle unaided",
+				"That the system is fast",
+				"That permissions are correct"
+			],
+			"answer": 1,
+			"why": "It measures capability rather than attendance. Watching without helping is what exposes the hesitations that documentation or design should have prevented."
+		},
+		{
+			"question": "Which weekly health check failure most often causes a surprise a month later?",
+			"options": [
+				"A quiet error log",
+				"A scheduler that stopped running without anyone noticing",
+				"Aged drafts",
+				"Backups completing late"
+			],
+			"answer": 1,
+			"why": "Silent scheduler failures mean recurring documents and jobs simply stop, and nobody notices until a number is missing at month end."
+		},
+		{
+			"question": "What is the clearest evidence that adoption has failed despite busy transaction counts?",
+			"options": [
+				"Users complain about speed",
+				"Spreadsheets proliferate beside the system to get the work done",
+				"Documents are submitted late",
+				"The error log grows"
+			],
+			"answer": 1,
+			"why": "Parallel spreadsheets mean the real work is happening outside, often done by one power user whose volume makes the dashboard look healthy."
+		}
+	],
+	"memory": {
+		"spine": "Rhythm for the first week, triage by consequence, prove adoption with numbers, and leave a named owner who never needs you.",
+		"device": {
+			"kind": "path",
+			"label": "Week, month, quarter, exit",
+			"expansion": [
+				"Week one: morning check, same-day triage, one written update a day",
+				"Month one: numbers at day thirty, three agreed actions with owners",
+				"Month two: a second user completes a weekly cycle unaided while you watch",
+				"Month three: the internal owner configures a user, a warehouse and a print format",
+				"Exit: every item closed, keys handed back, your access revoked, one dated offer"
+			]
+		},
+		"cards": [
+			{
+				"q": "What three things shape a hypercare week?",
+				"a": "A morning check with a name and time, same-day triage of anything wrong, and one written update per day. Everything else is optional.",
+				"hint": "Check, triage, update"
+			},
+			{
+				"q": "How should a fix list be split, and in what order?",
+				"a": "Wrong numbers first, then blocked work, then cosmetic in one agreed batch — and publish the rule so volume does not decide.",
+				"hint": "Numbers before noise"
+			},
+			{
+				"q": "Why is the second-user test more valuable than a training record?",
+				"a": "It measures capability: a non-champion completes a weekly cycle unaided while you watch in silence, exposing hesitations that training missed.",
+				"hint": "Watch, don't help"
+			},
+			{
+				"q": "Which five checks make up the weekly health routine?",
+				"a": "Scheduled jobs ran, error log quiet, stock and ledger agree, aged drafts counted, backups completed — signed with a date and a name.",
+				"hint": "Fifteen minutes"
+			},
+			{
+				"q": "What does a good exit actually deliver?",
+				"a": "Every open item closed as fixed, accepted or transferred, keys handed back, your access revoked, a named successor, and one dated optional review.",
+				"hint": "Capability, not farewell"
+			}
+		],
+		"trap": {
+			"what": "Hypercare drifts: response times lengthen quietly, the champion is the only user, and the consultant is still answering questions in month nine.",
+			"why": "Dependence feels like success and is the opposite. Set the exit date at the start, hand over to a named owner with a deputy, publish three numbers the client reads, and close every item explicitly when the date arrives."
+		}
+	},
+	"narration": "Go live is a launch, not an ending, and the ninety days after it decide whether the client owns a system or rents one. The first week needs a rhythm rather than a hotline: a morning check with a name and a time, same day triage of anything wrong, and one written update every day. Then triage the fix list by consequence. Wrong numbers first, because trust in the ledger is the product, then blocked work, which is usually training or a permission, then the cosmetic items in one agreed batch with a published rule so volume does not decide. At day thirty bring four numbers compared against the go-live baseline, and agree three actions with owners. At day sixty watch a second user, not the champion, complete a weekly cycle unaided, and record every hesitation as a defect rather than a training gap. At day ninety hand over to a named internal owner and a deputy, who can add a user, a warehouse and a print format without calling you. Along the way run the fifteen minute weekly check, prove adoption with counts per role instead of anecdotes, and finish with a dated exit: every item closed, keys handed back, your access revoked, and one optional review priced in writing."
+}

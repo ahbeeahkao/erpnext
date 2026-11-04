@@ -1,320 +1,343 @@
 {
 	"id": "ch19",
 	"number": 19,
-	"title": "Volume 7 · Projects, Timesheets and Billable Work",
-	"subtitle": "Lessons 1–4: a project that carries its own profit and loss, timesheets that become invoices, and a close that shows the margin",
+	"title": "Volume 6 · Production Costing, Scrap and Subcontracting",
+	"subtitle": "Lessons 5–8: what a finished unit really cost, how scrap changes the answer, and where subcontracting sits in the ledger",
 	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Set up a project whose cost and revenue land on the same report",
-		"Record billable and non-billable time without inflating the client invoice",
-		"Turn approved timesheets into an invoice with the right tax treatment",
-		"Report project margin and close the project with evidence"
+		"Read a production cost and reconcile it to the BOM",
+		"Handle scrap so the good units carry the loss",
+		"Subcontract an operation and keep material control",
+		"Explain variance between planned and actual cost to a production manager"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 1 · Project",
-			"title": "Create a project that tracks its own profit",
+			"kicker": "Lesson 5 · Production cost",
+			"title": "Read the finished cost before you defend it",
 			"bullets": [
-				"A project is a cost collector, and its value appears only if every entry names it",
-				"Set the expected start and end dates, because they drive the billing schedule",
-				"Assign a cost centre if the client reports by department as well as by project",
-				"Create the project before the first timesheet, not after the first invoice"
+				"Finished cost is materials consumed plus operations recorded, divided by good units",
+				"The stock ledger row is the proof, not the report total",
+				"A cost that differs from the BOM has exactly three usual causes",
+				"Cost reviewed weekly stops being an argument at month end"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Projects → Project → New", "Aeon Big rollout, company SM", "Empty project form"],
-					["2", "Set the dates", "Start 02-02-2026, end 27-02-2026", "Schedule recorded"],
+					["1", "Open the manufacture entry", "STE-SM-2026-0011", "Consumed and produced rows"],
+					["2", "Add up materials", "20 × 80.00 plus 10 × 40.00", "2,000.00"],
+					["3", "Add operating cost", "5 hours at 60.00 per hour", "300.00"],
+					["4", "Divide by good units", "2,300.00 across 10 assemblies", "230.00 per unit"],
+					["5", "Compare with the BOM", "BOM total 230.00", "No variance"],
 					[
-						"3",
-						"Set billing",
-						"Project currency MYR, 150.00 per hour billing rate",
-						"Rate stored for billing"
-					],
-					["4", "Set cost centre", "Retail Counter - SM for delivery work", "Cost centre carried"],
-					["5", "Save", "Nothing else", "Project PROJ-0001, status Open"],
-					["6", "Check the dashboard", "Project overview", "Zero hours, zero cost, zero billed"]
+						"6",
+						"Record the check",
+						"One line in the production worksheet",
+						"Signed by production and finance"
+					]
 				]
 			},
-			"notes": "The billing rate on the project is what turns hours into money, so get it agreed in writing before the first timesheet. Twenty hours at one hundred fifty is three thousand of revenue, and the client will compare that against the fixed quote in the contract. A project without a rate produces timesheets that finance has to reprice by hand, which is exactly the work a consultant is hired to remove."
+			"notes": "The arithmetic here is deliberately identical to the BOM, because the first production run should show no variance. Once a client sees that the system agrees with the recipe, they trust it when the numbers later diverge. Introduce variance only after the clean case is understood, or the learner will assume every difference is a system error."
 		},
 		{
-			"kicker": "Lesson 2 · Verify the setup",
-			"title": "What the project must carry before work starts",
+			"kicker": "Lesson 6 · Verify the cost",
+			"title": "Cost per unit, proved three ways",
 			"bullets": [
-				"Rate, cost centre, dates and customer are the four fields that matter",
-				"A project with no customer cannot be invoiced without retyping everything",
-				"Cost centre makes the project visible in departmental reporting as well",
-				"The percentage complete figure is a management input, not an accounting one"
+				"Materials, operations and total must agree from the entry, the stock ledger and the BOM",
+				"Valuation per unit appears in the stock ledger row and the stock balance report",
+				"A rounding difference of a cent is normal, a difference of ten per cent is not",
+				"Any difference must be explained in the worksheet before the period closes"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Customer", "Aeon Big Sdn Bhd", "Project form"],
-					["Billing rate", "150.00 per hour", "Project → Billing"],
-					["Cost centre", "Retail Counter - SM", "Project form"],
-					["Expected hours", "20", "Project → Costing"],
-					["Expected revenue", "3,000.00", "Your own arithmetic"]
+					["Material cost", "2,000.00", "Manufacture entry consumed rows"],
+					["Operating cost", "300.00", "Manufacture entry operating cost"],
+					["Total cost", "2,300.00", "Manufacture entry total"],
+					["Valuation per unit", "230.00", "Stock Ledger, SM-ASM incoming row"],
+					["Stock value", "2,300.00 for 10 units", "Stock Balance report"]
 				]
 			},
-			"notes": "Twenty hours at one hundred fifty is three thousand, and the expected cost will come from timesheets at the internal rate. Writing both numbers down before work starts is what makes the margin conversation possible in week three, when the client asks why the invoice is higher than they remember."
+			"notes": "Three ways of seeing the same number is the fastest way to build confidence in a new system. Ask the learner to read the figure off the entry, off the ledger and off the balance sheet item, then to explain why all three agree. When they can do that unprompted, they can survive any costing meeting."
 		},
 		{
-			"kicker": "Lesson 3 · Timesheet",
-			"title": "Record time so it can be billed and costed",
+			"kicker": "Lesson 7 · Scrap",
+			"title": "Scrap one unit and let the good units carry it",
 			"bullets": [
-				"A timesheet records hours against a project and an activity, and it carries a cost",
-				"Mark billable time deliberately, because non-billable hours still cost money",
-				"Approve timesheets before invoicing, or the invoice will not be defensible",
-				"The internal cost rate is separate from the billing rate and is what finance needs"
+				"Scrap is a quantity decision, not a cost adjustment typed into a journal",
+				"The total production cost stays the same while the good quantity falls",
+				"Cost per good unit therefore rises, and the finished stock carries that higher value",
+				"Scrap needs a reason code, because the causes are process, material or machine"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Projects → Timesheet → New",
-						"Employee Aina, project Aeon Big rollout",
-						"Empty timesheet"
-					],
-					["2", "Add a line", "Activity Implementation, 8 hours on 05-02-2026", "Line accepted"],
-					[
-						"3",
-						"Mark billing",
-						"Billable, billing rate 150.00, cost rate 80.00",
-						"Amounts computed"
-					],
-					[
-						"4",
-						"Add a second line",
-						"Design review, 2 hours, non-billable",
-						"Billable total unchanged"
-					],
-					["5", "Save and Submit", "Confirm", "Timesheet TS-2026-0001, cost 800.00"],
-					["6", "Check the project", "Project cost", "800.00 against the project"]
-				]
-			},
-			"notes": "Eight billable hours at one hundred fifty and two non-billable at the same rate is a trap, because non-billable time must not reach the invoice. Marking it correctly keeps three thousand of revenue intact while still costing eight hundred, which is the honest picture. Teach the difference before the first timesheet, not after the first disputed invoice."
-		},
-		{
-			"kicker": "Lesson 4 · Bill the project",
-			"title": "Turn approved time into a defensible invoice",
-			"bullets": [
-				"Invoicing from a timesheet carries hours, rate and project onto the invoice automatically",
-				"Service tax treatment differs from goods, so check the template before submitting",
-				"An invoice without a project loses the margin link that made the project worth creating",
-				"Bill monthly, because a single invoice at the end hides cost overruns until it is too late"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Open TS-2026-0001 → Create → Sales Invoice",
-						"Nothing",
-						"Customer and project pre-filled"
-					],
-					["2", "Check the line", "20 hours at 150.00", "Net 3,000.00"],
-					["3", "Apply service tax", "Service Tax 8 % template", "Tax 240.00, total 3,240.00"],
-					["4", "Save and Submit", "Confirm", "Invoice SINV-SM-2026-0010"],
-					["5", "Read the project", "Project cost and billed", "Cost 1,600.00, billed 3,000.00"],
-					["6", "Check the margin", "Project profitability", "1,400.00, about 46 per cent"]
-				]
-			},
-			"notes": "Twenty hours at one hundred fifty is three thousand of revenue, twenty hours at eighty is one thousand six hundred of cost, and the difference of one thousand four hundred is the margin the project exists to produce. Service tax of eight per cent adds two hundred forty, which is a liability and never revenue. When those three numbers are visible on one screen, the client stops treating projects as a reporting nicety."
-		},
-		{
-			"kicker": "Lesson 5 · Project close",
-			"title": "Close the project with the numbers attached",
-			"bullets": [
-				"Closing means no more time or cost can be posted against the project",
-				"Compare final cost with the estimate and write down the reason for the difference",
-				"Unbilled timesheets must be invoiced or written off before closing",
-				"A closed project is the reference for pricing the next one"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					[
-						"1",
-						"Check unbilled time",
-						"Filter timesheets by project and billing status",
-						"List empty or explained"
+						"Open the work order",
+						"WO-SM-2026-0001, completed 10 units",
+						"Existing completion"
 					],
 					[
 						"2",
-						"Check cost",
-						"Project cost against the 1,600.00 estimate",
-						"Variance within tolerance"
+						"Create the scrap entry",
+						"Stock Entry type Material Issue from Main, quantity 1",
+						"One assembly removed"
 					],
-					["3", "Set completion", "100 per cent complete, status Completed", "Project closes"],
 					[
-						"4",
-						"Attach evidence",
-						"Signed timesheet and invoice in the file",
-						"Audit trail complete"
+						"3",
+						"Set the reason",
+						"Scrap - assembly defect, cost centre Assembly",
+						"Reason stored on the entry"
 					],
-					["5", "Record the lesson", "Variance note in the project sheet", "Reason written down"],
-					["6", "Confirm no postings", "Attempt a new timesheet", "Project no longer accepts time"]
+					["4", "Save and Submit", "Confirm", "Stock falls to 9 assemblies"],
+					["5", "Read the cost", "Stock Balance for SM-ASM", "9 units still worth 2,300.00"],
+					["6", "Recompute per unit", "2,300.00 across 9 units", "255.56 per unit"]
 				]
 			},
-			"notes": "The value of closing properly is the next quotation. A project that ended at one thousand six hundred of cost against an estimate of one thousand two hundred teaches the client to reprice, provided somebody writes it down. Make the variance note part of the close, or the same underestimate will repeat on every engagement and the consultant will be blamed for the system's silence."
+			"notes": "Two thousand three hundred across nine units is two hundred fifty five point five six, and that is the number the owner needs to see, because the loss is now visible in the value of the remaining stock. If the scrap were journalled away, the nine good units would look cheaper than they are and the next quotation would be priced on a lie."
 		},
 		{
-			"kicker": "Volume 7 · Reference",
-			"title": "Project documents and the controls they carry",
+			"kicker": "Lesson 8 · Subcontracting",
+			"title": "Subcontract an operation and keep control of the material",
 			"bullets": [
-				"Each document adds one dimension: time, cost, revenue or status",
-				"The project record is the join between all four, which is why it must be named everywhere",
-				"Approval is the control that makes timesheets billable and defensible",
-				"Every control has an owner in the client's team, not in the consultant's head"
+				"Subcontracting sends material out and buys a service back, and both must be recorded",
+				"The subcontractor warehouse is where your material sits while someone else holds it",
+				"The purchase receipt of the service adds that cost to the finished valuation",
+				"Sending material without a transfer is how stock disappears in a subcontracting business"
 			],
 			"table": {
-				"headers": ["Document", "Adds", "Control", "Who owns it"],
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
-						"Project",
-						"Cost centre, rate, customer",
-						"Rate agreed before work",
-						"Engagement manager"
+						"1",
+						"Create the subcontracting BOM",
+						"SM-ASM with operation Powder Coating marked subcontract",
+						"BOM ready for outsourcing"
 					],
-					["Timesheet", "Hours and internal cost", "Approval before billing", "Team lead"],
-					["Sales Invoice", "Revenue and tax", "Matches approved hours", "Finance"],
-					["Project profitability", "Margin by project", "Reviewed monthly", "Finance manager"],
-					["Completion note", "Variance and lessons", "Signed at close", "Engagement manager"]
+					[
+						"2",
+						"Raise the purchase order",
+						"Service item Powder Coating, 10 units at 12.00",
+						"Total 120.00"
+					],
+					[
+						"3",
+						"Transfer material",
+						"SM-ASM 10 units to Subcontractor - SM",
+						"Material leaves main"
+					],
+					[
+						"4",
+						"Receive the service",
+						"Purchase receipt against the order",
+						"Units return to main"
+					],
+					["5", "Check valuation", "Stock Balance for SM-ASM", "242.00 per unit including 12.00"],
+					["6", "Reconcile material", "Subcontractor warehouse balance", "Zero, all units returned"]
 				]
 			},
-			"notes": "Projects fail in ERPNext for a boring reason: somebody forgets to name the project on a timesheet, and the cost disappears into a departmental expense. The fix is a control, not a report, so agree who checks that every timesheet carries a project and put it in the weekly meeting. When that control is in place, the margin report is trustworthy by default."
+			"notes": "Twelve ringgit of coating on a two hundred thirty assembly gives two hundred forty two, and the subcontractor warehouse must end at zero. That zero is the control: if material is still sitting with the subcontractor after the service receipt, someone is holding your stock without a document, which is a finding worth raising the same day."
 		},
 		{
-			"kicker": "Volume 7 · Reference",
-			"title": "Reading the project profit and loss",
+			"kicker": "Lesson 7 · Verify scrap",
+			"title": "What scrap does to the remaining value",
 			"bullets": [
-				"Revenue comes from invoices that name the project, not from quotations",
-				"Cost comes from timesheets and purchase documents that name the project",
-				"Unbilled work in progress is a real asset, and it belongs in the month-end pack",
-				"A margin of 46 per cent on services is healthy for Malaysian implementation work"
+				"Total production cost is unchanged by scrap, and the good units carry it",
+				"The stock value stays at 2,300.00 with nine units, so the report shows the loss",
+				"A scrap account only appears if you configured the entry to expense it directly",
+				"Recalculate the selling price implication before the next quotation goes out"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Project revenue", "3,000.00 net of tax", "Project profitability report"],
-					["Project cost", "1,600.00 at 80.00 per hour", "Project profitability report"],
-					["Gross margin", "1,400.00, about 46 per cent", "Your own arithmetic"],
-					["Unbilled time", "0.00 after the invoice", "Timesheet billing status"],
-					["Service tax", "240.00 payable, not revenue", "General Ledger, Service Tax account"]
+					["Assemblies in stock", "9", "Stock → Bin, Main - SM"],
+					["Stock value", "2,300.00 unchanged", "Stock Balance for SM-ASM"],
+					["Valuation per unit", "255.56", "Stock Ledger, latest row"],
+					[
+						"Scrap entry",
+						"1 unit issued with a reason and cost centre",
+						"Stock Entry STE-SM-2026-0012"
+					],
+					["Margin at 350.00 selling price", "94.44, about 27 per cent", "Your own arithmetic"]
 				]
 			},
-			"notes": "Show this page to the client's finance manager and to the engagement manager in the same meeting, because they will each read a different line. Finance wants unbilled time at zero; the engagement manager wants margin above forty per cent. When both are on one page, the project review takes ten minutes instead of an hour."
+			"notes": "Two hundred fifty five fifty six against a three hundred fifty selling price leaves ninety four forty four, roughly twenty seven per cent, down from thirty four. That fall is the real cost of the defect, and it belongs in the next pricing conversation rather than the scrap bin. Show the learner the margin before and after, and the quality discussion starts by itself."
+		},
+		{
+			"kicker": "Lesson 8 · Verify subcontracting",
+			"title": "Proof the service and the material both landed",
+			"bullets": [
+				"Material out, service in, material back: three movements and one valuation",
+				"The service cost is only in stock if the receipt was against the subcontracting order",
+				"The subcontractor warehouse must return to zero, or material is unaccounted for",
+				"Subcontract purchase invoices still carry tax, and it is input tax like any purchase"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Subcontractor warehouse balance", "0 units", "Stock → Bin, Subcontractor - SM"],
+					["Assemblies back in main", "10 units", "Stock → Bin, Main - SM"],
+					["Valuation per unit", "242.00", "Stock Ledger, latest incoming row"],
+					["Service cost in stock", "120.00 across ten units", "Landed value in the receipt"],
+					["Purchase invoice", "120.00 plus input tax", "Accounts → Purchase Invoice"]
+				]
+			},
+			"notes": "The two numbers that matter are zero and two hundred forty two: nothing left with the supplier, and every returned unit carrying the service cost. If either is wrong, the receipt was raised against the wrong order or the transfer never happened, and both are visible in the same screen. Checking this weekly prevents the year-end scramble that subcontracting projects always produce."
+		},
+		{
+			"kicker": "Volume 6 · Reference",
+			"title": "Cost components and where they land",
+			"bullets": [
+				"Every ringgit of production cost must land in inventory, not in an expense account",
+				"Capacity cost is labour and machine time, and it needs a rate the client can defend",
+				"Scrap and rework are cost of quality, and they belong in the same work order",
+				"Subcontracting adds an external service cost, which is still inventory until sale"
+			],
+			"table": {
+				"headers": ["Component", "Source", "Lands in", "Check"],
+				"rows": [
+					[
+						"Raw material",
+						"Stock issue at valuation",
+						"Work in progress, then finished goods",
+						"Quantity matches the BOM"
+					],
+					[
+						"Direct labour",
+						"Operation time at workstation rate",
+						"Finished goods valuation",
+						"Hours recorded on the entry"
+					],
+					[
+						"Machine cost",
+						"Workstation rate including overhead",
+						"Finished goods valuation",
+						"Rate agreed with finance"
+					],
+					[
+						"Subcontract service",
+						"Purchase invoice for the service",
+						"Finished goods valuation",
+						"Material returned to zero"
+					],
+					[
+						"Scrap",
+						"Material issue with a reason",
+						"Cost of the remaining good units",
+						"Reason code and approver"
+					]
+				]
+			},
+			"notes": "This is the table to leave with a manufacturing client, because their accountant will ask where each element sits and their production manager will ask who controls it. Answering both columns in one page is what turns a system implementation into a costing conversation the client trusts."
 		}
 	],
 	"lab": {
-		"title": "Lab · Run a 20-hour project from setup to margin",
+		"title": "Lab · Cost a build, scrap a unit and subcontract an operation",
 		"minutes": 45,
 		"steps": [
-			"Create the Aeon Big rollout project with a 150.00 billing rate and a cost centre",
-			"Confirm the expected revenue of 3,000.00 before any work is recorded",
-			"Record 20 billable hours and 2 non-billable hours on a timesheet",
-			"Submit the timesheet and confirm the project cost of 1,600.00",
-			"Create the sales invoice from the timesheet with 8 per cent service tax",
-			"Confirm net revenue 3,000.00, tax 240.00 and total 3,240.00",
-			"Read project profitability and confirm the 1,400.00 margin",
-			"Close the project and confirm new timesheets are refused"
+			"Read the completed manufacture entry and confirm 2,300.00 total cost",
+			"Prove 230.00 per unit from the entry, the stock ledger and the stock balance",
+			"Issue one assembly as scrap with a reason and a cost centre",
+			"Confirm nine units now carry the full 2,300.00 and recompute the unit cost",
+			"Create a subcontracting operation on the BOM for powder coating at 12.00",
+			"Raise the purchase order and transfer ten assemblies to the subcontractor warehouse",
+			"Receive the service and confirm the new valuation of 242.00 per unit",
+			"Prove the subcontractor warehouse balance is zero after receipt"
 		],
-		"done": "Done when the project shows 3,000.00 revenue, 1,600.00 cost and 1,400.00 margin, no unbilled time remains, and the project no longer accepts postings."
+		"done": "Done when scrap leaves nine units at 255.56 each, the subcontracted units carry 242.00, and no material remains in the subcontractor warehouse."
 	},
 	"quiz": [
 		{
-			"question": "20 billable hours at 150.00 with 8 per cent service tax give aninvoice total of what?",
-			"options": ["3,000.00", "3,240.00", "3,120.00", "2,760.00"],
+			"question": "A build costs 2,300.00 and one of ten units is scrapped. Cost per good unit becomes what?",
+			"options": ["230.00", "255.56", "207.00", "2,300.00"],
 			"answer": 1,
-			"why": "Net is 3,000.00 and service tax of 8 per cent adds 240.00, giving 3,240.00, of which the tax is a liability not income."
+			"why": "Total cost stays at 2,300.00 while the good quantity falls to nine, so each unit carries 255.56."
 		},
 		{
-			"question": "Where does project cost come from?",
+			"question": "How should scrap be recorded?",
 			"options": [
-				"The quotation",
-				"Timesheets and purchase documents naming the project",
-				"The customer record",
-				"The stock ledger"
+				"A journal reducing stock",
+				"A stock entry with a reason code",
+				"Editing the work order",
+				"A credit note"
 			],
 			"answer": 1,
-			"why": "Only documents that name the project feed its cost, which is why naming the project on a timesheet is the control that matters."
+			"why": "Scrap is a quantity event, so it needs a stock entry with a reason, which also keeps the cost with the good units."
 		},
 		{
-			"question": "What is the project margin with 20 hours billed at 150.00 and costed at 80.00 per hour?",
-			"options": ["1,400.00", "1,600.00", "3,000.00", "2,240.00"],
-			"answer": 0,
-			"why": "Revenue is 3,000.00 and cost is 1,600.00, leaving 1,400.00, which is about 46 per cent of revenue."
-		},
-		{
-			"question": "What happens to non-billable time on a timesheet?",
+			"question": "In subcontracting, where does your material sit while the supplier works on it?",
 			"options": [
-				"It is invoiced",
-				"It costs the project but is not billed",
-				"It is deleted",
-				"It moves to the customer"
+				"Main warehouse",
+				"The subcontractor warehouse",
+				"Goods in transit",
+				"Work in progress"
 			],
 			"answer": 1,
-			"why": "Non-billable time still carries internal cost, so it reduces margin without appearing on the invoice."
+			"why": "ERPNext holds subcontracted material in a subcontractor warehouse so the balance proves what is with the supplier."
 		},
 		{
-			"question": "Why close a project in the system?",
+			"question": "What should the subcontractor warehouse balance be after the service is received?",
+			"options": ["Equal to the order quantity", "Zero", "Negative", "Equal to the service cost"],
+			"answer": 1,
+			"why": "All transferred material should return, so a non-zero balance means material is unaccounted for and needs immediate investigation."
+		},
+		{
+			"question": "Which production cost lands in finished goods valuation?",
 			"options": [
-				"To delete timesheets",
-				"To prevent further postings and capture the variance",
-				"To close the fiscal year",
-				"To archive the invoice"
+				"Only raw material",
+				"Material, operations and subcontract services",
+				"Only labour",
+				"Selling and admin costs"
 			],
 			"answer": 1,
-			"why": "Closing stops new time and cost, and the variance note becomes the reference for pricing the next engagement."
+			"why": "Production cost includes material, operations and bought-in services used in the build, all of which stay in inventory until sale."
 		}
 	],
 	"memory": {
-		"spine": "A project is a collector, and it only collects what names it, so every hour and every invoice must carry the project field.",
+		"spine": "Total production cost is fixed; the only question is how many good units must carry it, and scrap never answers that with a journal.",
 		"device": {
 			"kind": "rule",
-			"label": "Every entry names the project",
+			"label": "Good units carry the bad ones",
 			"expansion": [
-				"A project is a cost collector whose profit and loss exists only if postings name it",
-				"Four fields before work starts: rate, cost centre, dates and customer",
-				"A timesheet records hours against project and activity and carries both a billing and a costing rate",
-				"Invoice from the timesheet so hours, rate and project travel together",
-				"Closing stops time and cost, and does not reverse revenue already billed"
+				"Finished cost is materials consumed plus operations recorded, divided by good units",
+				"Scrap is a quantity decision on the document, never a cost typed into a journal",
+				"Total production cost is unchanged by scrap, so the good units absorb it",
+				"Subcontracting is material out, service in and material back: three movements, one valuation",
+				"Every ringgit of production cost lands in inventory, not in an expense account"
 			]
 		},
 		"cards": [
 			{
-				"q": "Why is a project profit and loss empty?",
-				"a": "Something was posted without the project field, because the collector only sees postings that name it.",
-				"hint": "Name it or lose it"
+				"q": "How is cost per finished unit calculated?",
+				"a": "Materials plus operations, divided by good units, with scrap in the numerator and never quietly subtracted.",
+				"hint": "Divide by good units"
 			},
 			{
-				"q": "Where does project revenue come from?",
-				"a": "Sales invoices that name the project, not quotations and not orders.",
-				"hint": "Invoices, not promises"
+				"q": "One of ten units is scrapped. What happens to total cost?",
+				"a": "It stays the same and the nine good units carry it, so unit cost rises.",
+				"hint": "Spread, not lost"
 			},
 			{
-				"q": "What does a timesheet carry besides hours?",
-				"a": "A billing rate and a costing rate, so one hour is both revenue and cost.",
-				"hint": "Two rates, one hour"
+				"q": "How is scrap recorded?",
+				"a": "As a quantity on the manufacture entry or a separate scrap entry, not as a journal.",
+				"hint": "Quantity, not money"
 			},
 			{
-				"q": "Why invoice from the timesheet?",
-				"a": "Hours, rate and project land on the invoice without retyping, so the margin stays traceable.",
-				"hint": "No retyping"
+				"q": "How many movements does subcontracting create?",
+				"a": "Three: material out to the subcontractor, the service received, and the finished material back.",
+				"hint": "Out, service, back"
 			},
 			{
-				"q": "What does closing a project do?",
-				"a": "It stops further time and cost postings, and it does not reverse revenue already billed.",
-				"hint": "Stop, do not undo"
+				"q": "Where must production cost land?",
+				"a": "In inventory value. An expense account here means the stock was under costed.",
+				"hint": "Balance sheet first"
 			}
 		],
 		"trap": {
-			"what": "Hours are captured on the timesheet but the invoice is raised by hand at a different rate.",
-			"why": "Revenue and cost no longer share a rate, so project margin is fiction and the timesheet becomes paperwork nobody trusts."
+			"what": "Scrap is written off to an expense account at the end of the month instead of on the document.",
+			"why": "Finished units then carry a cost that excludes the loss, the true unit cost is understated, and the expense appears where nobody looks."
 		}
 	},
-	"narration": "Services work is deceptively simple, and the margin is where consultants get caught. A project is a cost collector: name it on a timesheet, name it on an invoice, and it carries both sides. Twenty hours at one hundred fifty is three thousand of revenue; twenty hours at eighty is one thousand six hundred of cost; the difference is one thousand four hundred, about forty six per cent. Service tax of eight per cent adds two hundred forty and stays a liability. Record non-billable time anyway, because it costs money even though it cannot be invoiced. Then close the project with a variance note, which is the only way the next quote gets better. A project that is never closed teaches nobody anything and quietly repeats its mistakes. Twenty hours, one rate, one invoice, one margin: when a client can state those four numbers from memory, the services practice is under control, and the next quotation is priced on evidence rather than optimism."
+	"narration": "Once a client has built something, the next question is what it cost, and the answer has to survive an argument. A completed build of ten assemblies carries two thousand of material and three hundred of labour, so two hundred thirty each, and the entry, the stock ledger and the stock balance must all say the same thing. Scrap is where costing gets real: one unit fails, the total cost does not move, and the nine good units now carry two hundred fifty five fifty six each. Subcontracting adds a bought-in service, twelve ringgit of coating, and a warehouse that must return to zero. Materials, labour, scrap, service: four components, one valuation, and a worksheet that lets the production manager and the accountant argue with numbers instead of opinions. Teach the four components in order, and insist on the worksheet, because a costing conversation without evidence becomes a personality contest, and the consultant is always the outsider in that room."
 }

@@ -1,354 +1,426 @@
 {
 	"id": "ch22",
 	"number": 22,
-	"title": "Volume 8 · Permissions, Workflows and Automation",
-	"subtitle": "Lessons 5–8: roles that match the org chart, restrictions that hold, a discount workflow, and automation that does not run away",
+	"title": "Volume 7 · The Service Desk: Issues, SLAs and Warranty Claims",
+	"subtitle": "Lessons 1–10: logging issues against assets, running SLAs honestly, and settling warranty claims without losing money",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 65,
 	"outcomes": [
-		"Build roles and permissions that match who does what",
-		"Restrict a user to their own warehouse or branch without custom code",
-		"Add an approval workflow for discounts and prove it blocks what it should",
-		"Automate recurring documents safely and know what to leave manual"
+		"Log an issue against a serialised asset and keep the service history attached to it",
+		"Configure service levels that measure the response the client actually promised",
+		"Decide when a repair is free of charge and when it is billable, with evidence",
+		"Turn field service time into an invoice that matches the agreement"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Roles",
-			"title": "Roles that match the org chart, not the software",
+			"kicker": "Lesson 1 · The issue desk",
+			"title": "Why service work needs its own document",
 			"bullets": [
-				"A role is a job function, so name it after the job and not after a person",
-				"Permission levels control what can be created, read, amended or deleted",
-				"Start restrictive and add, because removing access later is a political fight",
-				"Every role needs an owner who reviews membership quarterly"
+				"A customer complaint is not a sales return, and treating it as one destroys the warranty history",
+				"An issue records who reported it, which asset, what the symptom was and who owns the fix",
+				"The same asset accumulates issues over years, which is how a client learns which model to stop buying",
+				"Without an issue record, the service team keeps its history in a chat group and the warranty claim in a memory",
+				"A distributor with an assembly line needs this even at two issues a week"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Issue exists as its own document", "Status, priority, owner", "Desk, Issues list"],
+					[
+						"Issue linked to a serialised asset",
+						"Serial shown on the issue",
+						"Issue form, asset field"
+					],
+					["Reported-by captured", "Customer contact, not just company", "Contact field"],
+					["Owner assigned", "One person, not a team", "Assigned To"],
+					["History visible per asset", "Issues listed against the serial", "Asset dashboard"]
+				]
+			},
+			"notes": "The first objection is always volume: we only get two complaints a week. Volume is not the argument, warranty is. Without a per-asset history, the client cannot tell an early failure from a misuse pattern, and pays for both."
+		},
+		{
+			"kicker": "Lesson 2 · Logging",
+			"title": "A five-field issue that survives an audit",
+			"bullets": [
+				"Asset, symptom, reporter, priority and promised response: five fields, filled every time",
+				"The symptom is written in the customer's words plus one sentence of technical description",
+				"Priority is set by impact, not by who shouted, and the SLA clock follows the priority",
+				"Attach the photograph at logging time, because the second visit is where the cost is",
+				"Nothing is closed without a resolution note a stranger could understand"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Users and Permissions → Role → New", "Sales Executive, desk user", "Role created"],
-					["2", "Open Role Permissions Manager", "Sales Order for that role", "Permission matrix"],
+					["1", "Open Issue for customer Kim Huat Hardware", "(new)", "Draft issue"],
+					["2", "Select the serialised asset", "SN-2026-00418", "Asset and its history load"],
 					[
 						"3",
-						"Set levels",
-						"Read, Write, Create, Submit; no Delete or Cancel",
-						"Four ticks, two blanks"
+						"Write the symptom in the customer's words",
+						"Bearing noise above 800 rpm",
+						"Description saved"
 					],
-					["4", "Set user permissions", "Customer and territory restrictions", "Restriction rows"],
-					["5", "Assign to a user", "Aina as Sales Executive", "One role on the user"],
-					[
-						"6",
-						"Log in as the user",
-						"Open a sales order",
-						"Create and submit buttons present, delete absent"
-					]
+					["4", "Set priority from impact", "High", "SLA clock starts on submission"],
+					["5", "Attach the photograph and a reading", "(attach)", "Two attachments on the issue"],
+					["6", "Assign an owner", "Service technician", "Issue appears in their queue"]
 				]
 			},
-			"notes": "The instinct is to grant everything because the demo is easier, and the consequence arrives six months later when a salesperson deletes a submitted order. Start with read, write, create and submit; add cancel only for supervisors, and delete for nobody in a transaction doctype. A functional consultant who can explain that sentence has already delivered value."
+			"notes": "Five fields, consistently, is worth more than twenty fields filled sometimes. The photograph at logging is the highest-value habit, because it turns a second site visit into a phone call."
 		},
 		{
-			"kicker": "Lesson 6 · User permissions",
-			"title": "Restrict a user to their own warehouse",
+			"kicker": "Lesson 3 · Service levels",
+			"title": "Make the SLA measurable or do not promise it",
 			"bullets": [
-				"User permissions filter the data a role can see, and they outweigh role permissions",
-				"A warehouse restriction is the standard way to keep branches apart without separate companies",
-				"Test as the restricted user, because administrators bypass these filters",
-				"Restrictions apply to reports too, which is what makes them trustworthy"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Open the user", "Warehouse supervisor", "User form"],
-					[
-						"2",
-						"Add user permission",
-						"Allow Warehouse: Retail Counter - SM",
-						"Restriction row added"
-					],
-					["3", "Set apply to all doctypes", "Yes, for stock doctypes", "Scope defined"],
-					["4", "Log in as that user", "Open Stock Balance", "Only Retail Counter shown"],
-					["5", "Try a transfer to Main", "Create a stock entry", "Main not selectable"],
-					["6", "Log back in as administrator", "Same report", "All warehouses visible"]
-				]
-			},
-			"notes": "This is the single most requested control in multi-branch distribution, and it is pure configuration. Show the client the same report from two logins, because seeing the difference is what sells the control. Remind them that administrators bypass it, so the discipline depends on limiting administrator accounts to two named people."
-		},
-		{
-			"kicker": "Lesson 7 · Workflow",
-			"title": "Put an approval on discounts above ten per cent",
-			"bullets": [
-				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
-				"Conditions belong in transition rules, which keeps the workflow honest",
-				"Approvers need a role, not a person, so absence does not block the business",
-				"Every workflow needs an escape path, or urgent orders stall at month end"
+				"A service level is a response and a resolution target per priority, not an aspiration in a proposal",
+				"Response means the clock stops when someone with the right skill starts, not when the ticket is read",
+				"Holiday calendars and working hours belong in the setup, or the SLA breaches itself over a long weekend",
+				"Measure from submission to first response, and report the breaches with their cause",
+				"A client who signs an eight-hour promise with no weekend cover has bought a number they cannot meet"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Settings → Workflow → New",
-						"Document Sales Order, state Draft",
-						"Workflow editor"
+						"Set working hours and holidays for the service calendar",
+						"Mon–Fri 09:00–18:00",
+						"Calendar saved"
 					],
-					["2", "Add states", "Pending Approval, Approved, Rejected", "Three states defined"],
+					[
+						"2",
+						"Define service level by priority",
+						"High: respond 4h, resolve 24h",
+						"Two targets stored"
+					],
 					[
 						"3",
-						"Add a transition",
-						"Draft to Approved when discount is zero",
-						"Auto-approval path"
+						"Assign priority to the agreement",
+						"High, Medium, Low",
+						"Priority list configured"
 					],
 					[
 						"4",
-						"Add a second transition",
-						"Draft to Pending Approval when discount above 10",
-						"Approval path"
+						"Raise a test issue outside working hours",
+						"(submit)",
+						"Clock counts from the next working hour"
 					],
-					["5", "Assign approver role", "Sales Manager", "Role attached to the state"],
+					[
+						"5",
+						"Respond and check the elapsed time",
+						"(update)",
+						"Elapsed shown against the target"
+					],
+					["6", "Report breaches for the week", "(report)", "Breach list with causes"]
+				]
+			},
+			"notes": "Most SLA failures are calendar failures, not people failures. A promise of four hours starting at five on Friday means the clock runs all weekend unless the calendar says otherwise. Configure it, then demonstrate the weekend test."
+		},
+		{
+			"kicker": "Lesson 4 · Verify the clock",
+			"title": "What an SLA report must prove",
+			"bullets": [
+				"The elapsed time must be computed from stored timestamps, not from a note in the description",
+				"A breach must be attributable: which target, which priority, which agent, which cause",
+				"Response and resolution are separate measures, and a fast response with a slow resolution is still a breach",
+				"Report the median and the worst case, because the average hides the customer who is about to leave",
+				"Keep the report small enough that the service lead reads it weekly"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Elapsed computed from timestamps", "Hours, to the minute", "Issue form and SLA report"],
+					["Breaches attributable", "Target, agent and cause named", "Weekly SLA report"],
+					["Response and resolution separated", "Two columns, two verdicts", "Same report"],
+					["Worst case shown", "Longest open issue", "Same report, top row"],
+					["Report reviewed weekly", "Dated notes on actions", "Service meeting minutes"]
+				]
+			},
+			"notes": "An SLA report that says ninety-eight per cent is useless if the two per cent are the client's biggest account. Show the worst case next to the median, and make the review weekly so the breach is a conversation rather than a post-mortem."
+		},
+		{
+			"kicker": "Lesson 5 · Free or billable",
+			"title": "The warranty decision, with evidence",
+			"bullets": [
+				"Warranty is a date, a serial and a condition, and all three must be findable in one place",
+				"The delivery date of the serial is the warranty start, not the invoice date of the first order from that customer",
+				"Free of charge covers the part and the labour per the agreement, and the agreement must say which",
+				"Damage in transit and misuse are exclusions, and the photograph taken at logging is what settles the argument",
+				"Record the decision with the reason, because next year's claim will refer to this one"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Warranty start date found", "Delivery date of the serial", "Serial number record"],
+					["Claim inside the period", "Date compared, verdict stated", "Issue form"],
+					["Exclusions checked", "Photograph and report reviewed", "Attachments"],
+					["Decision recorded", "Free of charge, yes or no, with reason", "Issue resolution note"],
+					["Billable claim priced", "Parts and labour on a quotation", "Linked sales order"]
+				]
+			},
+			"notes": "The warranty decision is where a distributor leaks money quietly, usually by goodwill. Goodwill is a fine policy if it is recorded and limited, and a disaster if it is assumed. Make the decision explicit and store the reason."
+		},
+		{
+			"kicker": "Lesson 6 · Repair, replace or credit",
+			"title": "Three outcomes and the documents each needs",
+			"bullets": [
+				"A repair consumes parts and labour, which is a material issue and a service invoice",
+				"A replacement ships a new serial and takes the old one back, which is a delivery and a return, never a deletion",
+				"A credit closes the commercial complaint, and only where the goods are not coming back",
+				"Each outcome creates a different document trail, so the choice is made before the work, not after",
+				"Never re-use a serial number for a replacement unit"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Decide the outcome with the customer", "Repair", "Outcome recorded on the issue"],
+					["2", "Issue the parts to the job", "Bearing kit x1", "Stock leaves against the issue"],
+					["3", "Book the technician's time", "2.5 hours", "Time recorded against the issue"],
+					[
+						"4",
+						"Raise the invoice if billable",
+						"Parts + labour + SST",
+						"Sales invoice with service tax"
+					],
+					[
+						"5",
+						"For a replacement, despatched and received back",
+						"New serial, old serial",
+						"Two documents, both serials visible"
+					],
 					[
 						"6",
-						"Test both paths",
-						"One order at 5 per cent, one at 15 per cent",
-						"First submits, second waits"
+						"Close the issue with the resolution note",
+						"(close)",
+						"Status closed, owner and date"
 					]
 				]
 			},
-			"notes": "The workflow is only useful if the client's approver role is filled by more than one person, so ask that question before building it. A fifteen per cent discount order that sits unapproved for three days costs more than the discount saved. Build the escape path deliberately and document who may use it."
+			"notes": "The replacement path is the one that goes wrong, because someone ships a new unit and forgets the return, so the old serial stays in stock forever. Decide the outcome first and let the documents follow it."
 		},
 		{
-			"kicker": "Lesson 8 · Automation",
-			"title": "Automate recurring documents, carefully",
+			"kicker": "Lesson 7 · Field service",
+			"title": "Time, travel and the invoice that follows",
 			"bullets": [
-				"Auto repeat creates a copy of a document on a schedule, which suits subscriptions and retainers",
-				"Test one cycle before enabling, because a wrong template repeats the error monthly",
-				"Automation never replaces the control, so someone still reviews the output",
-				"Start with one low-risk document and add others only after a clean month"
+				"Field time is billable or absorbed by the agreement, and either way it is recorded per issue",
+				"Travel is a line item the client signed for, not a surprise at month end",
+				"Time recorded in a chat message is not evidence; it belongs on the document it bills against",
+				"A service invoice that does not name the issue cannot be defended when the customer queries it",
+				"Batch the invoicing monthly, but record the time the day it happens"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open the source document",
-						"Sales Invoice for the monthly retainer",
-						"Submitted invoice"
+						"Record the visit against the issue",
+						"Date, technician, arrival and departure",
+						"Time entries on the issue"
 					],
-					["2", "Create auto repeat", "Monthly on the first, 12 occurrences", "Schedule stored"],
-					["3", "Set the template", "Same items, customer and tax", "Template reviewed"],
-					["4", "Enable and wait", "First cycle on 01-03-2026", "New draft invoice created"],
-					["5", "Review the draft", "Amounts and dates correct", "Submit or amend"],
-					["6", "Check the log", "Auto Repeat list", "Next occurrence scheduled"]
+					[
+						"2",
+						"Add travel as a separate line",
+						"60 km @ agreed rate",
+						"Quotation or invoice line"
+					],
+					[
+						"3",
+						"Check the agreement for what is included",
+						"Labour included, travel excluded",
+						"Service agreement terms"
+					],
+					["4", "Generate the invoice for the month", "(create)", "Lines name issue and asset"],
+					["5", "Apply service tax where due", "8% on service", "Tax template on the invoice"],
+					["6", "Attach the visit log to the invoice", "(attach)", "Evidence travels with the bill"]
 				]
 			},
-			"notes": "Automation is where a small configuration error compounds twelve times a year, so the first cycle must be reviewed by a person. A retainer invoice that repeats the wrong tax template creates a filing problem every month. Enable one document, watch one cycle, then expand, and write that rule into the handover note."
+			"notes": "Clients query service invoices more than any other kind, because the work is invisible after it is done. A line that names the issue, the date and the technician ends the query before it starts."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the restriction",
-			"title": "Same report, two logins",
+			"kicker": "Lesson 8 · The asset history",
+			"title": "What the serial number accumulates",
 			"bullets": [
-				"The test is not what the administrator sees but what the restricted role sees",
-				"Reports, lists and link fields must all respect the filter, not only forms",
-				"A restriction that silently does not apply is worse than no restriction at all",
-				"Record the test result, because the client will ask for evidence"
+				"The serial number is the thread: delivery, warranty start, issues, parts consumed, invoices",
+				"Two years of history answers the question the client asks next year: is this model worth buying again",
+				"Failure rate per model is a purchasing input, not a service statistic",
+				"A repair that consumes parts should show on the asset, so the next technician knows what was replaced",
+				"Report the top ten failing serials quarterly, and expect that report to change a purchasing decision"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Every issue attached to a serial", "Count matches the issue list", "Asset history"],
+					["Parts consumed visible", "Line items per repair", "Same view"],
+					["Warranty dates on the record", "Start and end dates", "Serial record"],
+					["Failure ranking produced", "Top ten serials by issue count", "Quarterly report"],
+					["Purchasing sees it", "Dated note in the review", "Procurement minutes"]
+				]
+			},
+			"notes": "This is the commercial argument for the whole chapter. A distributor who can show that one model generates three times the warranty cost has a purchasing decision for free. Build the ranking once and the client will maintain it."
+		},
+		{
+			"kicker": "Lesson 9 · Verify the desk",
+			"title": "Four numbers the service lead should trust",
+			"bullets": [
+				"Open issues by priority, because that is the queue somebody has to work today",
+				"Median response and median resolution, split by priority rather than averaged across all",
+				"Warranty cost as a percentage of the model's revenue, which is the number purchasing reacts to",
+				"Billable versus absorbed hours, because absorbed hours are a decision and should be seen as one",
+				"If a number cannot be produced from the documents, it is not a metric, it is an opinion"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Open by priority", "Counts per priority, aged", "Issue list filters"],
+					["Response and resolution medians", "Per priority, with worst case", "SLA report"],
+					["Warranty cost versus revenue", "Per model, quarterly", "Issue cost report plus sales"],
+					["Billable versus absorbed", "Hours, per technician", "Timesheet summary"],
+					["All four from documents", "No spreadsheet outside the system", "Source check"]
+				]
+			},
+			"notes": "Four numbers, weekly, beats a dashboard nobody opens. The test for each is the same: can it be produced from the documents alone? If a spreadsheet is needed, the process has a hole worth fixing."
+		},
+		{
+			"kicker": "Lesson 10 · Handover",
+			"title": "The service playbook",
+			"bullets": [
+				"One page per scenario: log, respond, decide warranty, repair or replace, invoice, close",
+				"The warranty rules in writing, with the exclusions the client actually intends to enforce",
+				"The escalation path with names and hours, because an SLA without escalation is a wish",
+				"The monthly pack: the four numbers, the breach list and the warranty ranking",
+				"The parts list a technician is allowed to consume without approval"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
 					[
-						"Warehouses visible to the supervisor",
-						"Retail Counter only",
-						"Stock Balance as that user"
+						"Scenarios documented",
+						"Log, respond, decide, repair, invoice, close",
+						"Service playbook"
 					],
-					["Transfer target options", "Main not selectable", "New stock entry as that user"],
-					["Report totals", "retail-only quantity and value", "Stock Balance as that user"],
-					["Administrator view", "all four warehouses", "Same report as administrator"],
-					["Evidence", "screenshot or note in the handover file", "Project documentation"]
+					["Warranty rules written", "Period, exclusions, approver", "Playbook, warranty section"],
+					["Escalation named", "Contact, hours, backup", "Playbook, escalation page"],
+					["Monthly pack agreed", "Four numbers, breach list, ranking", "Review meeting agenda"],
+					["Parts authority set", "Value limit per technician", "Authorisation matrix"]
 				]
 			},
-			"notes": "Two logins, one report, a visible difference: that is the demonstration clients remember. Write the result down, because when the first complaint arrives about missing data the answer is already documented. If both logins look identical, the user permission was saved against the wrong field."
-		},
-		{
-			"kicker": "Lesson 7 · Verify the workflow",
-			"title": "States, roles and the escape path",
-			"bullets": [
-				"A workflow is correct when a low-discount order flows and a high-discount order waits",
-				"Approvers must see the document in their queue, not hunt for it by number",
-				"The escape path is documented and named, so emergencies do not become policy",
-				"Rejection is a state, not a deletion, so the history survives"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["5 per cent order", "submits without approval", "Sales Order list"],
-					["15 per cent order", "status Pending Approval", "Sales Order header"],
-					["Approver queue", "the pending order appears", "Workflow action list"],
-					[
-						"Rejected order",
-						"status Rejected, retained in the list",
-						"Sales Order list filtered by state"
-					],
-					["Escape path", "named user documented", "Workflow notes in the handover file"]
-				]
-			},
-			"notes": "The failure mode is a workflow with no queue, where the approver only learns about the order when the customer calls. Configure the queue view as part of the build, not afterwards, and teach the approver to work from it. A rejection that deletes the document would destroy the audit trail, which is why the state is retained."
-		},
-		{
-			"kicker": "Volume 8 · Reference",
-			"title": "Automation options ranked by risk",
-			"bullets": [
-				"Permissions are the highest-value change and the lowest risk, so start there",
-				"Notifications are cheap and reversible; workflows change behaviour and need agreement",
-				"Auto repeat touches money documents, so it needs the tightest review",
-				"Every option here is configuration, and every one needs an owner"
-			],
-			"table": {
-				"headers": ["Option", "Risk", "First control", "Owner"],
-				"rows": [
-					["Roles and permissions", "Low, reversible", "Quarterly access review", "HR or admin"],
-					["User permissions", "Low, reversible", "Test with a restricted login", "Admin"],
-					[
-						"Notifications",
-						"Low, noisy if overused",
-						"One message per exception",
-						"Department head"
-					],
-					[
-						"Workflow",
-						"Medium, blocks work",
-						"Named approver role and escape path",
-						"Operations manager"
-					],
-					["Auto repeat", "High, repeats money", "Review the first cycle", "Finance manager"]
-				]
-			},
-			"notes": "Ranking by risk is what stops a client asking for everything at once. Permissions first, notifications second, workflow once the approver role exists, and auto repeat only for documents that are genuinely identical every period. Say the order out loud in the proposal and the delivery becomes predictable."
-		},
-		{
-			"kicker": "Volume 8 · Reference",
-			"title": "The access review a consultant should leave behind",
-			"bullets": [
-				"Access reviews are a quarterly ritual, not a one-off configuration task",
-				"List every user, their roles and any user permissions, and get a signature",
-				"Remove leavers on the day they leave, which is the only control auditors test hard",
-				"Keep two administrators, named, and no shared logins"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Active users", "matches the HR list", "User list"],
-					["Administrators", "exactly two named people", "Role list for System Manager"],
-					["Restricted users", "each has a user permission row", "User permissions"],
-					["Leavers", "disabled on their last day", "User list, enabled column"],
-					["Review evidence", "signed quarterly sheet", "Client's audit file"]
-				]
-			},
-			"notes": "This sheet takes twenty minutes a quarter and prevents the finding that audits always produce: a leaver with live access. Hand it to the client as a template rather than a lecture, and put the first review date in the handover document. Consulting value often looks like a checklist somebody actually uses."
+			"notes": "Close with the playbook, because the desk outlives the project. The parts authority limit is the line most often missing: without it a technician either waits for approval on a bearing or consumes a motor unasked, and both cost money."
 		}
 	],
 	"lab": {
-		"title": "Lab · Roles, a warehouse restriction, a discount workflow and an auto repeat",
-		"minutes": 45,
+		"title": "Lab · Run one warranty claim end to end at Seri Murni",
+		"minutes": 60,
 		"steps": [
-			"Create the Sales Executive role with read, write, create and submit but no delete",
-			"Restrict a warehouse supervisor to Retail Counter with a user permission",
-			"Log in as that user and confirm only their warehouse appears in reports",
-			"Build a sales order workflow with an approval state above 10 per cent discount",
-			"Test a 5 per cent order and confirm it submits without approval",
-			"Test a 15 per cent order and confirm it waits in Pending Approval",
-			"Set an auto repeat for a monthly retainer invoice",
-			"Review the first generated draft and confirm amounts and tax"
+			"Open an issue against serial SN-2026-00418 with a photograph and a reading attached",
+			"Set the priority, confirm the SLA clock started, and record the calendar it is measured against",
+			"Raise a second test issue outside working hours and check when its clock begins",
+			"Look up the serial's delivery date and state whether the claim is inside the warranty period",
+			"Decide repair, replacement or credit, and write the reason into the resolution note",
+			"Issue the parts and book the technician's two and a half hours against the issue",
+			"Raise the invoice with parts, labour, travel and service tax, naming the issue on every line",
+			"Produce the four service numbers and the breach list, and add them to the monthly pack"
 		],
-		"done": "Done when the restricted user sees one warehouse only, the 15 per cent order cannot submit without approval, and the auto repeat produced a correct draft for review."
+		"done": "One issue closed with a defensible warranty decision, its parts and time consumed against the asset, an invoice that names the issue, and four service numbers produced from documents alone."
 	},
 	"quiz": [
 		{
-			"question": "Which permission should a sales role normally lack on submitted documents?",
-			"options": ["Read", "Create", "Delete", "Submit"],
-			"answer": 2,
-			"why": "Delete on transaction doctypes destroys the audit trail. Sales roles normally read, create, write and submit, with cancel reserved for supervisors."
-		},
-		{
-			"question": "What does a user permission do?",
+			"question": "Why must a service complaint be logged as an issue rather than a sales return?",
 			"options": [
-				"Changes the role",
-				"Filters the records a user can see",
-				"Adds a new user",
-				"Disables the workflow"
+				"Because returns cannot carry attachments",
+				"Because the issue keeps the per-asset history that the warranty decision depends on",
+				"Because issues are cheaper to process",
+				"Because returns close automatically"
 			],
 			"answer": 1,
-			"why": "User permissions restrict data, such as one warehouse or territory, and they apply to reports as well as forms."
+			"why": "A return records goods movement. The issue records symptom, reporter and asset, which is what tells you whether a failure is inside warranty and whether a model is worth buying again."
 		},
 		{
-			"question": "Why should an approver be a role rather than a named person?",
+			"question": "What makes an SLA meetable rather than aspirational?",
 			"options": [
-				"Roles are cheaper",
-				"So the process continues when someone is away",
-				"Roles bypass permissions",
-				"It simplifies printing"
+				"A generous target per priority",
+				"Working hours and holidays configured, with response measured from stored timestamps",
+				"A monthly review meeting",
+				"Priority set by the customer"
 			],
 			"answer": 1,
-			"why": "A role keeps the workflow moving during leave, whereas a named approver blocks the business whenever they are unavailable."
+			"why": "Most breaches are calendar breaches. Without working hours the clock runs through nights and weekends, and without timestamps the measurement is somebody's recollection."
 		},
 		{
-			"question": "What is the main risk of auto repeat?",
+			"question": "When does a serial number's warranty period start?",
 			"options": [
-				"It deletes documents",
-				"An error repeats every cycle",
-				"It changes permissions",
-				"It stops notifications"
+				"When the item was purchased from the supplier",
+				"When the serialised unit was delivered to the customer",
+				"When the first issue is raised",
+				"When the invoice is paid"
 			],
 			"answer": 1,
-			"why": "Auto repeat copies a document on a schedule, so a wrong tax template or price repeats monthly until somebody reviews the draft."
+			"why": "Delivery of the specific serial is the only date that matches the unit in the customer's hands. Using the supplier's purchase date shortens the warranty the customer was promised."
 		},
 		{
-			"question": "Which automation should a consultant configure first?",
-			"options": ["Auto repeat", "Workflow", "Roles and permissions", "Notifications"],
-			"answer": 2,
-			"why": "Permissions deliver the highest control value with the lowest risk and are fully reversible, which is why they come first."
+			"question": "What is the dangerous omission in a replacement rather than a repair?",
+			"options": [
+				"Failing to raise a service invoice",
+				"Shipping the new serial without receiving the old one back",
+				"Failing to update the SLA",
+				"Not booking travel time"
+			],
+			"answer": 1,
+			"why": "The old unit stays in stock forever and the ledger keeps an asset that no longer exists. Replacement needs a delivery out and a return in, both visible."
+		},
+		{
+			"question": "Which service figure is most likely to change a purchasing decision?",
+			"options": [
+				"Median response time",
+				"Warranty cost as a percentage of revenue per model",
+				"Open issues by priority",
+				"Billable versus absorbed hours"
+			],
+			"answer": 1,
+			"why": "It joins service cost to the commercial result for a specific model, which is the comparison a purchasing manager can act on. The others manage today's queue."
 		}
 	],
 	"memory": {
-		"spine": "A role says what a job may do, a user permission says which rows it may see, and the only test that counts is the restricted login.",
+		"spine": "Log the issue against the serial, measure the clock, decide warranty with evidence, and bill what the agreement allows.",
 		"device": {
 			"kind": "rule",
-			"label": "Roles do, permissions see",
+			"label": "Priority before promise",
 			"expansion": [
-				"Name roles after the job function, never after a person",
-				"User permissions filter rows and outweigh what the role would otherwise show",
-				"A workflow adds states and allowed transitions, so a document cannot jump to submitted",
-				"Auto repeat copies a document on a schedule, which suits subscriptions and retainers only",
-				"Test the restricted login, not the administrator"
+				"Priority is set by impact at logging, and the SLA clock follows the priority",
+				"Promises are made in a calendar, so working hours and holidays decide the measurement",
+				"Warranty is decided from the serial's delivery date and recorded with its reason",
+				"Repair, replace or credit is chosen before work starts, because each needs different documents",
+				"Every closed issue carries a resolution note and, if billable, an invoice that names it"
 			]
 		},
 		"cards": [
 			{
-				"q": "Role permission or user permission, what is the difference?",
-				"a": "A role grants actions on a DocType, a user permission filters the records, and the narrower wins.",
-				"hint": "Do versus see"
+				"q": "Which five fields make an issue defensible later?",
+				"a": "Asset, symptom, reporter, priority and promised response, plus the resolution note on close. Everything else is optional.",
+				"hint": "Five, every time"
 			},
 			{
-				"q": "How is a user kept to one warehouse?",
-				"a": "With a user permission on Warehouse for that user, not with a new role.",
-				"hint": "Row filter"
+				"q": "Why do service levels breach themselves over a long weekend?",
+				"a": "Because the clock runs on the service calendar. If working hours and holidays are not configured, a Friday evening issue breaches by Monday morning.",
+				"hint": "Calendar, not effort"
 			},
 			{
-				"q": "What makes a discount workflow correct?",
-				"a": "A low discount flows straight to submitted while a high one waits at pending approval for the right role.",
-				"hint": "States and transitions"
+				"q": "What decides whether a repair is free of charge?",
+				"a": "The serial's delivery date against the warranty period, the exclusions in the agreement, and the evidence attached at logging. The decision and its reason are recorded.",
+				"hint": "Date, serial, evidence"
 			},
 			{
-				"q": "When is auto repeat safe?",
-				"a": "For genuinely recurring documents with a fixed shape, never for ones a human must judge.",
-				"hint": "Rhythm, not judgement"
+				"q": "Why is a replacement the riskiest of the three service outcomes?",
+				"a": "Because it needs a delivery out and the old unit back in. If the return is forgotten, a serial that no longer exists stays in stock forever.",
+				"hint": "Two documents"
 			},
 			{
-				"q": "What does an access review check?",
-				"a": "That every active login still matches a job, quarterly, including the ones nobody uses.",
-				"hint": "Quarterly ritual"
+				"q": "Which four numbers belong in the monthly service pack?",
+				"a": "Open issues by priority, median response and resolution per priority, warranty cost versus revenue per model, and billable versus absorbed hours.",
+				"hint": "Queue, clock, cost, hours"
 			}
 		],
 		"trap": {
-			"what": "A user permission is added to fix a report that looks wrong.",
-			"why": "The report was the symptom of an over broad role, so filtering rows hides the grant and the next report breaks differently."
+			"what": "The client handles complaints by phone and goodwill, so the desk is configured but never used, and warranty cost is invisible.",
+			"why": "Goodwill with no record is a subsidy nobody measures. Log every complaint against the serial, record each warranty decision with its reason, and put the four numbers in a monthly pack the purchasing lead reads."
 		}
 	},
-	"narration": "Permissions are the least glamorous part of a project and the part that determines whether it survives an audit. Roles follow the org chart, not the software, and the safe default is read, write, create and submit without delete. User permissions restrict a person to their warehouse or territory, and you prove it by logging in as them, because administrators bypass the filter. Then workflow: a discount above ten per cent waits for the sales manager, and the approver is a role so leave does not stop the business. Finally automation, where one wrong template repeats twelve times a year, so review the first cycle. Configure in that order and the client gets control before convenience, and finish with a quarterly access review that the client signs, because a leaver with live access is the finding every audit produces when nobody owns the list, and when nobody has written down who is allowed to do what."
+	"narration": "Service work is where a distributor leaks money without noticing, and it starts with the document. A complaint is not a sales return: it is an issue, logged against a serial number, in the customer's words, with a photograph and an owner. Priority comes from impact, and the service level clock follows the priority, which is why working hours and holidays must be configured before anyone promises four hours on a Friday. Warranty is a date, a serial and a condition. Find the delivery date of that exact unit, check the exclusions, and record the decision with its reason, because next year's claim will refer to this one. Then choose the outcome before the work starts: a repair consumes parts and time, a replacement ships a new serial and must take the old one back, a credit closes the commercial complaint. Bill from the issue, so every line names the asset and the visit. And finish with the four numbers the service lead should trust: open issues by priority, median response and resolution, warranty cost against revenue per model, and billable against absorbed hours."
 }

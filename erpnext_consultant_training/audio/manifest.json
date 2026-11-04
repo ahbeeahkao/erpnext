@@ -104,93 +104,128 @@
 		"ch15": {
 			"file": "ch15.mp3",
 			"voice": "voice-00",
+			"chars": 1124,
+			"bytes": 582653,
+			"text": "Scanning is the part of stock accuracy that a consultant is asked about most and prepares for least. Start with the barcode data, because one item can carry several codes, including the supplier's own, and a carton code that resolves to twelve units. Then check for duplicates, since two items sharing a code will count wrong in both directions without ever raising an error. Scanning on documents does not create a new kind of transaction: it fills the same rows, so read the totals back before submitting, and demonstrate a refusal rather than letting the floor invent a workaround. Counting is where the money is. Run a blind count so the counter cannot reproduce the expected figure, let the device queue offline, and prove after the sync that the voucher total matches the device total, and that a repeated send is refused. Set the recount threshold in money, name the approver, attach the signed sheet with the device export, and publish a monthly accuracy figure. Finish with the unglamorous part that decides whether any of it survives: label stock, a spare battery, two trained people per shift and a four-page SOP."
+		},
+		"ch16": {
+			"file": "ch16.mp3",
+			"voice": "voice-00",
 			"chars": 975,
 			"bytes": 245613,
 			"text": "Journals are where the accounting primer becomes a daily tool. An accrual records a cost before the invoice arrives, and it must reverse, or February carries January's electricity twice. A prepayment is an asset until the cover is used, so one thousand two hundred of insurance becomes one hundred a month, leaving one thousand one hundred on the balance sheet after the first release. Then the bank. Match every statement line, create the bank charge the ledger is missing, and drive the difference to zero with evidence rather than a plug. And when something was posted to the wrong place, amend it inside the open period or reverse it afterwards. Never delete, because the gap is exactly what an auditor looks for first. Practise the four situations until they are reflexes: accrual, prepayment, bank charge, wrong cost centre. Each one has a canonical remedy, and each remedy leaves a document behind, which is what turns a bookkeeping task into a consulting deliverable."
 		},
-		"ch16": {
-			"file": "ch16.mp3",
+		"ch17": {
+			"file": "ch17.mp3",
 			"voice": "voice-00",
 			"chars": 1002,
 			"bytes": 231693,
 			"text": "Month end is a process, not an event, and the consultant who builds the process is the one who gets invited back. Five checks come first: the trial balance, the draft documents, the debtors and creditors control accounts, the bank reconciliation, and stock with tax. When all five are signed, the close can start. January carries twelve thousand of sales, six thousand of cost, and four thousand six hundred eighty of net profit once freight, accrual, insurance and the stock adjustment are counted. The closing voucher moves that to retained earnings and marks the period as reported. At year end the same discipline carries balances into the new year, and the frozen date stops anyone rewriting a year that has already been filed. A close calendar with a name against every task is what makes the process repeatable, and the signed five-page pack is what makes it auditable. Build both once, hand the ownership to the client's finance lead, and the consultant's job becomes review rather than rescue."
 		},
-		"ch17": {
-			"file": "ch17.mp3",
+		"ch18": {
+			"file": "ch18.mp3",
 			"voice": "voice-00",
 			"chars": 970,
 			"bytes": 247149,
 			"text": "Manufacturing scares functional consultants because it looks technical, and it is not. A bill of materials is a recipe: two motors at eighty, one housing at forty, half an hour of assembly at sixty an hour, which gives two hundred thirty per unit. A work order turns demand into a reservation: ten assemblies need twenty motors and ten housings, and nothing has moved yet. The material transfer moves components to the floor, where they are work in progress and still not an expense. Completion consumes the components, adds three hundred of operating cost, and produces ten assemblies at two hundred thirty each. Four documents, one cost, no mystery. If the completion differs from the BOM, check the rate, the time and any extra charges before blaming the system, and write the answer in the production worksheet. A client who can explain a cost per unit from four documents will trust the system with their quotations, and that trust is the whole point of the volume."
 		},
-		"ch18": {
-			"file": "ch18.mp3",
+		"ch19": {
+			"file": "ch19.mp3",
 			"voice": "voice-00",
 			"chars": 959,
 			"bytes": 228621,
 			"text": "Once a client has built something, the next question is what it cost, and the answer has to survive an argument. A completed build of ten assemblies carries two thousand of material and three hundred of labour, so two hundred thirty each, and the entry, the stock ledger and the stock balance must all say the same thing. Scrap is where costing gets real: one unit fails, the total cost does not move, and the nine good units now carry two hundred fifty five fifty six each. Subcontracting adds a bought-in service, twelve ringgit of coating, and a warehouse that must return to zero. Materials, labour, scrap, service: four components, one valuation, and a worksheet that lets the production manager and the accountant argue with numbers instead of opinions. Teach the four components in order, and insist on the worksheet, because a costing conversation without evidence becomes a personality contest, and the consultant is always the outsider in that room."
 		},
-		"ch19": {
-			"file": "ch19.mp3",
+		"ch20": {
+			"file": "ch20.mp3",
 			"voice": "voice-00",
 			"chars": 947,
 			"bytes": 236493,
 			"text": "Services work is deceptively simple, and the margin is where consultants get caught. A project is a cost collector: name it on a timesheet, name it on an invoice, and it carries both sides. Twenty hours at one hundred fifty is three thousand of revenue; twenty hours at eighty is one thousand six hundred of cost; the difference is one thousand four hundred, about forty six per cent. Service tax of eight per cent adds two hundred forty and stays a liability. Record non-billable time anyway, because it costs money even though it cannot be invoiced. Then close the project with a variance note, which is the only way the next quote gets better. A project that is never closed teaches nobody anything and quietly repeats its mistakes. Twenty hours, one rate, one invoice, one margin: when a client can state those four numbers from memory, the services practice is under control, and the next quotation is priced on evidence rather than optimism."
 		},
-		"ch20": {
-			"file": "ch20.mp3",
+		"ch21": {
+			"file": "ch21.mp3",
 			"voice": "voice-00",
 			"chars": 966,
 			"bytes": 244173,
 			"text": "Three modules that clients ask for and rarely operate properly. Fixed assets first: sixty thousand of van becomes twelve thousand a year, one thousand a month, and the register must agree with the control account every month. Quality second: an inspection that rejects one of ten units is the difference between an argument with a supplier and a documented claim. CRM third, and only if somebody owns the pipeline: a lead becomes an opportunity with a value and a probability, twenty four hundred at sixty per cent is fourteen hundred forty, and the quotation is the first document the customer sees. Each module adds a control the client has to run, so sequence them and say plainly what you would leave until year two. Assets and quality carry a control that runs itself once configured; CRM only works when a person owns it, so name that person in the workshop before you switch it on, and put the weekly pipeline review in the same meeting as the sales forecast."
 		},
-		"ch21": {
-			"file": "ch21.mp3",
+		"ch22": {
+			"file": "ch22.mp3",
+			"voice": "voice-00",
+			"chars": 1078,
+			"bytes": 547962,
+			"text": "Service work is where a distributor leaks money without noticing, and it starts with the document. A complaint is not a sales return: it is an issue, logged against a serial number, in the customer's words, with a photograph and an owner. Priority comes from impact, and the service level clock follows the priority, which is why working hours and holidays must be configured before anyone promises four hours on a Friday. Warranty is a date, a serial and a condition. Find the delivery date of that exact unit, check the exclusions, and record the decision with its reason, because next year's claim will refer to this one. Then choose the outcome before the work starts: a repair consumes parts and time, a replacement ships a new serial and must take the old one back, a credit closes the commercial complaint. Bill from the issue, so every line names the asset and the visit. And finish with the four numbers the service lead should trust: open issues by priority, median response and resolution, warranty cost against revenue per model, and billable against absorbed hours."
+		},
+		"ch23": {
+			"file": "ch23.mp3",
 			"voice": "voice-00",
 			"chars": 936,
 			"bytes": 223533,
 			"text": "Volume eight is where a functional consultant stops looking like an implementer. Print formats built in the builder give the customer a document worth reading, with the registration and tax number where they belong and totals matching the ledger to the cent. Naming series keep numbering sequential, and a cancelled document keeps its number because reusing one breaks the audit trail. Notifications watch a condition: an order above five thousand emails the sales manager, an order of twelve hundred stays quiet. Letterheads and terms templates make every document look like one company, and they are the easiest handover win because the client can maintain them alone. No code, all configuration, and it all survives the next upgrade. Test five things before handover: one page, matching totals, sequential numbering, one notification above the threshold and silence below it, and a letterhead the client can edit without calling you."
 		},
-		"ch22": {
-			"file": "ch22.mp3",
+		"ch24": {
+			"file": "ch24.mp3",
+			"voice": "voice-00",
+			"chars": 1096,
+			"bytes": 585160,
+			"text": "Most requirements a consultant hears can be met in the browser, and the value of knowing where that stops is what this chapter is for. Configuration is anything you can change and reverse in Customize Form: a property setter that renames a label, makes a field mandatory, hides it or makes it read-only, without touching the standard definition underneath. Custom fields come next, but only when somebody will filter, print or report on them, because a field nobody queries is an empty box. Then the DocType editor, where a functional consultant can build a new document with its own naming series and a child table for lines, provided the series is decided before the first record exists. Verify every change the same way: on the form, in the list, under a second role, and again after a migration on staging. Keep a six-column register, with the reason and the reversal, because that is the part the next consultant cannot reconstruct. And when a requirement genuinely needs code, say so plainly, price it, and write the gap down as a decision rather than letting a vague yes carry the project."
+		},
+		"ch25": {
+			"file": "ch25.mp3",
 			"voice": "voice-00",
 			"chars": 912,
 			"bytes": 230253,
 			"text": "Permissions are the least glamorous part of a project and the part that determines whether it survives an audit. Roles follow the org chart, not the software, and the safe default is read, write, create and submit without delete. User permissions restrict a person to their warehouse or territory, and you prove it by logging in as them, because administrators bypass the filter. Then workflow: a discount above ten per cent waits for the sales manager, and the approver is a role so leave does not stop the business. Finally automation, where one wrong template repeats twelve times a year, so review the first cycle. Configure in that order and the client gets control before convenience, and finish with a quarterly access review that the client signs, because a leaver with live access is the finding every audit produces when nobody owns the list, and when nobody has written down who is allowed to do what."
 		},
-		"ch23": {
-			"file": "ch23.mp3",
+		"ch26": {
+			"file": "ch26.mp3",
 			"voice": "voice-00",
 			"chars": 930,
 			"bytes": 217293,
 			"text": "Malaysian tax is the part clients test you on first, because the numbers go to a government portal. Build separate templates for sales tax and service tax, with separate output and input accounts, because the return needs each box separately. Attach item tax templates so the rate follows the product: ten per cent goods, eight per cent services, zero for exempt with a stored certificate. Then the return: twelve hundred output less one hundred twenty input is one thousand eighty payable, and the same three numbers must appear in the tax summary, the ledger and the form. If they do not, the cause is a draft counted, a credit note that did not reverse tax, or a purchase without an input template. Keep the tax advisor's written confirmation with the configuration worksheet, because rates and thresholds change with every budget, and the consultant who documented the basis is the one who gets called back rather than blamed."
 		},
-		"ch24": {
-			"file": "ch24.mp3",
+		"ch27": {
+			"file": "ch27.mp3",
 			"voice": "voice-00",
 			"chars": 913,
 			"bytes": 219789,
 			"text": "e-Invoice is a deadline, not a feature. Everything starts with master data: company and customer TIN, registration, MSIC, address, and a validated TIN before the first submission. When you submit, you get a submission identifier and an accepted list, but accepted only means the portal has the file. Validated is the state that matters, because that is where the UUID and the QR code come from, and that is the legal tax invoice. Cancellation lives inside seventy two hours with a reason, and after that the remedy is a credit note, which the portal enforces with named errors. Consolidate only consumer sales, self-bill only where the rules allow, and give the finance team a daily dashboard routine: clear rejections, cancel what must be cancelled, and confirm nothing is left pending overnight. A monthly tie-out between validated totals and the sales ledger is the check that keeps the project out of trouble."
 		},
-		"ch25": {
-			"file": "ch25.mp3",
+		"ch28": {
+			"file": "ch28.mp3",
 			"voice": "voice-00",
 			"chars": 947,
 			"bytes": 249069,
 			"text": "Migration is where a project is won or lost, and it starts on paper. A mapping workbook with old values, new values and a named owner for every exception is the document the client signs, and it is what ends arguments in month two. Import in dependency order: company, chart of accounts, warehouses and groups, then items, parties and price lists, then users, and only then opening balances. The opening is a journal dated the day before go-live plus a stock reconciliation, and it must balance: ninety six thousand two hundred ninety of assets against three thousand and sixty eight of liabilities and ninety three thousand two hundred twenty two of equity. If it does not balance, the doors stay closed, because every later correction is harder once documents exist. Map on paper, import in order, prove the opening, and only then open the doors to users, with the evidence table signed so the first audit is a page rather than a reconstruction."
 		},
-		"ch26": {
-			"file": "ch26.mp3",
+		"ch29": {
+			"file": "ch29.mp3",
 			"voice": "voice-00",
 			"chars": 949,
 			"bytes": 238989,
 			"text": "The last two weeks decide how the project is remembered. UAT is not a demo: every case states an action and an expected number, five blenders at two hundred forty plus tax is one thousand three hundred twenty, cost six hundred, gross profit six hundred, and the case passes only when those figures appear. Go or no-go is decided on five rows of evidence, with a written acceptance for anything red. Cut-over is a one-page sequence with owners, and the old system stays readable as a rollback position. Then hypercare: five metrics, fifteen minutes, every morning, ending on the date agreed before go-live. Hand over the runbook, the worksheet, the opening pack and the access review, and step back. The measure of a finished engagement is not the invoice, it is a client running their own close, their own UAT for the next change, and their own access review without calling you, because the rhythm lives in their calendar rather than in your notes."
 		},
-		"ch27": {
-			"file": "ch27.mp3",
+		"ch30": {
+			"file": "ch30.mp3",
 			"voice": "voice-00",
 			"chars": 1123,
 			"bytes": 593102,
 			"text": "Volume ten ends where most projects are weakest: what happens after go-live, on the day something breaks. Continuity is a consultant deliverable even though the commands belong to somebody else. Pin the versions you went live on and write them in a register. Check with the hosting provider that the nightly backup includes files, and store the site encryption key somewhere the backup cannot reach, because a restored site without its key cannot read what it holds. Then prove it: restore into a scratch site, time it with a stopwatch, log the elapsed minutes with a date and a person, and attach that log to the handover pack. Before every upgrade, restore production data into staging and test there, because print formats, workflows and saved reports break on data and configuration, not just code. Keep one named approver and a cut-off time so a rollback decision takes minutes rather than an argument. Afterwards, twenty minutes of verification: log in as a normal user, submit a test invoice, print it, run two saved reports, and submit one e-Invoice in sandbox. Then sign the ticket and hand the whole section over."
+		},
+		"ch31": {
+			"file": "ch31.mp3",
+			"voice": "voice-00",
+			"chars": 1173,
+			"bytes": 645138,
+			"text": "This chapter exists because the site holds the money, and the easiest way in is not technical. Start with accounts: one person one login, no shared warehouse account, and the administrator kept for administration rather than daily invoicing. Write the departure procedure and rehearse it with a test user who holds open documents, because that is the step clients fail under pressure. Then enforce two factor by role, beginning with administrators and finance, after proving that recovery works, so a lost phone is not a lost month end. Privilege is next: withhold delete, restrict by warehouse, and prove it with a second login rather than a configuration screenshot. Network exposure and keys belong to the host and to you jointly, so ask for evidence of a refused connection from outside, keep one key per integration with an owner and a rotation date, and test revocation. Find the encryption key through its named holder without your help. Then sign the one page review, dated, with the items you cannot verify marked as host confirmed. And if something happens, contain access first, preserve the logs second, notify the owner third, and only then restore and verify."
+		},
+		"ch32": {
+			"file": "ch32.mp3",
+			"voice": "voice-00",
+			"chars": 1179,
+			"bytes": 632599,
+			"text": "Go live is a launch, not an ending, and the ninety days after it decide whether the client owns a system or rents one. The first week needs a rhythm rather than a hotline: a morning check with a name and a time, same day triage of anything wrong, and one written update every day. Then triage the fix list by consequence. Wrong numbers first, because trust in the ledger is the product, then blocked work, which is usually training or a permission, then the cosmetic items in one agreed batch with a published rule so volume does not decide. At day thirty bring four numbers compared against the go-live baseline, and agree three actions with owners. At day sixty watch a second user, not the champion, complete a weekly cycle unaided, and record every hesitation as a defect rather than a training gap. At day ninety hand over to a named internal owner and a deputy, who can add a user, a warehouse and a print format without calling you. Along the way run the fifteen minute weekly check, prove adoption with counts per role instead of anecdotes, and finish with a dated exit: every item closed, keys handed back, your access revoked, and one optional review priced in writing."
 		}
 	}
 }

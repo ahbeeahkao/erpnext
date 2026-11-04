@@ -1,350 +1,395 @@
 {
 	"id": "ch26",
 	"number": 26,
-	"title": "Volume 10 · UAT, Cut-Over and Go-Live",
-	"subtitle": "Lessons 5–8: a UAT script the client signs, a cut-over weekend with a checklist, hypercare that measures itself, and a handover that outlives the consultant",
-	"level": "Capstone",
+	"title": "Volume 9 · Malaysian Tax and Statutory Setup",
+	"subtitle": "Lessons 1–4: SST templates that survive an audit, item tax categories that match the law, and an SST-02 return that reconciles",
+	"level": "Advanced",
 	"minutes": 55,
 	"outcomes": [
-		"Write and run a UAT script whose pass criteria are numbers, not opinions",
-		"Plan a cut-over with a dependency order and a rollback position",
-		"Run go-live week with a daily hypercare rhythm",
-		"Hand over documentation, ownership and a support cadence"
+		"Build sales and purchase tax templates with separate liability accounts",
+		"Map items to tax categories so the right rate lands on the right line",
+		"Produce SST-02 figures that tie to the general ledger",
+		"Handle exempt and zero-rated lines with the evidence an auditor asks for"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · UAT",
-			"title": "Write a UAT script the client will sign",
+			"kicker": "Lesson 1 · Tax templates",
+			"title": "Build the SST templates an auditor expects",
 			"bullets": [
-				"Every test case states the action, the expected number and the evidence",
-				"Test by role, because a salesperson and an accountant see different screens",
-				"Include the nasty cases: partial delivery, credit limit, return and discounted order",
-				"Sign-off per module, with a named business owner, not one signature for everything"
+				"One template per rate per direction: sales tax out, service tax out, purchase tax in",
+				"Each template names an account, and those accounts become the return's source lines",
+				"Service tax on services is eight per cent, sales tax on goods is ten per cent in our sample",
+				"Never reuse one account for both output and input, or the return cannot be split"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Accounts → Tax Template → New", "Sales Tax 10 %, type Sales", "Template form"],
+					["2", "Add the row", "Rate 10, account SST Output - SM", "One tax row"],
+					[
+						"3",
+						"Create the service template",
+						"Service Tax 8 %, account Service Tax Output - SM",
+						"Second template"
+					],
+					[
+						"4",
+						"Create the purchase templates",
+						"Purchase tax 10 % and service tax 8 %, input accounts",
+						"Two more templates"
+					],
+					[
+						"5",
+						"Set tax categories",
+						"In-State, Out-of-State, Exempt",
+						"Three categories available"
+					],
+					[
+						"6",
+						"Attach to a customer",
+						"Aeon Big uses Sales Tax 10 %",
+						"Default template on the customer"
+					]
+				]
+			},
+			"notes": "Separate accounts are the whole trick: output tax is a liability, input tax is an asset, and the difference is what you file. Most Malaysian sites start with one combined account and then cannot produce SST-02 without a spreadsheet. Fix it at configuration time, because changing it later means remapping every historical posting."
+		},
+		{
+			"kicker": "Lesson 2 · Verify the tax",
+			"title": "One invoice that proves the matrix",
+			"bullets": [
+				"Goods at ten per cent and services at eight per cent must sit on separate templates",
+				"The invoice total is net plus tax, and the tax amount is never income",
+				"Each tax row names its account, so the ledger carries the split automatically",
+				"An exempt line carries no tax but still needs a category for reporting"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Goods line", "2,400.00 at 10 % gives 240.00", "Sales Invoice, tax summary"],
+					["Service line", "500.00 at 8 % gives 40.00", "Sales Invoice, tax summary"],
+					["Invoice total", "2,940.00", "Invoice totals"],
+					["SST Output account", "240.00 credit", "General Ledger, SST Output - SM"],
+					["Service Tax Output account", "40.00 credit", "General Ledger, Service Tax Output - SM"]
+				]
+			},
+			"notes": "Two rates on one invoice is the case that breaks most first attempts, because a single template cannot carry both. Make the learner compute two thousand four hundred plus five hundred plus two hundred forty plus forty, and then read the same four numbers off the tax summary. When they agree, the tax configuration is defensible."
+		},
+		{
+			"kicker": "Lesson 3 · Item tax categories",
+			"title": "Map items so the rate follows the product",
+			"bullets": [
+				"Tax category on the item overrides the customer's default, and that precedence must be intended",
+				"A service item with sales tax creates an incorrect return even though the invoice looks right",
+				"Exempt goods need their own category and a reason code, not just a zero rate",
+				"Review the mapping once with the client's tax advisor and keep the email"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Write the script",
-						"Case 1: quote to invoice for 5 blenders",
-						"Steps with expected figures"
+						"Open item SM-BL200",
+						"Tax section, item tax template Sales Tax 10 %",
+						"Template attached"
 					],
 					[
 						"2",
-						"Add the awkward cases",
-						"Partial delivery, discount, return, credit limit",
-						"Four extra cases"
+						"Open item SM-DEL",
+						"Service item with Service Tax 8 %",
+						"Service template attached"
 					],
+					["3", "Open item SM-CTN", "Exempt packaging with the exempt category", "Exempt attached"],
 					[
-						"3",
-						"Assign testers",
-						"Sales executive, accountant, warehouse supervisor",
-						"One owner per case"
+						"4",
+						"Create a mixed invoice",
+						"One line each of the three items",
+						"Three different tax rows"
 					],
-					["4", "Run in a test company", "Real data, not the demo data", "Results recorded"],
-					["5", "Log defects", "Screen, expected, actual, severity", "Defect list with owners"],
-					["6", "Sign off", "Module signed by the business owner", "Signed UAT sheet"]
+					["5", "Check the summary", "240.00, 40.00 and 0.00", "Totals 280.00 tax"],
+					["6", "Print the invoice", "Tax shown per line", "Customer sees the breakdown"]
 				]
 			},
-			"notes": "A UAT case without a number is an opinion, and opinions do not survive a steering committee. Case one in our sample is five blenders at two hundred forty plus ten per cent tax, total one thousand three hundred twenty, cost six hundred, gross profit six hundred. When the tester sees those four figures, the case passes; when they do not, the defect is specific enough to fix."
+			"notes": "Precedence confuses everyone, so write it on the configuration worksheet: item template beats customer template beats company default. Test it with the three-line invoice above and the client can see the precedence rather than being told about it. When the tax advisor changes a rate, this is also the list you update."
 		},
 		{
-			"kicker": "Lesson 6 · Verify UAT",
-			"title": "Pass criteria that a steering committee accepts",
+			"kicker": "Lesson 4 · SST return",
+			"title": "Produce SST-02 figures from the ledger",
 			"bullets": [
-				"Every case passes on expected figures, not on the absence of an error message",
-				"Severity one and two defects must be closed, with three and four scheduled",
-				"Each module signs separately so one weak area does not block the rest",
-				"The signed sheet is the client's acceptance of the system, and your protection"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Cases executed", "all planned cases", "UAT tracker"],
-					["Passed on figures", "every case with numbers matching", "UAT evidence column"],
-					["Open severity one defects", "0", "Defect log"],
-					["Modules signed", "sales, purchase, stock, accounts", "Signature sheet"],
-					["Retest evidence", "defect fix confirmed by the tester", "Tracker with dates"]
-				]
-			},
-			"notes": "The figure that matters at the steering committee is zero open severity one defects, not ninety per cent of cases passed. Be explicit about what is deferred, with a date and an owner, because deferred items without owners become the first month's support tickets. A signed sheet with a short deferral list is a better outcome than a verbal yes."
-		},
-		{
-			"kicker": "Lesson 7 · Cut-over",
-			"title": "Plan the weekend in dependency order",
-			"bullets": [
-				"Cut-over is a sequence, and each step unblocks the next one",
-				"Freeze the old system before extracting balances, or the numbers will move",
-				"Have a rollback position: the old system stays readable for one month",
-				"One person owns the clock and one person owns the checklist, never the same person"
+				"The return is built from posted invoices, so drafts and cancelled documents must be excluded",
+				"Output tax total equals the credit balance on the output accounts for the period",
+				"Input tax is only claimable on invoices that are submitted and matched to a receipt",
+				"The payable figure is output minus input, and it must tie to the ledger to the cent"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Freeze trading", "Old system locked at 18:00 Friday", "Signed freeze note"],
-					["2", "Extract balances", "Trial balance, ageing, stock count", "Three source documents"],
 					[
-						"3",
-						"Load opening",
-						"Journal plus stock reconciliation",
-						"Opening trial balance balanced"
+						"1",
+						"Open the tax summary",
+						"01-01-2026 to 31-01-2026, sales tax",
+						"Output tax by account"
 					],
-					["4", "Verify", "Five opening checks", "96,290.00 both sides"],
-					["5", "Smoke test", "One sale, one purchase, one payment", "Documents post correctly"],
-					["6", "Communicate", "Go-live notice to all users", "Users know where to log in"]
-				]
-			},
-			"notes": "The cut-over plan fits on one page and that is the test of it. If a step has no owner or no evidence, it will be skipped at two in the morning. Keep the old system readable for a month and say so in writing, because that rollback position is what allows the client to say yes on Friday rather than postpone a week."
-		},
-		{
-			"kicker": "Lesson 8 · Go-live",
-			"title": "Hypercare with numbers, then hand over",
-			"bullets": [
-				"Hypercare is a fortnight of daily rhythm: tickets, blockers, and a single decision channel",
-				"Measure the same five things daily so the trend is visible, not the anecdote",
-				"Hand over documentation, owners and a support cadence, or you become the support desk",
-				"The exit criterion is agreed before go-live, not negotiated at the end"
-			],
-			"table": {
-				"headers": ["Step", "Do this", "Enter", "Expect to see"],
-				"rows": [
-					["1", "Open the hypercare log", "Tickets with severity and owner", "Daily list"],
-					["2", "Run the daily stand-up", "15 minutes, blockers first", "Decisions recorded"],
+					["2", "Read the output figure", "1,200.00", "Tax summary report"],
+					["3", "Read the input figure", "120.00", "Tax summary, purchase side"],
+					["4", "Compute the payable", "1,200.00 minus 120.00", "1,080.00"],
+					["5", "Tie to the ledger", "SST Output and SST Input balances", "Same two numbers"],
 					[
-						"3",
-						"Track five metrics",
-						"invoices, stock errors, ticket count, close progress, user logins",
-						"Daily dashboard"
-					],
-					["4", "Close the fortnight", "Open severity one at zero", "Exit review"],
-					[
-						"5",
-						"Hand over documents",
-						"Runbook, config worksheet, UAT sheet, access review",
-						"Signed handover"
-					],
-					["6", "Agree the cadence", "Monthly review for three months", "Calendar invites sent"]
-				]
-			},
-			"notes": "Five metrics, fifteen minutes, every morning for a fortnight: that is hypercare, and it ends on a date the client agreed before go-live. The handover pack is the same documentation produced during the project, which is why it must be written as you go rather than reconstructed. A consultant who leaves a runbook and a calendar invite is the one who gets the phase two call."
-		},
-		{
-			"kicker": "Lesson 7 · Verify cut-over",
-			"title": "Evidence for each cut-over step",
-			"bullets": [
-				"Every step leaves a document, and the documents are what the auditor reads",
-				"The freeze note, the count sheet and the opening trial balance are the core three",
-				"A smoke test that posts correctly is the last gate before users are let in",
-				"Rollback stays available for a month, and saying so reduces go-live anxiety"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Freeze note", "signed at 18:00 Friday", "Project file"],
-					["Opening trial balance", "96,290.00 both sides", "Accounts at the opening date"],
-					["Stock count", "47 units at 120.00", "Signed count sheet"],
-					["Smoke test documents", "one sale, one purchase, one payment posted", "Document list"],
-					["Rollback position", "old system readable for 30 days", "Written support note"]
-				]
-			},
-			"notes": "Cut-over is judged on documents rather than on a feeling that it went well. Lay the five items on the table at the Sunday evening review, and either they exist or they do not. If the smoke test posted incorrectly, that is the moment to use the rollback position, not Monday morning when users are already entering data."
-		},
-		{
-			"kicker": "Lesson 8 · Verify hypercare",
-			"title": "The numbers that end the fortnight",
-			"bullets": [
-				"Ticket count, invoice count, stock errors, close progress and logins are the five daily measures",
-				"A falling ticket count with a rising invoice count means the client is taking over",
-				"Open severity one at zero for three consecutive days is the usual exit signal",
-				"The exit review is a meeting, not an opinion, and it produces a signed note"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Open severity one tickets", "0 for three consecutive days", "Hypercare log"],
-					["Invoices posted daily", "rising towards normal volume", "Sales invoice register"],
-					["Stock errors", "trending to zero", "Stock reconciliation list"],
-					["Users logging in", "all trained users active", "User login report"],
-					["Exit note", "signed with an agreed support cadence", "Project file"]
-				]
-			},
-			"notes": "Five numbers on one line each day, and the trend does the talking. When tickets fall while invoices rise, the client has absorbed the system, and the exit meeting is a formality rather than a risk. If stock errors are flat rather than falling, the warehouse process is still wrong, and staying another week is cheaper than a year of corrections."
-		},
-		{
-			"kicker": "Volume 10 · Reference",
-			"title": "Go or no-go, decided on evidence",
-			"bullets": [
-				"Each criterion has a number, so the meeting is short and the decision is defensible",
-				"Any single red row is a no-go unless the client formally accepts the risk",
-				"The acceptance must be written, dated and signed by the project sponsor",
-				"A delayed go-live is cheaper than an uncontrolled one, in cost and in reputation"
-			],
-			"table": {
-				"headers": ["Criterion", "Green means", "Evidence", "Owner"],
-				"rows": [
-					[
-						"Opening balances",
-						"trial balance balances to 0.00",
-						"Signed opening pack",
-						"Finance manager"
-					],
-					["UAT", "zero open severity one defects", "Signed UAT sheet", "Business owners"],
-					["Access", "roles tested, two administrators named", "Access review sheet", "Admin"],
-					["Training", "every user attended or was covered", "Attendance list", "Department heads"],
-					[
-						"Support",
-						"hypercare dates and channel agreed",
-						"Signed support note",
-						"Project sponsor"
+						"6",
+						"File and record",
+						"Return reference in the tax worksheet",
+						"Evidence for the auditor"
 					]
 				]
 			},
-			"notes": "Put this table on the screen in the go/no-go meeting and work down it row by row; the decision takes fifteen minutes and nobody can claim afterwards that they were not consulted. Green everywhere is a go. One red row is a conversation about risk, documented in the minutes with a name against it."
+			"notes": "Twelve hundred out, one hundred twenty in, one thousand eighty payable: three numbers that must appear in the report, in the ledger and on the return. If they do not, the usual causes are a draft invoice counted, a credit note not reversing tax, or a purchase invoice without the input template. All three are visible in the tax summary by account."
 		},
 		{
-			"kicker": "Volume 10 · Reference",
-			"title": "The handover pack that ends the engagement",
+			"kicker": "Lesson 4 · Verify the return",
+			"title": "Three numbers that must agree",
 			"bullets": [
-				"The pack is the project's memory, and it must be usable without the consultant",
-				"Configuration worksheet, opening balances, UAT results and runbook are the core four",
-				"Named owners for each cadence, or the pack becomes shelfware",
-				"A short training session on the pack itself is what makes it live"
+				"The return figure, the tax summary and the ledger balance are the same number seen three ways",
+				"A draft or cancelled document in the summary shifts the return and must be explained",
+				"Input tax is only claimable where the purchase invoice exists, so unbooked bills understate the claim",
+				"Sign the worksheet with the date filed, because that is the audit evidence"
 			],
 			"table": {
-				"headers": ["Document", "Purpose", "Owner after handover", "Review cadence"],
+				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Configuration worksheet", "What was set and why", "Finance manager", "Half-yearly"],
+					["Output tax", "1,200.00", "Tax summary and General Ledger"],
+					["Input tax", "120.00", "Tax summary and General Ledger"],
+					["Net payable", "1,080.00", "Your own arithmetic and the return"],
 					[
-						"Opening balance pack",
-						"Evidence for the audit trail",
-						"Finance manager",
-						"At each audit"
+						"Draft documents in the period",
+						"none contributing tax",
+						"Sales and purchase registers"
 					],
-					[
-						"UAT results",
-						"Proof the business accepted the system",
-						"Project sponsor",
-						"On major change"
-					],
-					["Runbook", "Daily, weekly and monthly routines", "Operations manager", "Quarterly"],
-					["Access review sheet", "Who can do what", "Admin", "Quarterly"]
+					["Filed reference", "recorded with the date", "Tax worksheet"]
 				]
 			},
-			"notes": "A consultant's reputation is built in the last two weeks, and it is built on how little the client needs to call afterwards. Hand over five documents, name five owners, put five meetings in the calendar, and then step back. The work is finished when the client runs the rhythm without you, not when the invoices are issued."
+			"notes": "The check takes four minutes and prevents the most common compliance finding: a return that disagrees with the ledger because a document was posted in a later period. Print the summary for the period, print the ledger for the same accounts, and staple them to the return. When an auditor asks, the answer is a page rather than an explanation."
+		},
+		{
+			"kicker": "Lesson 5 · Exemptions",
+			"title": "Exempt and zero-rated lines with evidence",
+			"bullets": [
+				"An exemption is a category plus a certificate, not a zero typed into a rate field",
+				"Schedule A and B exemptions must be referenced on the invoice or the claim fails",
+				"Exempt sales still appear in the return, in their own box",
+				"Keep the customer's exemption certificate with the customer record"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create the exempt template",
+						"0 % with the Exempt - SM account mapping",
+						"Exempt template available"
+					],
+					[
+						"2",
+						"Attach to the customer",
+						"Exemption certificate number in the customer record",
+						"Evidence stored"
+					],
+					[
+						"3",
+						"Invoice the exempt line",
+						"100 units at 12.00, no tax",
+						"Total 1,200.00 with zero tax"
+					],
+					["4", "Check the return", "Exempt box populated", "Separate from taxable sales"],
+					[
+						"5",
+						"Attempt a taxable line",
+						"Same customer, taxable item",
+						"Template override required"
+					],
+					["6", "Document the exception", "Reason in the tax worksheet", "Auditor can see why"]
+				]
+			},
+			"notes": "Exemptions are where clients get enthusiastic and auditors get interested, so the rule is one certificate per customer, stored, with an expiry date. The system will happily apply a zero rate; it cannot judge whether the exemption is valid. Put that judgement in writing and attach it to the customer record before the first exempt invoice."
+		},
+		{
+			"kicker": "Volume 9 · Reference",
+			"title": "Malaysian configuration checklist",
+			"bullets": [
+				"Tax rates, accounts and categories are configuration, and they must be evidenced",
+				"e-Invoice readiness depends on the same master data being clean",
+				"Every row below has an owner in the client's finance team",
+				"Revisit annually, because rates and thresholds change with each budget"
+			],
+			"table": {
+				"headers": ["Configuration", "Value in our sample", "Owner", "Evidence"],
+				"rows": [
+					[
+						"Sales tax on goods",
+						"10 per cent to SST Output - SM",
+						"Finance manager",
+						"Tax advisor email"
+					],
+					[
+						"Service tax",
+						"8 per cent to Service Tax Output - SM",
+						"Finance manager",
+						"Tax advisor email"
+					],
+					[
+						"Purchase tax",
+						"10 per cent and 8 per cent input accounts",
+						"Finance manager",
+						"Configuration worksheet"
+					],
+					[
+						"Tax categories",
+						"In-State, Out-of-State, Exempt",
+						"Finance manager",
+						"Worksheet signed"
+					],
+					[
+						"Exemption certificates",
+						"stored per customer with expiry",
+						"Sales admin",
+						"Certificate scans"
+					]
+				]
+			},
+			"notes": "This checklist is the deliverable that makes a compliance conversation concrete. Hand it over signed, with the tax advisor's email attached, and the client's auditor has a starting point that is not a memory of a phone call. It also protects the consultant when a rate changes and nobody told them."
+		},
+		{
+			"kicker": "Volume 9 · Reference",
+			"title": "Reading the tax summary by account",
+			"bullets": [
+				"Grouping by account is what makes the return auditable, because each account is one box",
+				"A single blended tax account hides the split between sales tax and service tax",
+				"Credit notes must reduce both the taxable amount and the tax in the same period",
+				"Compare the summary with the general ledger, not with a spreadsheet"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Sales tax output", "1,200.00 for January", "Tax summary by account"],
+					["Service tax output", "40.00", "Tax summary by account"],
+					["Input tax", "120.00", "Tax summary, purchase side"],
+					["Net payable", "1,120.00 including service tax", "Your own arithmetic"],
+					["Ledger agreement", "identical figures", "General Ledger for the same accounts"]
+				]
+			},
+			"notes": "Twelve hundred of sales tax plus forty of service tax less one hundred twenty of input is one thousand one hundred twenty payable, and that single sum is what the client actually pays. Show the arithmetic in the meeting rather than the report, because the sum is what gets remembered and the report is what gets filed."
 		}
 	],
 	"lab": {
-		"title": "Lab · Run UAT, cut over and open the hypercare log",
+		"title": "Lab · Build SST templates, map an item mix and reconcile the return",
 		"minutes": 45,
 		"steps": [
-			"Write five UAT cases with exact expected figures for sales, purchase, stock and accounts",
-			"Assign each case to a named business owner and record the tester",
-			"Execute the cases in a test company and log any defect with severity",
-			"Confirm zero open severity one defects before sign-off",
-			"Produce the one-page cut-over plan with owners and evidence",
-			"Freeze, extract, load and prove the opening trial balance",
-			"Smoke test one sale, one purchase and one payment after go-live",
-			"Open the hypercare log and record the five daily metrics"
+			"Create sales tax at 10 per cent and service tax at 8 per cent with separate output accounts",
+			"Create the matching input templates on the purchase side",
+			"Attach item tax templates to the blender, the delivery service and the exempt carton",
+			"Raise a mixed invoice with all three lines and confirm 240.00, 40.00 and 0.00",
+			"Confirm the invoice total of 2,940.00 with 280.00 of tax",
+			"Produce the January tax summary and confirm 1,200.00 output and 120.00 input",
+			"Compute the net payable and tie it to the two ledger accounts",
+			"Attach an exemption certificate to a customer and invoice an exempt line"
 		],
-		"done": "Done when all five UAT cases pass on their figures with a signature, the opening balances balance, the smoke tests post correctly, and the hypercare log has an owner and an exit date."
+		"done": "Done when the tax summary and the ledger agree on output and input, the mixed invoice shows both rates correctly, and the exempt customer has a stored certificate."
 	},
 	"quiz": [
 		{
-			"question": "What makes a UAT case pass?",
+			"question": "Why keep separate accounts for sales tax and service tax output?",
 			"options": [
-				"No error message appeared",
-				"The expected figures match exactly",
-				"The tester liked it",
-				"It ran quickly"
+				"To reduce the rate",
+				"Because the return needs each box separately",
+				"To speed printing",
+				"To avoid e-Invoice"
 			],
 			"answer": 1,
-			"why": "A case passes on numbers: 1,320.00 total, 600.00 cost, 600.00 gross profit. The absence of an error message proves nothing."
+			"why": "SST-02 reports sales tax and service tax in different boxes, so they need separate accounts; a blended account cannot be split later."
 		},
 		{
-			"question": "Which defect state blocks go-live?",
-			"options": ["Any open defect", "Open severity one defects", "Closed defects", "Cosmetic defects"],
-			"answer": 1,
-			"why": "Severity one blocks go-live; lower severities can be scheduled with an owner and a date, recorded at sign-off."
-		},
-		{
-			"question": "Why keep the old system readable after cut-over?",
+			"question": "Which document beats which when deciding an item's tax rate?",
 			"options": [
-				"To save money",
-				"As a rollback position and reference for the first month",
-				"To avoid training",
-				"To reuse licences"
+				"Customer template beats item template",
+				"Item template beats customer template",
+				"Company default beats both",
+				"The invoice line beats everything"
 			],
 			"answer": 1,
-			"why": "A readable old system gives the client a rollback position and a reference while the new balances settle."
+			"why": "Precedence runs from the most specific to the least: item tax template, then customer or supplier template, then company default."
 		},
 		{
-			"question": "What is the exit criterion for hypercare?",
-			"options": [
-				"Thirty days elapsed",
-				"Open severity one at zero, agreed before go-live",
-				"The consultant is tired",
-				"The invoice is paid"
-			],
+			"question": "Output tax of 1,200.00 and input tax of 120.00 give a payable of what?",
+			"options": ["1,320.00", "1,080.00", "1,200.00", "120.00"],
 			"answer": 1,
-			"why": "The exit is measured against a criterion agreed before go-live, so it is a decision rather than a negotiation at the end."
+			"why": "The payable is output minus input, 1,200.00 − 120.00 = 1,080.00, and it must tie to the two ledger balances."
 		},
 		{
-			"question": "Which document proves the business accepted the system?",
+			"question": "What makes an exempt sale defensible?",
 			"options": [
-				"The configuration worksheet",
-				"The signed UAT sheet",
-				"The runbook",
-				"The access review"
+				"Typing zero in the rate",
+				"A category plus a stored exemption certificate",
+				"Cancelling the invoice",
+				"A journal entry"
 			],
 			"answer": 1,
-			"why": "The signed UAT sheet is the formal acceptance, supported by defect closure and retest evidence."
+			"why": "An exemption needs a category for reporting and a certificate as evidence; a zero rate alone gives the auditor nothing to test."
+		},
+		{
+			"question": "Which documents must be excluded from the SST return?",
+			"options": [
+				"Submitted invoices",
+				"Draft and cancelled documents",
+				"Credit notes",
+				"Purchase invoices"
+			],
+			"answer": 1,
+			"why": "Only posted, submitted documents carry tax liability. Drafts have not happened and cancelled documents have been reversed."
 		}
 	],
 	"memory": {
-		"spine": "A script the client signs, a weekend in dependency order, a fortnight measured in numbers, and a pack that outlives the consultant.",
+		"spine": "One tax template per rate per direction, an item category that follows the product, and a return that is the ledger seen three ways.",
 		"device": {
-			"kind": "phrase",
-			"label": "Script, sequence, numbers, hand over",
+			"kind": "rule",
+			"label": "One template per rate per direction",
 			"expansion": [
-				"A test case states the action, the expected number and the evidence, and the client signs it",
-				"Pass means the expected figure appears, not that no error message was shown",
-				"Cut over in dependency order, because each step unblocks the next one",
-				"Hypercare is a fortnight of daily numbers: tickets, invoices, stock errors, close progress and logins",
-				"The handover pack must be usable without the consultant in the room"
+				"Sales tax out, service tax out and purchase tax in never share a template",
+				"Goods at ten per cent and services at eight per cent sit on separate lines and templates",
+				"Item tax category overrides the customer default, which must be intended rather than discovered",
+				"SST-02 comes from posted invoices, so drafts and cancellations are excluded",
+				"The return, the tax summary and the ledger are one number seen three ways"
 			]
 		},
 		"cards": [
 			{
-				"q": "What makes a UAT case pass?",
-				"a": "The expected figure appears on screen, not merely that the screen did not produce an error.",
-				"hint": "Figures, not silence"
+				"q": "Why one template per rate per direction?",
+				"a": "The posting account and the return box differ by direction, and mixing them makes the return untraceable.",
+				"hint": "Account and box"
 			},
 			{
-				"q": "Why is cut over ordered rather than parallel?",
-				"a": "Each step produces the input for the next, so reordering it creates work that must be redone.",
-				"hint": "Dependency, not convenience"
+				"q": "Goods at ten per cent and services at eight per cent on one invoice?",
+				"a": "Two lines on two templates, each rate posting to its own account.",
+				"hint": "Never one line"
 			},
 			{
-				"q": "Which five numbers are measured daily in hypercare?",
-				"a": "Tickets raised, invoices posted, stock errors, close progress and logins.",
-				"hint": "Five numbers a day"
+				"q": "Item tax category or customer default, which applies?",
+				"a": "The item's category wins, which is useful for exempt goods and dangerous when unintended.",
+				"hint": "Product beats party"
 			},
 			{
-				"q": "What ends hypercare?",
-				"a": "A go or no go decision on evidence where every criterion carries a number and someone signs it.",
-				"hint": "Decision on evidence"
+				"q": "Which documents feed the SST-02 return?",
+				"a": "Posted invoices only, because drafts, cancelled documents and unsubmitted returns are excluded.",
+				"hint": "Posted only"
 			},
 			{
-				"q": "What goes into the handover pack?",
-				"a": "Configuration record, mapping workbook, UAT sign off, cut over log, open items and how to run the close.",
-				"hint": "The project's memory"
+				"q": "Which three numbers must agree?",
+				"a": "The return figure, the tax summary by account and the ledger balance of the tax account.",
+				"hint": "One number, three views"
 			}
 		],
 		"trap": {
-			"what": "UAT is signed off because no errors were raised during the session.",
-			"why": "Nobody compared figures, so the first month end discovers the wrong tax template and the sign off protects the vendor, not the client."
+			"what": "An exempt customer is handled by typing zero per cent into the rate field.",
+			"why": "No exemption category or certificate sits behind the zero, so the return cannot evidence why tax was not charged."
 		}
 	},
-	"narration": "The last two weeks decide how the project is remembered. UAT is not a demo: every case states an action and an expected number, five blenders at two hundred forty plus tax is one thousand three hundred twenty, cost six hundred, gross profit six hundred, and the case passes only when those figures appear. Go or no-go is decided on five rows of evidence, with a written acceptance for anything red. Cut-over is a one-page sequence with owners, and the old system stays readable as a rollback position. Then hypercare: five metrics, fifteen minutes, every morning, ending on the date agreed before go-live. Hand over the runbook, the worksheet, the opening pack and the access review, and step back. The measure of a finished engagement is not the invoice, it is a client running their own close, their own UAT for the next change, and their own access review without calling you, because the rhythm lives in their calendar rather than in your notes."
+	"narration": "Malaysian tax is the part clients test you on first, because the numbers go to a government portal. Build separate templates for sales tax and service tax, with separate output and input accounts, because the return needs each box separately. Attach item tax templates so the rate follows the product: ten per cent goods, eight per cent services, zero for exempt with a stored certificate. Then the return: twelve hundred output less one hundred twenty input is one thousand eighty payable, and the same three numbers must appear in the tax summary, the ledger and the form. If they do not, the cause is a draft counted, a credit note that did not reverse tax, or a purchase without an input template. Keep the tax advisor's written confirmation with the configuration worksheet, because rates and thresholds change with every budget, and the consultant who documented the basis is the one who gets called back rather than blamed."
 }

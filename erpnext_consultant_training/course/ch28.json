@@ -1,0 +1,373 @@
+{
+	"id": "ch28",
+	"number": 28,
+	"title": "Volume 10 · Migration: Mapping, Opening Balances and Import",
+	"subtitle": "Lessons 1–4: a mapping workbook the client signs, masters imported in dependency order, and an opening trial balance that balances to the cent",
+	"level": "Capstone",
+	"minutes": 60,
+	"outcomes": [
+		"Build a mapping workbook before anything is imported",
+		"Import masters in the order the system demands, not the order of the spreadsheet",
+		"Load opening balances so the trial balance balances first time",
+		"Freeze the opening and prove it with evidence the auditor accepts"
+	],
+	"slides": [
+		{
+			"kicker": "Lesson 1 · Mapping",
+			"title": "Build the mapping workbook before you touch the system",
+			"bullets": [
+				"Mapping is a written agreement: old value, new value, owner, decision date",
+				"Chart of accounts mapping is the hardest part, because old codes carry history and habit",
+				"Every unmapped value is a future support ticket, so count them down to zero",
+				"The client signs the workbook, which is what ends the argument in month two"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Export old masters",
+						"Chart of accounts, customers, suppliers, items",
+						"Four spreadsheets"
+					],
+					["2", "Create the workbook", "Sheet per entity with old and new columns", "Workbook v1"],
+					[
+						"3",
+						"Map the chart",
+						"Old 1100 Debtors to Debtors - SM, and so on",
+						"Every code has a target"
+					],
+					[
+						"4",
+						"Mark the exceptions",
+						"Codes with no obvious target flagged in red",
+						"Exception list"
+					],
+					["5", "Review with finance", "Walk the red rows only", "Decisions recorded"],
+					["6", "Sign the version", "Workbook v1 approved on a date", "Signed PDF on file"]
+				]
+			},
+			"notes": "The workbook is the deliverable that separates a migration from an improvisation, and its most valuable column is the owner. Every red row needs a name beside it, because the client's finance manager will otherwise assume you decided. Sign one version, date it, and treat later changes as change requests with a cost."
+		},
+		{
+			"kicker": "Lesson 2 · Verify the mapping",
+			"title": "Prove the workbook is complete before import",
+			"bullets": [
+				"Completeness means every old value has a target, including the ones nobody uses",
+				"Duplicates must be merged before import, not after, because merged history is messy",
+				"Tax categories, territories and price lists are the fields people forget",
+				"A trial import into a test company is cheaper than a second migration"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Old accounts mapped", "38 of 38", "Mapping workbook, chart sheet"],
+					["Unmapped exceptions", "0 before go-live", "Red rows in the workbook"],
+					["Duplicate customers", "merged and documented", "Customer sheet with merge notes"],
+					["Tax categories assigned", "every customer and supplier", "Workbook column"],
+					["Trial import errors", "0 in the test company", "Data Import log"]
+				]
+			},
+			"notes": "Thirty eight of thirty eight sounds trivial until the client's chart has one dormant account used once in 2019, and that is exactly the row an auditor finds. Run the trial import into a test company, fix errors there, and keep the log as evidence. The test company costs an hour; a re-migration costs a weekend and the client's confidence."
+		},
+		{
+			"kicker": "Lesson 3 · Import masters",
+			"title": "Import in dependency order, not spreadsheet order",
+			"bullets": [
+				"ERPNext needs parents before children: item groups before items, territories before customers",
+				"Import small batches and check the log after each, rather than one giant file",
+				"Use the template download for each doctype, because column names must match exactly",
+				"Never import a field the business does not use, because unused data becomes noise"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Data Import → New",
+						"DocType Item Group, download template",
+						"Template with exact columns"
+					],
+					["2", "Import item groups", "Four groups, one child", "4 plus 1 created"],
+					["3", "Import items", "12 items with UOM and valuation", "12 created, 0 errors"],
+					["4", "Import customers", "5 customers with credit limits and tax category", "5 created"],
+					["5", "Import suppliers", "3 suppliers with payment terms", "3 created"],
+					["6", "Import price lists", "Retail 240.00 and Dealer 216.00 rows", "Price rows visible"]
+				]
+			},
+			"notes": "Dependency order is the rule people break first, usually by importing items before item groups and then wondering why every row fails. Import five records, read the log, then continue. That rhythm feels slow for the first ten minutes and saves hours later, because the first error tells you the column name is wrong before five hundred rows are queued."
+		},
+		{
+			"kicker": "Lesson 4 · Verify the import",
+			"title": "Rows, errors and duplicates, counted",
+			"bullets": [
+				"The import log is the evidence: rows attempted, created, updated and failed",
+				"A successful import of the wrong data is worse than a failed one, so spot-check content",
+				"Duplicates usually come from trailing spaces in names, which the system treats as distinct",
+				"Re-run the import after fixing errors, using update mode rather than creating again"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Item groups created", "5", "Item Group list"],
+					["Items created", "12, zero errors", "Item list and import log"],
+					["Customers and suppliers", "5 and 3", "Party lists"],
+					["Duplicates", "0", "Search by name and by abbreviation"],
+					["Spot check", "SM-BL200 valuation 120.00, UOM Nos", "Item record"]
+				]
+			},
+			"notes": "Counting rows is the easy half; spot-checking content is the half that matters. Open three records at random and read the fields the business depends on: valuation, tax template, warehouse. If those are right, the rest of the row probably is too. If they are wrong, the column mapping is off by one and the whole file needs re-running."
+		},
+		{
+			"kicker": "Lesson 5 · Opening balances",
+			"title": "Load an opening trial balance that balances",
+			"bullets": [
+				"Opening balances are a journal dated the day before go-live, not a set of typed invoices",
+				"Debtors and creditors open as party balances so ageing starts on day one",
+				"Stock opens at valuation through a stock reconciliation, not through the journal",
+				"Equity is the plug that makes it balance, and the client must agree the figure"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Stock opening",
+						"Stock Reconciliation at 120.00 for 47 units",
+						"5,640.00 of stock"
+					],
+					[
+						"2",
+						"Debtors opening",
+						"Journal to Debtors - SM with party rows, 13,200.00",
+						"Ageing populated"
+					],
+					[
+						"3",
+						"Creditors opening",
+						"Journal to Creditors - SM, 1,188.00",
+						"Supplier balances visible"
+					],
+					["4", "Bank opening", "Journal to Bank - SM, 18,450.00", "Bank balance set"],
+					["5", "Tax and accruals", "SST payable 1,080.00, accrued 800.00", "Liabilities recorded"],
+					[
+						"6",
+						"Equity",
+						"Share capital 50,000.00 and retained 43,222.00",
+						"Journal balances to 0.00"
+					]
+				]
+			},
+			"notes": "The arithmetic is the deliverable: 5,640 plus 13,200 plus 18,450 plus 59,000 of fixed assets is 96,290 of assets, against 1,188 plus 1,080 plus 800 of liabilities and 93,222 of equity. Make the learner write both sides before saving the journal, because an opening that balances by accident is not balanced at all."
+		},
+		{
+			"kicker": "Lesson 6 · Verify the opening",
+			"title": "The five checks before you let anyone transact",
+			"bullets": [
+				"Assets equal liabilities plus equity, and the trial balance proves it",
+				"Party balances must equal their control accounts, or ageing is wrong from day one",
+				"Stock quantity and value must match the count sheet, not the old system's report",
+				"The opening journal must be the last document dated before go-live"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Total assets", "96,290.00", "Trial Balance at opening date"],
+					["Liabilities plus equity", "3,068.00 plus 93,222.00", "Trial Balance at opening date"],
+					[
+						"Debtors control",
+						"13,200.00 equals party ledger",
+						"Accounts Receivable and control account"
+					],
+					["Stock", "47 units, 5,640.00", "Stock Balance report"],
+					["Opening journal difference", "0.00", "Journal Entry footer"]
+				]
+			},
+			"notes": "Two numbers to say out loud in the sign-off meeting: ninety six thousand two hundred ninety of assets, and the same figure on the other side. If the difference is not zero, do not open the doors, because every later correction will be harder once documents exist. This is the moment to be slow rather than helpful."
+		},
+		{
+			"kicker": "Volume 10 · Reference",
+			"title": "Migration order and what depends on what",
+			"bullets": [
+				"Each row depends on the rows above it, which is why the order is not negotiable",
+				"Opening balances come last, because they reference every master",
+				"Users and permissions usually precede training, not go-live",
+				"Every step leaves an artefact, and the artefacts become the client's audit file"
+			],
+			"table": {
+				"headers": ["Order", "Step", "Depends on", "Artefact"],
+				"rows": [
+					["1", "Company, currency, fiscal year", "Nothing", "Company record screenshot"],
+					["2", "Chart of accounts and cost centres", "Company", "Signed chart mapping"],
+					["3", "Warehouses, UOM and item groups", "Company", "Master file"],
+					["4", "Items, parties, price lists", "Groups and territories", "Import log"],
+					["5", "Users, roles and permissions", "Company", "Access matrix"],
+					["6", "Opening balances", "Everything above", "Opening trial balance"]
+				]
+			},
+			"notes": "Print this order and stick it on the wall of the project room, because every delay in a migration traces to somebody working out of sequence. When the client asks to import invoices before opening balances, this table is the answer that ends the conversation politely."
+		},
+		{
+			"kicker": "Volume 10 · Reference",
+			"title": "What makes an opening balance auditable",
+			"bullets": [
+				"The auditor wants a source document for every opening figure",
+				"The count sheet supports stock, the ageing report supports debtors and creditors",
+				"The bank statement supports cash, and the fixed asset register supports assets",
+				"The equity figure is the only one that is derived, and it must be explained in words"
+			],
+			"table": {
+				"headers": ["Opening figure", "Value", "Supporting evidence", "Owner"],
+				"rows": [
+					["Stock", "5,640.00", "Signed count sheet at 47 units", "Warehouse"],
+					["Debtors", "13,200.00", "Ageing report from the old system", "Finance"],
+					["Creditors", "1,188.00", "Supplier statements", "Purchasing"],
+					["Bank", "18,450.00", "Bank statement at cut-off", "Finance"],
+					["Fixed assets", "59,000.00", "Asset register with dates", "Finance"]
+				]
+			},
+			"notes": "Every row here has a paper source except equity, and that is the row to explain in the file note. When the audit comes, the client produces this page rather than reconstructing a number from memory. A consultant who builds the evidence table at migration time is remembered as the one who made the audit easy."
+		},
+		{
+			"kicker": "Lesson 7 · Re-import",
+			"title": "The second import is the one that bites",
+			"bullets": [
+				"Every import will be run at least twice, because the first run always finds a mistake",
+				"An import that re-runs cleanly is idempotent: the same file produces the same state, not duplicates",
+				"Key on a stable identifier — item code, supplier name, customer code — never on the row number",
+				"Delete-and-reload is safe for masters only if nothing references them yet, which is rarely true twice",
+				"Keep the file, the date and the row count of every run in the migration log"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Take a backup before the first import", "(backup)", "Archive with a timestamp"],
+					["2", "Import twenty masters with the stable key", "item_code", "Twenty records created"],
+					["3", "Run the same file again unchanged", "(import)", "Zero created, twenty matched"],
+					[
+						"4",
+						"Change one price in the file and re-run",
+						"(import)",
+						"One updated, nineteen unchanged"
+					],
+					["5", "Introduce a deliberate duplicate code", "(import)", "Rejected row, reason shown"],
+					["6", "Log the run in the migration register", "(write)", "Date, rows, outcome"]
+				]
+			},
+			"notes": "Idempotency is the difference between an import you can retry at ten at night and one you cannot. Test it deliberately: run the same file twice and prove the second run changes nothing. If it duplicates, the key is wrong, and no amount of care in the file will fix it."
+		}
+	],
+	"lab": {
+		"title": "Lab · Map, import, load the opening and prove it balances",
+		"minutes": 45,
+		"steps": [
+			"Create the mapping workbook with old and new columns for accounts, parties and items",
+			"Confirm every old account has a target and no exceptions remain",
+			"Import item groups, then items, then customers, suppliers and price lists",
+			"Check each import log for errors and spot-check three item records",
+			"Post the stock opening of 47 units at 120.00 through stock reconciliation",
+			"Load debtors 13,200.00, creditors 1,188.00, bank 18,450.00 and fixed assets 59,000.00",
+			"Balance the opening with equity and confirm the journal difference is 0.00",
+			"Print the opening trial balance and confirm assets equal liabilities plus equity"
+		],
+		"done": "Done when the opening trial balance shows 96,290.00 on both sides, party balances equal their control accounts, and the evidence table is complete for every opening figure."
+	},
+	"quiz": [
+		{
+			"question": "Why must masters be imported in dependency order?",
+			"options": [
+				"To save disk space",
+				"Because children reference parents like item groups and territories",
+				"To avoid tax",
+				"To speed the import"
+			],
+			"answer": 1,
+			"why": "ERPNext links records, so an item needs its group and a customer needs its territory before either can be created."
+		},
+		{
+			"question": "How should stock opening balances be loaded?",
+			"options": [
+				"A journal to the stock account",
+				"A stock reconciliation at valuation",
+				"A purchase invoice",
+				"A sales return"
+			],
+			"answer": 1,
+			"why": "Stock reconciliation sets both quantity and valuation, whereas a journal would create value with no quantity behind it."
+		},
+		{
+			"question": "Opening assets of 96,290.00 with liabilities of 3,068.00 require equity of what?",
+			"options": ["96,290.00", "93,222.00", "3,068.00", "99,358.00"],
+			"answer": 1,
+			"why": "Assets equal liabilities plus equity, so equity is 96,290.00 − 3,068.00 = 93,222.00."
+		},
+		{
+			"question": "What evidence supports the debtors opening balance?",
+			"options": [
+				"The count sheet",
+				"The ageing report from the old system",
+				"The bank statement",
+				"The asset register"
+			],
+			"answer": 1,
+			"why": "Debtors are supported by an ageing report or customer statements, while stock uses the count sheet and cash uses the bank statement."
+		},
+		{
+			"question": "An opening journal shows a difference of 250.00. What should happen?",
+			"options": [
+				"Post it to a suspense account",
+				"Stop and find the cause before go-live",
+				"Ignore it as immaterial",
+				"Adjust the stock value"
+			],
+			"answer": 1,
+			"why": "An opening that does not balance will corrupt every later comparison, and a suspense account merely moves the problem into a new line."
+		}
+	],
+	"memory": {
+		"spine": "Agree the mapping on paper, then import parents before children, and let one dated journal carry every opening balance.",
+		"device": {
+			"kind": "phrase",
+			"label": "Agree, then parents before children",
+			"expansion": [
+				"The mapping workbook holds old value, new value, owner and decision date, signed before any import",
+				"Completeness means every old value has a target, including the ones nobody uses",
+				"Dependency order, not spreadsheet order: item groups before items, territories before customers",
+				"Opening balances are one journal dated the day before go live, not typed invoices",
+				"The import log is the evidence: attempted, created, updated and failed"
+			]
+		},
+		"cards": [
+			{
+				"q": "What must the mapping workbook contain?",
+				"a": "Every old value with a new target, an owner and a decision date, signed before the import starts.",
+				"hint": "A written agreement"
+			},
+			{
+				"q": "Why import in dependency order?",
+				"a": "ERPNext refuses children without parents, so the order is the data model rather than a preference.",
+				"hint": "Parents first"
+			},
+			{
+				"q": "How are opening balances loaded?",
+				"a": "As a single journal dated the day before go live, with a source document behind every figure.",
+				"hint": "One journal"
+			},
+			{
+				"q": "What proves an import is complete?",
+				"a": "The log: rows attempted, created, updated and failed, plus a duplicate count.",
+				"hint": "The log is the evidence"
+			},
+			{
+				"q": "Which five checks come before anyone is allowed to transact?",
+				"a": "Assets equal liabilities plus equity, the trial balance balances, stock ties to the count, debtors to statements, tax to returns.",
+				"hint": "Paper, then access"
+			}
+		],
+		"trap": {
+			"what": "Opening balances are entered as dummy invoices so that ageing looks right.",
+			"why": "Revenue and tax are then overstated in the go live month and the auditor cannot separate history from opening figures."
+		}
+	},
+	"narration": "Migration is where a project is won or lost, and it starts on paper. A mapping workbook with old values, new values and a named owner for every exception is the document the client signs, and it is what ends arguments in month two. Import in dependency order: company, chart of accounts, warehouses and groups, then items, parties and price lists, then users, and only then opening balances. The opening is a journal dated the day before go-live plus a stock reconciliation, and it must balance: ninety six thousand two hundred ninety of assets against three thousand and sixty eight of liabilities and ninety three thousand two hundred twenty two of equity. If it does not balance, the doors stay closed, because every later correction is harder once documents exist. Map on paper, import in order, prove the opening, and only then open the doors to users, with the evidence table signed so the first audit is a page rather than a reconstruction."
+}

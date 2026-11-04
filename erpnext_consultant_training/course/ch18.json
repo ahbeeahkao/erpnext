@@ -1,343 +1,481 @@
 {
 	"id": "ch18",
 	"number": 18,
-	"title": "Volume 6 · Production Costing, Scrap and Subcontracting",
-	"subtitle": "Lessons 5–8: what a finished unit really cost, how scrap changes the answer, and where subcontracting sits in the ledger",
+	"title": "Volume 6 · Bills of Materials and Work Orders",
+	"subtitle": "Lessons 1–4: a bill of materials the floor will follow, a work order that reserves the right stock, and a completion that leaves a sane valuation",
 	"level": "Advanced",
-	"minutes": 55,
+	"minutes": 65,
 	"outcomes": [
-		"Read a production cost and reconcile it to the BOM",
-		"Handle scrap so the good units carry the loss",
-		"Subcontract an operation and keep material control",
-		"Explain variance between planned and actual cost to a production manager"
+		"Build a bill of materials with materials, operations and a defensible cost",
+		"Plan a work order from real demand and read what it reserves",
+		"Issue components to the floor without losing the valuation trail",
+		"Complete production so finished goods carry materials plus capacity cost"
 	],
 	"slides": [
 		{
-			"kicker": "Lesson 5 · Production cost",
-			"title": "Read the finished cost before you defend it",
+			"kicker": "Lesson 1 · Bill of materials",
+			"title": "Write a bill of materials the floor will follow",
 			"bullets": [
-				"Finished cost is materials consumed plus operations recorded, divided by good units",
-				"The stock ledger row is the proof, not the report total",
-				"A cost that differs from the BOM has exactly three usual causes",
-				"Cost reviewed weekly stops being an argument at month end"
+				"A BOM is a recipe: quantities, operations and the cost of both",
+				"Quantities must be per single finished unit, or every work order multiplies the error",
+				"Operations carry time and rate, which is how labour enters the finished cost",
+				"Include only what the floor actually consumes, not what the drawing says in theory"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
-					["1", "Open the manufacture entry", "STE-SM-2026-0011", "Consumed and produced rows"],
-					["2", "Add up materials", "20 × 80.00 plus 10 × 40.00", "2,000.00"],
-					["3", "Add operating cost", "5 hours at 60.00 per hour", "300.00"],
-					["4", "Divide by good units", "2,300.00 across 10 assemblies", "230.00 per unit"],
-					["5", "Compare with the BOM", "BOM total 230.00", "No variance"],
+					[
+						"1",
+						"Manufacturing → Bill of Materials → New",
+						"Item SM-ASM, quantity 1, company SM",
+						"Empty BOM form"
+					],
+					[
+						"2",
+						"Add components",
+						"SM-MTR 2 Nos at 80.00, SM-HSG 1 Nos at 40.00",
+						"Material cost 200.00"
+					],
+					[
+						"3",
+						"Add operation",
+						"Assembly, workstation Assembly Line, 30 minutes",
+						"Operation row accepted"
+					],
+					["4", "Set the rate", "60.00 per hour on the operation", "Operating cost 30.00"],
+					["5", "Save and Submit", "Confirm", "BOM-SM-ASM-001, total cost 230.00"],
+					["6", "Check the tree", "Manufacturing → BOM Tree", "One level, two components"]
+				]
+			},
+			"notes": "Two motors at eighty and one housing at forty is two hundred of material, and half an hour at sixty adds thirty of capacity, so the assembly costs two hundred thirty to make. If the learner cannot predict that number before saving, they will not notice when a supplier price change silently makes every finished unit wrong. The BOM is the only place where a costing error is cheap to fix."
+		},
+		{
+			"kicker": "Lesson 2 · Verify the BOM",
+			"title": "The cost roll-up, proved line by line",
+			"bullets": [
+				"Material cost, operating cost and total must each be visible and explainable",
+				"A BOM without operations still works, but labour then never reaches inventory",
+				"Quantity per unit of one keeps the work order arithmetic trivial",
+				"Every BOM needs an owner, because prices and routings both change"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Material cost", "200.00", "BOM → Costing section"],
+					["Operating cost", "30.00", "BOM → Operations table"],
+					["Total cost per unit", "230.00", "BOM total"],
+					["Selling price assumption", "350.00", "Item price for SM-ASM"],
+					["Gross margin per unit", "120.00, about 34 per cent", "Your own arithmetic"]
+				]
+			},
+			"notes": "A three hundred fifty selling price against two hundred thirty of cost gives one hundred twenty of margin, roughly thirty four per cent, and that single ratio is what the owner will ask about in the first production meeting. Teach the learner to state it before anyone asks, because a consultant who arrives with the margin already computed sets the tone for the whole engagement."
+		},
+		{
+			"kicker": "Lesson 3 · Work order",
+			"title": "Plan a work order from real demand",
+			"bullets": [
+				"A work order is a promise to the floor: this item, this quantity, this date",
+				"Required items are reserved against the warehouse you nominate, not against hope",
+				"The planned start date drives the material request, so set it honestly",
+				"Do not create work orders for stock you have not sold unless the client plans to stock"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Manufacturing → Work Order → New",
+						"Item SM-ASM, quantity 10, BOM-SM-ASM-001",
+						"Required items populated"
+					],
+					[
+						"2",
+						"Set the dates",
+						"Planned start 05-02-2026, planned end 07-02-2026",
+						"Schedule recorded"
+					],
+					["3", "Set source warehouse", "Main - SM for components", "Reserved quantities shown"],
+					["4", "Save and Submit", "Confirm", "WO-SM-2026-0001, status Not Started"],
+					["5", "Read required items", "SM-MTR 20, SM-HSG 10", "Reserved against Main"],
 					[
 						"6",
-						"Record the check",
-						"One line in the production worksheet",
-						"Signed by production and finance"
+						"Check availability",
+						"Stock Balance for both components",
+						"Enough or a shortage flagged"
 					]
 				]
 			},
-			"notes": "The arithmetic here is deliberately identical to the BOM, because the first production run should show no variance. Once a client sees that the system agrees with the recipe, they trust it when the numbers later diverge. Introduce variance only after the clean case is understood, or the learner will assume every difference is a system error."
+			"notes": "Ten assemblies need twenty motors and ten housings, and the work order says so before anything moves. That is the value of the document: it converts a sales promise into a material promise. If availability is short, the conversation happens on the planning screen rather than on the assembly floor, which is a day earlier and considerably cheaper."
 		},
 		{
-			"kicker": "Lesson 6 · Verify the cost",
-			"title": "Cost per unit, proved three ways",
+			"kicker": "Lesson 4 · Verify the reservation",
+			"title": "What the work order actually reserves",
 			"bullets": [
-				"Materials, operations and total must agree from the entry, the stock ledger and the BOM",
-				"Valuation per unit appears in the stock ledger row and the stock balance report",
-				"A rounding difference of a cent is normal, a difference of ten per cent is not",
-				"Any difference must be explained in the worksheet before the period closes"
+				"Reserved quantity is a planning number and does not move the stock ledger",
+				"Stock only moves when material is transferred to the floor",
+				"A work order with no reservation means the item is not stock-tracked or the warehouse is wrong",
+				"Status changes are the audit trail of the production process"
 			],
 			"table": {
 				"headers": ["Check", "Expected value", "Where to look"],
 				"rows": [
-					["Material cost", "2,000.00", "Manufacture entry consumed rows"],
-					["Operating cost", "300.00", "Manufacture entry operating cost"],
-					["Total cost", "2,300.00", "Manufacture entry total"],
-					["Valuation per unit", "230.00", "Stock Ledger, SM-ASM incoming row"],
-					["Stock value", "2,300.00 for 10 units", "Stock Balance report"]
+					["Reserved SM-MTR", "20 units", "Work Order → Required Items"],
+					["Reserved SM-HSG", "10 units", "Work Order → Required Items"],
+					["Stock ledger effect", "none until material transfer", "Stock Ledger for SM-MTR"],
+					["Work order status", "Not Started", "Work Order header"],
+					["Projected quantity at Main", "reduced by the reservation", "Stock → Item dashboard"]
 				]
 			},
-			"notes": "Three ways of seeing the same number is the fastest way to build confidence in a new system. Ask the learner to read the figure off the entry, off the ledger and off the balance sheet item, then to explain why all three agree. When they can do that unprompted, they can survive any costing meeting."
+			"notes": "This is where learners confuse planning with posting. Reserved quantities live in the work order and in availability reports, while the stock ledger stays untouched until the transfer. Say the sentence twice: a reservation is a promise, a transfer is a movement. The distinction prevents the classic panic when a client sees stock still in main after an issue was supposedly made."
 		},
 		{
-			"kicker": "Lesson 7 · Scrap",
-			"title": "Scrap one unit and let the good units carry it",
+			"kicker": "Lesson 5 · Material issue",
+			"title": "Issue components to the floor",
 			"bullets": [
-				"Scrap is a quantity decision, not a cost adjustment typed into a journal",
-				"The total production cost stays the same while the good quantity falls",
-				"Cost per good unit therefore rises, and the finished stock carries that higher value",
-				"Scrap needs a reason code, because the causes are process, material or machine"
+				"Material transfer for manufacture moves components to the work-in-progress warehouse",
+				"The transfer is the moment cost leaves raw stock and joins the production order",
+				"Transfer exactly what the work order asks for, not the whole shelf",
+				"Partial transfers are normal for long builds, and the work order tracks the balance"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Open the work order",
-						"WO-SM-2026-0001, completed 10 units",
-						"Existing completion"
+						"Open WO-SM-2026-0001 → Create → Material Transfer",
+						"Nothing",
+						"Stock entry pre-filled with components"
 					],
 					[
 						"2",
-						"Create the scrap entry",
-						"Stock Entry type Material Issue from Main, quantity 1",
-						"One assembly removed"
+						"Set warehouses",
+						"From Main - SM to Assembly Floor - SM",
+						"Transfer type for manufacture"
 					],
 					[
 						"3",
-						"Set the reason",
-						"Scrap - assembly defect, cost centre Assembly",
-						"Reason stored on the entry"
+						"Confirm quantities",
+						"SM-MTR 20, SM-HSG 10",
+						"Transferred quantity equals required"
 					],
-					["4", "Save and Submit", "Confirm", "Stock falls to 9 assemblies"],
-					["5", "Read the cost", "Stock Balance for SM-ASM", "9 units still worth 2,300.00"],
-					["6", "Recompute per unit", "2,300.00 across 9 units", "255.56 per unit"]
+					["4", "Save and Submit", "Confirm", "Stock entry STE-SM-2026-0010 submitted"],
+					[
+						"5",
+						"Check the bins",
+						"Main and Assembly Floor",
+						"Main falls by 20 and 10, floor rises"
+					],
+					[
+						"6",
+						"Check the work order",
+						"Transfer status",
+						"Material transferred, status In Process"
+					]
 				]
 			},
-			"notes": "Two thousand three hundred across nine units is two hundred fifty five point five six, and that is the number the owner needs to see, because the loss is now visible in the value of the remaining stock. If the scrap were journalled away, the nine good units would look cheaper than they are and the next quotation would be priced on a lie."
+			"notes": "Twenty motors and ten housings leave main and arrive on the floor, and the total value of the company has not changed. That is the point to make loudly, because the client's accountant will see two ledger rows and ask which one is the cost. Neither is: cost becomes expense only when the finished item is sold."
 		},
 		{
-			"kicker": "Lesson 8 · Subcontracting",
-			"title": "Subcontract an operation and keep control of the material",
+			"kicker": "Lesson 6 · Verify the WIP",
+			"title": "Work in progress on the floor, in numbers",
 			"bullets": [
-				"Subcontracting sends material out and buys a service back, and both must be recorded",
-				"The subcontractor warehouse is where your material sits while someone else holds it",
-				"The purchase receipt of the service adds that cost to the finished valuation",
-				"Sending material without a transfer is how stock disappears in a subcontracting business"
+				"Work in progress is the value of components consumed but not yet finished",
+				"The floor warehouse quantity is your visual WIP, and it must match the work order",
+				"No profit appears at this stage, however long the build takes",
+				"A floor balance that outlives the work order is scrap or theft, not WIP"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					["Components on the floor", "SM-MTR 20, SM-HSG 10", "Stock → Bin, Assembly Floor - SM"],
+					["Value on the floor", "2,000.00", "Stock Balance, Assembly Floor"],
+					[
+						"Main warehouse after issue",
+						"reduced by 20 motors and 10 housings",
+						"Stock → Bin, Main - SM"
+					],
+					["Work order status", "In Process", "Work Order header"],
+					["Profit and loss effect", "none", "Profit and Loss Statement"]
+				]
+			},
+			"notes": "Two thousand of components sitting on the floor is a number a client can see with their own eyes, and that is why the floor warehouse earns its place. When the count on the floor disagrees with the work order, the conversation is about physical control rather than accounting, and it is the warehouse supervisor who owns the answer."
+		},
+		{
+			"kicker": "Lesson 7 · Completion",
+			"title": "Complete the order and value the finished goods",
+			"bullets": [
+				"The manufacture entry consumes components and produces the finished item in one document",
+				"Valuation carries materials plus the operating cost you configured",
+				"A short completion leaves components on the floor, which the next transfer must explain",
+				"Scrap and rework belong in the same work order, not in a separate correction later"
 			],
 			"table": {
 				"headers": ["Step", "Do this", "Enter", "Expect to see"],
 				"rows": [
 					[
 						"1",
-						"Create the subcontracting BOM",
-						"SM-ASM with operation Powder Coating marked subcontract",
-						"BOM ready for outsourcing"
+						"Open the work order → Create → Manufacture",
+						"Nothing",
+						"Entry with consumed and produced rows"
 					],
 					[
 						"2",
-						"Raise the purchase order",
-						"Service item Powder Coating, 10 units at 12.00",
-						"Total 120.00"
+						"Check the consumed rows",
+						"SM-MTR 20, SM-HSG 10 from Assembly Floor",
+						"Consumption pre-filled"
 					],
-					[
-						"3",
-						"Transfer material",
-						"SM-ASM 10 units to Subcontractor - SM",
-						"Material leaves main"
-					],
+					["3", "Check the produced row", "SM-ASM 10 units into Main - SM", "Finished quantity 10"],
 					[
 						"4",
-						"Receive the service",
-						"Purchase receipt against the order",
-						"Units return to main"
+						"Confirm operating cost",
+						"0.50 hours × 10 units at 60.00 per hour",
+						"Operating cost 300.00"
 					],
-					["5", "Check valuation", "Stock Balance for SM-ASM", "242.00 per unit including 12.00"],
-					["6", "Reconcile material", "Subcontractor warehouse balance", "Zero, all units returned"]
+					["5", "Save and Submit", "Confirm", "Finished goods valued at 230.00 each"],
+					["6", "Read the stock ledger", "Filter SM-ASM", "Incoming 10 at 230.00, value 2,300.00"]
 				]
 			},
-			"notes": "Twelve ringgit of coating on a two hundred thirty assembly gives two hundred forty two, and the subcontractor warehouse must end at zero. That zero is the control: if material is still sitting with the subcontractor after the service receipt, someone is holding your stock without a document, which is a finding worth raising the same day."
-		},
-		{
-			"kicker": "Lesson 7 · Verify scrap",
-			"title": "What scrap does to the remaining value",
-			"bullets": [
-				"Total production cost is unchanged by scrap, and the good units carry it",
-				"The stock value stays at 2,300.00 with nine units, so the report shows the loss",
-				"A scrap account only appears if you configured the entry to expense it directly",
-				"Recalculate the selling price implication before the next quotation goes out"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Assemblies in stock", "9", "Stock → Bin, Main - SM"],
-					["Stock value", "2,300.00 unchanged", "Stock Balance for SM-ASM"],
-					["Valuation per unit", "255.56", "Stock Ledger, latest row"],
-					[
-						"Scrap entry",
-						"1 unit issued with a reason and cost centre",
-						"Stock Entry STE-SM-2026-0012"
-					],
-					["Margin at 350.00 selling price", "94.44, about 27 per cent", "Your own arithmetic"]
-				]
-			},
-			"notes": "Two hundred fifty five fifty six against a three hundred fifty selling price leaves ninety four forty four, roughly twenty seven per cent, down from thirty four. That fall is the real cost of the defect, and it belongs in the next pricing conversation rather than the scrap bin. Show the learner the margin before and after, and the quality discussion starts by itself."
-		},
-		{
-			"kicker": "Lesson 8 · Verify subcontracting",
-			"title": "Proof the service and the material both landed",
-			"bullets": [
-				"Material out, service in, material back: three movements and one valuation",
-				"The service cost is only in stock if the receipt was against the subcontracting order",
-				"The subcontractor warehouse must return to zero, or material is unaccounted for",
-				"Subcontract purchase invoices still carry tax, and it is input tax like any purchase"
-			],
-			"table": {
-				"headers": ["Check", "Expected value", "Where to look"],
-				"rows": [
-					["Subcontractor warehouse balance", "0 units", "Stock → Bin, Subcontractor - SM"],
-					["Assemblies back in main", "10 units", "Stock → Bin, Main - SM"],
-					["Valuation per unit", "242.00", "Stock Ledger, latest incoming row"],
-					["Service cost in stock", "120.00 across ten units", "Landed value in the receipt"],
-					["Purchase invoice", "120.00 plus input tax", "Accounts → Purchase Invoice"]
-				]
-			},
-			"notes": "The two numbers that matter are zero and two hundred forty two: nothing left with the supplier, and every returned unit carrying the service cost. If either is wrong, the receipt was raised against the wrong order or the transfer never happened, and both are visible in the same screen. Checking this weekly prevents the year-end scramble that subcontracting projects always produce."
+			"notes": "Two thousand of materials plus three hundred of capacity gives two thousand three hundred, or two hundred thirty per assembly, which matches the BOM exactly. When the completion value differs from the BOM, the difference is always one of three things: a rate change on a component, an operation time recorded differently, or additional costs added on the entry."
 		},
 		{
 			"kicker": "Volume 6 · Reference",
-			"title": "Cost components and where they land",
+			"title": "Production documents in order",
 			"bullets": [
-				"Every ringgit of production cost must land in inventory, not in an expense account",
-				"Capacity cost is labour and machine time, and it needs a rate the client can defend",
-				"Scrap and rework are cost of quality, and they belong in the same work order",
-				"Subcontracting adds an external service cost, which is still inventory until sale"
+				"Each document answers one question and hands the next one a number",
+				"Skipping the material transfer makes the completion consume stock that is not there",
+				"The work order is the only place where planned and actual quantities meet",
+				"Every document has a status that tells you where the build actually stands"
 			],
 			"table": {
-				"headers": ["Component", "Source", "Lands in", "Check"],
+				"headers": ["Document", "When", "Purpose", "What to verify"],
 				"rows": [
 					[
-						"Raw material",
-						"Stock issue at valuation",
-						"Work in progress, then finished goods",
-						"Quantity matches the BOM"
+						"Bill of Materials",
+						"Once per product",
+						"Defines materials, operations and cost",
+						"Cost per unit matches the quote"
 					],
 					[
-						"Direct labour",
-						"Operation time at workstation rate",
-						"Finished goods valuation",
-						"Hours recorded on the entry"
+						"Work Order",
+						"Per build",
+						"Reserves stock and schedules the floor",
+						"Required quantities are correct"
 					],
 					[
-						"Machine cost",
-						"Workstation rate including overhead",
-						"Finished goods valuation",
-						"Rate agreed with finance"
+						"Material Transfer for Manufacture",
+						"At build start",
+						"Moves components to the floor",
+						"Floor quantity equals required"
 					],
 					[
-						"Subcontract service",
-						"Purchase invoice for the service",
-						"Finished goods valuation",
-						"Material returned to zero"
+						"Manufacture entry",
+						"At completion",
+						"Consumes components, produces finished goods",
+						"Valuation equals materials plus operations"
 					],
 					[
-						"Scrap",
-						"Material issue with a reason",
-						"Cost of the remaining good units",
-						"Reason code and approver"
+						"Stock Entry for scrap",
+						"When a unit fails",
+						"Removes the failed unit and its cost",
+						"Cost per good unit recalculated"
 					]
 				]
 			},
-			"notes": "This is the table to leave with a manufacturing client, because their accountant will ask where each element sits and their production manager will ask who controls it. Answering both columns in one page is what turns a system implementation into a costing conversation the client trusts."
+			"notes": "Walk this table once with the client's production supervisor and once with their accountant, and you will hear two different questions: can I build it, and what did it cost. Answering both from the same five documents is what makes ERPNext usable on a shop floor rather than merely installed."
+		},
+		{
+			"kicker": "Lesson 8 · Job cards",
+			"title": "The floor needs a card per operation",
+			"bullets": [
+				"A job card turns one work order into the sequence of operations, each with time, quantity and a person",
+				"Time logged against a card is how labour enters the cost, so an unused card means an under-costed product",
+				"Quantity completed per operation is what shows the bottleneck, which is a capacity question rather than a costing one",
+				"Printed cards still work, and a printed card that names the operation is a training aid as well as a record",
+				"Reconcile card time against the timesheet, or the payroll and the product cost tell different stories"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					["1", "Add operations to the BOM", "Cut, Assemble, Test", "Three operations with times"],
+					[
+						"2",
+						"Release a work order for ten units",
+						"(submit)",
+						"Job cards generated per operation"
+					],
+					[
+						"3",
+						"Log time on the cutting card",
+						"1.5 hours, operator A",
+						"Time recorded against the card"
+					],
+					[
+						"4",
+						"Record quantity completed per card",
+						"10 of 10 cut",
+						"Progress visible per operation"
+					],
+					["5", "Print the cards for the floor", "(print)", "Cards with operation and quantity"],
+					[
+						"6",
+						"Reconcile cards against the timesheet",
+						"(compare)",
+						"Hours agree within tolerance"
+					]
+				]
+			},
+			"notes": "Job cards are the difference between a work order that reports cost and a work order that reports progress. On a small floor the honest version is one card per operation, printed, with the operator writing time. Do not let the card become a form filled at the end of the week from memory."
+		},
+		{
+			"kicker": "Lesson 9 · Planning",
+			"title": "From demand to a plan you can defend",
+			"bullets": [
+				"A production plan answers a different question from a work order: what should we make, and when",
+				"Start from real demand — open sales orders and a stated forecast — never from a hunch about the month",
+				"The plan shows shortages of components before the order is released, which is the point of doing it",
+				"Capacity is a constraint, so compare planned hours against the hours the floor actually has",
+				"A plan reviewed weekly is a tool; one produced monthly is a report"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Confirm open demand for the next four weeks",
+						"Sales orders and forecast",
+						"Demand list by item"
+					],
+					["2", "Run the plan for the assembly items", "(plan)", "Suggested quantities by week"],
+					[
+						"3",
+						"Read the component shortage list",
+						"Bearing kit short by 4",
+						"Shortage rows on the plan"
+					],
+					[
+						"4",
+						"Compare planned hours against available hours",
+						"38 planned, 40 available",
+						"Capacity view"
+					],
+					[
+						"5",
+						"Release work orders only for the current week",
+						"(release)",
+						"One week of orders, not four"
+					],
+					["6", "Repeat next week against the same demand", "(plan)", "Plan and reality compared"]
+				]
+			},
+			"notes": "The plan earns its place by finding a shortage before the order is released. Releasing four weeks of work orders at once defeats the purpose, because the plan can no longer be adjusted. Weekly, one week ahead, is the discipline that makes small manufacturers trust it."
 		}
 	],
 	"lab": {
-		"title": "Lab · Cost a build, scrap a unit and subcontract an operation",
+		"title": "Lab · Build a BOM, run a work order and value the output",
 		"minutes": 45,
 		"steps": [
-			"Read the completed manufacture entry and confirm 2,300.00 total cost",
-			"Prove 230.00 per unit from the entry, the stock ledger and the stock balance",
-			"Issue one assembly as scrap with a reason and a cost centre",
-			"Confirm nine units now carry the full 2,300.00 and recompute the unit cost",
-			"Create a subcontracting operation on the BOM for powder coating at 12.00",
-			"Raise the purchase order and transfer ten assemblies to the subcontractor warehouse",
-			"Receive the service and confirm the new valuation of 242.00 per unit",
-			"Prove the subcontractor warehouse balance is zero after receipt"
+			"Create the SM-ASM bill of materials with two motors, one housing and a 30 minute operation",
+			"Confirm the cost roll-up of 200.00 materials and 30.00 operations",
+			"Create a work order for 10 units and confirm the 20 and 10 component requirement",
+			"Issue the components to the Assembly Floor and confirm main warehouse falls",
+			"Confirm the floor holds 2,000.00 of work in progress and no profit has moved",
+			"Complete the work order with 10 finished units and 300.00 of operating cost",
+			"Confirm finished goods valuation of 230.00 per unit and total 2,300.00",
+			"Compare the completion value with the BOM and explain any difference"
 		],
-		"done": "Done when scrap leaves nine units at 255.56 each, the subcontracted units carry 242.00, and no material remains in the subcontractor warehouse."
+		"done": "Done when 10 assemblies sit in main at 230.00 each, the floor is empty of components for this order, and the completion value matches the BOM line for line."
 	},
 	"quiz": [
 		{
-			"question": "A build costs 2,300.00 and one of ten units is scrapped. Cost per good unit becomes what?",
-			"options": ["230.00", "255.56", "207.00", "2,300.00"],
+			"question": "Two motors at 80.00, one housing at 40.00 and half an hour at 60.00 per hour give a unit cost of what?",
+			"options": ["200.00", "230.00", "260.00", "180.00"],
 			"answer": 1,
-			"why": "Total cost stays at 2,300.00 while the good quantity falls to nine, so each unit carries 255.56."
+			"why": "Materials are 2 × 80 + 40 = 200, and the operation is 0.5 × 60 = 30, so the BOM costs 230.00 per unit."
 		},
 		{
-			"question": "How should scrap be recorded?",
+			"question": "What does submitting a work order do to the stock ledger?",
 			"options": [
-				"A journal reducing stock",
-				"A stock entry with a reason code",
-				"Editing the work order",
-				"A credit note"
+				"Moves components to the floor",
+				"Nothing, it only reserves",
+				"Produces finished goods",
+				"Creates a purchase order"
 			],
 			"answer": 1,
-			"why": "Scrap is a quantity event, so it needs a stock entry with a reason, which also keeps the cost with the good units."
+			"why": "A work order reserves quantities for planning. Stock moves only when material is transferred to the floor."
 		},
 		{
-			"question": "In subcontracting, where does your material sit while the supplier works on it?",
+			"question": "When does component cost become an expense?",
 			"options": [
-				"Main warehouse",
-				"The subcontractor warehouse",
-				"Goods in transit",
-				"Work in progress"
+				"At the material transfer",
+				"At work order completion",
+				"When the finished item is sold",
+				"When the BOM is saved"
+			],
+			"answer": 2,
+			"why": "Component and labour cost accumulate in inventory until the finished item is sold, at which point cost of goods sold is recognised."
+		},
+		{
+			"question": "What does the manufacture entry add to finished goods valuation?",
+			"options": [
+				"Only material cost",
+				"Materials plus operating cost",
+				"Selling price",
+				"Only operating cost"
 			],
 			"answer": 1,
-			"why": "ERPNext holds subcontracted material in a subcontractor warehouse so the balance proves what is with the supplier."
+			"why": "The manufacture entry consumes components and adds the operating cost from the BOM, giving the full production cost per unit."
 		},
 		{
-			"question": "What should the subcontractor warehouse balance be after the service is received?",
-			"options": ["Equal to the order quantity", "Zero", "Negative", "Equal to the service cost"],
-			"answer": 1,
-			"why": "All transferred material should return, so a non-zero balance means material is unaccounted for and needs immediate investigation."
-		},
-		{
-			"question": "Which production cost lands in finished goods valuation?",
-			"options": [
-				"Only raw material",
-				"Material, operations and subcontract services",
-				"Only labour",
-				"Selling and admin costs"
-			],
-			"answer": 1,
-			"why": "Production cost includes material, operations and bought-in services used in the build, all of which stay in inventory until sale."
+			"question": "10 assemblies cost 2,300.00 to build. Cost per unit is what?",
+			"options": ["230.00", "200.00", "255.56", "300.00"],
+			"answer": 0,
+			"why": "2,000 of materials plus 300 of operations is 2,300 across 10 good units, which is 230.00 each."
 		}
 	],
 	"memory": {
-		"spine": "Total production cost is fixed; the only question is how many good units must carry it, and scrap never answers that with a journal.",
+		"spine": "A recipe, a promise, a reservation, an issue and a completion: five steps from demand to finished goods, each with its own document.",
 		"device": {
-			"kind": "rule",
-			"label": "Good units carry the bad ones",
+			"kind": "phrase",
+			"label": "Recipe, promise, reserve, issue, complete",
 			"expansion": [
-				"Finished cost is materials consumed plus operations recorded, divided by good units",
-				"Scrap is a quantity decision on the document, never a cost typed into a journal",
-				"Total production cost is unchanged by scrap, so the good units absorb it",
-				"Subcontracting is material out, service in and material back: three movements, one valuation",
-				"Every ringgit of production cost lands in inventory, not in an expense account"
+				"BOM: quantities and operations, with the cost of both, written so the floor can follow it",
+				"Work order: this item, this quantity, this date, a promise to the floor",
+				"Reservation: planning only, because quantities reserved never move the ledger",
+				"Material Transfer for Manufacture: components move to the work in progress warehouse",
+				"Manufacture: components consumed and finished goods produced in one document"
 			]
 		},
 		"cards": [
 			{
-				"q": "How is cost per finished unit calculated?",
-				"a": "Materials plus operations, divided by good units, with scrap in the numerator and never quietly subtracted.",
-				"hint": "Divide by good units"
+				"q": "Does a work order move stock?",
+				"a": "No, it reserves. Only the transfer and the manufacture entry move quantity.",
+				"hint": "Promise versus movement"
 			},
 			{
-				"q": "One of ten units is scrapped. What happens to total cost?",
-				"a": "It stays the same and the nine good units carry it, so unit cost rises.",
-				"hint": "Spread, not lost"
+				"q": "What is work in progress?",
+				"a": "The value of components consumed but not yet finished, sitting in the work in progress warehouse.",
+				"hint": "Half made stock"
 			},
 			{
-				"q": "How is scrap recorded?",
-				"a": "As a quantity on the manufacture entry or a separate scrap entry, not as a journal.",
-				"hint": "Quantity, not money"
+				"q": "What does a BOM cost roll up contain?",
+				"a": "Material cost plus operating cost per unit, at the BOM's own rates and operations.",
+				"hint": "Material plus operations"
 			},
 			{
-				"q": "How many movements does subcontracting create?",
-				"a": "Three: material out to the subcontractor, the service received, and the finished material back.",
-				"hint": "Out, service, back"
+				"q": "Where are components actually consumed?",
+				"a": "In the Manufacture stock entry, which also produces and values the finished item.",
+				"hint": "One document, two directions"
 			},
 			{
-				"q": "Where must production cost land?",
-				"a": "In inventory value. An expense account here means the stock was under costed.",
-				"hint": "Balance sheet first"
+				"q": "Why must the finished valuation be explainable?",
+				"a": "It becomes the cost of every later sale, so an unexplainable BOM cost is an unexplainable margin.",
+				"hint": "Cost in, cost out"
 			}
 		],
 		"trap": {
-			"what": "Scrap is written off to an expense account at the end of the month instead of on the document.",
-			"why": "Finished units then carry a cost that excludes the loss, the true unit cost is understated, and the expense appears where nobody looks."
+			"what": "Components are issued straight out of the main warehouse and the work in progress step is skipped.",
+			"why": "Nothing is ever in process, so a half finished order looks like a stock loss and the finished goods value cannot be rebuilt."
 		}
 	},
-	"narration": "Once a client has built something, the next question is what it cost, and the answer has to survive an argument. A completed build of ten assemblies carries two thousand of material and three hundred of labour, so two hundred thirty each, and the entry, the stock ledger and the stock balance must all say the same thing. Scrap is where costing gets real: one unit fails, the total cost does not move, and the nine good units now carry two hundred fifty five fifty six each. Subcontracting adds a bought-in service, twelve ringgit of coating, and a warehouse that must return to zero. Materials, labour, scrap, service: four components, one valuation, and a worksheet that lets the production manager and the accountant argue with numbers instead of opinions. Teach the four components in order, and insist on the worksheet, because a costing conversation without evidence becomes a personality contest, and the consultant is always the outsider in that room."
+	"narration": "Manufacturing scares functional consultants because it looks technical, and it is not. A bill of materials is a recipe: two motors at eighty, one housing at forty, half an hour of assembly at sixty an hour, which gives two hundred thirty per unit. A work order turns demand into a reservation: ten assemblies need twenty motors and ten housings, and nothing has moved yet. The material transfer moves components to the floor, where they are work in progress and still not an expense. Completion consumes the components, adds three hundred of operating cost, and produces ten assemblies at two hundred thirty each. Four documents, one cost, no mystery. If the completion differs from the BOM, check the rate, the time and any extra charges before blaming the system, and write the answer in the production worksheet. A client who can explain a cost per unit from four documents will trust the system with their quotations, and that trust is the whole point of the volume."
 }

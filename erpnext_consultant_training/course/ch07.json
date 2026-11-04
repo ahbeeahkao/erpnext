@@ -4,7 +4,7 @@
 	"title": "Volume 1 · The Item Master",
 	"subtitle": "Lessons 1–4: item groups, a complete stock item, serial and batch tracking, and the prices and reorder rules behind them",
 	"level": "Core",
-	"minutes": 70,
+	"minutes": 80,
 	"outcomes": [
 		"Build an item group tree that finance and operations both accept",
 		"Create a stock item with every field that affects valuation and tax",
@@ -250,6 +250,79 @@
 				"title": "Price lists are per customer",
 				"text": "The customer's price list wins. If a rate looks wrong, check the customer record before editing the item price."
 			}
+		},
+		{
+			"kicker": "Lesson 5 · Variants",
+			"title": "One template, many sellable variants",
+			"bullets": [
+				"A variant item is the same product in another size, colour or finish, sharing one template and one attribute set",
+				"Choose the attribute that drives cost and stock first, because that is the one you cannot change later",
+				"Variants get their own item codes and their own balances, so the template is a factory, not a stock item",
+				"Price lists and pricing rules attach to variants, which is how a size premium becomes a rule rather than a spreadsheet",
+				"Never create variants for things that are merely different suppliers of the same product"
+			],
+			"table": {
+				"headers": ["Step", "Do this", "Enter", "Expect to see"],
+				"rows": [
+					[
+						"1",
+						"Create the attributes the business actually sells on",
+						"Size: 200ml, 500ml, 1L",
+						"Three attribute values"
+					],
+					[
+						"2",
+						"Create an item template with the attribute set",
+						"Template: SM-OIL",
+						"Template saved, not stockable"
+					],
+					["3", "Generate the variants", "3 combinations", "Three item codes, one template"],
+					["4", "Set a price per variant", "500ml = 18.00", "Price visible on the variant"],
+					[
+						"5",
+						"Add a pricing rule for the size premium",
+						"1L +10%",
+						"Rule applies on the document"
+					],
+					[
+						"6",
+						"Receive stock into one variant only",
+						"500ml x 24",
+						"Only that variant holds stock"
+					]
+				]
+			},
+			"notes": "The template is the decision that is expensive to reverse. Pick the attribute that changes cost or stock, because adding a second attribute later multiplies item codes and nobody wants to re-key opening balances. Variants are a pricing and reporting tool, not a tidiness exercise."
+		},
+		{
+			"kicker": "Lesson 6 · Verify variants",
+			"title": "The matrix, the price and the stock",
+			"bullets": [
+				"The matrix should read like a shelf: every combination visible, every combination sellable or deliberately disabled",
+				"A disabled variant must be invisible on documents, or a sales user will eventually pick it",
+				"Price per variant is the check the client cares about, so demonstrate the premium on a real quotation",
+				"Stock must sit on the variant and never on the template",
+				"Report by attribute once, because that is the report a distributor asks for in month two"
+			],
+			"table": {
+				"headers": ["Check", "Expected value", "Where to look"],
+				"rows": [
+					[
+						"Every combination present",
+						"Three of three, or explicitly disabled",
+						"Item list filtered by template"
+					],
+					[
+						"Disabled variant unselectable",
+						"Absent from the item picker",
+						"New quotation, item search"
+					],
+					["Variant price correct", "18.00 and 19.80", "Quotation lines"],
+					["Stock only on variants", "Template shows no balance", "Stock Balance"],
+					["Attribute report returns rows", "Quantity by size", "Stock report grouped by attribute"]
+				]
+			},
+			"notes": "The attribute report is the proof that variants were worth the trouble. If nobody reports by size or colour, the client has paid for complexity they do not use — and that is worth saying out loud before you build the matrix."
 		}
 	],
 	"lab": {
